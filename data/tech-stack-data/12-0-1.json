@@ -3,22 +3,16 @@
     "UI": {
       "Angular": [
         {
-          "name": "Angular",
-          "description": "Platform for building mobile and desktop web applications.",
-          "link": "https://angular.io/",
-          "version": "18.2.13"
-        },
-        {
           "name": "jQuery",
-          "description": "Fast, small, and feature-rich JavaScript library.",
+          "description": "Fast, small, and feature-rich JavaScript library",
           "link": "https://jquery.com/",
           "version": "3.7.1"
         },
         {
-          "name": "jQuery UI",
-          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
-          "link": "https://jqueryui.com/",
-          "version": "1.13.3"
+          "name": "Angular",
+          "description": "Platform for building mobile and desktop web applications.",
+          "link": "https://angular.io/",
+          "version": "18.2.13"
         },
         {
           "name": "ngx-bootstrap",
@@ -33,22 +27,28 @@
           "version": "3.3.7"
         },
         {
-          "name": "D3.js",
-          "description": "JavaScript library for manipulating documents based on data.",
-          "link": "https://d3js.org/",
-          "version": "7.8.5"
+          "name": "jQuery UI",
+          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
+          "link": "https://jqueryui.com/",
+          "version": "1.13.3"
         },
         {
-          "name": "NVD3",
-          "description": "Re-usable charts for D3.js.",
-          "link": "https://nvd3.org/",
-          "version": "1.8.11"
+          "name": "D3.js",
+          "description": "JavaScript library for manipulating documents based on data",
+          "link": "https://d3js.org/",
+          "version": "7.8.5"
         },
         {
           "name": "FullCalendar",
           "description": "Full-sized drag & drop event calendar.",
           "link": "https://fullcalendar.io/",
           "version": "6.1.15"
+        },
+        {
+          "name": "NVD3",
+          "description": "Re-usable charts for D3.js.",
+          "link": "https://nvd3.org/",
+          "version": "1.8.11"
         },
         {
           "name": "Lodash (lodash-es)",
@@ -82,7 +82,7 @@
     "Backend": [
       {
         "name": "Spring Framework",
-        "description": "Comprehensive programming and configuration model for modern Java-based enterprise applications.",
+        "description": "Comprehensive programming and configuration model for modern Java-based enterprise applications",
         "link": "https://spring.io/projects/spring-framework",
         "version": "6.2.12"
       },
