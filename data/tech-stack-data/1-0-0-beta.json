@@ -6,19 +6,19 @@
           "name": "Angular",
           "description": "Platform for building mobile and desktop web applications.",
           "link": "https://angular.io/",
-          "version": "18.2.14"
-        },
-        {
-          "name": "jQuery UI",
-          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
-          "link": "https://jqueryui.com/",
-          "version": "1.13.3"
+          "version": "18.2.13"
         },
         {
           "name": "jQuery",
           "description": "Fast, small, and feature-rich JavaScript library.",
           "link": "https://jquery.com/",
           "version": "3.7.1"
+        },
+        {
+          "name": "jQuery UI",
+          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
+          "link": "https://jqueryui.com/",
+          "version": "1.13.3"
         },
         {
           "name": "ngx-bootstrap",
