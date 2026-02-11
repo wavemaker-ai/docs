@@ -6,19 +6,19 @@
           "name": "Angular",
           "description": "Platform for building mobile and desktop web applications.",
           "link": "https://angular.io/",
-          "version": "18.2.13"
-        },
-        {
-          "name": "jQuery",
-          "description": "Fast, small, and feature-rich JavaScript library.",
-          "link": "https://jquery.com/",
-          "version": "3.7.1"
+          "version": "18.2.14"
         },
         {
           "name": "jQuery UI",
           "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
           "link": "https://jqueryui.com/",
           "version": "1.13.3"
+        },
+        {
+          "name": "jQuery",
+          "description": "Fast, small, and feature-rich JavaScript library.",
+          "link": "https://jquery.com/",
+          "version": "3.7.1"
         },
         {
           "name": "ngx-bootstrap",
@@ -81,187 +81,188 @@
     },
     "Backend": {
       "Java": [
-      {
-        "name": "Spring Framework",
-        "description": "Comprehensive programming and configuration model for modern Java-based enterprise applications.",
-        "link": "https://spring.io/projects/spring-framework",
-        "version": "6.2.15"
-      },
-      {
-        "name": "Spring Security",
-        "description": "Authentication and access-control framework.",
-        "link": "https://spring.io/projects/spring-security",
-        "version": "6.5.7"
-      },
-      {
-        "name": "Spring Data",
-        "description": "Simplifies data access for relational and non-relational databases.",
-        "link": "https://spring.io/projects/spring-data",
-        "version": "2025.0.7"
-      },
-      {
-        "name": "Spring Boot",
-        "description": "Framework to create stand-alone, production-grade Spring based Applications.",
-        "link": "https://spring.io/projects/spring-boot",
-        "version": "3.5.9"
-      },
-      {
-        "name": "Spring Session",
-        "description": "Provides an API and implementations for managing a user's session information.",
-        "link": "https://spring.io/projects/spring-session",
-        "version": "3.5.4"
-      },
-      {
-        "name": "Hibernate (Jakarta)",
-        "description": "Object/Relational Mapping (ORM) library for Java.",
-        "link": "https://hibernate.org/",
-        "version": "5.6.15.Final"
-      },
-      {
-        "name": "Gson",
-        "description": "Java library to convert Java Objects into JSON and back.",
-        "link": "https://github.com/google/gson",
-        "version": "2.13.2"
-      },
-      {
-        "name": "Jackson",
-        "description": "Standard JSON library for Java (streaming, DOM, binding).",
-        "link": "https://github.com/FasterXML/jackson",
-        "version": "2.20.1"
-      },
-      {
-        "name": "SLF4J",
-        "description": "Simple Logging Facade for Java.",
-        "link": "https://www.slf4j.org/",
-        "version": "2.0.17"
-      },
-      {
-        "name": "Log4j2",
-        "description": "Java-based logging utility.",
-        "link": "https://logging.apache.org/log4j/2.x/",
-        "version": "2.25.3"
-      },
-      {
-        "name": "HttpComponents HttpClient",
-        "description": "Client-side HTTP standards implementation.",
-        "link": "https://hc.apache.org/httpcomponents-client-5.x/",
-        "version": "5.5.1"
-      },
-      {
-        "name": "Jakarta Servlet",
-        "description": "Server-side API for handling HTTP requests.",
-        "link": "https://jakarta.ee/specifications/servlet/",
-        "version": "6.0.0"
-      },
-      {
-        "name": "HikariCP",
-        "description": "High-performance JDBC connection pool.",
-        "link": "https://github.com/brettwooldridge/HikariCP",
-        "version": "7.0.2"
-      },
-      {
-        "name": "Apache Commons Lang3",
-        "description": "Extra methods for manipulation of standard Java classes.",
-        "link": "https://commons.apache.org/proper/commons-lang/",
-        "version": "3.19.0"
-      },
-      {
-        "name": "Guava",
-        "description": "Google core libraries for Java.",
-        "link": "https://github.com/google/guava",
-        "version": "33.5.0-jre"
-      },
-      {
-        "name": "PostgreSQL Driver",
-        "description": "JDBC driver for PostgreSQL.",
-        "link": "https://jdbc.postgresql.org/",
-        "version": "42.7.8"
-      },
-      {
-        "name": "Hibernate Validator",
-        "description": "Reference implementation of the Bean Validation specification.",
-        "link": "https://hibernate.org/validator/",
-        "version": "8.0.2.Final"
-      },
-      {
-        "name": "JGit",
-        "description": "Java implementation of the Git version control system.",
-        "link": "https://www.eclipse.org/jgit/",
-        "version": "7.4.0"
-      },
-      {
-        "name": "Apache Commons Codec",
-        "description": "Implementations of common encoders and decoders (Base64, Hex, etc).",
-        "link": "https://commons.apache.org/proper/commons-codec/",
-        "version": "1.18.0"
-      },
-      {
-        "name": "Apache Commons IO",
-        "description": "Library of utilities to assist with developing IO functionality.",
-        "link": "https://commons.apache.org/proper/commons-io/",
-        "version": "2.19.0"
-      },
-      {
-        "name": "Apache Commons Text",
-        "description": "Library focused on algorithms working on strings.",
-        "link": "https://commons.apache.org/proper/commons-text/",
-        "version": "1.13.1"
-      },
-      {
-        "name": "OWASP AntiSamy",
-        "description": "Library for performing fast, configurable cleansing of HTML coming from untrusted sources.",
-        "link": "https://owasp.org/www-project-antisamy/",
-        "version": "1.7.7"
-      },
-      {
-        "name": "Apache FreeMarker",
-        "description": "Java template engine to generate text output.",
-        "link": "https://freemarker.apache.org/",
-        "version": "2.3.34"
-      },
-      {
-        "name": "Apache Tika",
-        "description": "Content analysis toolkit to detect and extract metadata and text.",
-        "link": "https://tika.apache.org/",
-        "version": "3.2.3"
-      },
-      {
-        "name": "MariaDB JDBC Driver",
-        "description": "JDBC driver for MariaDB.",
-        "link": "https://mariadb.com/kb/en/about-mariadb-connector-j/",
-        "version": "3.5.2"
-      },
-      {
-        "name": "MongoDB Driver",
-        "description": "Java driver for MongoDB.",
-        "link": "https://www.mongodb.com/docs/drivers/java/sync/current/",
-        "version": "5.6.2"
-      },
-      {
-        "name": "Jakarta Validation API",
-        "description": "Standard API for bean validation.",
-        "link": "https://jakarta.ee/specifications/bean-validation/",
-        "version": "3.1.1"
-      },
-      {
-        "name": "Apache Commons Validator",
-        "description": "Client-side validation and server-side validation support.",
-        "link": "https://commons.apache.org/proper/commons-validator/",
-        "version": "1.10.0"
-      },
-      {
-        "name": "JSON-Smart",
-        "description": "Performance focused JSON processor.",
-        "link": "https://netplex.github.io/json-smart/",
-        "version": "2.5.2"
-      },
-      {
-        "name": "HSQLDB",
-        "description": "Leading SQL relational database engine written in Java (Sample DB).",
-        "link": "http://hsqldb.org/",
-        "version": "2.7.4"
-      }
-    ]}
+        {
+          "name": "Spring Framework",
+          "description": "Comprehensive programming and configuration model for modern Java-based enterprise applications.",
+          "link": "https://spring.io/projects/spring-framework",
+          "version": "6.2.15"
+        },
+        {
+          "name": "Spring Security",
+          "description": "Authentication and access-control framework.",
+          "link": "https://spring.io/projects/spring-security",
+          "version": "6.5.7"
+        },
+        {
+          "name": "Spring Data",
+          "description": "Simplifies data access for relational and non-relational databases.",
+          "link": "https://spring.io/projects/spring-data",
+          "version": "2025.0.7"
+        },
+        {
+          "name": "Spring Boot",
+          "description": "Framework to create stand-alone, production-grade Spring based Applications.",
+          "link": "https://spring.io/projects/spring-boot",
+          "version": "3.5.9"
+        },
+        {
+          "name": "Spring Session",
+          "description": "Provides an API and implementations for managing a user's session information.",
+          "link": "https://spring.io/projects/spring-session",
+          "version": "3.5.4"
+        },
+        {
+          "name": "Hibernate (Jakarta)",
+          "description": "Object/Relational Mapping (ORM) library for Java.",
+          "link": "https://hibernate.org/",
+          "version": "5.6.15.Final"
+        },
+        {
+          "name": "Gson",
+          "description": "Java library to convert Java Objects into JSON and back.",
+          "link": "https://github.com/google/gson",
+          "version": "2.13.2"
+        },
+        {
+          "name": "Jackson",
+          "description": "Standard JSON library for Java (streaming, DOM, binding).",
+          "link": "https://github.com/FasterXML/jackson",
+          "version": "2.20.1"
+        },
+        {
+          "name": "SLF4J",
+          "description": "Simple Logging Facade for Java.",
+          "link": "https://www.slf4j.org/",
+          "version": "2.0.17"
+        },
+        {
+          "name": "Log4j2",
+          "description": "Java-based logging utility.",
+          "link": "https://logging.apache.org/log4j/2.x/",
+          "version": "2.25.3"
+        },
+        {
+          "name": "HttpComponents HttpClient",
+          "description": "Client-side HTTP standards implementation.",
+          "link": "https://hc.apache.org/httpcomponents-client-5.x/",
+          "version": "5.5.1"
+        },
+        {
+          "name": "Jakarta Servlet",
+          "description": "Server-side API for handling HTTP requests.",
+          "link": "https://jakarta.ee/specifications/servlet/",
+          "version": "6.0.0"
+        },
+        {
+          "name": "HikariCP",
+          "description": "High-performance JDBC connection pool.",
+          "link": "https://github.com/brettwooldridge/HikariCP",
+          "version": "7.0.2"
+        },
+        {
+          "name": "Apache Commons Lang3",
+          "description": "Extra methods for manipulation of standard Java classes.",
+          "link": "https://commons.apache.org/proper/commons-lang/",
+          "version": "3.19.0"
+        },
+        {
+          "name": "Guava",
+          "description": "Google core libraries for Java.",
+          "link": "https://github.com/google/guava",
+          "version": "33.5.0-jre"
+        },
+        {
+          "name": "PostgreSQL Driver",
+          "description": "JDBC driver for PostgreSQL.",
+          "link": "https://jdbc.postgresql.org/",
+          "version": "42.7.8"
+        },
+        {
+          "name": "Hibernate Validator",
+          "description": "Reference implementation of the Bean Validation specification.",
+          "link": "https://hibernate.org/validator/",
+          "version": "8.0.2.Final"
+        },
+        {
+          "name": "JGit",
+          "description": "Java implementation of the Git version control system.",
+          "link": "https://www.eclipse.org/jgit/",
+          "version": "7.4.0"
+        },
+        {
+          "name": "Apache Commons Codec",
+          "description": "Implementations of common encoders and decoders (Base64, Hex, etc).",
+          "link": "https://commons.apache.org/proper/commons-codec/",
+          "version": "1.18.0"
+        },
+        {
+          "name": "Apache Commons IO",
+          "description": "Library of utilities to assist with developing IO functionality.",
+          "link": "https://commons.apache.org/proper/commons-io/",
+          "version": "2.19.0"
+        },
+        {
+          "name": "Apache Commons Text",
+          "description": "Library focused on algorithms working on strings.",
+          "link": "https://commons.apache.org/proper/commons-text/",
+          "version": "1.13.1"
+        },
+        {
+          "name": "OWASP AntiSamy",
+          "description": "Library for performing fast, configurable cleansing of HTML coming from untrusted sources.",
+          "link": "https://owasp.org/www-project-antisamy/",
+          "version": "1.7.7"
+        },
+        {
+          "name": "Apache FreeMarker",
+          "description": "Java template engine to generate text output.",
+          "link": "https://freemarker.apache.org/",
+          "version": "2.3.34"
+        },
+        {
+          "name": "Apache Tika",
+          "description": "Content analysis toolkit to detect and extract metadata and text.",
+          "link": "https://tika.apache.org/",
+          "version": "3.2.3"
+        },
+        {
+          "name": "MariaDB JDBC Driver",
+          "description": "JDBC driver for MariaDB.",
+          "link": "https://mariadb.com/kb/en/about-mariadb-connector-j/",
+          "version": "3.5.2"
+        },
+        {
+          "name": "MongoDB Driver",
+          "description": "Java driver for MongoDB.",
+          "link": "https://www.mongodb.com/docs/drivers/java/sync/current/",
+          "version": "5.6.2"
+        },
+        {
+          "name": "Jakarta Validation API",
+          "description": "Standard API for bean validation.",
+          "link": "https://jakarta.ee/specifications/bean-validation/",
+          "version": "3.1.1"
+        },
+        {
+          "name": "Apache Commons Validator",
+          "description": "Client-side validation and server-side validation support.",
+          "link": "https://commons.apache.org/proper/commons-validator/",
+          "version": "1.10.0"
+        },
+        {
+          "name": "JSON-Smart",
+          "description": "Performance focused JSON processor.",
+          "link": "https://netplex.github.io/json-smart/",
+          "version": "2.5.2"
+        },
+        {
+          "name": "HSQLDB",
+          "description": "Leading SQL relational database engine written in Java (Sample DB).",
+          "link": "http://hsqldb.org/",
+          "version": "2.7.4"
+        }
+      ]
+    }
   },
   "Build Time": {
     "Angular": [
