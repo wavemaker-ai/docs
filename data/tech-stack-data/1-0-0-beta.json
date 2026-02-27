@@ -6,7 +6,7 @@
           "name": "Angular",
           "description": "Platform for building mobile and desktop web applications",
           "link": "https://angular.io/",
-          "version": "18.2.14"
+          "version": "18.2.15"
         },
         {
           "name": "jQuery",
@@ -39,7 +39,7 @@
           "version": "7.8.5"
         },
         {
-          "name": "NVD3",
+          "name": "NVD37",
           "description": "Re-usable charts for D3.js.",
           "link": "https://nvd3.org/",
           "version": "1.8.11"
@@ -280,14 +280,21 @@
           "version": "1.10.11"
         },
         {
-          "name": "npm",
-          "description": "Package manager for the JavaScript programming language.",
-          "link": "https://www.npmjs.com/",
-          "version": "10.9.0"
+          "name": "new",
+          "version": "0.0.1",
+          "url": ",,,,",
+          "description": "desc",
+          "link": ",,,,"
         }
       ],
       "React": [],
       "React Native": [
+        {
+          "name": "wm-reactnative-cli",
+          "description": "WaveMaker CLI for React Native projects.",
+          "link": "https://www.npmjs.com/package/@wavemaker/wm-reactnative-cli",
+          "version": "1.9.5"
+        },
         {
           "name": "Android Gradle Plugin (AGP)",
           "description": "Build system for Android applications.",
@@ -299,12 +306,6 @@
           "description": "Tools required to build Android applications.",
           "link": "https://developer.android.com/studio/releases/build-tools",
           "version": "36.0.0"
-        },
-        {
-          "name": "wm-reactnative-cli",
-          "description": "WaveMaker CLI for React Native projects.",
-          "link": "https://www.npmjs.com/package/@wavemaker/wm-reactnative-cli",
-          "version": "1.9.5"
         },
         {
           "name": "Maven",
@@ -368,7 +369,7 @@
         },
         {
           "name": "Node.js",
-          "description": "JavaScript runtime for the Metro bundler.",
+          "description": "JavaScript runtime for the Metro bundler. abc",
           "link": "https://nodejs.org/",
           "version": "22.11.0"
         }
