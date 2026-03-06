@@ -3,22 +3,24 @@
     "UI": {
       "Angular": [
         {
-          "name": "Angular",
-          "description": "Platform for building mobile and desktop web applications",
-          "link": "https://angular.io/",
-          "version": "18.2.14"
-        },
-        {
           "name": "jQuery",
           "description": "Fast, small, and feature-rich JavaScript library.",
           "link": "https://jquery.com/",
-          "version": "3.7.1"
+          "version": "3.7.1.9.9"
+        },
+        {
+          "name": "Angular123",
+          "description": "Platform for building mobile and desktop web applications. Asdfsjbjbjbj",
+          "link": "https://angular.io/jgjgbjhbj",
+          "version": "18.2.1376767",
+          "url": "https://angular.io/jgjgbjhbj"
         },
         {
           "name": "jQuery UI",
-          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
-          "link": "https://jqueryui.com/",
-          "version": "1.13.3"
+          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.ioioipopjbjhkh",
+          "link": "https://jqueryui.com/bjbjb",
+          "version": "1.13.4",
+          "url": "https://jqueryui.com/bjbjb"
         },
         {
           "name": "ngx-bootstrap",
@@ -75,7 +77,7 @@
           "name": "Expo",
           "description": "Platform for universal React applications.",
           "link": "https://expo.dev/",
-          "version": "54.0.12"
+          "version": "54.0.1.50"
         }
       ]
     },
@@ -247,19 +249,19 @@
           "name": "Apache Commons Validator",
           "description": "Client-side validation and server-side validation support.",
           "link": "https://commons.apache.org/proper/commons-validator/",
-          "version": "1.10.0"
-        },
-        {
-          "name": "JSON-Smart",
-          "description": "Performance focused JSON processor.",
-          "link": "https://netplex.github.io/json-smart/",
-          "version": "2.5.2"
+          "version": "1.10.0.8"
         },
         {
           "name": "HSQLDB",
           "description": "Leading SQL relational database engine written in Java (Sample DB).",
           "link": "http://hsqldb.org/",
           "version": "2.7.4"
+        },
+        {
+          "name": "JSON-Smart",
+          "description": "Performance focused JSON processor.",
+          "link": "https://netplex.github.io/json-smart/",
+          "version": "2.5.2"
         }
       ]
     }
@@ -361,16 +363,16 @@
       "React": [],
       "React Native": [
         {
-          "name": "Java (JDK)",
-          "description": "Required for Android builds and runtime environment.",
-          "link": "https://openjdk.org/",
-          "version": "17"
-        },
-        {
           "name": "Node.js",
           "description": "JavaScript runtime for the Metro bundler.",
           "link": "https://nodejs.org/",
           "version": "22.11.0"
+        },
+        {
+          "name": "Java (JDK)",
+          "description": "Required for Android builds and runtime environment.",
+          "link": "https://openjdk.org/",
+          "version": "17"
         }
       ]
     },
@@ -387,13 +389,20 @@
           "name": "Android Studio",
           "description": "Integrated Development Environment (IDE) for Android app development.",
           "link": "https://developer.android.com/studio",
-          "version": "Narwhal 4 2025.1.4"
+          "version": "Narwhal 4 2025.1.7"
         },
         {
           "name": "Xcode",
           "description": "Integrated Development Environment (IDE) for macOS/iOS.",
           "link": "https://developer.apple.com/xcode/",
-          "version": "26"
+          "version": "27"
+        },
+        {
+          "name": "new",
+          "version": "1.0.0",
+          "url": "gooogle.com",
+          "description": "desc",
+          "link": "gooogle.com"
         }
       ]
     },
