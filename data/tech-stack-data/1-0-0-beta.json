@@ -63,7 +63,64 @@
           "version": "2.0.8"
         }
       ],
-      "React": [],
+      "React": [
+        {
+          "name": "React",
+          "version": "v19.2.3",
+          "url": "https://react.dev/",
+          "description": "Platform for building desktop web applications",
+          "link": "https://react.dev/"
+        },
+        {
+          "name": "Next Js",
+          "version": "v16.1.1",
+          "url": "https://nextjs.org/",
+          "description": "React framework that helps to build fast web apps",
+          "link": "https://nextjs.org/"
+        },
+        {
+          "name": "Material UI",
+          "version": "v6.3.1",
+          "url": "https://mui.com/material-ui/",
+          "description": "Ready to use Material Design components",
+          "link": "https://mui.com/material-ui/"
+        },
+        {
+          "name": "D3",
+          "version": "v7.8.5",
+          "url": "https://d3js.org/",
+          "description": "JavaScript library for manipulating documents based on data.",
+          "link": "https://d3js.org/"
+        },
+        {
+          "name": "NVD3",
+          "version": "v1.8.16",
+          "url": "https://nvd3.org/",
+          "description": "Re-usable charts for D3.js.",
+          "link": "https://nvd3.org/"
+        },
+        {
+          "name": "Fullcalendar",
+          "version": "v6.1.15",
+          "url": "https://fullcalendar.io/",
+          "description": "Full-sized drag & drop event calendar.",
+          "link": "https://fullcalendar.io/"
+        },
+        {
+          "name": "Lodash (lodash-es)",
+          "version": "v4.17.21",
+          "url": "https://lodash.com/",
+          "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
+          "link": "https://lodash.com/"
+        },
+        {
+          "name": "Moment",
+          "version": "v2.30.1",
+          "url": "https://momentjs.com/",
+          "description": "Parse, validate, manipulate, and display dates and times in JavaScript",
+          "link": "https://momentjs.com/"
+        }
+      ],
       "React Native": [
         {
           "name": "React Native",
@@ -292,7 +349,7 @@
           "name": "Android Gradle Plugin (AGP)",
           "description": "Build system for Android applications.",
           "link": "https://developer.android.com/build",
-          "version": "8.11.0"
+          "version": "8.14.3"
         },
         {
           "name": "SDK Build Tools",
@@ -301,10 +358,10 @@
           "version": "36.0.0"
         },
         {
-          "name": "wm-reactnative-cli",
+          "name": "@wavemaker/wm-reactnative-cli",
           "description": "WaveMaker CLI for React Native projects.",
           "link": "https://www.npmjs.com/package/@wavemaker/wm-reactnative-cli",
-          "version": "1.9.6"
+          "version": "1.9.7"
         },
         {
           "name": "Maven",
@@ -387,7 +444,7 @@
           "name": "Android Studio",
           "description": "Integrated Development Environment (IDE) for Android app development.",
           "link": "https://developer.android.com/studio",
-          "version": "Otter 3 Feature Drop | 2025.2.3"
+          "version": "Meerkat 2024.3.1 to Narwhal 4 Feature Drop 2025.1.4"
         },
         {
           "name": "Xcode",
