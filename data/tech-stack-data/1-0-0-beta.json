@@ -122,7 +122,7 @@
         },
         {
           "name": "UI Kitten",
-          "description": "React Native UI library based on Eva Design System for building rich cross-platform mobile applicationss.",
+          "description": "Based on the Eva Design System, it offers unique theming capabilities and excellent right-to-left (RTL) support.",
           "link": "https://akveo.github.io/react-native-ui-kitten/",
           "version": "1.0.0"
         }
