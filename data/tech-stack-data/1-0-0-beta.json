@@ -4,7 +4,7 @@
       "Angular": [
         {
           "name": "Angular",
-          "description": "Platform for building mobile and desktop web applications",
+          "description": "Platform for building mobile and desktop web applications.",
           "link": "https://angular.io/",
           "version": "18.2.13"
         },
@@ -12,19 +12,19 @@
           "name": "jQuery",
           "description": "Fast, small, and feature-rich JavaScript library.",
           "link": "https://jquery.com/",
-          "version": "3.7.1"
+          "version": "3.7.2"
         },
         {
           "name": "jQuery UI",
-          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
+          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.....",
           "link": "https://jqueryui.com/",
-          "version": "1.14.1"
+          "version": "1.14.2"
         },
         {
           "name": "ngx-bootstrap",
           "description": "Native Angular directives for Bootstrap.",
           "link": "https://valor-software.com/ngx-bootstrap/",
-          "version": "9.0.0"
+          "version": "9.0.1"
         },
         {
           "name": "Bootstrap",
@@ -61,56 +61,48 @@
         {
           "name": "React",
           "version": "v19.2.3",
-          "url": "https://react.dev/",
           "description": "Platform for building desktop web applications",
           "link": "https://react.dev/"
         },
         {
           "name": "Next Js",
           "version": "v16.1.1",
-          "url": "https://nextjs.org/",
           "description": "React framework that helps to build fast web apps",
           "link": "https://nextjs.org/"
         },
         {
           "name": "Material UI",
           "version": "v6.3.1",
-          "url": "https://mui.com/material-ui/",
           "description": "Ready to use Material Design components",
           "link": "https://mui.com/material-ui/"
         },
         {
           "name": "D3",
           "version": "v7.8.5",
-          "url": "https://d3js.org/",
           "description": "JavaScript library for manipulating documents based on data.",
           "link": "https://d3js.org/"
         },
         {
           "name": "NVD3",
           "version": "v1.8.16",
-          "url": "https://nvd3.org/",
           "description": "Re-usable charts for D3.js.",
           "link": "https://nvd3.org/"
         },
         {
           "name": "Fullcalendar",
           "version": "v6.1.15",
-          "url": "https://fullcalendar.io/",
           "description": "Full-sized drag & drop event calendar.",
           "link": "https://fullcalendar.io/"
         },
         {
           "name": "Lodash (lodash-es)",
           "version": "v4.17.21",
-          "url": "https://lodash.com/",
           "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
           "link": "https://lodash.com/"
         },
         {
           "name": "Moment",
           "version": "v2.30.1",
-          "url": "https://momentjs.com/",
           "description": "Parse, validate, manipulate, and display dates and times in JavaScript",
           "link": "https://momentjs.com/"
         }
@@ -127,6 +119,12 @@
           "description": "Platform for universal React applications.",
           "link": "https://expo.dev/",
           "version": "54.0.12"
+        },
+        {
+          "name": "UI Kitten",
+          "description": "React Native UI library based on Eva Design System for building rich cross-platform mobile applicationss.",
+          "link": "https://akveo.github.io/react-native-ui-kitten/",
+          "version": "1.0.0"
         }
       ]
     },
@@ -355,8 +353,7 @@
           "name": "@wavemaker-ai/wm-reactnative-cli",
           "description": "WaveMaker CLI for React Native projects.",
           "link": "https://www.npmjs.com/package/@wavemaker-ai/wm-reactnative-cli",
-          "version": "1.0.1",
-          "url": "https://www.npmjs.com/package/@wavemaker-ai/wm-reactnative-cli"
+          "version": "1.0.1"
         },
         {
           "name": "Maven",
