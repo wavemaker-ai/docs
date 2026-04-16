@@ -6,13 +6,13 @@
           "name": "Angular",
           "description": "Platform for building mobile and desktop web applications",
           "link": "https://angular.io/",
-          "version": "18.2.13"
+          "version": "18.2.14"
         },
         {
           "name": "jQuery",
           "description": "Fast, small, and feature-rich JavaScript library.",
           "link": "https://jquery.com/",
-          "version": "3.7.1"
+          "version": "3.7.2"
         },
         {
           "name": "jQuery UI",
