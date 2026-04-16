@@ -77,6 +77,12 @@
           "link": "https://mui.com/material-ui/"
         },
         {
+          "name": "Chakra UI",
+          "version": "v1.2.2",
+          "description": "test Simple, modular and accessible component library for React applications",
+          "link": "https://chakra-ui.com/"
+        },
+        {
           "name": "D3",
           "version": "v7.8.5",
           "description": "JavaScript library for manipulating documents based on data.",
