@@ -6,13 +6,7 @@
           "name": "Angular",
           "description": "Platform for building mobile and desktop web applications",
           "link": "https://angular.io/",
-          "version": "18.2.13"
-        },
-        {
-          "name": "jQuery",
-          "description": "Fast, small, and feature-rich JavaScript library.",
-          "link": "https://jquery.com/",
-          "version": "3.7.1"
+          "version": "18.2.14"
         },
         {
           "name": "jQuery UI",
@@ -21,22 +15,22 @@
           "version": "1.14.1"
         },
         {
+          "name": "jQuery",
+          "description": "Fast, small, and feature-rich JavaScript library.",
+          "link": "https://jquery.com/",
+          "version": "3.7.1"
+        },
+        {
           "name": "ngx-bootstrap",
           "description": "Native Angular directives for Bootstrap.",
           "link": "https://valor-software.com/ngx-bootstrap/",
           "version": "9.0.0"
         },
         {
-          "name": "Bootstrap",
+          "name": "Bootstrap9",
           "description": "The most popular HTML, CSS, and JS library for developing responsive, mobile-first projects.",
           "link": "https://getbootstrap.com/docs/3.3/",
           "version": "3.3.7"
-        },
-        {
-          "name": "D3.js",
-          "description": "JavaScript library for manipulating documents based on data.",
-          "link": "https://d3js.org/",
-          "version": "7.8.5"
         },
         {
           "name": "NVD3",
