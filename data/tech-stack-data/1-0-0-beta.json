@@ -36,7 +36,7 @@
           "name": "D3.js",
           "description": "JavaScript library for manipulating documents based on data.",
           "link": "https://d3js.org/",
-          "version": "7.8.5"
+          "version": "7.8.6"
         },
         {
           "name": "NVD3",
