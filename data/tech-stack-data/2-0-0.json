@@ -436,7 +436,7 @@
           "name": "Xcode",
           "description": "Integrated Development Environment (IDE) for macOS/iOS.",
           "link": "https://developer.apple.com/xcode/",
-          "version": "26.2"
+          "version": "20.0"
         }
       ]
     },
