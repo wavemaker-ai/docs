@@ -314,7 +314,7 @@
           "name": "Apache Maven",
           "description": "Software project management and comprehension tool.",
           "link": "https://maven.apache.org/",
-          "version": "3.9.12"
+          "version": "3.9.15"
         },
         {
           "name": "Apache Ant",
