@@ -131,6 +131,7 @@ We follow a simple branching setup to keep the docs stable, while still making i
 - Direct pushes to the upstream `main` branch are restricted
 
 ### Feature-Specific Branches
+
 - For any structural changes (like navigation, search, UI updates, or plugins):
   - Create a **temporary feature branch from `main`**
   - Use the following naming format:

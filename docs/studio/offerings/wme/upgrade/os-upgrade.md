@@ -4,6 +4,7 @@ last_update: { author: "WaveMaker" }
 id: os-upgrade
 sidebar_label: OS Upgrade
 ---
+
 ## Why do we need Operating System Upgrade ?
 
 - WME is completely running inside docker containers, these docker containers are hosted on the Platform Instance's Operating System.
@@ -37,43 +38,43 @@ Below is the guide for upgrading the Operating system in the WME running Instanc
 #### Launchpad
 
 - After logging into launchpad in your WME setup go to the Developer Workspace Tab, and then go to the container as shown in the below image
+
 - Select the containers that are running, hibernate those containers one after the other by hitting the stop button as shown in the image below, and wait till the state is changed to stop.
-  
-  [![instances_verification](./assets/images/instances-verification.png)](./assets/images/instances-verification.png)
+
+  [![instances\_verification](./assets/images/instances-verification.png)](./assets/images/instances-verification.png)
 
 - Go to Developer Workspace, and then go to capacity as shown in the below image
-  
-  [![developer_workspace](./assets/images/developer-workspace.png)](./assets/images/developer-workspace.png)
-  
+
+  [![developer\_workspace](./assets/images/developer-workspace.png)](./assets/images/developer-workspace.png)
+
 - Here select all the StudioWorkspace Instances one by one and do the below operations.
 
 - First hit the **stop** button present there, it will stop the Instances from taking new user containers, wait till the state of Instance is changed to **STOPPED**
+
 - Then you need to hit the **passivate** button, this will passivate all the stopped containers in the Instance selected, wait till there are no stopped Instances present in the Instance
+
 - After this is done in all StudioWorkspace Instances cross-check the running containers in the containers tab, all the containers should be in the passivated state.
 
 - After making sure all containers are passivated come back to capacity and select one by one Instances by clicking the   ***":"***  icon and hit the delete icon as shown below, this will delete the Instance from setup.
-  
-  [![delete_instances](./assets/images/delete-instances.png)](./assets/images/delete-instances.png)
+
+  [![delete\_instances](./assets/images/delete-instances.png)](./assets/images/delete-instances.png)
 
 - After completed the above process in Developer Workspace, go to AppDeployments, and perform the same operation mentioned above in all AppDeployment Instances(Demo, Stage, Live)
-
-
 
 ### Stop the WME Setup
 
 - We recommend you to stop the WME setup before proceeding for further steps
 - You can stop the WME setup operation from the config wizard portal
 
-
   - **CW Portal**
 
     - Login into the CW portal, after login in home page you can see settings icon on the top right as marked below.
-    
-    [![cw_stop](./assets/images/cw-stop-settings.png)](./assets/images/cw-stop-settings.png)    
-    
+
+    [![cw\_stop](./assets/images/cw-stop-settings.png)](./assets/images/cw-stop-settings.png)
+
     - Click on Stop Installation button as shown in the image below, hit to stop the WME setup.
 
-    [![cw_stop](./assets/images/cw-stop.png)](./assets/images/cw-stop.png)
+    [![cw\_stop](./assets/images/cw-stop.png)](./assets/images/cw-stop.png)
 
     - From here also,  you can start the CW process, can be perform Sync and Cleanup Operations.
 
@@ -86,7 +87,7 @@ Below is the guide for upgrading the Operating system in the WME running Instanc
 
 - To create AMI of Instance in AWS cloud provider please refer [AMI creation in aws](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instances-and-amis.html).
 - Stop WME EC2 instance and detach eth1 network interface [follow the steps given here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#detach_eni), make a note of interface ID or ENI ID
-  
+
 ### Azure
 
 - For creating an Image of Instance in AZURE cloud provider please refer [Image creation in azure](https://docs.microsoft.com/en-us/azure/virtual-machines/image-version-vm-cli).
@@ -104,7 +105,7 @@ Below is the guide for upgrading the Operating system in the WME running Instanc
 
 ```bash
 bash wme-installer.sh --data-archive
-```  
+```
 
 - Copy the generated data.tar to secure location either on to new WME Platform Instance or to any cloud storage services or your local machine. This data.tar will be used for restoring purposes.
 
@@ -139,11 +140,11 @@ There are two possibilities depends on your infrastructure.
 ##### AWS
 
 - To launch WME Platform Instance in AWS cloud environment please refer [WME Platform instance Infrastructure in AWS](../installation/platforms/aws/launching-instances-in-aws.md).
-  
+
 ##### AZURE
 
 - To launch WME Platform virtual machines in AZURE cloud environment please refer [WME Platform instance Infrastructure in AZURE](../installation/platforms/azure/launching-instances-in-azure.md).
-  
+
 ##### GCP
 
 - To launch WME Platform virtual machines in GCP cloud environment, follow the general [Prerequisites](/docs/studio/offerings/wme/getting-started/prerequisites) and installation steps.
@@ -154,7 +155,7 @@ There are two possibilities depends on your infrastructure.
 
 ##### Hyper-V
 
-- To create WME Platform virtual machines in Hyper-V please refer [WME Platform instance Infrastructure in Hyper-V](../installation/platforms/hyperv/launching-instances-in-hyperv-vhd.md).
+- To create WME Platform virtual machines in Hyper-V please refer [WME Platform instance Infrastructure in Hyper-V](../installation/platforms/hyperv/launching-instances-in-hyper-v-vhd).
 
 #### Volumes Based Disks Restoring(AWS, GCP, Azure)
 
@@ -174,7 +175,7 @@ blkid
 
 - To entry, the UUID of the disks in fstab, use the following format.
 
-``` bash
+```bash
 UUID=</wm-data block-device-UUID>  /wm-data   ext4   defaults ,nofail  0  2
 ```
 
@@ -185,9 +186,9 @@ UUID=</wm-data block-device-UUID>  /wm-data   ext4   defaults ,nofail  0  2
 
 ```bash
 bash wme-installer.sh --data-untar
-```  
+```
 
-[![data_untar](./assets/images/data-un-tar.png)](./assets/images/data-un-tar.png)
+[![data\_untar](./assets/images/data-un-tar.png)](./assets/images/data-un-tar.png)
 
 #### Launch WME StudioWorkspace Instance/AppDeployment Instances
 
@@ -202,9 +203,9 @@ bash wme-installer.sh --data-untar
 
 ### Setups when allowed to execute Operating System Upgrade Commands
 
- ::: note
-    Follow the below steps in PlatformInstance, all StudioWorkspaceInstances and AppDeploymentInstances.
- :::
+::: note
+Follow the below steps in PlatformInstance, all StudioWorkspaceInstances and AppDeploymentInstances.
+:::
 
 #### Ubuntu
 
@@ -213,7 +214,7 @@ bash wme-installer.sh --data-untar
   ::: note
 
   For a user to upgrade from Ubuntu 16.04 to Ubuntu 20.04 version the above upgrade operations has to be done in two steps to reach the desired version
-  
+
   :::
 
 #### RHEL

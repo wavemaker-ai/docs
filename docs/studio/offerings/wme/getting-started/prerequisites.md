@@ -1,187 +1,178 @@
 ---
-title: WaveMaker Enterprise Prerequisites
-last_update: { author: "WaveMaker" }
+title: WaveMaker Enterprise AI Prerequisites
+last_update: { author: "Imtiyaz Mohammad" }
 id: prerequisites
 sidebar_label: Prerequisites
 ---
-You can setup WaveMaker Enterprise on any machine.
+You can set up WaveMaker Enterprise AI on any machine.
 
 :::note
 This document uses words like **VM**, **Instance** to refer a machine.
 :::
 
-## WME Setup System Requirements
+## **WME AI setup system requirements**
 
-WaveMaker Enterprise can be installed on any machine with the below requirements. Before you start setting up the WaveMaker Enterprise, here is a list of minimum and recommended system requirements for each type of Instance.
+WaveMaker Enterprise AI can be installed on any machine that meets the following requirements. Before you start setting up WaveMaker Enterprise AI, review the minimum and recommended system requirements for each instance type.
 
-### WME Platform Instance
+### **WME AI Platform Instance**
 
-<table>
+<table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
+  <colgroup>
+    <col style={{ width: '120px' }} />
+    <col />
+  </colgroup>
+  <thead>
+    <tr>
+      <th style={{ fontSize: '0.875rem' }}>Requirement</th>
+      <th>Minimum configuration</th>
+    </tr>
+  </thead>
   <tbody>
     <tr>
-      <td>
-        <strong>Memory</strong>
-      </td>
-      <td>
-        <ul>
-          <li>Minimum 32GB</li>
-        </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Memory</td>
+      <td><ul><li>Minimum 32 GB</li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>CPU</strong>
-      </td>
-      <td>
-        <ul>
-          <li>8-cores, single CPU system</li>
-        </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>CPU</td>
+      <td><ul><li>8-core, single CPU system</li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>Hard Disk</strong>
-      </td>
-      <td>
-        <ul>
-          <li>Minimum&nbsp;350 GB to be allocated</li>
-          <li>In case of volumes we recommend 3 disks </li>
-              <li>/&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 100 GB</li>
-              <li>/wm-data&nbsp; &nbsp; &nbsp; &nbsp; 150 GB</li>
-              <li>/wm-runtime&nbsp; &nbsp;100 GB</li>
-	      <li>WaveMaker supports only SSD hard drives</li>
-            </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Hard disk</td>
+      <td><ul><li>Minimum 450 GB to be allocated</li><li>For volume-based setups, allocate:<ul><li>100 GB for <code style={{ fontFamily: 'inherit' }}>/</code></li><li>200 GB for <code style={{ fontFamily: 'inherit' }}>/wm-data</code></li><li>150 GB for <code style={{ fontFamily: 'inherit' }}>/wm-runtime</code></li></ul></li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>Host OS</strong>
-      </td>
-      <td>
-        <ul>
-          <li>Ubuntu 18.04.5/20.04.2.0 LTS/22.x LTS;  RHEL 7.x/8.x/9.x</li>
-          <li>Kernel 4.4 or latter</li>
-          <li>Architecture x86</li>
-        </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Host OS</td>
+      <td><ul><li>Ubuntu 22.x LTS or RHEL 8.x/9.x</li><li>Kernel 4.4 or later</li><li>x86 architecture</li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>Software</strong>
-      </td>
-      <td>
-        <ul>
-          <li>docker 24.0.6 </li>
-          <li>python 3.5 or higher</li>
-          <li>wget</li>
-          <li>container-selinux-2.107-1.el7.noarch.rpm(Only for RHEL7)</li>
-        </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Software</td>
+      <td><ul><li>Docker 28.x</li><li>Python 3.5 or later</li><li><code style={{ fontFamily: 'inherit' }}>wget</code></li><li><code style={{ fontFamily: 'inherit' }}>jq</code></li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>Network</strong>
-      </td>
-      <td>
-        <ul>
-          <li>Static IP with valid DNS</li>
-          <li>Ports 80, 443, 8080, 22(for ssh) to developer network range</li>
-          <li>Ports to be opened on Platform Instance for Access from StudioWorkspace Instance / AppDeployment Instance </li>
-              <li>Ports : 5000, 8500, 22, 8081, 2200, 8100, 9200, 8000-8020</li>
-            </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Network</td>
+      <td><ul><li>Static IP with valid DNS</li><li>Open ports 80, 443, 8080, and 22 for SSH access from the developer network range.</li></ul></td>
     </tr>
   </tbody>
 </table>
 
+### **WME AI StudioWorkspace Instance and AppDeployment Instance**
 
-### WME StudioWorkspace Instance and AppDeployment Instance
-
-<table>
+<table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
+  <colgroup>
+    <col style={{ width: '120px' }} />
+    <col />
+  </colgroup>
+  <thead>
+    <tr>
+      <th style={{ fontSize: '0.875rem' }}>Requirement</th>
+      <th>Minimum configuration</th>
+    </tr>
+  </thead>
   <tbody>
     <tr>
-      <td>
-        <strong>Memory</strong>
-      </td>
-      <td>
-        <ul>
-          <li>Minimum 32GB</li>
-        </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Memory</td>
+      <td><ul><li>Minimum 32 GB</li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>CPU</strong>
-      </td>
-      <td>
-        <ul>
-          <li>8-cores, single CPU system</li>
-        </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>CPU</td>
+      <td><ul><li>8-core, single CPU system</li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>Hard Disk</strong>
-      </td>
-      <td>
-        <ul>
-          <li>Minimum&nbsp;200 GB to be allocated</li>
-          <li>In case of volumes we recommend 3 disks </li>
-              <li>/&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 50 GB</li>
-              <li>/data&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 150 GB</li>
-              <li>WaveMaker supports only SSD hard drives</li>
-            </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Hard disk</td>
+      <td><ul><li>Minimum 300 GB to be allocated</li><li>For volume-based setups, allocate:<ul><li>100 GB for <code style={{ fontFamily: 'inherit' }}>/</code></li><li>200 GB for <code style={{ fontFamily: 'inherit' }}>/data</code></li></ul></li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>Host OS</strong>
-      </td>
-      <td>
-        <ul>
-          <li>Ubuntu 18.04.5/20.04.2.0 LTS/22.x LTS;  RHEL 7.x, 8.x, 9.x</li>
-          <li>Kernel 4.4 or 4.15</li>
-          <li>Architecture x86</li>
-        </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Host OS</td>
+      <td><ul><li>Ubuntu 22.x LTS or RHEL 8.x/9.x</li><li>Kernel 4.4 or later</li><li>x86 architecture</li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>Software</strong>
-      </td>
-      <td>
-        <ul>
-          <li>docker 24.0.6 </li>
-          <li>python 3.5 or higher</li>
-          <li>wget</li>
-          <li>container-selinux-2.107-1.el7.noarch.rpm(only for RHEL7)</li>
-        </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Software</td>
+      <td><ul><li>Docker 28.x</li><li>Python 3.5 or later</li><li><code style={{ fontFamily: 'inherit' }}>wget</code></li><li><code style={{ fontFamily: 'inherit' }}>jq</code></li></ul></td>
     </tr>
     <tr>
-      <td>
-        <strong>Network</strong>
-      </td>
-      <td>
-        <ul>
-          <li>Static IP</li>
-          <li>Ports to be Opened on StudioWorkspace Instance / AppDeployment Instance for Access from Platform Instance </li>
-              <li>Ports: 22, 2375, 80, 5000, 8100, 8888, 9101, 9102, 9100, 9404,2200-2299, 8001-8099, 3300-3399, 9500-9599</li>
-            </ul>
-      </td>
+      <td style={{ fontSize: '0.875rem' }}>Network</td>
+      <td><ul><li>Static IP</li><li>Open the required ports for access from the Platform Instance.</li></ul></td>
     </tr>
   </tbody>
 </table>
 
-### Network Communication
+## **Port requirements**
 
-- Below diagram explain the network communication between the Platform Instance and StudioWorkspace Instance and AppDeployment Instance.
+Open the following ports on the Platform Instance for access from the StudioWorkspace Instance and AppDeployment Instance.
+
+<table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
+  <colgroup>
+    <col style={{ width: '120px' }} />
+    <col />
+  </colgroup>
+  <thead>
+    <tr>
+      <th style={{ fontSize: '0.875rem' }}>Port</th>
+      <th>Required for</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ fontSize: '0.875rem' }}>443</td><td>HTTPS access to the Platform Instance</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>5000</td><td>Platform services</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8500</td><td>Service discovery</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>22</td><td>SSH access</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8081</td><td>Platform communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>2200</td><td>Container SSH access</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8100</td><td>StudioWorkspace and AppDeployment communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>9200</td><td>Search and observability services</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8000-8020</td><td>Platform-managed application services</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8094</td><td>AI service communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8079</td><td>AI service communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>5432</td><td>Database connectivity</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>5433</td><td>Vector database access for AI features</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8083</td><td>AI Studio and agent-server LiteLLM proxy communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8086</td><td>AI Studio and agent-server key management</td></tr>
+  </tbody>
+</table>
+
+Open the following ports on the StudioWorkspace Instance and AppDeployment Instance for access from the Platform Instance.
+
+<table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
+  <colgroup>
+    <col style={{ width: '120px' }} />
+    <col />
+  </colgroup>
+  <thead>
+    <tr>
+      <th style={{ fontSize: '0.875rem' }}>Port</th>
+      <th>Required for</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ fontSize: '0.875rem' }}>22</td><td>SSH access</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>2375</td><td>Docker API access</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>80</td><td>HTTP access</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>5000</td><td>Platform service communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8100</td><td>StudioWorkspace and AppDeployment communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8888</td><td>Workspace service communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>9101, 9102, 9100</td><td>Metrics collection</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>9404</td><td>Metrics export</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>2200-2299</td><td>Container SSH access</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>8001-8099</td><td>Platform-managed application services</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>3300-3399</td><td>Database and service communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>9500-9599</td><td>Platform-managed service communication</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>3000</td><td>Routing traffic from the load balancer to AI Studio</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>3001</td><td>Routing traffic from the load balancer to AI Studio NGINX</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>3002</td><td>Routing traffic from the load balancer to agent-server</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>5010</td><td>Backend MCP</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>5020</td><td>UI MCP</td></tr>
+  </tbody>
+</table>
+
+### **Network Communication**
+
+- The following diagram explains the network communication between the Platform Instance, StudioWorkspace Instance, and AppDeployment Instance.
 
 [![network-communication-between-instances](./assets/images/network-communication-between-instances.jpg)](./assets/images/network-communication-between-instances.jpg)
 
-### Capacity Planning
+### **Capacity planning**
 
-Adding an instance to either User workspace or Deployed Apps aids in the scalability of the WME setup in terms of application development and deployment, respectively. Each added User workspace or Deployed Apps instances would allow for a specific number of app developments and app deployments. These numbers will vary based on the WME version, refer to the table below for the exact numbers.
+Adding an instance to either User Workspace or Deployed Apps increases WME AI setup capacity for application development and deployment, respectively. Each added User Workspace or Deployed Apps instance supports a specific number of app developments and app deployments. These numbers vary based on the WME AI version.
 
 | Application Type    | Developer logins per 32GB WaveMaker Studio Instance | 
 | ------------------- | --------------------------------------------------- |
@@ -195,61 +186,45 @@ Adding an instance to either User workspace or Deployed Apps aids in the scala
 | 20                                                        |
 
 
-The actual app development and deployment support are further determined by your license terms. This means that, even if your infrastructure has the capacity, the apps that can be developed and deployed is restricted by your license terms. Similarly, even though your license terms allow, the apps that can be developed and deployed are limited by the infrastructure capacity.
+The actual app development and deployment support is also determined by your license terms. Even if your infrastructure has the capacity, the apps that can be developed and deployed are restricted by your license terms. Similarly, even when your license terms allow more apps, the apps that can be developed and deployed are limited by infrastructure capacity.
 
 :::note
-Different instances needs to be added to each stage in the release pipeline as explained in the Increasing Deployment Capacity section.
+Different instances need to be added to each stage in the release pipeline.
 :::
 
-## WME Setup Artifacts
+## **WME AI Setup Artifacts**
 
 WaveMaker will share the required artifacts (installer files/Images) to do the setup. There are two ways to do the setup.
 
 1. **Operating System Pre-Installed**.  
     You can come up with machines with the Operating system pre-installed and install Prerequisite(optional).
     Then use our installer to setup WME.
-2. **Use WaveMaker Machine Images(OVA/VHD/AMI)**.  
-    Backed with Operating System, prerequisite, Installer.
-    Launch machines from hypervisors or cloud consoles.
 
-### Files
-
-WaveMaker team will share the following files. You should download the below files before starting the installation.
-Depending on your setup type, WaveMaker team will send one of the following.
-
-- Operating System Pre-Installed.
-  - Tar ball if you choose RHEL or Ubuntu.
-- Use WaveMaker Images(OVA/VHD/AMI)
-  - Platform Instance OVA for Esxi 6.5 or higher
-  - StudioWorkspace Instance / AppDeployment Instance OVA for Esxi 6.5 or higher
-- Checksum(sha1sum) file for each of the above files.
-- License Key (.zip format) issued by WaveMaker, communicated to you by the WaveMaker team.
-
-## IP Addressing and DNS Mapping
+## **IP Addressing and DNS Mapping**
 
 You will be needing IP Addresses for the following.
 
-### IP Address
+### **IP Address**
 
 - One static IP for accessing the platform machine from your developer's network.
 - Machine Static IP: This is the IP assigned to the machine during setup and should be accessible on your network, or
   - In the case of VM, it will be the local IP address, which should be rout table from in your LAN.
   - In case of AWS instance: Private static IP for the instance within your VPC (assigned via eth0 or via ENI on eth1,ens5)
 
-### DNS Mapping
+### **DNS Mapping**
 
 Map a domain to the above IP for easy access.
 
 | **Domain**              | **Domain URL**                                                                      | **Description**                                                                          |
 | ----------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| WaveMaker Studio        | `wavemaker.[mycompany].com`                                                         | This domain will be used to access WaveMaker Studio                                      |
-| WaveMaker Deployed Apps | `wm-apps.[mycompany].com`  `wm-stage.[mycompany].com`     `wm-live.[mycompany].com` | These domains will be used to access WaveMaker Studio apps deployed onto WaveMaker Cloud |
+| WaveMaker Studio        | `wavemaker.[mycompany].com`                                                         | This domain will be used to access WaveMaker AI Studio                                      |
+| WaveMaker Deployed Apps | `wm-apps.[mycompany].com`  `wm-stage.[mycompany].com`     `wm-live.[mycompany].com` | These domains will be used to access WaveMaker AI Studio apps deployed onto WaveMaker AI Cloud |
 
 :::note
 In the preceding table, `[mycompany]` is used as an example. You may have to replace `[mycompany]` with your appropriate domain name.
 :::
 
-### Docker Container Access
+### **Docker Container Access**
 
 - An IP range to be assigned to the Docker containers internally. The Minimum [CIDR](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (Classless Inter-Domain Routing) range for Docker container network is 24.
 

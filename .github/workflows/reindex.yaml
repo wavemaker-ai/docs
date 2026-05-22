@@ -16,7 +16,7 @@ jobs:
           --header "x-api-key: ${{ secrets.DOCS_INDEXING_API_KEY }}" \
           --header 'Content-Type: application/json' \
           --data '{
-            "repo_url": "https://github.com/wavemaker/ai-docs",
+            "repo_url": "https://github.com/wavemaker-ai/docs",
             "git_branch": "prod",
             "force": false
           }'

@@ -4,6 +4,7 @@ last_update: { author: "WaveMaker" }
 id: dehydration-and-rehydration
 sidebar_label: Dehydration and Rehydration
 ---
+
 This process is used to rotate instances periodically or for disaster recovery when WME data(`/wm-data and /wm-runtime in directory/volumes Platform Instance`) is available but machines are corrupted and make sure have to use the same WME version for the recovery process.
 
 ## Data Storage in WME
@@ -30,15 +31,15 @@ This process is used to rotate instances periodically or for disaster recovery w
 #### Launchpad
 
 - After logging into launchpad in WME setup go to Developer/Deployment Workspace, and then go to the container as shown in the below image
+
 - Select the containers that are running, hibernate those containers one after the other by hitting the **stop** button as shown in the image below, and wait till the state is changed to stop.
 
-  [![stop_conainers](./assets/images/hibernate.png)](./assets/images/hibernate.png)
-
+  [![stop\_conainers](./assets/images/hibernate.png)](./assets/images/hibernate.png)
 
 - After logging into launchpad in WME setup go to Developer Workspace, and then go to capacity as shown in the below image
 
-  [![instance_passivate](./assets/images/instance-passivate.png)](./assets/images/instance-passivate.png)   
-  
+  [![instance\_passivate](./assets/images/instance-passivate.png)](./assets/images/instance-passivate.png)
+
   - Here select all the StudioWorkspace instances one by one and do the below operations
 
     - First hit the stop button present there, it will stop the instances from taking new user containers, wait till the state of Instance is changed to **STOPPED**
@@ -47,19 +48,16 @@ This process is used to rotate instances periodically or for disaster recovery w
 
 - After completed the above process in Developer Workspace, go to AppDeployments, and perform the same operation mentioned above in all AppDeployment Instances(Demo, Stage, Live)
 
-
-
 ### Stop the WME Setup
 
 - We recommend you to stop the WME setup before proceeding for further steps
 - You can stop the WME setup operation from the config wizard portal
 
-
   - **CW Portal**
 
     - Log in to the CW portal, after login in home page you can see the stop button as shown in the image below, hit the stop button to stop the WME setup
 
-    [![cw_stop](./assets/images/cw-stop.png)](./assets/images/cw-stop.png)
+    [![cw\_stop](./assets/images/cw-stop.png)](./assets/images/cw-stop.png)
 
 ## How to take a backup of the data
 
@@ -70,7 +68,7 @@ This process is used to rotate instances periodically or for disaster recovery w
 
 - For taking a snapshot of volume in AWS cloud provider please refer [volume snapshot in aws](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html).
 - Stop WME EC2 instance and detach eth1 network interface [follow the steps given here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#detach_eni), make a note of interface ID or ENI ID
-  
+
 ### Azure
 
 - For taking a snapshot of volume in AZURE cloud provider please refer [volume snapshot in azure](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/snapshot-copy-managed-disk).
@@ -84,7 +82,7 @@ This process is used to rotate instances periodically or for disaster recovery w
 ### VMWARE ESXi and Hyper-V
 
 - Use the below steps for taking /wm-data backup in Platform Instance, it will create data.tar in /wm-data location.
-  
+
 ```bash
 bash wme-installer.sh --data-archive
 ```
@@ -101,11 +99,11 @@ bash wme-installer.sh --data-archive
 #### AWS
 
 - To launch WME Platform instance in AWS cloud environment please refer [WME Platform instance Infrastructure in AWS](../installation/platforms/aws/launching-instances-in-aws.md).
-  
+
 #### AZURE
 
 - To launch WME Platform virtual machines in AZURE cloud environment please refer [WME Platform instance Infrastructure in AZURE](../installation/platforms/azure/launching-instances-in-azure.md).
-  
+
 #### GCP
 
 - To launch WME Platform virtual machines in GCP cloud environment, follow the general [Prerequisites](/docs/studio/offerings/wme/getting-started/prerequisites) and installation steps.
@@ -116,7 +114,7 @@ bash wme-installer.sh --data-archive
 
 #### Hyper-V
 
-- To create WME Platform virtual machines in Hyper-V please refer [WME Platform instance Infrastructure in Hyper-V](../installation/platforms/hyperv/launching-instances-in-hyperv-vhd.md).
+- To create WME Platform virtual machines in Hyper-V please refer [WME Platform instance Infrastructure in Hyper-V](../installation/platforms/hyperv/launching-instances-in-hyper-v-vhd).
 
 #### Volumes Based Disks Restoring(AWS, GCP, Azure)
 
@@ -134,7 +132,7 @@ blkid
 
 - To entry, the UUID of the disks in fstab, use the following format.
 
-``` bash
+```bash
 UUID=</wm-data block-device-UUID>  /wm-data   ext4   defaults ,nofail  0  2
 ```
 
@@ -145,14 +143,13 @@ UUID=</wm-data block-device-UUID>  /wm-data   ext4   defaults ,nofail  0  2
 
 ```bash
 bash wme-installer.sh --data-untar
-```  
+```
 
-[![data_untar](./assets/images/data-un-tar.png)](./assets/images/data-un-tar.png)
+[![data\_untar](./assets/images/data-un-tar.png)](./assets/images/data-un-tar.png)
 
 ### StudioWorkspace Instance / AppDeployment Instance
 
 - Launch StudioWorkspace Instance/AppDeployment Instance in different Infra providers from Link [WaveMaker Launch Instances](/docs/studio/offerings/wme/getting-started/prerequisites).
-
 
 ## Download and Extract Migrations
 
@@ -162,11 +159,11 @@ bash wme-installer.sh --data-untar
     wget <WME-Migration-Link>
 ```
 
-- Extract wme_migrations to /usr/local/content/wme/wme-installer/< version>/resources folder, for extract the content run the following command
+- Extract wme\_migrations to /usr/local/content/wme/wme-installer/\< version>/resources folder, for extract the content run the following command
 
 ```bash
     sudo tar xvf <WME-Migration-Filename> -C /usr/local/content/wme/wme-installer/<version>/resources/
-```    
+```
 
 - To Rotate the Instances, it is required some Rotation related files and to download these which will be shared by the WaveMaker team, please run the following command
 
@@ -174,7 +171,7 @@ bash wme-installer.sh --data-untar
     wget <WME-Rotate-Scripts-link>
 ```
 
-- Extract the wme_rotations to /usr/local/content/wme/wme-installer/< version >/resources folder, for extract the content run the following command
+- Extract the wme\_rotations to /usr/local/content/wme/wme-installer/\< version >/resources folder, for extract the content run the following command
 
 ```bash
     sudo tar -xvf  <WME-Rotate-sCripts-Filename> -C /usr/local/content/wme/wme-installer/<version>/resources/
@@ -190,13 +187,12 @@ bash wme-installer.sh --data-untar
 After Completing the ***WaveMaker Initialization*** process, please go with the ***migrations*** step which is given below before proceeding with the ***Configwizard***
 :::
 
-
 ### Run the required migrations
 
 - As we we migrating from WME 10.13.x to WME 11.x, we have to run few migrations on gitlab and postgres
 - Execute Below command to copy wme rotation script to installer location
 
-```bash 
+```bash
     cp /usr/local/content/wme/wme-installer/<version>/resources/wme-rotate.sh /usr/local/content/wme/wme-installer/<version>/ 
 ```
 
@@ -209,33 +205,32 @@ After Completing the ***WaveMaker Initialization*** process, please go with the 
 ### Run Sync Operation
 
 - After completing the above steps, run the **Sync** from the configwizard portal by following steps
-  - Login to the config portal using the same password that was used in earlier setup 
+
+  - Login to the config portal using the same password that was used in earlier setup
   - After login in home page you can see settings icon on the top right as marked below, it takes you to the CW settings place
 
-  [![cw_stop](./assets/images/cw-stop-settings.png)](./assets/images/cw-stop-settings.png)    
-    
-  - Go to the Danger Zone and hit the **Sync** button and perform the next configuration steps
-  
-  [![cw_stop](./assets/images/cw-sync.png)](./assets/images/cw-sync.png)
+  [![cw\_stop](./assets/images/cw-stop-settings.png)](./assets/images/cw-stop-settings.png)
 
+  - Go to the Danger Zone and hit the **Sync** button and perform the next configuration steps
+
+  [![cw\_stop](./assets/images/cw-sync.png)](./assets/images/cw-sync.png)
 
 ### Replace StudioWorkspace/AppDeployment Instances
 
-- Once the configwizard reaches to 100%, you can go to Launchpad and Developer Workspace [WaveMaker add developer workspace](../configuration/add-dev-capacity#add-capacity-to-developer-workspace) and  Deployment Workspace [WaveMaker add deployement workspace](../configuration/add-apps-capacity#add-capacity-to-app-deployment), remove the previously added instances and add the newly provisioned Developer and Deployment workspace Instances respectively  
-
+- Once the configwizard reaches to 100%, you can go to Launchpad and Developer Workspace [WaveMaker add developer workspace](../configuration/add-dev-capacity#add-capacity-to-developer-workspace) and  Deployment Workspace [WaveMaker add deployement workspace](../configuration/add-apps-capacity#add-capacity-to-app-deployment), remove the previously added instances and add the newly provisioned Developer and Deployment workspace Instances respectively
 
 ### Update VCS IP’s in Passivation Disk and Database
 
 - Run below scripts in the WME platform Instance to change the IP in Database and the Backserver disk
 
-  - Change IP in Database entries 
+  - Change IP in Database entries
 
-    ```bash 
+    ```bash
     sudo bash executesql.sh update_vcs_ips_in_db.sql  <old_vcs_ip>  <new_vcs_ip>
     ```
 
   - Change IP in backupserver disk
 
-    ```bash 
+    ```bash
     sudo bash update_vcs_ips_in_backupserver.sh <old_vcs_ip>  <new_vcs_ip>
     ```

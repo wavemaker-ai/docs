@@ -1,60 +1,62 @@
 ---
-title: WaveMaker Enterprise Setup Process
+title: WaveMaker Enterprise AI Setup Process
 last_update: { author: "WaveMaker" }
 id: getting-started
-sidebar_label: WaveMaker Enterprise Setup Process
+sidebar_label: WaveMaker Enterprise AI Setup Process
 ---
-WaveMaker Enterprise (WME) is an on-premise offering of WaveMaker. WME can be installed on an on-premise/private, or public cloud. It can be hosted and managed by an organization on their own infrastructure.
 
-You can setup WaveMaker Enterprise on any machine.
+WaveMaker Enterprise AI (WME AI) is an on-premise offering of WaveMaker. WME AI can be installed on an on-premise/private cloud or public cloud. It can be hosted and managed by an organization on its own infrastructure.
 
-This document describes the process for setting up WaveMaker Enterprise in all major cloud providers and on-premise environments.
+You can set up WaveMaker Enterprise AI on any machine.
+
+This document describes the process for setting up WaveMaker Enterprise AI in all major cloud providers and on-premise environments.
 
 :::note
-This document uses words like **VM**, **Instance** to refer a machine.
+This document uses words like **VM** and **Instance** to refer to a machine.
 :::
 
-The machine can be hosted on any cloud provider like Amazon Web Services EC2 (AWS), Google Cloud Provider (GCP), Microsoft Azure, or enterprise cloud, or bare-metal. All machines allocated to the WME Platform must not have any other process running in it.
+The machine can be hosted on any cloud provider like Amazon Web Services Elastic Compute Cloud (AWS EC2), Google Cloud Platform (GCP), Microsoft Azure, an enterprise cloud, or bare metal. All machines allocated to the WME Platform must not have any other process running on them.
 
-## WaveMaker Enterprise Setup Process
+## **WaveMaker Enterprise AI Setup Process**
 
-WaveMaker Enterprise setup requires you to follow the steps below.
+WaveMaker Enterprise AI setup requires you to follow the steps below.
 
-### Step-1: Understand prerequisites
+### **Step-1: Understand prerequisites**
 
-Understand and procure the [Prerequisites](./prerequisites.md).
+Understand and procure the [Prerequisites](./prerequisites).
 
-### Step-2: Choose an infrastructure provider
+### **Step-2: Choose an infrastructure provider**
 
-Choose a cloud provider from
+Choose a cloud provider from:
 
-1. [AWS](../installation/platforms/aws/launching-instances-in-aws.md)
-2. [Azure](../installation/platforms/azure/launching-instances-in-azure.md)
+1. [AWS](../installation/platforms/aws/launching-instances-in-aws)
+2. [Azure](../installation/platforms/azure/launching-instances-in-azure)
 3. GCP (Follow general prerequisites and installation steps)
 
-Or, choose any on-premise virtualization providers from
+Or, choose an on-premise virtualization provider from:
 
-1. [VMWare ESXi (OVA)](../installation/platforms/vmware-esxi/launching-instances-in-esxi-ova.md)
-2. [VMWare ESXi (ISO)](../installation/platforms/vmware-esxi/launching-instances-in-esxi-iso.md)
-3. [Hyper-V](../installation/platforms/hyperv/launching-instances-in-hyperv-vhd.md)
+1. [VMware ESXi (OVA)](../installation/platforms/vmware-esxi/launching-instances-in-esxi-ova)
+2. [VMware ESXi (ISO)](../installation/platforms/vmware-esxi/launching-instances-in-esxi-iso)
+3. [Hyper-V](../installation/platforms/hyperv/launching-instances-in-hyper-v-vhd)
 
-Or, you can choose bare-metal or any other option as well.
+You can also choose bare metal or any other infrastructure option.
 
-### Step-3: Choose the OS
+### **Step-3: Choose the OS**
 
-Currently, WaveMaker supports the following Operating Systems.
+WaveMaker Enterprise AI supports the following operating systems.
 
-- RHEL 7.x, RHEL 8.x, RHEL 9.x.
-- Ubuntu 18.04, Ubuntu 20.04, Ubuntu 22.x.
+- RHEL 8.x and RHEL 9.x
+- Ubuntu 20.04 and Ubuntu 22.x
 
-### Step-4: Check for software requirements
+### **Step-4: Check for software requirements**
 
-Depending on the Operating System, you'll need to install additional software.
+Depending on the operating system, you need to install additional software.
 
-### Step-5: Install
+### **Step-5: Install**
 
-Start installing, using the WME installer. You can follow the steps depending on the selected infrastructure provider specified in step-2.
+Start installing using the WME AI installer. Follow the steps for the infrastructure provider selected in step-2.
 
-### Step-6: Configure
+### **Step-6: Configure**
 
-Configuring the setup.
+Configure the setup.
+

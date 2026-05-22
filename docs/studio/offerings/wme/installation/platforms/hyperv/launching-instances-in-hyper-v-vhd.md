@@ -1,9 +1,9 @@
 ---
 title: WaveMaker Enterprise Setup on Hyper-V using VHD
 last_update: { author: "WaveMaker" }
-id: launching-instances-in-hyper-v-vhd
 sidebar_label: Prepare Infrastructure using VHD
 ---
+
 ## Prerequisite
 
 - VHD file shared by WaveMaker team
@@ -39,7 +39,7 @@ This guide has written based on Hyper-V with version 10.0.x.
 - Select the switch (Virtual Switch) for the connection and click next.
 
 [![network configuration](./assets/images/configure-network.png)](./assets/images/configure-network.png)
-  
+
 - Select Use an existing virtual hard disk option and browse to select the WME platform VM vhd from your local machine.
 
 [![hard disk connection](./assets/images/virtual-harddisk-connnection.png)](./assets/images/virtual-harddisk-connnection.png)
@@ -51,7 +51,7 @@ This guide has written based on Hyper-V with version 10.0.x.
 - Start and connect to the VM.
 
 [![staring vm](./assets/images/start-and-connect-vm.png)](./assets/images/start-and-connect-vm.png)
-  
+
 ## Launch StudioWorkspace Instance / AppDeployment Instance
 
 - Use same procedure for StudioWorkspace Instance / AppDeployment Instance.
