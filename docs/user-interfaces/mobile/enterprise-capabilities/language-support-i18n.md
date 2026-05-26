@@ -1,67 +1,59 @@
 ---
-last_update: { author: "Priyanka Bhadri" }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Localization
 
-Localization is the process of adapting an application to meet the language, cultural, and regional preferences of users. In WaveMaker, localization enables applications to be rendered in multiple languages and formats, making them more usable and relevant for a global audience. Localization support in WaveMaker is provided at two levels: **Application Localization** and **Platform Localization**. 
-
----
+Localization is the process of adapting an application to meet the language, cultural, and regional preferences of users. In WaveMaker, localization enables applications to be rendered in multiple languages and formats, making them more usable and relevant for a global audience. Localization support in WaveMaker is provided at two levels: **Application Localization** and **Platform Localization**.
 
 ## Application Localization
 
-Application localization allows you to present the application’s user interface in different languages and formats:
+Application localization lets your mobile app present UI text and regional formats in different languages:
 
-- **Default Language and Locale:**  
-  From **Project Settings**, you can configure the default language and locale for an application from settings. This determines the language used as well as regional formats such as date and time when the application loads.
+- **Default language and locale:** In **Project Settings**, configure the default language and locale for the app. This sets the language and regional formats (date, time, currency) used when the app starts and no other locale is stored yet.
 
-- **Select Locale Widget:**  
-  By adding the **Select Locale** widget to a page, end users can choose the language in which the app should be displayed. When a language is selected, WaveMaker applies the corresponding locale settings, updating UI text and regional formats accordingly. 
+- **Select Locale widget:** Add the **Select Locale** widget to a page so users can pick a display language from the languages you enabled for the project. The widget is bound to the `supportedLocale` variable. When the user selects a language, the app calls `App.changeLocale`, loads the locale bundle, updates UI text and formats, and refreshes the screen. If the switch changes layout direction (RTL ↔ LTR), the app may restart on device.
 
-To support localization within an app, developers typically maintain a **dictionary of localized messages** (keys and translated values) that can be bound to UI components such as labels and messages. 
+To support localization within the app, maintain a **dictionary of localized messages** (keys and translated values) and bind widget **Caption** and other text to those keys (for example `appLocale.LABEL_WELCOME`). See [Binding to localized messages](/docs/user-interfaces/mobile/develop/integrating-with-apis/bind-expressions#binding-to-localized-messages) for binding patterns.
 
-<!-- ![language](../assets/i18.png) -->
+## Platform Localization *(Enterprise only)*
 
----
+Platform localization lets developers work in WaveMaker Studio in their preferred language. This applies to the Studio and Launchpad experience, not to your exported mobile app UI. It is available in the **Enterprise** edition.
 
-## Platform Localization *(Enterprise Only)*
+### Setting language preference
 
-Platform localization allows developers to work within the WaveMaker Studio itself in their preferred language. This feature is available only in the **Enterprise edition** of WaveMaker. 
+- Developers can set a **personal preferred language** in their Studio profile.
+- Administrators can configure a **default language for all users** from Launchpad.
 
-### Setting Language Preference
+### Adding language bundles
 
-- Developers can set a **personal preferred language** by editing their profile in Studio.  
-- Administrators can configure a **default language for all users** from the Launchpad. 
+To add languages in Studio:
 
-### Adding Language Bundles
+1. Copy an existing English bundle file (`en.properties` or `en.json`).
+2. Rename it with the target locale identifier (for example `de.properties` for German).
+3. Translate the content.
+4. Add the files to the required resource locations for Launchpad, Studio frontend, and backend modules.
 
-To enable additional language support in Studio, you must add language bundles:
+WaveMaker includes English and German bundles by default. New locales are added by placing language files in the correct module directories so Studio UI and backend services can load them.
 
-1. Copy an existing English bundle file (`en.properties` or `en.json`).  
-2. Rename it using the target locale identifier (e.g., `de.properties` for German).  
-3. Translate the content appropriately.  
-4. Add the files to the required resource locations for Launchpad, Studio frontend, and backend modules. 
+## How localization works in the app
 
-WaveMaker includes English and German bundles by default. Adding new locales involves placing the language files in specific module directories so that both the Studio UI and backend services can use them.
+When the app supports multiple languages:
 
-<!-- ### Updating Build Scripts
+- On first launch, the app uses the default language and locale from **Project Settings**.
+- After a user picks a language with **Select Locale**, that choice is saved on the device and restored on the next launch.
+- The app loads the locale bundle for the active language (message keys and format settings for date, time, and currency).
+- Widgets bound to `appLocale` keys show translated text for the active locale.
+- Date, time, number, and currency widgets use formats from the active locale.
+- For right-to-left languages (such as Arabic or Hebrew), layout direction follows the locale. Switching between a left-to-right and a right-to-left language on a device build may require restarting the app for layout to apply fully.
 
-Once language bundles are added, the platform build process must be updated:
-
-- Create or update a **Flyway script** to insert the new locale into the platform’s database.  
-- For example, insert an entry into the `SUPPORTED_LOCALE` table for the new language.  
-- After rebuilding the platform, developers will see the new language option in their Studio profiles.  -->
-
----
-
-## How Localization Works at Runtime
-
-- When an application supports multiple languages, WaveMaker can detect the user’s preferred locale from the browser or selected language, and render the UI accordingly. 
-- The **Select Locale widget** is bound to a locale variable (usually `supportedLocale`). When the user selects a language, localized messages are applied dynamically without requiring a full page reload in many cases. 
-- Date, time, number, and currency formats are adjusted based on the selected locale’s regional settings. 
-
----
+Test language switching on a device or simulator. Studio preview may not match every on-device locale behavior.
 
 ## Summary
 
-WaveMaker’s localization capabilities enable applications to support multiple languages, regional formatting, and cultural conventions for a global audience. Application localization focuses on rendering content in various languages at runtime, while platform localization allows developers to interact with the Studio interface itself in different languages. Both levels of localization improve usability and broaden the reach of WaveMaker applications. 
+WaveMaker localization helps mobile apps reach a global audience with multiple languages and regional formatting. **Application localization** controls what end users see in the app. **Platform localization** controls the language developers use in Studio (Enterprise). Together they improve usability for both app users and your team.
+
+## Related topics
+
+- [Bind expressions](/docs/user-interfaces/mobile/develop/integrating-with-apis/bind-expressions/) for `appLocale` bindings and formatters
+- [Variables](/docs/user-interfaces/mobile/develop/integrating-with-apis/variables/) including `supportedLocale`

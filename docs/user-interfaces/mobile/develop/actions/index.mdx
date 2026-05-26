@@ -1,56 +1,67 @@
 ---
-last_update: { author: "Raj Kumar Reddy Abbadi" }
+last_update: { author: "Praneeth Reddy" }
 ---
+
 # Overview
 
-## Actions in WaveMaker
+Variables and **Actions** connect the UI to backend services and navigation. Variables load and bind data. Actions run the next step when something happens: invoke a service, show a message, open a page, or log in.
 
-In WaveMaker, Variables and Actions together form the integration layer between the user interface and backend services. While variables are mainly used for data operations (fetching, inserting, updating, deleting, and binding data to widgets), Actions define what the application should do next when something happens.
-
-Actions help you connect UI events (like button clicks) with application logic (like invoking a service, validating data, or navigating to another page), without tightly coupling everything to a single widget.
+Actions keep business logic out of widget markup. You wire them from the **Actions** dialog or from a widget **Events** tab (for example **on Tap** or **on Submit**).
 
 ```mermaid
 flowchart TD
-    A[User Event Click or Submit] --> B[Action Starts]
-    B --> C[Invoke Variable]
-    C --> D{Response Received}
+    A[User tap or submit] --> B[Action runs]
+    B --> C[Invoke variable or built-in action]
+    C --> D{Response}
 
-    D -->|Success| E[Update UI Widgets and Refresh Data Binding]
-    E --> F[Success Flow -> Navigate, Close Dialog, Show Message]
+    D -->|Success| E[Update bindings and widgets]
+    E --> F[Navigate, close dialog, or notify]
 
-    D -->|Error| G[Error Flow Show Error Message]
-    G --> H[Reset UI State -> Stop Loader, Enable Button]
-
+    D -->|Error| G[Show error message]
+    G --> H[Reset UI, hide loader]
 ```
 
-Actions represent operations performed by the application when an event occurs. These operations can be triggered by:
-- User-initiated events (such as clicking a button or submitting a form)
-- System-driven events (such as successful completion of a service call)
-Actions enable developers to implement business logic, rules, and navigation flows without tightly coupling them to UI components.
+## When actions run
 
-## Action Creation
+- **User events:** button tap, form submit, list row select
+- **System events:** success or error after a variable or action completes
 
-There are two common ways to create an Action:
+For event handler naming and UI callbacks, see [Event handling overview](/docs/user-interfaces/mobile/develop/events/).
 
-- From the Actions dialog: You can open the Actions panel and click New Action to create an action directly.
-- From a component event: When you select a UI component (like a Button, Form, or DataTable), you can go to its Events tab and choose New Action for an event such as onClick, onSubmit, or onRowSelect
+## Create an action
+
+**From the Actions dialog**
+
+1. Open **Actions** in Studio.
+2. Click **New Action**.
+3. Pick the action type (navigation, notification, login, and so on).
+
+**From a widget event**
+
+1. Select the widget.
+2. Open the **Events** tab.
+3. Choose an event (for example **on Tap**) and click **New Action**.
+4. Complete the **New Action** dialog.
 
 ```mermaid
-
 flowchart TD
-    A[Start] --> B{How do you create the Action}
+    A[Create action] --> B{Entry point}
 
-    B -->|Actions dialog| C[Click on Variable and Select Action value from dropdown]
-    C --> D[Click -> New Action]
+    B -->|Actions dialog| C[New Action]
+    B -->|Widget Events tab| D[Pick event, then New Action]
 
-    B -->|Component event| E[Select a component]
-    E --> F[Open Events tab]
-    F --> G[Choose event and click New Action]
-
-    D --> H[New Action dialog opens]
-    G --> H[New Action dialog opens]
-
-    H --> I[Select required target action]
-    I --> J[Action created and available for use]
-
+    C --> E[Select action type and configure]
+    D --> E
+    E --> F[Action available on Page or App]
 ```
+
+## Action types
+
+Studio provides navigation, login, logout, timer, and notification actions. Configuration and `invoke()` examples are on [Types of actions](/docs/user-interfaces/mobile/develop/actions/types).
+
+## Related topics
+
+- [Types of actions](/docs/user-interfaces/mobile/develop/actions/types)
+- [Event handling overview](/docs/user-interfaces/mobile/develop/events/)
+- [Variable events](/docs/user-interfaces/mobile/develop/events/variable-events)
+- [UI events](/docs/user-interfaces/mobile/develop/events/ui-events)

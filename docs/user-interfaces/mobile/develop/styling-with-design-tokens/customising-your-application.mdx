@@ -1,127 +1,115 @@
 ---
-last_update: { author: 'Sandeep Chezhian A' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Customising your application
 
 ## Style Workspace
 
-While Foundation CSS provides a comprehensive and highly configurable styling architecture, it operates at a low level and is primarily intended to serve as the underlying implementation layer of the design system. Directly modifying Foundation CSS typically requires working with design tokens, CSS variables, component rules, and variant definitions, which can be complex and time-consuming, especially for large-scale or iterative styling changes. As the foundation grows in scope, making manual updates directly within the CSS layer may introduce risks such as unintended overrides, specificity conflicts, or inconsistencies across components.
+Use **Style Workspace** in Studio to change design tokens, component styles, and variants through structured inputs instead of raw theme files. For what Foundation CSS is and how tokens feed the mobile theme, see [Introduction to Foundation CSS](./introduction-to-foundation-css). For how to navigate and edit tokens in Studio, see [Working with Style Workspace](./working-with-style-workspace).
 
-To address this, the platform provides the **Style Workspace**, a higher-level configuration interface designed to simplify and streamline the process of customizing the visual system. The Style Workspace acts as an abstraction layer on top of Foundation CSS, enabling users to modify design tokens, component styles, and variant behavior through a structured and guided workflow rather than editing raw CSS. Instead of directly changing styles at the implementation level, users interact with controlled configuration inputs that map to the underlying tokens and style definitions.
+**Foundation CSS** is the base theme layer for your **React Native (Expo)** app. Customize through Style Workspace rather than editing Foundation source. Hand-editing tokens, component rules, or variants in that base layer is possible but slow and easy to get wrong as the design system grows.
 
-From a technical perspective, changes made within the Style Workspace are translated into token updates or scoped overrides that integrate seamlessly with the Foundation CSS architecture. This ensures that customizations remain consistent with the design system, follow established inheritance patterns, and avoid breaking core styling contracts. By operating through tokens and standardized configuration points, the workspace preserves the integrity of the foundation while still allowing flexible theming and component-level adjustments.
+Changes in Style Workspace are saved under your WaveMaker project at `src/main/webapp/design-tokens/overrides/`. They stay aligned with the mobile design system and do not require forking Foundation CSS. Style Workspace keeps customizations token-driven, helps you iterate on theme and variants faster, and scales theming without duplicating component style definitions on every screen.
 
-This approach provides several key benefits:
+---
 
-- Reduces the need to directly modify or fork Foundation CSS  
-- Minimizes the risk of cascading or specificity-related issues  
-- Ensures changes remain aligned with the design system structure  
-- Enables faster iteration and experimentation  
-- Improves accessibility for non-CSS-heavy users  
-- Supports scalable theming and customization without duplication  
+## Variant management
 
-In effect, the Style Workspace functions as the primary interface for extending and customizing the design system, while Foundation CSS remains the stable, low-level implementation layer that guarantees consistency and reliability across the application.
+Create new variants or change existing ones in Style Workspace. Variant definitions are stored as JSON under `src/main/webapp/design-tokens/overrides/` and compiled when you export or regenerate the mobile app.
 
---- 
+For variant concepts, see [Introduction to Foundation CSS — Variants](./introduction-to-foundation-css#variants).
 
-## Variant Management
+---
 
-The Style Workspace provides dedicated support for creating new variants and modifying existing ones, enabling controlled customization of component appearance and behavior without directly altering Foundation CSS source code.
+## Under the hood
 
-Within Foundation CSS, variants represent predefined stylistic or behavioral configurations of a component. These variations typically capture differences such as visual emphasis, size, density, state, or semantic intent (for example: primary, secondary, compact, outlined, success, or error). Variants allow multiple use cases to be supported by a single base component while maintaining structural consistency and minimizing redundant style definitions.
+Customizations touch **two different folders**, depending on whether you are looking at the WaveMaker project in Studio or the exported Expo app.
 
-Traditionally, introducing or updating a variant at the CSS level would require manually defining new selectors, managing overrides, and ensuring correct inheritance and specificity. As the number of components and variations grows, this approach becomes increasingly difficult to maintain and prone to conflicts.
+### 1. WaveMaker project (Studio source)
 
-The Style Workspace abstracts this complexity by exposing variants as structured, configurable entities. Users can:
+Path: **`src/main/webapp/design-tokens/`**
 
-- Create new variants for existing components  
-- Modify styling properties of existing variants  
-- Adjust token values associated with a variant  
-- Extend base styles without duplicating component definitions  
-- Preview and validate changes in real time  
+| File or folder                              | Role                                                                                                                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `overrides/**/*.json`                       | Source of truth from Style Workspace (global and component token edits, **variants**, and **states**)                 |
+| `app.override.css`                          | Compiled override CSS from the JSON (intermediate output from codegen)                                                |
+| `app.studio.override.css`                   | Studio canvas and mobile preview in Studio (derived from `app.override.css`)                                          |
+| `app.designtokens.js`                       | Runtime token and variant overrides for preview and export (derived from `app.override.css`)                          |
+| `foundation/ios/` and `foundation/android/` | Compiled Foundation theme (`style.css` for Studio, `style.js` and `tokens.js` for runtime, fonts, and related assets) |
 
-From a technical standpoint, variant updates made through the workspace are translated into token adjustments or scoped style configurations that integrate directly with Foundation CSS. Rather than generating isolated or ad-hoc styles, the system composes changes on top of the established foundation, ensuring that variants inherit correctly from base component definitions and remain consistent with global design rules.
-
-This model provides several advantages:
-
-- Significantly the need for manual CSS overrides  
-- Preserves predictable inheritance and cascade behavior  
-- Encourages reuse of base component logic  
-- Prevents style duplication and drift  
-- Enables scalable expansion of component states  
-- Simplifies long-term maintenance as the design system evolves  
-
-By treating variants as first-class configuration units, the Style Workspace makes it easier to adapt components to new requirements while maintaining alignment with the underlying Foundation CSS architecture.
-
-## Under the hood 
-
-All styling changes made through the Style Workspace are persisted as design token updates within the `design-tokens` directory. These tokens are stored in structured JSON files that capture both global and component-level modifications. Rather than directly altering Foundation CSS, the system treats these files as declarative configuration inputs that describe how the design system should be extended or customized.
-
-During the build process, Amazon Style Dictionary consumes these token definitions and compiles them into a generated CSS artifact named `app.override.css`. This file contains the concrete CSS variables and rules derived from the updated tokens and serves as the application’s customization layer.
-
-From an architectural perspective, `app.override.css` is loaded after Foundation CSS in the cascade. This ensures that:
-
-- Foundation CSS provides the base styling contract  
-- `app.override.css` selectively overrides or extends those defaults  
-- The core foundation remains unchanged and upgrade-safe  
-
-
-This layered approach allows the application to adapt the design system without modifying or forking the underlying Foundation CSS implementation.
-
-### Override Behavior
-
-When existing tokens are modified through the Style Workspace (for example, changing a primary color or adjusting component spacing), the compiled styles in `app.override.css` override the corresponding values defined in Foundation CSS. Because these overrides are generated from tokens rather than handwritten CSS, they remain consistent, predictable, and aligned with the system’s structure.
-
-This guarantees that:
-
-- Customizations remain scoped and intentional  
-- The cascade is controlled and conflict-free  
-- Foundation updates can be adopted without losing changes  
-
-For example, when a user modifies a value in the Style Workspace (for example, changing the primary color), the change is persisted as a token:
+Example override JSON (custom button variant):
 
 ```json
-// src/main/webapp/design-tokens/overrides/global/color.json
+// src/main/webapp/design-tokens/overrides/components/button/button.json
 {
-  "color": {
-    "primary": {
-      "value": "#0052CC"
+  "btn": {
+    "appearances": {
+      "custom": {
+        "mapping": {
+          "background": { "value": "{color.border.translucent.value}" },
+          "color": { "value": "{color.error.@.value}" }
+        }
+      }
     }
   }
 }
 ```
 
-The generated `app.override.css` will host these changes in CSS format. 
+The exported **Expo** app on a device uses **`app.designtokens.js`** and foundation **`style.js`** / **`tokens.js`**, not the override CSS files directly.
 
-```css
-// src/main/webapp/design-tokens/app.override.css 
+### 2. Exported Expo app (`generated-expo-app`)
 
-:root {
---wm-color-primary: #0052CC;
-}
-``` 
+When you export or generate the mobile app, codegen produces a runnable Expo project. Theme files live at the **app root**, not under `src/main/webapp/`.
 
-### Variant Additions
+Typical layout:
 
-When new variants are created, the generated styles in `app.override.css` behave differently. Instead of overriding existing rules, these styles introduce new selectors and definitions that extend the component’s capabilities.
+| File or folder                                                          | Role                                                                                              |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `design-tokens/foundation/ios/` and `design-tokens/foundation/android/` | Widget style maps and theme variables the runtime loads (`style.js`, `tokens.js`, `variables.js`) |
+| `app.designtokens.js`                                                   | Project-specific color-scheme tokens and **variant** overrides merged at runtime                  |
 
-In this case, the output should be viewed as an addition to Foundation CSS rather than an override. The base component styles continue to function as defined, while the new variant definitions augment the system with additional behavior or appearance options.
+Override JSON is compiled into `app.designtokens.js` and into the foundation `style.js` / `tokens.js` output when you export or generate the mobile app.
 
-This distinction is important:
+Example from an exported app (`btn-custom` variant derived from Style Workspace overrides):
 
-- Existing variant token edits → override existing foundation values  
-- New variants → extend the foundation with new styles as these will not be present in foundation styles. 
+```javascript
+// generated-expo-app/app.designtokens.js (excerpt)
+export const variants = {
+  "btn-custom": {
+    "--wm-btn-background": "var(--wm-color-border-translucent)",
+    "--wm-btn-color": "var(--wm-color-error)",
+    "--wm-btn-radius": "var(--wm-radius-pill)"
+  }
+};
+```
 
-### Benefits of the Layered Model
+### Build flow
 
-This compilation strategy provides several advantages:
+When you edit Style Workspace and click **Save**:
 
-- Preserves the integrity of Foundation CSS  
-- Avoids direct modification of shared base styles  
-- Enables safe upgrades and maintenance  
-- Keeps all customizations declarative and token-driven  
-- Ensures predictable cascade order  
-- Clean separation between base system and application-specific styling  
+1. Studio saves your changes as JSON under `design-tokens/overrides/`.
+2. Codegen compiles those overrides and generates **`app.override.css`**.
+3. From **`app.override.css`**, codegen produces two outputs:
+   - **`app.studio.override.css`** for the Studio canvas and mobile preview in Studio
+   - **`app.designtokens.js`** for the mobile runtime (variants and color-scheme overrides)
+4. When you **export or generate** the Expo app, theme assets (including `app.designtokens.js` and `design-tokens/foundation/*/style.js` and `tokens.js`) are written into **`generated-expo-app`** for the device build.
 
-By separating Foundation CSS from the generated `app.override.css` layer, the system maintains a clear boundary between the stable design foundation and application-level customization, resulting in a scalable and maintainable styling architecture.
+Foundation CSS stays upgrade-safe because you never patch its source. Your layer stays in override JSON and the compiled artifacts codegen produces.
+
+### Override vs new variant
+
+- **Edit an existing token or variant** when you want to change a default the design system already defines (for example the default button background). After you save, that value applies everywhere the token is used, including on widgets you drag onto the canvas later.
+- **Create a new variant** when you need an extra look for a widget (for example a `custom` button). Select it on the widget **variant** property in the Properties panel.
+
+Keep Style Workspace changes in `design-tokens/overrides/` in the project. Rely on export to produce the theme files the Expo app actually loads.
+
+---
+
+## Application and page styles
+
+Use Style Workspace for most theming. When a token or variant is not enough, open the **Style** tab for **`app.css`** (shared across the app) or for a specific page or partial (one screen only).
+
+Use custom CSS only when Style Workspace cannot express the style, the change is limited to one screen, or you are prototyping before moving values into tokens. Prefer widget properties in Studio for a single control.
+
+Do not edit files under `design-tokens/foundation/`. Export or regenerate the mobile app after Style tab changes so the generated Expo project picks up `app.style.js` and page `*.style.js`.

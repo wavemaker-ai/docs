@@ -1,73 +1,114 @@
 ---
-last_update: { author: "Raj Kumar Reddy Abbadi" }
+last_update: { author: "Praneeth Reddy" }
 ---
-# Types of Actions
 
-- **Navigation:** action provides navigation capabilities to help in navigating from one page or view to another
-- **Login:** action is to authenticate a user at the server. A Login Action is created automatically when you enable Security in your application
-- **Logout** action
-- **Timer:** action can be used to trigger events repeatedly at timed intervals.
-- **Notification:** is an action to show UI notifications in the app in the form of a toaster, alert or a confirmation box
+# Types of actions
 
+Studio ships built-in actions for navigation, security, timed callbacks, and user messages. Create them from the **Actions** dialog or from a widget **Events** tab. For how actions fit with variables and events, see [Actions overview](/docs/user-interfaces/mobile/develop/actions/).
 
-## Navigation Action
-The Navigation Action in WaveMaker provides built in navigation capabilities that enable movement between pages or views within an application. Navigation actions define how and when page transitions occur in response to events.
+| Action       | Use for                                      |
+| ------------ | -------------------------------------------- |
+| Navigation   | Open another page or go to the previous page |
+| Login        | Authenticate against your security provider  |
+| Logout       | End the session                              |
+| Timer        | Run logic once or on an interval             |
+| Notification | Toast, alert, or confirm UI                  |
 
-#### Properties
+## Navigation action
 
-| Property | Description |
-| -------- | ----------- |
-| Navigation Target | Sets Navigation Target (Previous Page, Page, Tab or Accordion)|
-| Page Name | The page name to navigate to |
+Navigation actions move the user between screens in the stack. In a **React Native mobile** project, Studio exposes **Page** and **Previous page** as navigation targets. Wire an action to a tap, a variable **on Success** handler, or another event.
+
+To switch tabs or accordion panes on the same page, use the widget API in script (for example `Page.Widgets.myTabs.select()`) or bind selection in markup instead of a navigation action.
+
+### Properties
+
+| Property          | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| Navigation target | **Page** or **Previous page** (mobile)         |
+| Page name         | Target page when navigation target is **Page** |
+
+### Invoke from script
+
+Action names follow `goToPage_{PageName}` (or the name Studio generates). Pass route parameters on `invoke` or with `setData` before `invoke`.
 
 ```javascript
-// Example 1: Navigate to TestPage
 Page.Actions.goToPage_TestPage.invoke();
 
-// Example 2: Navigate to TestPage with url params
 Page.Actions.goToPage_TestPage.invoke({
-     data: {
-         'param1': "param value",
-         "param2": "param value 2"
-     }
+    data: {
+        param1: "param value",
+        param2: "param value 2"
+    }
 });
 
-// Example 3: Navigate to TestPage by setting the input fields
-Var nv = Page.Actions.goToPage_TestPage;
-nv.setData({
-   'param1': "param value",
-   "param2": "param value 2"
+var nav = Page.Actions.goToPage_TestPage;
+nav.setData({
+    param1: "param value",
+    param2: "param value 2"
 });
-nv.invoke();
+nav.invoke();
 ```
 
----
-## Login Action
-The Login Action in WaveMaker provides a standardized mechanism for user authentication. Automatically created when security is enabled, it integrates with the configured security provider and supports flexible customization through properties and events. By leveraging the Login Action, applications can implement secure, role-based access with minimal configuration.
+## Login action
 
-The Login Action exposes standard action lifecycle events, These events can be used to implement custom authentication logic, error handling, or navigation behavior.:
-- onSuccess
-- onError
-- onBeforeInvoke
+Created automatically when you enable **Security**. Calls your configured identity provider and supports role-based landing pages.
 
-#### Properties
+### Events
 
-| Property | Description |
-| -------- | ----------- |
-| Use default success handler | If checked, on successful login, the logged in user will be redirected to the Landing Page configured against the user role (refer to Login Configuration under Security for more info). If a custom logic is required, uncheck this property and implement the logic under the onSuccess event of the Action.|
-| Update data on input change | If checked, the component will be triggered automatically on the change of input data (as mentioned in the data tab) for the Action. |
-| Request data on page load | If checked, 'Page' scoped will be triggered on page load while 'Application' scoped will be triggered on application load. |
-| In Flight Behavior | This property determines the behavior when a call is fired through the action with the previous call still pending. Action queues all these calls, waits for the previous call completion and then based on the value of the inFlightBehavior property, decides what to do with all the queued calls: - doNotExecute - all the queued calls will be discarded, - executeAll - all the calls will be triggered one by one, or - executeLast - only the last call is triggered and the rest are discarded, this is the default behavior |
-| Spinner Context | This property specifies on which UI widget the spinner should show. Leave empty if no spinner required. |
-| Spinner Message | The message to be displayed below the spinner. Leave empty if no message is required below the spinner. Note: If multiple actions are fired then the spinner messages will be displayed as a list below a single spinner. |
----
-## Logout Action
-A Logout Action is automatically created when you implement Security in your application. You can edit the Properties and Events of the Logout Action from the Actions dialog.
+- `onBeforeInvoke`
+- `onSuccess`
+- `onError`
 
----
-## Timer Action
-Timer action can be used to trigger events repeatedly at timed intervals.
+Use **on Success** for custom navigation when **Use default success handler** is off.
 
----
-## Notification Action
-Notification Action is an action to show UI notifications in the app in the form of a toaster, alert or a confirmation box. It provides message capabilities, a way for the app to notify the end users. Based on the operation selected app can notify the user through an Alert/Confirm dialog or a simple toaster message. This action can be useful in cases like error handling, confirm user action, etc.
+### Common properties
+
+| Property                    | Description                                                                                                                |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Use default success handler | When enabled, navigates to the landing page for the user role after login. Disable to handle navigation in **on Success**. |
+| Update data on input change | Invokes the action when bound input data changes.                                                                          |
+| Request data on page load   | Runs on page load (page scope) or app load (app scope).                                                                    |
+| In flight behavior          | `executeLast` (default), `executeAll`, or `doNotExecute` when a call is already in progress.                               |
+
+```javascript
+App.Actions.loginAction.invoke();
+```
+
+## Logout action
+
+Created when **Security** is enabled. Configure properties and events in the **Actions** dialog, then invoke from a menu item or button:
+
+```javascript
+App.Actions.logoutAction.invoke();
+```
+
+## Timer action
+
+Runs page or app logic after a delay, once or repeatedly. Set **delay** (milliseconds) and **repeating** in Studio. Call `invoke()` to start and `cancel()` to stop.
+
+```javascript
+Page.Actions.myTimer.invoke();
+Page.Actions.myTimer.cancel();
+```
+
+## Notification action
+
+Shows feedback in the app: **toast** messages, **alert** dialogs, or **confirm** dialogs (with OK and Cancel). Use for errors, confirmations, and status updates.
+
+Configure message text, type (success, error, info), duration, and position in the action properties or when invoking:
+
+```javascript
+Page.Actions.appNotification.invoke({
+    message: "Saved successfully",
+    class: "Success"
+});
+```
+
+Partial content can be bound for richer toast or dialog bodies.
+
+## Related topics
+
+- [Actions overview](/docs/user-interfaces/mobile/develop/actions/)
+- [Event handling overview](/docs/user-interfaces/mobile/develop/events/)
+- [UI events](/docs/user-interfaces/mobile/develop/events/ui-events)
+- [Variable events](/docs/user-interfaces/mobile/develop/events/variable-events)

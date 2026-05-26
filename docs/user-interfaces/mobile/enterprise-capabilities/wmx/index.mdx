@@ -1,0 +1,100 @@
+---
+last_update: { author: "Praneeth Reddy" }
+---
+
+# WMX components
+
+**WMX components (WaveMaker Extension components)** let you integrate custom React Native components into WaveMaker mobile applications. They extend the default component library while supporting property binding, event handling, scripting, and theme styling.
+
+WMX components behave like native WaveMaker widgets in Studio and in the app.
+
+WaveMaker wraps your React Native implementation so the component still supports binding, page scripts, events, app and page styles, and design tokens like built-in widgets. You keep control of the UI code inside `index.tsx`; the platform supplies the integration layer.
+
+In Studio, custom components appear under **WMX Widgets** in the widget panel. This documentation uses the term **WMX components** for the same feature.
+
+## Why use WMX components
+
+WaveMaker ships a large widget set, but some apps need controls that are not in the library. WMX components are a good fit when you need:
+
+- A custom control or visualization (for example a color picker, chart, or circular slider)
+- A reusable component shared across projects with Studio-configurable props
+- A third-party React Native library embedded as a first-class widget
+
+## Capabilities
+
+WMX components allow you to:
+
+- Integrate custom React Native components
+- Bind component properties to application variables
+- Trigger and handle component events
+- Apply WaveMaker themes and style tokens
+- Use third-party React Native libraries
+
+## Key benefits
+
+Along with the capabilities above, WMX components give you:
+
+- **Script access:** use `Page.Widgets.<componentName>` in page logic like other widgets
+- **Studio configuration:** props, events, and styles from `wmx.json` appear in the Properties panel
+- **Data binding:** bind props to variables and page data
+- **Theming:** use app, page, and design token styles with your component
+- **Debugging:** inspect behavior with [WavePulse](/docs/user-interfaces/mobile/testing-and-debugging/wm-debugging-tools/wavepulse) on device
+- **Lightweight integration:** a thin wrapper around your React Native code
+
+## WMX component file structure
+
+All components live under:
+
+`src/main/webapp/extensions/components/src/`
+
+Organize each component in its own folder:
+
+```text
+src/main/webapp/extensions/components/src/
+├── widgetname/
+│   ├── index.tsx
+│   ├── wmx.json
+│   └── icon.svg (optional)
+```
+
+### index.tsx
+
+- Contains the component UI and core logic.
+- Acts as the entry point for the custom WMX widget.
+- Must export the component as the **default export**.
+
+### wmx.json
+
+- Defines component metadata.
+- Controls how the component appears and behaves in WaveMaker Studio.
+- Includes component name, properties, events, and styling options.
+- Studio generates the properties panel from this file.
+
+### icon.svg (optional)
+
+- Used as the component icon in WaveMaker Studio.
+
+Recommended guidelines:
+
+- Use a transparent background.
+- Prefer `#737373` as the stroke color.
+- Keep the design minimal and recognizable at small sizes.
+
+Learn more in [WMX schema reference](wmx-schema-reference.md).
+
+## Get started
+
+- **Create in Studio (recommended):** [Create WMX components with AIRA](wmx-with-aira.md)
+- **Schema while building:** [WMX schema reference](wmx-schema-reference.md) for `wmx.json`, props, events, and styles
+- **Edit locally and sync:** [Set up WaveMaker project locally](/docs/guide/integration/set-up-wavemaker-project-locally/) when you use an external editor and push changes back to Studio with Maven workspace sync
+
+## Limitations
+
+- WMX components show placeholders in the Studio canvas; they do not render the full UI in design mode.
+- WMX components cannot act as container widgets.
+- WMX components cannot be used as form fields.
+- WMX components are supported only in React Native mobile applications.
+
+## Summary
+
+WMX components enable advanced mobile UI customization by plugging custom React Native components into WaveMaker with binding, events, scripts, theming, and external libraries. Teams can deliver richer mobile experiences without being limited to the default widget set.

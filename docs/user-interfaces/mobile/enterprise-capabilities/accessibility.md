@@ -1,140 +1,72 @@
 ---
-last_update: { author: "Priyanka Bhadri" }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Accessibility
 
+Accessible mobile apps work for everyone, including people who use VoiceOver (iOS) or TalkBack (Android). Clear labels, logical structure, readable contrast, and helpful feedback improve the experience for all users.
 
-Accessibility plays a vital role in building high‑quality applications that can be used by everyone, including people with disabilities. WaveMaker adheres to international standards for web accessibility, such as the Web Content Accessibility Guidelines (WCAG) and WAI‑ARIA, to ensure UI components and applications are inclusive and assistive‑technology friendly.
+## Built-in accessibility
 
-To support accessibility, WaveMaker automatically assigns appropriate ARIA roles and attributes to its widgets, making it possible for screen readers and other assistive technologies to interpret UI elements and their purpose correctly. Developers can configure or refine text captions and accessibility hints to provide meaningful context for users relying on assistive tools.
+WaveMaker mobile apps include accessibility support by default. On device, the app uses iOS **VoiceOver** and Android **TalkBack**. You do not need extra setup for basic screen reader support.
 
-WaveMaker’s accessibility enhancements aim to cover key WCAG “A” and “AA” success criteria, including meaningful semantics, relationships between UI elements, input identification, error prevention, and non‑text contrast.
+The app uses widget properties such as **Caption** for what the screen reader announces. For example, a **Button** with caption `Sign Up` is read as **Sign Up, button** when the screen reader is on.
 
----
+Test on a physical device or simulator with the screen reader enabled. Studio preview does not fully match on-device behavior.
 
-## How Accessibility Works in WaveMaker
+## Add context with Hint
 
-WaveMaker ensures that applications are accessible by embedding semantic information directly into UI components. Each widget automatically includes ARIA roles, labels, and attributes that convey meaning to assistive technologies such as screen readers. Developers can further enhance accessibility by configuring hints, labels, and focus behaviors, allowing users with different abilities to interact with applications effectively. This approach provides a consistent, standards-compliant experience across devices while reducing the manual effort required to implement accessibility.
+Sometimes **Caption** and the control type are not enough. Use **Hint** in the widget **Accessibility** section to add spoken context after the label.
 
+For example, a **Button** with caption `Submit` is read as **Submit, button**. Add **Hint** `Sends your order` so users hear what the action does.
 
-### ARIA Roles and Attributes
+Another example: **Button** caption `Sign Up` with **Hint** `Creates a new account` is read as **Sign Up, button. Creates a new account**.
 
-WaveMaker uses ARIA roles and attributes to improve accessibility across its widget library. These attributes help screen readers understand the purpose, structure, and relationships of UI elements.
+## Configure accessibility in Studio
 
-Developers can provide meaningful text for widgets using the **Hint** property, which is then exposed as an `aria‑label` in the HTML output, aiding assistive technologies.
+Mobile apps do not use ARIA attributes such as `aria-label`. In Studio, set **Accessibility label** when you need a spoken name different from **Caption**. On web apps, the similar control is often described as `aria-label`; on mobile, use the **Accessibility** properties in the table below.
 
----
+1. Select the widget on the canvas.
+2. In the **Properties** panel, open **Accessibility**.
+3. Set **Hint** or other properties as needed. You can bind **Hint** using the bind icon next to the field.
 
-## Steps to Ensure Accessibility in WaveMaker
+| Property                | Purpose                                                                    |
+| ----------------------- | -------------------------------------------------------------------------- |
+| **Hint**                | Extra context read after the label (for example `Double tap to submit`).   |
+| **Accessibility label** | Overrides the spoken name when the visible caption is not enough.          |
+| **Accessibility role**  | Describes the control type, such as button, header, or link.               |
+| **Accessible**          | Set to `false` for purely decorative elements so screen readers skip them. |
+| **Alt text**            | On **Picture** (and similar), describes the image.                         |
 
- Ensure accessibility in WaveMaker by setting meaningful Hint values for widgets, which automatically populate the aria-label for screen readers. Review the Accessibility section for each widget to provide descriptive labels, tooltips, and alternative text.
+Review defaults when you add a widget. Many ship with placeholder text such as `Label text` or `Button`.
 
-<!-- ### Labels
-1. For every widget you add via drag-and-drop, check the **Accessibility** section in the Properties panel.  
-2. Copy or bind the captions of label widgets to the **Hint** property in the Accessibility section.  
-3. By default, all labels and text fields have a **Hint** value of `"Label text"`, which can be edited as needed.  
-4. The **Hint** property serves two purposes:
-   - Appears as **tooltip text** on hover.
-   - Automatically populates the **`aria-label`** attribute, which is used by assistive technologies (screen readers) to interpret the widget content. -->
+### Example: add Hint to a Label
 
-  ### Example: Adding Accessibility to a Label Widget
+1. Add a **Label** to the page and set **Caption** to `First name` (replace the default `Label text`).
+2. Select the label. In the **Properties** panel, open **Accessibility**.
+3. Set **Hint** to `Enter your first name`. You can type the value or bind it to a variable.
+4. Run the app on a device with VoiceOver or TalkBack and focus the label to confirm the caption and hint are announced.
 
+![WaveMaker Studio Properties panel with the Accessibility section open for a Label widget, showing Accessible, Accessibility label, Hint, and Accessibility role fields](../assets/accessibility.png)
 
+### Widgets that support Hint
 
-1. **Select the Label Widget**  
-   - Drag and drop a **Label** widget onto your page or form.
+Anchor, Button, Checkbox, Chips, Currency, Date, Icon, Label, Line chart, Message, Nav, Number, Picture, Popover, Search, Select, Slider, Switch, Text, Textarea, Toggle, Video, Web view
 
-2. **Open the Accessibility Section**  
-   - In the Properties panel, expand the **Accessibility** section.
+## Good practices
 
-3. **Set the Hint Property**  
-   - Copy or bind the text of the label to the **Hint** property.  
-   - Example: For a label displaying `"First Name"`, set the Hint as `"Enter your first name"`.  
-   - By default, the Hint is `"Label text"`. Always update it with a meaningful description.
+- Use clear, descriptive **Caption** text on buttons, labels, and other interactive widgets. Prefer `Sign Up for newsletter` over `Click here`.
+- Add a **Hint** when the caption alone does not explain the action or field (for example **Caption** `Pay now`, **Hint** `Completes payment for order 12345`).
+- Do not rely on color alone for errors, success, or warnings. Pair visual cues with text such as a **validation message** on form fields or a **Message** widget for app-wide status.
+- Use design tokens and theme colors so text and controls stay readable on device.
+- Set **Accessible** to `false` only for decoration that adds no meaning (redundant icons, dividers).
+- Use heading-style widgets, list group headers, and form titles with **Accessibility role** set to header where it helps structure.
+- Keep a logical reading order in your layout so screen reader focus moves predictably through the page.
+- Test critical flows on a real device with VoiceOver or TalkBack enabled before release.
 
-4. **Understand the Effect**  
-   - The **Hint** serves two purposes:
-     - Appears as **tooltip text** on hover for general users.  
-     - Automatically sets the **`aria-label`** attribute for screen readers, making the label accessible to assistive technologies.
+## Related topics
 
-5. **Preview Accessibility**  
-   - Use the browser preview to check that the `aria-label` is correctly applied.  
-   - Screen readers will announce the label text based on the Hint property.
-
-![Accessibility Steps ](../assets/accessibility.png)
-
-   
-
----
-
-
-## Predefined ARIA Attributes in WaveMaker
-
-WaveMaker UI components include predefined ARIA attributes to support accessibility. These attributes provide screen readers and assistive technologies with semantic information about UI elements.
-
-| Component | ARIA Labels | Role / Attributes |
-|-----------|-------------|-----------------|
-| App logo | `aria-label="Image"` | — |
-| Header | `aria-label="Page header"` | `banner` |
-| Page | `aria-label="Main page content"` | — |
-| Mobile Navbar | `aria-label="Title"` | `link` |
-| Mobile Tabbar | `aria-label="Home"` | `link` |
-| Heading | `aria-label="Label text"` | `heading`, `aria-level="1"` |
-| Login Input | `aria-label="Text field"` | — |
-| Login Button | `aria-label="Login"` | — |
-| Validation Errors | `aria-label="error message"`, `aria-hidden="true"`, `aria-live="polite"` | `alert` |
-| Anchors | `aria-label="Link"` | — |
-| Button | `aria-label="Button"` | — |
-| Checkbox | `aria-label="Checkbox"`, `aria-checked="false"` | `checkbox` |
-| Toggle Switch | `aria-label="Toggle"`, `aria-checked="false"` | — |
-| Rating | `aria-label="1 out of 5 ratings"`, `aria-checked="true"`, `aria-multiselectable="true"` | `radio` |
-| Currency | `aria-label="country currency"` | — |
-| Datetime | `aria-label="Date and time field"` | — |
-| Time Input | `aria-label="Time field"`, `aria-atomic="true"` | `timer` |
-| Pagination | `aria-label="Page 1"` | — |
-| Calendar View | `aria-label="Month view"` | — |
-| Search Input | `aria-label="search field"` | — |
-| Slider | `aria-label="slider"`, `aria-orientation="Vertical/horizontal"` | `slider` |
-| Selectbox | `aria-label="Select options"`, `aria-expanded="false"`, `aria-hashpop="true"` | `listbox` |
-| Selectbox Options | — | `option` |
-| Accordion Tabs | `aria-expanded="true/false"` | `tab` |
-| List | — | `list`, `listitem` |
-| Datatable | — | `table` |
-| Panel | `aria-label="panel"`, `aria-label="panel-header"`, `aria-label="panel-content"`, `aria-label="panel-footer"` | — |
-| Charts | `aria-label="pie chart"` | — |
-| Left Panel | `aria-label="Left navigation"` | `navigation` |
-| Right Panel | `aria-label="Right navigation"` | `complementary` |
-| Top Nav | `aria-label="Second level navigation"` | `navigation` |
-| Footer | `aria-label="Page footer"` | `contentinfo` |
-| Partials | — | `complementary` |
-| Spinner | `aria-label="Loading..."`, `aria-live="assertive"`, `aria-busy="true"` | `alert` |
-| Picture | `aria-label="Placeholder Image"` | — |
-| Icon | `aria-label="user icon"` | — |
-| Popover | `aria-label="user icon"` | `menubar` |
-| Dialog | — | `aria-modal="true"`, `dialog` |
-| Audio | — | — |
-
----
-
-
-## Accessibility Best Practices
-
-When designing accessible applications with WaveMaker:
-
-- Ensure all widgets have meaningful labels and hints for assistive technology.
-- Use proper heading structures to convey content hierarchy.
-- Provide alternative text or descriptions for images and non‑text elements.
-- Enable keyboard navigation using appropriate focus and tab order settings.
-- Effective use of color contrast is also an important aspect of making your app accessible.
-
-  - WCAG 2.0 level "AA" requires a contrast ratio of at least 4.5:1 for normal text and 3:1 for large text.
-  - WCAG 2.1 requires a contrast ratio of at least 3:1 for graphics and user interface components (such as form input borders).
-  - WCAG Level "AAA" requires a contrast ratio of at least 7:1 for normal text and 4.5:1 for large text. 
-For more information about the color contrast ratio before designing or developing any application, see [Contrast Checker](https://webaim.org/resources/contrastchecker/).
-
----
-
-## Summary
-
-WaveMaker ensures that applications are inclusive and accessible by adhering to WCAG and WAI‑ARIA standards. Built-in ARIA roles, attributes, and widget hints allow screen readers and assistive technologies to interpret the UI correctly. By following accessibility best practices—meaningful labels, keyboard navigation, proper headings, alternative text, and sufficient contrast—developers can create applications that are usable by all users across devices and platforms.
+- [React Native component docs](https://react-components.wavemaker.ai/) for widget-specific properties
+- [Design tokens](/docs/user-interfaces/mobile/develop/styling-with-design-tokens/design-token-architecture) for color and typography
+- [Auto Layout](/docs/user-interfaces/mobile/develop/working-with-layouts/auto-layout) for touch-friendly spacing and tap targets
+- [Form input validations](/docs/user-interfaces/mobile/develop/form-input-validations/custom-validators-in-javascript) for validation messages on fields

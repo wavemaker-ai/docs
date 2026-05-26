@@ -4,24 +4,26 @@ last_update: { author: "Raj Kumar Reddy Abbadi" }
 
 # Page Elements
 
-In WaveMaker, every page is designed and managed through the **Canvas**. On the top-left corner of the Canvas, you’ll find a dropdown with three options: **Markup, Script, and Style**. These options represent the core building blocks of a WaveMaker page and define how a page is structured and managed.
+In WaveMaker, every page is designed and managed through the **Canvas**. On the top-left corner of the Canvas, you'll find a dropdown with three options: **Markup, Script, and Style**. These options represent the core building blocks of a WaveMaker page and define how a page is structured and managed.
 
 ![Page Dropdown](../../assets/mobilemarkup.png)
 
 - **Markup:** The Markup view contains the UI structure of the page
 
-  - It includes all WaveMaker components that are dragged and dropped onto the canvas (such as datatable, charts, containers, forms, etc.).
+  - It includes all WaveMaker components that are dragged and dropped onto the canvas (such as lists, charts, containers, forms, etc.).
   - This section defines how the page looks structurally and how components are laid out.
 
   ```html
       <!-- Main Page Markup -->
-      <wm-page name="mainpage" pagetitle="Main">
-          <wm-left-panel columnwidth="2" name="leftpanel" content="leftnav" navtype="rail" navheight="full"></wm-left-panel>
-          <wm-content name="content">
-              <wm-header content="header" name="header" height="auto"></wm-header>
-              <wm-page-content columnwidth="10" name="mainContent"></wm-page-content>
-              <wm-footer name="footer" content="footer"></wm-footer>
+      <wm-page name="mainpage">
+          <wm-mobile-navbar name="mobile_navbar1" title="Title" backbutton="false">
+              <wm-anchor caption="" name="AddLink" iconclass="wi wi-gear"></wm-anchor>
+          </wm-mobile-navbar>
+          <wm-content name="content1">
+              <wm-left-panel content="leftnav" name="left_panel1"></wm-left-panel>
+              <wm-page-content columnwidth="12" name="page_content1"></wm-page-content>
           </wm-content>
+          <wm-mobile-tabbar name="mobile_tabbar1"></wm-mobile-tabbar>
       </wm-page>
   ```
 - **Script:** The Script view is used for page level and component level logic.
@@ -30,28 +32,28 @@ In WaveMaker, every page is designed and managed through the **Canvas**. On the 
   - This includes lifecycle hooks, event handlers, and custom functions related to the page.
 
   ```JavaScript
-      // Page logic that added in script section 
       Page.onReady = function () {
           Page.Variables.svProfileData.invoke();
           Page.Widgets.userButton.caption = "Steve Harrington";
       };
 
-      Page.submitClick = function ($event, widget) {
+      Page.submitTap = function ($event, widget) {
           Page.Actions.goToPage_Main.invoke();
       };
   ```
-- **Style:** The Style view is dedicated to page level styling
-  - Any CSS rules specific to the page, such as layout adjustments, colors, fonts, or overrides are defined here.
+- **Style:** The Style view is dedicated to page level styling.
+
+  - CSS rules specific to the page, such as layout adjustments, colors, fonts, or overrides are defined here.
   - These styles apply only to the current page and do not affect other pages in the application.
+  - For mobile, styles are converted to React Native StyleSheet at build time.
+
   ```css
-      .wm-app .button {
-          background-color: red;
-          border: none;
+      .app-button {
+          background-color: #0B868D;
           color: white;
-          padding: 15px 32px;
-          text-align: center;
+          padding: 12px 24px;
           font-size: 16px;
-          cursor: pointer;
+          border-radius: 8px;
       }
   ```
 
@@ -61,7 +63,7 @@ To switch between these views, simply select the required option (**Markup, Scri
 
 ## Page Level Project Structure
 
-For each page created in WaveMaker Studio, the platform generates a set of five related files within the project structure. These files work together to define the page’s layout, behavior, styling, and configuration. Each file serves a specific purpose, enabling a clean separation of concerns and making the page easier to develop, customize, and maintain.
+For each page created in WaveMaker Studio, the platform generates a set of four related files within the project structure. These files work together to define the page's layout, behavior, styling, and configuration. Each file serves a specific purpose, enabling a clean separation of concerns and making the page easier to develop, customize, and maintain.
 
 ```text
      src/
@@ -72,15 +74,13 @@ For each page created in WaveMaker Studio, the platform generates a set of five 
                           ├── Main.css
                           ├── Main.html
                           ├── Main.js
-                          ├── Main.variables.json
-                          └── page.min.json
+                          └── Main.variables.json
 ```
 
 - **Main.css:** Contains all the CSS styles defined in the Style tab for page-level styling.
 - **Main.html:** Contains all the markup defined in the Markup tab, including the UI components added to the page.
 - **Main.js:** Contains all the JavaScript logic written in the Script tab, including event handlers and custom functions.
-- **Main.variable.json:** Stores metadata related to page variables, such as service variables, modal variables and configurations.
-- **page.min.json:** A minified representation that consolidates the page definition and metadata for optimized runtime usage.
+- **Main.variables.json:** Stores metadata related to page variables, such as service variables, model variables and configurations.
 
 ---
 
@@ -88,43 +88,62 @@ For each page created in WaveMaker Studio, the platform generates a set of five 
 
 In **WaveMaker App**, a page represents a complete UI view within an application. You can create any number of pages in an app, and each page follows a defined layout structure that ensures consistency, responsiveness and ease of development across the application.
 
-The page layout is divided into two main sections (**Leftpanel, Content**) each serving a specific purpose.
+The mobile page layout is divided into four sections: **Mobile Navbar, Content (with Left Panel and Page Content), and Mobile Tabbar**.
 
-By default, WaveMaker generates a standard page markup that follows below structure, which can be customized based on application requirements.
+By default, WaveMaker generates a standard page markup that follows the below structure, which can be customized based on application requirements.
 
 ```html
-    <!-- Default Page Markup -->
-    <wm-page name="mainpage" pagetitle="Main">
-        <wm-left-panel columnwidth="2" name="leftpanel" content="leftnav" navtype="rail" navheight="full"></wm-left-panel>
-        <wm-content name="content">
-            <wm-header content="header" name="header" height="auto"></wm-header>
-            <wm-page-content columnwidth="10" name="mainContent"></wm-page-content>
-            <wm-footer name="footer" content="footer"></wm-footer>
+    <!-- Default Mobile Page Markup -->
+    <wm-page name="mainpage">
+        <wm-mobile-navbar name="mobile_navbar1" title="Title" backbutton="false">
+            <wm-anchor caption="" name="AddLink" iconclass="wi wi-gear"></wm-anchor>
+        </wm-mobile-navbar>
+        <wm-content name="content1">
+            <wm-left-panel content="leftnav" name="left_panel1"></wm-left-panel>
+            <wm-page-content columnwidth="12" name="page_content1"></wm-page-content>
         </wm-content>
+        <wm-mobile-tabbar name="mobile_tabbar1"></wm-mobile-tabbar>
     </wm-page>
+```
+
+### Mobile Navbar
+
+The **Mobile Navbar** appears at the top of the page and provides navigation and contextual actions. In a **web** project, the comparable pattern is a header partial; mobile projects use the navbar instead.
+
+It commonly contains:
+
+- Page title
+- Back button for navigation
+- Action anchors (settings, search, notifications)
+
+The navbar also controls the drawer button for toggling the left panel.
+
+```html
+    <wm-mobile-navbar name="mobile_navbar1" title="Title" backbutton="false">
+        <wm-anchor caption="" name="AddLink" iconclass="wi wi-gear"></wm-anchor>
+    </wm-mobile-navbar>
 ```
 
 ### Left Panel
 
-The **Left Panel** serves as a dedicated area for navigation and contextual support within the application. It provides users with quick access to important sections and tools without interrupting the main content area, helping maintain a consistent and intuitive user experience.
+The **Left Panel** serves as a navigation drawer that slides in from the side. It provides users with quick access to important sections without interrupting the main content area.
 
 Typical use cases include:
 
-- **Navigation menus:** Used to render primary or secondary navigation structures, enabling routing between pages, modules, or application sections.
-- **Contextual tools and actions:** A place to put things like filters, action buttons, shortcuts, or small utilities that make sense for the current page or component
+- **Navigation menus:** Used to render primary or secondary navigation structures, enabling routing between pages or application sections.
+- **Contextual tools and actions:** Filters, action buttons, shortcuts, or utilities relevant to the current page.
 
   ```html
       <!-- Left Panel Partial Markup -->
-      <wm-partial name="leftnav" type="leftnav">
-          <wm-container direction="row" alignment="middle-center" width="fill" name="container1" variant="default:" height="80px">
-              <wm-picture resizemode="cover" name="picture1" variant="default:rounded" class="img-rounded" picturesource="https://dh2dw20653ig1.cloudfront.net/assets/wavemaker_logo.png"></wm-picture>
-          </wm-container>
-          <wm-nav name="leftnavigation" type="pills" layout="stacked">
-              <wm-nav-item name="list_dashboard">
-                  <wm-anchor caption="Dashboard" name="dashboardLink" iconclass="wi wi-bar-graph" on-click="Actions.goToPage_Main.invoke()"></wm-anchor>
+      <wm-partial name="leftnav" type="left-panel">
+          <wm-nav type="pills" layout="stacked" name="nav1">
+              <wm-nav-item name="nav_item1">
+                  <wm-anchor caption="Dashboard" iconclass="wi wi-bar-graph" name="anchor1"
+                      on-tap="Actions.goToPage_Main.invoke()"></wm-anchor>
               </wm-nav-item>
-              <wm-nav-item name="list_order">
-                  <wm-anchor caption="Pending Orders" name="orderLink" iconclass="wi wi-file"></wm-anchor>
+              <wm-nav-item name="nav_item2">
+                  <wm-anchor caption="Pending Orders" iconclass="wi wi-file" name="anchor2"
+                      on-tap="Actions.goToPage_Orders.invoke()"></wm-anchor>
               </wm-nav-item>
           </wm-nav>
       </wm-partial>
@@ -132,57 +151,27 @@ Typical use cases include:
 
 ### Content
 
-The **Content** section forms the main body of the page where most user interactions occur. This section is designed to be flexible and supports complex layouts. To improve structure and usability, the content area is further divided into three parts: **Header, Page Content, Footer**
-
-#### Header
-
-The **Header** section appears at the top of the page and is typically used for global or page level information. It commonly contains: Top navigation menus, User profile actions (login, logout, settings)
-
-The header can be defined directly within a page or implemented as a **reusable partial**, allowing it to be shared across multiple pages for a consistent user experience.
-
-```html
-    <!-- Header Partial Markup -->
-    <wm-partial name="header" type="header">
-        <wm-container direction="column" alignment="top-left" gap="4" width="fill" name="containerlayout">
-            <wm-container direction="row" alignment="top-left" gap="4" width="fill" name="containerrow" variant="default" height="fill">
-                <wm-container direction="row" alignment="top-right" gap="4" width="100%" name="containerright" variant="default" wrap="false">
-                    <wm-container direction="row" alignment="top-right" gap="4" width="320px" name="containersearch" variant="default" wrap="false">
-                        <wm-search dataset="Home, Services, Products, About US, Contact" name="search1"></wm-search>
-                    </wm-container>
-                </wm-container>
-            </wm-container>
-        </wm-container>
-    </wm-partial>
-```
+The **Content** section forms the main body of the page where most user interactions occur. For mobile, the content area contains the **Page Content** section.
 
 #### Page Content
 
 The **Page Content** area is the primary workspace of the page. It contains the core UI components and business functionality, such as:
 
-- Layouts & UI Components
+- Layouts and UI Components
 - Charts and dashboards
+- Forms and lists
 
 This area dynamically updates based on user interactions and data bindings and usually occupies the majority of the available screen space.
 
-#### Footer
+### Mobile Tabbar
 
-The Footer is located at the bottom of the page and is intended for supplementary, non-interactive content. It is commonly used to display information that applies across the application rather than to a specific page workflow.
+The **Mobile Tabbar** is located at the bottom of the page and provides tab-based navigation between primary sections of the application. In a **web** project, the comparable pattern is a footer partial; mobile projects use the tabbar instead.
 
-Like other sections, the footer can be created as a reusable partial to ensure consistency across the application.
+```html
+    <wm-mobile-tabbar name="mobile_tabbar1"></wm-mobile-tabbar>
+```
 
-Typical use cases include:
-
-- **Copyright information:** Displays ownership details and the applicable year for the application.
-- **Legal links:** Provides access to legal documents such as the Privacy Policy, Terms of Service, and other compliance related information.
-
-  ```html
-      <!-- Footer Partial Markup -->
-      <wm-partial name="footer" type="footer">
-          <wm-container direction="row" alignment="middle-right" gap="4" width="fill" height="auto" name="footerlayout" variant="default">
-              <wm-label caption="Copyright 2026 [company name]" textalign="right" name="copyright"></wm-label>
-          </wm-container>
-      </wm-partial>
-  ```
+The tabbar items are configured through the application's navigation settings in Studio.
 
 ---
 
@@ -208,7 +197,7 @@ When creating a page, the following naming conventions should to be followed.
 
 ### Home Page Configuration
 
-Every WaveMaker application has as **Home Page**. This allows flexible control over the app’s entry point without changing navigation logic.
+Every WaveMaker application has a **Home Page**. This allows flexible control over the app's entry point without changing navigation logic.
 
 - The page named **Main** is set as the homepage by default.
 - You can customize the default homepage from App Settings, Select the desired page from the Homepage dropdown.

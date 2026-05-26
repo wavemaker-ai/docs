@@ -1,147 +1,132 @@
 ---
-last_update: { author: 'Raj Kumar Reddy Abbadi' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
-# Variable Events
+# Variable events
 
-API callback events are available at different stages in the variable lifecycle. These events allow developers to intercept execution, modify inputs or results, and respond to success or failure scenarios. Event handlers provide fine-grained control over variable behavior without altering core logic.
+Service, database, and other variables expose callback events around each `invoke()`. Use them to validate input, change payloads, reshape response data before it reaches widgets, and react to success or failure on that variable only.
 
-Types of Variable Events:
-    - On Before Update
-    - On Result
-    - On Before Dataset Ready
-    - On Success
-    - On Error
-    - On Can Update
-    
+For where variable events sit alongside app, page, and UI events, see [Event handling overview](/docs/user-interfaces/mobile/develop/events/). For app-wide service failures, use [`App.onServiceError`](/docs/user-interfaces/mobile/develop/events/app-page-events#onserviceerror) instead of duplicating the same logic on every variable.
 
-### On Before Update
-The On Before Update event is invoked just before the variable triggers the service call. It provides access to the input data and allows you to: Validate inputs, Modify request payload.
+## Wire handlers in Studio
 
-    ```javascript
-        Page.createEmployeeonBeforeUpdate = function (variable, inputData, options) {
-            // Validate mandatory input
-            if (!inputData.employeeName) {
-                App.Actions.notify({
-                    message: "Employee name is required",
-                    severity: "error"
-                });
-                return false; // Cancel the service call
-            }
+1. Open the **Variables** dialog for the page or app.
+2. Select the variable (for example `createEmployee`).
+3. Open the **Events** tab and choose the event.
+4. Studio adds a handler in the page or app script, for example `Page.createEmployeeonBeforeUpdate`.
 
-            // Add additional input before sending to service
-            inputData.createdDate = new Date();
+Handler names concatenate the variable name and event name: `Page.{variableName}on{EventName}`.
 
-            return true; // Allow service call to proceed
-        };
-    ```
+## Which variables expose these events
+
+Studio lists these callbacks on **Service**, **Live**, and **Database CRUD** variables, and on **Login** and **Logout** variables. In-memory **Model** variables and **Device** variables do not use this invoke lifecycle.
+
+## Invocation order
+
+When you call `invoke()` on a service or live variable, handlers run in this order:
+
+| Order | Event                  | Purpose                                                     |
+| ----- | ---------------------- | ----------------------------------------------------------- |
+| 1     | `onBeforeUpdate`       | Validate or change input; return `false` to cancel the call |
+| 2     | `onResult`             | Run after any response (success or failure)                 |
+| 3     | `onBeforeDatasetReady` | Transform response data before `dataSet` is assigned        |
+| 4a    | `onSuccess`            | Run only when the call succeeds and `dataSet` is updated    |
+| 4b    | `onError`              | Run only when the call fails                                |
+
+`onResult` always runs when a response arrives. `onSuccess` and `onError` are mutually exclusive for that invocation.
+
+To block a call before it starts, use **`onBeforeUpdate`** (return `false`) or configure **In flight behavior** on the variable.
+
+## onBeforeUpdate
+
+Runs just before the variable calls the service. Validate or change `inputData`. Return `false` to cancel the call.
+
+```javascript
+Page.createEmployeeonBeforeUpdate = function (variable, inputData, options) {
+    if (!inputData.employeeName) {
+        App.Actions.notify({
+            message: "Employee name is required",
+            severity: "error"
+        });
+        return false;
+    }
+    inputData.createdDate = new Date();
+    return true;
+};
+```
 
 :::info
-The `onBeforeUpdate` event behaves differently based on the variable type:
+Database CRUD variables use specialized before-events instead of `onBeforeUpdate`:
 
-- **Database CRUD Variable (READ)** → `onBeforeListRecords`
-- **Database CRUD Variable (UPDATE)** → `onBeforeUpdateRecord`
-- **Database CRUD Variable (INSERT)** → `onBeforeInsertRecord`
-- **Database CRUD Variable (DELETE)** → `onBeforeDeleteRecord`
-- **All other variable types** → `onBeforeUpdate`
+- **READ** → `onBeforeListRecords`
+- **UPDATE** → `onBeforeUpdateRecord`
+- **INSERT** → `onBeforeInsertRecord`
+- **DELETE** → `onBeforeDeleteRecord`
+
+Other variable types use `onBeforeUpdate`.
 :::
 
+## onBeforeDatasetReady
 
-### On Before Dataset Ready
-This event is triggered after the service response is received but before the variable’s dataSet is updated.
+Runs after the service returns and before the variable `dataSet` is updated. Return the data shape you want bound to lists, forms, and other widgets.
 
-    ```javascript
-        // Triggered before the dataSet is assigned to the variable
-        Page.createEmployeeonBeforeDatasetReady = function (variable, data) {
-            // Get selected device IDs from a widget
-            let selectedDeviceIds = Page.Widgets.DevicePicker.selecteddevices
-                .map(device => device.id);
+```javascript
+Page.createEmployeeonBeforeDatasetReady = function (variable, data) {
+    let selectedDeviceIds = Page.Widgets.DevicePicker.selecteddevices
+        .map(device => device.id);
 
-            // Filter response data based on selected devices
-            let filteredData = data.filter(emp =>
-                selectedDeviceIds.includes(emp.devicesMappedId)
-            );
+    return data.filter(emp =>
+        selectedDeviceIds.includes(emp.devicesMappedId)
+    );
+};
+```
 
-            // Return modified data to update the variable's dataSet
-            return filteredData;
-        };
-    ```
+## onResult
 
-### On Result
-The On Result event is triggered immediately after receiving a response from the service—regardless of success or failure.
-   
-   ```javascript
-        // Triggered when the service returns a response
-        Page.createEmployeeonResult = function (variable, data, operation) {
-            // If response contains a single object, convert it to array
-            // This helps when binding to components like List etc
-            if (data && !Array.isArray(data)) {
-                variable.dataSet = [data];
-            }
+Runs when the service returns, whether the call succeeded or failed. Use it to normalize shape (for example wrap a single object in an array for a list).
 
-            // Store last operation performed for UI display
-            Page.Variables.svEmployee.lastOperation.dataSet = operation;
-        };
-    ```
+```javascript
+Page.createEmployeeonResult = function (variable, data, operation) {
+    if (data && !Array.isArray(data)) {
+        variable.dataSet = [data];
+    }
+};
+```
 
-### On Success
-The On Success event is triggered after the variable completes successfully and after the dataSet has been updated.
-    
-    ```javascript
-        // Triggered after successful execution
-        Page.createEmployeeonSuccess = function (variable, data, operation) {
-            // Show success notification
-            App.Actions.notify({
-                message: "Employee created successfully",
-                severity: "success"
-            });
+## onSuccess
 
-            // Navigate to Employee Details page using returned ID
-            App.navigate({
-                pageName: "EmployeeDetails",
-                params: {
-                    employeeId: data.id
-                }
-            });
-            
-            Page.Variables.getEmployees.invoke(); // Refresh employee list after update
-            Page.Widgets.editEmployeeDialog.close();  // Close edit dialog
-        };
-    ```
+Runs after a successful call, once `dataSet` is updated.
 
-### On Error
-The On Error event is triggered only when the service call fails.
+```javascript
+Page.createEmployeeonSuccess = function (variable, data, operation) {
+    App.Actions.notify({
+        message: "Employee created successfully",
+        severity: "success"
+    });
+    Page.Variables.getEmployees.invoke();
+    Page.Widgets.editEmployeeDialog.close();
+};
+```
 
-    ```javascript
-        // Triggered when the service call fails
-        Page.createEmployeeonError = function (variable, error, operation) {
-            // Display error message
-            App.Actions.notify({
-                message: error.message || "Unable to create employee",
-                severity: "error"
-            });
+## onError
 
-            // Highlight form fields if validation errors exist
-            if (error.details && error.details.validationErrors) {
-                Page.Widgets.employeeForm.setErrors(error.details.validationErrors)
-            }
+Runs when the variable call fails. Handle errors for this variable here; use `App.onServiceError` when the same handling should apply to every service in the app.
 
-            Page.Widgets.retryUploadBtn.enable(); // Enable retry button after failure
-        };
-    ```
+```javascript
+Page.createEmployeeonError = function (variable, error, operation) {
+    App.Actions.notify({
+        message: error.message || "Unable to create employee",
+        severity: "error"
+    });
 
-### On Can Update
-The On Can Update event is triggered right before execution, after all validations and just before hitting the service. This event determines whether the variable is allowed to execute.
+    if (error.details && error.details.validationErrors) {
+        Page.Widgets.employeeForm.setErrors(error.details.validationErrors);
+    }
+};
+```
 
-    ```javascript
-        // Triggered to decide whether the variable should execute
-        Page.createEmployeeonCanUpdate = function (variable, data) {
-            // Prevent execution if another request is in progress
-            if (variable.isExecuting) {
-                return false;
-            }
+## Related topics
 
-            // Allow execution
-            return true;
-        };
-    ```
+- [Event handling overview](/docs/user-interfaces/mobile/develop/events/)
+- [App and page lifecycle events](/docs/user-interfaces/mobile/develop/events/app-page-events)
+- [UI events](/docs/user-interfaces/mobile/develop/events/ui-events)

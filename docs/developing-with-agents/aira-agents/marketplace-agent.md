@@ -6,7 +6,6 @@ last_update: { author: 'Vivek Raj' }
 
 # Marketplace Agent
 
-
 The **Marketplace Agent** enables developers to discover and install reusable artifacts from the [WaveMaker Marketplace](https://marketplace.wavemaker.ai/) directly into their application projects. It functions as a controlled integration layer between the centralized artifact repository and project codebase.
 
 Reusing artifacts helps teams build faster, maintain consistency, and rely on well-tested components. The agent automates the discovery-to-installation workflow while enforcing compatibility checks, version validation, and explicit developer approval. Its scope is limited to artifact acquisition only; configuration, binding, and runtime usage are handled separately.
@@ -38,8 +37,8 @@ The Marketplace Agent operates as a **specialized execution agent** within the A
 
 **Responsibility boundaries:**
 
-- **WaveMaker Agent** – Determines _when_ a marketplace artifact is needed based on user intent and project context
-- **Marketplace Agent** – Handles _how_ that artifact is safely acquired and installed
+- **WaveMaker Agent** – Determines *when* a marketplace artifact is needed based on user intent and project context
+- **Marketplace Agent** – Handles *how* that artifact is safely acquired and installed
 - **Other agents** – Configure, bind, and utilize the installed artifact post-installation
 
 The Marketplace Agent never decides usage patterns or application behavior. Upon completing installation, control returns to `wm_agent` for downstream orchestration.
@@ -183,7 +182,7 @@ The agent does not participate after installation completes.
 ## Related Documentation
 
 - [Prefabs (Web)](#) – Creating and using reusable UI components for web
-- [Prefabs (Mobile)](../../user-interfaces/mobile/enterprise-capabilities/prefabs) – Creating and using reusable UI components for mobile
+- [Prefabs (Mobile)](../../user-interfaces/mobile/enterprise-capabilities/prefabs/) – Creating and using reusable UI components for mobile
 - [Connectors Architecture](../../apis-and-services/connectors/architecture) – Understanding connector structure and integration
 - [Building Connectors](../../apis-and-services/connectors/build-a-connector) – Creating custom external service integrations
 - [Design Tokens](../../user-interfaces/web/develop/styling-with-design-tokens/design-token-architecture) – Design system fundamentals and styling consistency

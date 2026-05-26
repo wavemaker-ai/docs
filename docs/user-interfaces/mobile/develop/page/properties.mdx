@@ -1,7 +1,9 @@
 ---
-last_update: { author: "Raj Kumar Reddy Abbadi" }
+last_update: { author: "Praneeth Reddy" }
 ---
+
 # Properties and Events
+
 Page properties define how a page behaves, appears, and interacts with the application lifecycle. These settings control performance, data handling, and page-level configuration.
 
 - Cache
@@ -10,139 +12,97 @@ Page properties define how a page behaves, appears, and interacts with the appli
 - Page Params
 
 ### Cache
-By default, when a user navigates away from a page, the page instance is destroyed to free up memory and resources. When **Cache** is enabled, the page instance is preserved in memory instead of being deleted. This allows the application to restore the page exactly as it was when the user navigates back, including UI state, variable values, and scroll position.
+
+By default, when a user navigates away from a page, the page instance is destroyed to free up memory and resources. When **Cache** is enabled, the page instance is preserved in memory instead of being deleted. This allows the application to restore the page when the user navigates back, including UI state, variable values, and scroll position.
 
 ### Refresh Data on Attach
-A property Refresh data on attach is added at the page level. If this flag is true, and the cached page instance is shown, then all start-up variables that have enabled load data on page startup of the page are invoked. If there are partials and prefabs in a page, then startup variables of partials and prefabs are also invoked. By default, this flag is set to true. 
 
-You can use On Attach event to refresh data by invoking the required variables.
+When **Refresh data on attach** is true and a cached page instance is shown again, all startup variables configured to load data on page startup run again. If the page includes partials and prefabs, their startup variables are invoked as well. By default, this flag is **true**.
+
+You can use **On Attach** to refresh specific data instead by invoking the variables you choose.
 
 ### Page Title
-The Page Title defines the document title that is set in run mode. When the page is rendered, this value is applied as the browser’s document title (for example, shown in the browser tab or window title).
+
+Page title is the display name associated with the page in runtime. Depending on layout, it may be shown in UI such as **Mobile Navbar** (`title`). It does not update the browser document title in the same way as a WaveMaker web app.
 
 ### Page Params
-Pass data from one page to another page within an app by defining the Page Params. This applies to pages and partial pages. There can be many scenarios where you will need to pass data to a specific page.
+
+Pass data from one page to another within the app using **Page Params**. This applies to pages and partial pages.
 
 #### How parameters work
-A typical page URL for a given app would be like this:
+
+Navigation passes parameters through the route as key-value pairs alongside the destination page name.
+
+A typical resolved route fragment looks like this:
 
 ```text
-    https://www.wavemakerdocumentationapp.com/#pagename
+#/Pagename
 ```
 
-Once the Page Params (**userId & existingUser**) has been defined the URL changes as below:
+After Page Params (for example **userId** and **existingUser**) are defined and navigation supplies values:
 
-```text 
-    https://www.wavemakerdocumentationapp.com/#/pagename?userId=1&existingUser=true 
+```text
+#/UserDetails?userId=1&existingUser=true
 ```
 
-This URL format will allow the data to be retained on browser refresh and reload. As is evident from the above example, multiple parameters are also supported.
+Multiple parameters are supported. Values are carried on the navigation action and surfaced on the receiving page scope for bindings and scripts.
+
+:::note Web preview vs device
+
+During web preview inside Studio, URLs may resemble a hosted web app; on device, parameters still map to navigation route params (`route.params`), not HTTP query strings sent to a server.
+
+:::
 
 #### Steps to adding Page Params
+
 There are two aspects to adding Page Params.
 
-- **Parameterized Page:** Page needing input to render the data on the page needs to define page-level parameters to hold this input and access the param value within the page.
-- **Calling Page:** Page calling the above parameterized-page needs a way to pass the value to the parameter
+- **Parameterized page:** The page that needs input defines page-level parameters to hold incoming values so you can use them when loading data or driving the UI.
+- **Calling page:** The page navigating to the parameterized page (for example **Main**) invokes a Navigation Action and binds argument values—for example **`id`**—from that page's widgets or variables via the Actions **Data** tab.
 
-#### Example 
-UserDetails Page needs an id to render the data and it has to be invoked from Main Page with the needed value for id.
+#### Example
 
-##### Parameterised Page
-- From Page Properties panel, add the parameter fields to the parameterized page (in this case, UserDetails) by giving it a Name and specifying the Type. 
+UserDetails needs an **id** to load data and is invoked from Main with that value.
 
+##### Parameterised page
 
-![Page Params](../../assets/pageparam.png)
+From the Page Properties panel, add parameter fields on the parameterized page by giving each a Name and Type.
 
-- Page Params are available on the page/partial scope and can be used in the same. These parameters can be accessed from the Page Param tab on the binding dialog.
+![WaveMaker Studio Page Properties panel on UserDetails with Page Params showing an id parameter defined as type integer](../../assets/pageparam.png)
 
-##### Calling Page
-- The Application-scoped Navigation Action generated by default by WaveMaker for UserDetails can be used to bind a value for the id field from the Main Page. The param will be available in the data tab of the Actions (goToPage_UserDetails). You can also create another Navigation Action and use it in a different navigation flow.
+Parameters are available in page or partial scope. Use them from the **Page Param** tab in the binding dialog.
 
-![Calling Page](../../assets/pageuserparam.png)
+##### Calling page
+
+Use the Application-scoped Navigation Action that WaveMaker generates by default for UserDetails when authoring **Main** (for example **goToPage\_UserDetails**). Open the Actions panel on Main, select that navigation action, and on the **Data** tab bind **id** (or whichever page parameter you declared) using widgets or variables on Main. You can also define another Navigation Action for a different navigation flow.
+
+![WaveMaker Studio Actions dialog for goToPage\_UserDetails on the Main page with the Data tab open and the Id navigation input ready for binding](../../assets/pageuserparam.jpg)
 
 ---
 
 #### High-Level Flow
 
 <div style={{ display: 'flex', justifyContent: 'center', margin: '2rem 0' }}>
+  ```mermaid
+  %%{init: {'theme': 'default', 'flowchart': {'nodeSpacing': 20, 'rankSpacing': 25}}}%%
+  flowchart TD
+      A[Main Page]
+      B[goToPage_UserDetails]
+      C["#/UserDetails?id=101"]
+      D[UserDetails Page]
+      E[API Call]
+      F[Data Rendered]
 
-```mermaid
-%%{init: {'theme': 'default', 'flowchart': {'nodeSpacing': 20, 'rankSpacing': 25}}}%%
-flowchart TD
-    A[Main Page]
-    B[goToPage_UserDetails]
-    C[#UserDetails?id=101]
-    D[UserDetails Page]
-    E[API Call]
-    F[Data Rendered]
-
-    A -->|id=101| B
-    B --> C
-    C --> D
-    D --> E
-    E --> F
-```
-
+      A -->|id=101| B
+      B --> C
+      C --> D
+      D --> E
+      E --> F
+  ```
 </div>
 
-
 ### Events
-WaveMaker provides lifecycle and system events at the page level, allowing you to execute custom logic when specific actions occur.
 
-- **On Attach**: This event handler is called when the page instance from cache is attached to dom.
-    ```JavaScript
-        Page.onAttach = function ($event, widget) { 
-            // Reset filter widgets to ensure a clean state
-            Page.Widgets.orderFilter.reset();
+WaveMaker exposes page-level lifecycle and viewport events (`onReady`, `onAttach`, `onDetach`, `onDestroy`, `onOrientationchange`, `onResize`) in the React Native runtime so you can run custom logic at the right time. **Cache** and **Refresh data on attach** above affect when **on Attach** and **on Detach** fire.
 
-            // Fetch the latest order data when the page becomes active again
-            Page.Variables.GetOrders.invoke();
-        };
-    ```
-
-- **On Detach**: This event handler is called when the page instance is detached from dom and saved in cache.
-    ```JavaScript
-        Page.onDetach = function ($event, widget) {
-             // ex-1: Stop auto-refresh
-            if (Page.dashboardRefreshTimer) {
-                clearInterval(Page.dashboardRefreshTimer);
-                Page.dashboardRefreshTimer = null;
-            }
-            
-            // Clear page-specific cached data
-            Page.Variables.selectedEmployee.setData(null);
-            Page.Variables.filterCriteria.setData({});
-        };
-    ```
-- **On Destroy**: This event handler is called when the page is destroyed.
-    ```JavaScript
-        Page.onDestroy = function ($event, widget) {
-            // Remove custom event listeners
-            window.removeEventListener("customEvent", Page.handleCustomEvent);
-            
-            // Clear local storage for page-specific entries
-            localStorage.removeItem("tempOrderData");
-        };
-    ```
-- **On Orientation Change**: This event handler is called when the screen orientation is changed (mobile/tablet).
-    ```JavaScript
-        Page.onOrientationChange = function ($event, widget, data) {
-            if (event.matches) {
-                Page.Widgets.sideMenu.show(); // Portrait layout
-            } else {
-                Page.Widgets.sideMenu.hide();  // Landscape layout
-            }
-        };
-    ```
-- **On Resize**: This event handler is called when the window is resized. 
-    ```JavaScript
-        Page.onResize = function (event, widget, data) {
-            if (data.width < 768) {
-                Page.Widgets.orderGrid.setProperty("columnMode", "stack"); // Smaller screen adjustments
-            } else {
-                Page.Widgets.orderGrid.setProperty("columnMode", "grid");  // Larger screen layout
-            }
-        };
-    ```
-
-
+For when each event runs, full sample handlers (including `onDetach` cleanup and orientation or resize `data`), and scripting patterns, see [Application and page events](../events/app-page-events#page-events).

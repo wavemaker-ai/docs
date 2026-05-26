@@ -1,0 +1,27 @@
+---
+last_update: { author: "Praneeth Reddy" }
+---
+
+import CSS_Logo from '../assets/logos/css3-logo.png';
+import JSON_Logo from '../assets/logos/json-green-logo.png';
+import JS_Logo from '../assets/logos/javascript-logo.png';
+import React_Logo from '../assets/logos/react-logo.png';
+
+# Technology Stack
+
+Mobile applications are generated using React Native with Expo.
+
+<div style={{ textAlign: 'center', margin: '16px 0' }}>
+  <img src={React_Logo} width="72" alt="React logo representing the React Native and Expo mobile stack" />
+</div>
+
+For more details about the technology stack, please refer to [Technology Stack](/tech-stack).
+
+| Artifact                       | Design time programming language                                                            | Code generation approach                    | Generated artifact                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Page Markup                    | HTML-like syntax (WML)                                                                      | React Native JSX compliant with Expo        | <img src={JS_Logo} width="36" alt="JavaScript logo for generated page markup artifact" />    |
+| Page Code                      | -                                                                                           | JavaScript code compliant with React Native | <img src={JS_Logo} width="36" alt="JavaScript logo for generated page code artifact" />      |
+| Page & App-level Custom Script | <img src={JS_Logo} width="36" alt="JavaScript logo for design-time and generated script" /> | Remains as JavaScript                       | <img src={JS_Logo} width="36" alt="JavaScript logo for generated script artifact" />         |
+| Page & App-level Custom Styles | <img src={JSON_Logo} width="42" alt="JSON logo for design-time style definitions" />        | Converted to React Native StyleSheet        | <img src={JS_Logo} width="36" alt="JavaScript logo for generated React Native StyleSheet" /> |
+| Design Token Overrides         | <img src={JSON_Logo} width="42" alt="JSON logo for design token override source" />         | Converted to CSS variables                  | <img src={CSS_Logo} width="36" alt="CSS logo for compiled design token CSS output" />        |
+| Variable definitions           | <img src={JSON_Logo} width="42" alt="JSON logo for variable definition source" />           | Converted to JavaScript                     | <img src={JS_Logo} width="36" alt="JavaScript logo for generated variable definitions" />    |

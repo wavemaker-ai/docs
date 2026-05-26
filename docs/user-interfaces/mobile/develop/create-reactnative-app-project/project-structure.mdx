@@ -1,27 +1,26 @@
 ---
-last_update: { author: 'Raj Kumar Reddy Abbadi' }
+last_update: { author: 'Praneeth Reddy' }
 ---
 
 # Overview
 
-WaveMaker projects follow a standard Maven structure with added directories for Angular web apps and mobile apps. The project is Maven-compliant, inherits from a parent POM, and can generate separate frontend/backend artifacts or a combined WAR. For mobile, React Native projects are generated with a standard Expo-based structure.
+WaveMaker projects follow a standard Maven structure with parent POM inheritance. For mobile, the platform generates an Expo-based React Native project. The generated project can be built into APK (Android) or IPA (iOS) using WaveMaker CLI or AppChef.
 
 ### Core Structure
-    - Maven-based with parent POM inheritance: wavemaker-app-parent → wavemaker-app-dependencies → your app’s pom.xml 
-    - Default profiles: development and deployment; custom profiles supported
-    - Build outputs:
-        - Combined WAR (frontend + backend) by default
-        - Separate ui-artifacts.zip (Angular) + project.war when build.ui.mode=angular
-        - Separate Project as Angular zip 
-        - Separate Project as React zip
 
+- Maven-based with parent POM inheritance: WaveMaker-app-parent → WaveMaker-app-dependencies → your app's pom.xml
+- Default profiles: development and deployment; custom profiles supported
+- Build outputs:
+  - Expo-based React Native project (exported as ZIP)
+  - APK (Android) via WaveMaker CLI or AppChef
+  - IPA (iOS) via WaveMaker CLI or AppChef
 
-```text 
+```text
 project/
 ├── src/main/
 │   ├── java/          # Java service classes
 │   ├── resources/     # Configuration files, queries
-│   └── webapp/        # Web application root
+│   └── webapp/        # UI and app config root (Maven folder name; used in mobile and web projects)
 │       ├── pages/     # Page markup, scripts, styles
 │       ├── services/  # Backend service metadata
 │       ├── app.css    # Application-level styles
@@ -34,7 +33,7 @@ project/
 
 ### Three-Layer Application Architecture
 
-WaveMaker applications follow a strict three-layer architecture that separates concerns between presentation, data binding, and business logic.
+WaveMaker applications follow a strict three-layer architecture that separates concerns between presentation, data binding, and business logic. You create either a **web** or a **mobile** project in Studio—not both in one project. The diagram shows both client types at a platform level; your mobile project uses only the **Mobile UI** branch.
 
 ```mermaid
 flowchart TB
@@ -42,7 +41,7 @@ flowchart TB
   %% UI Layer
   subgraph UI["UI Layer"]
     WebUI["Web UI<br/>Angular<br/> React"]
-    MobileUI["Mobile UI<br/>React Native<br/>Expo 54"]
+    MobileUI["Mobile UI<br/>React Native<br/>Expo"]
   end
 
   %% Binding Layer
@@ -91,4 +90,3 @@ flowchart TB
   BackendServices --> JavaServices
 
 ```
-

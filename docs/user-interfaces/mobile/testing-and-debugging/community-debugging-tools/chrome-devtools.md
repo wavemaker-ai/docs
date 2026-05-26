@@ -2,7 +2,7 @@
 title: "Chrome DevTools"
 id: "chrome-devtools"
 sidebar_label: "Chrome DevTools"
-last_update: { author: 'Vivek Raj' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Chrome DevTools
@@ -23,38 +23,24 @@ Chrome DevTools provides comprehensive debugging capabilities for web applicatio
 - **Memory profiling** to detect leaks
 
 **Platform Support:**
+
 - ✅ Web Preview
 - ❌ Expo (Go / Dev Build)
 - ❌ Release Build (APK/IPA)
 
-:::note
-Chrome DevTools works with web preview only. For debugging on devices, use [React Native DevTools](./react-native-devtools) or [WavePulse](../wm-debugging-tools/wavepulse).
+:::note When to use Chrome DevTools
+Chrome DevTools works with **web preview only**. Web preview runs in the browser, so layout and APIs can differ from on-device behavior. For physical devices or emulators, use [React Native DevTools](./react-native-devtools) or [WavePulse](../wm-debugging-tools/wavepulse).
+
+In the same preview session, pair Chrome DevTools with [React DevTools](./react-devtools): Chrome **Elements** shows DOM and CSS; React DevTools shows component props and state.
+
+[WavePulse](../wm-debugging-tools/wavepulse) is always available in web preview for WaveMaker widgets, variables, and services. Use Chrome DevTools for generic DOM, network, and JavaScript debugging.
 :::
 
 ---
 
-## Available Panels
+## Available panels
 
-### Console
-View logs, execute JavaScript, and interact with the running application.
-
-### Elements
-Inspect HTML elements and CSS styles. Useful for debugging layout and style issues.
-
-### Sources
-View and debug JavaScript source code with breakpoints.
-
-### Network
-Monitor network activity including API calls, timing, and payloads.
-
-### Performance
-Record and analyze page performance to identify bottlenecks.
-
-### Memory
-View memory usage and detect memory leaks.
-
-### Application
-Inspect storage (LocalStorage, SessionStorage), cookies, and cache.
+Chrome DevTools includes Console, Elements, Sources, Network, Performance, Memory, and Application panels. See [Common debugging panels](../debugging-overview#common-debugging-panels) in the debugging overview for a short description of each, or the [official Chrome DevTools documentation](https://developer.chrome.com/docs/devtools/) for full details.
 
 ---
 
@@ -71,12 +57,12 @@ Inspect storage (LocalStorage, SessionStorage), cookies, and cache.
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      left: 0,
-      top: 0
-    }}
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0
+  }}
     src="https://embed.app.guidde.com/playbooks/kBN1AsvKu66Eb9tE9QVaBX"
     title="Chrome DevTools Walkthrough in Web Preview for WM Mobile App"
     frameBorder={0}
@@ -90,10 +76,12 @@ Inspect storage (LocalStorage, SessionStorage), cookies, and cache.
 ### Keyboard Shortcuts
 
 **Open DevTools:**
+
 - Mac: `Cmd` + `Option` + `J` (Console) or `Cmd` + `Option` + `I` (Last panel)
 - Windows/Linux: `Ctrl` + `Shift` + `J` (Console) or `Ctrl` + `Shift` + `I` (Last panel)
 
 **Other shortcuts:**
+
 - `Cmd/Ctrl` + `Shift` + `C` – Element inspector
 - `Cmd/Ctrl` + `P` – Quick file search
 - `Cmd/Ctrl` + `Shift` + `P` – Command menu
@@ -110,6 +98,7 @@ Inspect storage (LocalStorage, SessionStorage), cookies, and cache.
 3. Click elements to inspect their properties
 
 **Features:**
+
 - View HTML structure
 - Inspect computed styles
 - Edit CSS in real-time
@@ -136,6 +125,7 @@ Elements panel shows HTML elements, not React components. To inspect React compo
 ```
 
 **Use cases:**
+
 - Quick style debugging
 - Testing CSS changes before implementing
 - Identifying conflicting styles
@@ -149,6 +139,8 @@ Elements panel shows HTML elements, not React components. To inspect React compo
 
 The Console shows all logs, errors, and warnings from your application.
 
+If the Console shows no application logs, set `"enableLogs": true` under `preferences` in `src/main/webapp/wm_rn_config.json` and restart preview. See [Enabling logs in WaveMaker mobile app](../debugging-overview#enabling-logs-in-wavemaker-mobile-app) in the debugging overview.
+
 ```javascript
 // Different log types
 console.log('Info message');
@@ -159,6 +151,7 @@ console.debug('Debug message');
 ```
 
 **Filtering logs:**
+
 - Use filter buttons at the top (Errors, Warnings, Info, Verbose)
 - Type in search box to filter by text
 - Use `-text` to exclude messages containing "text"
@@ -215,6 +208,7 @@ console.timeEnd('data-load');
 4. Click line numbers to set breakpoints
 
 **Breakpoint controls:**
+
 - **Pause (F8)** – Pause execution at next breakpoint
 - **Step Over (F10)** – Execute current line and move to next
 - **Step Into (F11)** – Step into function call
@@ -224,6 +218,7 @@ console.timeEnd('data-load');
 ### Setting Breakpoints
 
 **Line breakpoint:**
+
 ```javascript
 function calculateTotal(items) {
   // Click line number here to set breakpoint
@@ -233,12 +228,14 @@ function calculateTotal(items) {
 ```
 
 **Conditional breakpoint:**
+
 1. Right-click line number
 2. Select "Add conditional breakpoint"
 3. Enter condition (e.g., `item.price > 100`)
 4. Breakpoint only triggers when condition is true
 
 **Logpoints:**
+
 1. Right-click line number
 2. Select "Add logpoint"
 3. Enter message to log (e.g., `"Item:", item`)
@@ -273,6 +270,7 @@ View all network requests made by your application:
 3. Click on any request to view details
 
 **Request details:**
+
 - **Headers** – Request/response headers
 - **Preview** – Formatted response preview
 - **Response** – Raw response data
@@ -282,6 +280,7 @@ View all network requests made by your application:
 ### Filtering Requests
 
 Use filter buttons to show specific request types:
+
 - **All** – All requests
 - **XHR** – API calls (fetch/XMLHttpRequest)
 - **JS** – JavaScript files
@@ -293,6 +292,7 @@ Use filter buttons to show specific request types:
 - **WS** – WebSocket connections
 
 **Custom filters:**
+
 ```
 domain:api.example.com    # Filter by domain
 method:POST               # Filter by method
@@ -303,6 +303,7 @@ larger-than:1M            # Filter by size
 ### Analyzing Request Timing
 
 Click on a request and view **Timing** tab to see:
+
 - **Queueing** – Time waiting in queue
 - **Stalled** – Time blocked before sending
 - **DNS Lookup** – DNS resolution time
@@ -324,6 +325,7 @@ Click on a request and view **Timing** tab to see:
 4. Click **Stop** to finish recording
 
 **What's captured:**
+
 - JavaScript execution
 - Rendering and painting
 - Network activity
@@ -333,12 +335,14 @@ Click on a request and view **Timing** tab to see:
 ### Analyzing Results
 
 **Main areas to check:**
+
 - **Frames** – FPS (aim for 60fps)
 - **Main Thread** – JavaScript execution
 - **Raster** – Paint operations
 - **GPU** – Compositor work
 
 **Identifying bottlenecks:**
+
 - Long yellow bars = Long-running JavaScript
 - Long purple bars = Layout/reflow issues
 - Long green bars = Paint operations
@@ -352,78 +356,54 @@ Click on a request and view **Timing** tab to see:
 View and edit application storage:
 
 **Local Storage:**
+
 - View all key-value pairs
 - Edit values directly
 - Delete individual items
 - Clear all storage
 
 **Session Storage:**
+
 - Similar to Local Storage
 - Cleared when tab closes
 
 **Cookies:**
+
 - View all cookies
 - Edit cookie values
 - Delete cookies
 - View cookie properties (domain, path, expiry)
 
 **Cache Storage:**
+
 - View cached resources
 - Delete cached items
 - Clear entire cache
 
 ---
 
-## Key Features
+## Key features and limitations
 
-### Live Editing
+**Features:**
 
-Edit code and see changes immediately:
-
-**HTML editing:**
-1. Right-click element in Elements panel
-2. Select "Edit as HTML"
-3. Make changes
-4. Press `Ctrl/Cmd` + Enter to apply
-
-**CSS editing:**
-- Click any CSS value to edit
-- Add new properties by clicking empty space
-- Use arrow keys to increment/decrement values
-- Hold `Shift` for larger increments
-
-### Device Emulation
-
-Test responsive design:
-
-1. Click **Toggle Device Toolbar** (or press `Cmd/Ctrl` + `Shift` + `M`)
-2. Select device from dropdown
-3. Choose orientation (portrait/landscape)
-4. Adjust zoom level
-5. Throttle network speed
-
-**Custom devices:**
-- Click "Edit" to add custom device dimensions
-- Save frequently used configurations
-
----
-
-## Key Features and Limitations
-
-**Key Features:**
 - ✅ Works with web preview (quick launch from Studio)
 - ✅ Inspect elements and edit CSS for quick debugging
 - ✅ View logs and execute JavaScript in console
 - ✅ Monitor network activity
 - ✅ Debug JavaScript with breakpoints in Sources panel
-- ✅ Performance profiling
-- ✅ Memory leak detection
+- ✅ Performance profiling and memory analysis
+- ✅ Live HTML/CSS editing and device emulation in preview
+
+**Live editing:** Right-click an element in **Elements** and choose **Edit as HTML**, or edit CSS in the **Styles** pane. Changes apply instantly in preview.
+
+**Device emulation:** Use **Toggle Device Toolbar** (`Cmd/Ctrl` + `Shift` + `M`) to test viewport size, orientation, and network throttling in the browser.
 
 **Limitations:**
-- ❌ Elements panel shows HTML, not React components
-- ❌ Cannot debug native features (only work in web preview)
-- ❌ Not available for device/emulator debugging
-- ❌ Limited React-specific debugging features
+
+- ❌ Elements panel shows HTML, not React components (use [React DevTools](./react-devtools))
+- ❌ Cannot debug native device features
+- ❌ Not available for Expo Go, development builds, or release APK/IPA
+- ❌ Web preview behavior may not match on-device layout or APIs
 
 ---
 
@@ -445,17 +425,10 @@ Test responsive design:
 
 Enable "Preserve log" in Console and Network panels to keep logs across page navigations.
 
-### 3. Use Workspaces
-
-Map local files to DevTools for persistent editing:
-1. Open **Sources** panel
-2. Click **Filesystem** tab
-3. Add folder to workspace
-4. Edits in DevTools save to local files
-
-### 4. Leverage Command Menu
+### 3. Leverage Command Menu
 
 Press `Cmd/Ctrl` + `Shift` + `P` to access command menu:
+
 - Screenshot capture
 - Coverage analysis
 - Rendering tools
@@ -466,16 +439,19 @@ Press `Cmd/Ctrl` + `Shift` + `P` to access command menu:
 ## Related Documentation
 
 **Other Debugging Tools:**
+
 - [React DevTools](./react-devtools) – React component inspection
 - [React Native DevTools](./react-native-devtools) – React Native debugging
 - [WavePulse](../wm-debugging-tools/wavepulse) – WaveMaker debugging tool
 
 **Testing Documentation:**
+
 - [Debugging Overview](../debugging-overview) – All debugging tools and methods
 - [UI Testing Mobile](../testing-strategies/ui-testing-mobile) – Mobile testing strategies
-- [Unit Testing](../unit-testing/web-and-mobile) – Unit testing approaches
+- [Unit testing (mobile)](../unit-testing/unit-testing-mobile) – Jest and React Native Testing Library
 
 **External Resources:**
+
 - [Chrome DevTools Documentation](https://developer.chrome.com/docs/devtools/) – Official guide
 - [DevTools Tips](https://umaar.com/dev-tips/) – Weekly DevTools tips
 - [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) – Protocol documentation

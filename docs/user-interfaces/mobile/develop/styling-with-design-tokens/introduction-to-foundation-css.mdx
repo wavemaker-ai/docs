@@ -1,120 +1,71 @@
 ---
-last_update: { author: 'Sandeep Chezhian A' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Introduction to Foundation CSS
 
-Foundation CSS is the core styling layer of the application and establishes the baseline visual and structural configuration upon which the entire user interface is built. It provides a centralized, standardized system of tokens, base rules, and component definitions that ensure consistent design, predictable behavior, and scalable styling across the product.
-
----
-
-## At a Glance
-
-- Establishes the base styling architecture for the entire application  
-- Defines global and component-level design tokens  
-- Provides default component structures and reusable variants  
-- Ensures visual consistency and predictable behavior  
-- Reduces duplication and specificity conflicts  
-- Serves as the single source of truth for theming and customization  
+Foundation CSS is the default theme for your **React Native (Expo)** app. It defines the baseline colors, typography, spacing, and component appearance that every screen and widget builds on. In a [Design System project](../../../../design-system/design-system-project), Foundation CSS comes from **mobile** design tokens and stays separate from the customizations you add in Style Workspace.
 
 ---
 
 ## Purpose
 
-Foundation CSS acts as the starting point for all styling within the application. It standardizes how components look, behave, and interact by defining shared rules and design primitives that every feature and module builds upon. Rather than allowing independent or ad-hoc styling, it enforces a consistent system that improves maintainability and long-term scalability.
+Foundation CSS is where styling starts in a mobile project. It standardizes how widgets look and behave so teams do not redefine colors, fonts, or spacing on every page. It sets the base look and feel for the whole app, keeps pages and partials visually consistent, and acts as the source of truth before your project overrides.
+
+Shared rules flow from tokens into Foundation, then into WaveMaker widgets. Your app inherits that system when you export or run the project, which makes global theme updates predictable. Customizations and overrides sit on top of Foundation; they do not replace the base package in place.
+
+Centralizing styling in Foundation CSS reduces duplication and conflicting styles across widgets, encourages predictable inheritance from tokens into components, and scales as the app grows.
 
 ---
 
+## Alignment with the WaveMaker UI Kit
 
-## Alignment with WaveMaker UI Kit
-
-Foundation CSS is intentionally aligned with the design standards and styling conventions defined in the WaveMaker UI Kit. The base styles, tokens, component structures, and variants implemented within the foundation layer closely mirror the visual language and behavioral patterns established by the UI Kit to ensure consistency between design and implementation.
-
-By matching the UI Kit specifications, Foundation CSS enables a direct mapping between design artifacts and production code. Components built in the application reflect the same spacing, typography, color usage, and interaction patterns defined at the design level, reducing discrepancies between mockups and the final UI.
-
-This alignment provides several key benefits:
-
-- Visual and behavioral consistency with the official design system  
-- Faster development through predictable, pre-aligned styles  
-- Reduced design–development gaps and fewer manual adjustments  
-- Easier collaboration between designers and engineers  
-- Simplified maintenance when the UI Kit evolves or updates  
-- Greater reusability of components across projects and modules  
-
-As a result, Foundation CSS acts as the technical implementation layer of the WaveMaker UI Kit, ensuring that the application remains cohesive, standardized, and easier to scale over time.
-
-## Design Tokens
-
-Foundation CSS defines reusable design tokens that abstract common visual values into a centralized and platform-agnostic system. These tokens represent the fundamental building blocks of the design language and ensure that styling decisions remain consistent, maintainable, and scalable across the application.
-
-To manage and generate these tokens, the system leverages **Amazon Style Dictionary**. Global and component tokens are authored in a structured token format and processed through Style Dictionary to produce standardized CSS variables and other consumable outputs. These generated tokens are then referenced throughout Foundation CSS, allowing components and variants to inherit consistent values without hardcoding styles.
-
-Using Style Dictionary provides several advantages:
-
-- Centralized source of truth for all design values  
-- Automated token transformation into CSS variables and platform-specific formats  
-- Consistent naming conventions and structure  
-- Easier theming and brand customization  
-- Reduced duplication and manual maintenance  
-- Scalable token management as the design system grows  
-
-This approach ensures that changes to core design values (such as colors, typography, or spacing) propagate automatically across the entire system, improving reliability and significantly reducing the risk of inconsistencies.
-
-### Global Tokens
-
-Global tokens capture shared values used throughout the interface, such as:
-
-- Colors and palettes  
-- Typography scales  
-- Spacing and sizing units  
-- Border radii  
-- Shadows and elevation  
-- Breakpoints and layout constraints  
-
-Because these tokens are generated and distributed through Style Dictionary, they remain consistent, versioned, and easily extensible across the application.
-
-### Component Tokens
-
-Component tokens scope styling variables to individual components. This enables fine-grained customization while still adhering to system-wide standards and preventing style drift between similar components. Component tokens typically reference global tokens, ensuring that localized changes remain aligned with the overall design language.
+Foundation CSS follows the **WaveMaker UI Kit**: spacing, typography, color roles, and interaction patterns defined for the product. That keeps Studio, design artifacts, and the running app visually aligned, speeds up development with known defaults and variants, and lets you reuse the same component patterns across mobile projects when the design system changes.
 
 ---
 
-## Component Foundations
+## Design tokens
 
-Beyond tokens, Foundation CSS provides base implementations for components, including their structural layout, default styles, and interaction behavior. These definitions establish consistent patterns that can be reused across the application without reimplementation.
+Design tokens are named values for things like brand color, body text size, or corner radius. They are the building blocks of the theme.
+
+WaveMaker maintains **mobile** token definitions (separate from the web token set). When tokens change, Foundation and widgets that reference them update together after you rebuild or refresh the app theme.
+
+For folder layout and how global, component, and override tokens relate, see [Design token architecture](./design-token-architecture).
+
+### Global tokens
+
+Shared values used across the app, for example colors and palettes (primary, secondary, tertiary), typography scale (font sizes, weights, line heights), spacing, border radius, and shadows.
+
+For **brand** and **plain** fonts, mobile tokens use **one font family name** at a time (for example `Roboto`). Plan for fonts you bundle or ship with the app. A **backup** font may appear in token lists for reference, but mobile does **not** rely on a long browser-style fallback list from a single token value.
+
+### Component tokens
+
+Values scoped to a specific widget type (button, input, list, and others). They usually reference global tokens so a button background and a primary color stay in sync. Component tokens let you tune one widget family without breaking the rest of the design system.
+
+---
+
+## Component foundations
+
+Beyond tokens, Foundation CSS defines how each widget type is styled by default: layout-related defaults, colors, borders, and states such as disabled or focused where applicable.
+
+You compose screens from these widgets in Studio; Foundation supplies their baseline appearance.
 
 ---
 
 ## Variants
 
-Predefined variants represent alternative visual states or configurations of components (for example, size, emphasis, or semantic intent). Variants allow flexibility and extensibility while avoiding redundant or duplicated CSS, ensuring that stylistic differences remain systematic rather than custom-built.
+**Variants** are named configurations of a component (for example primary, secondary, compact, outlined, success, or error). They share one base structure while varying emphasis, size, density, or semantic intent—for example filled, outline, or text-only buttons.
+
+Set variants in Style Workspace or through the design system; widgets pick them up through the `variant` property in markup. In Style Workspace you can create variants, change existing ones, adjust token values tied to a variant, and preview changes before export.
 
 ---
 
-## Architecture and Maintainability
+## Styling flow
 
-By consolidating styling primitives into a centralized layer, Foundation CSS:
-
-- Acts as a single source of truth for the design system  
-- Reduces duplication and unnecessary overrides  
-- Minimizes specificity conflicts  
-- Encourages predictable inheritance and composition  
-- Improves scalability as the codebase grows  
-
-All higher-level styles, themes, and extensions are designed to build upon or override this foundation rather than redefine core behaviors.
-
-
-| Layer | Responsibility |
-|-------|---------------|
-| WaveMaker UI Kit | Defines visual standards and design guidelines |
-| Design Tokens | Encodes design decisions as reusable values |
-| Style Dictionary | Transforms tokens into CSS variables and outputs |
-| Foundation CSS | Provides base styles, components, and variants |
-| Application Components | Consume foundation styles |
-| Feature Implementations | Compose components into product features |
+For the layered flow from design tokens through Foundation, Style Workspace, and the exported Expo app, see [Styling architecture](/docs/user-interfaces/mobile/develop/styling-with-design-tokens#styling-flow-overview).
 
 ---
 
 ## Summary
 
-Foundation CSS forms the backbone of the application's styling architecture. It standardizes UI construction through tokens, base components, and variants, enabling consistency, reusability, and efficient development while providing a stable platform for building complex and customizable interfaces.
+Foundation CSS is the backbone of mobile styling: tokens, default widgets, and variants. It gives Style Workspace a stable base to customize without rewriting every screen from scratch. For paths, build output, and `app.css` exceptions, see [Customising your application](./customising-your-application).

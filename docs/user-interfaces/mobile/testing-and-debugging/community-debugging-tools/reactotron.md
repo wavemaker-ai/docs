@@ -2,26 +2,33 @@
 title: "Reactotron"
 id: "reactotron"
 sidebar_label: "Reactotron"
-last_update: { author: 'Vivek Raj' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Reactotron
 
-Reactotron is a desktop app for inspecting React and React Native applications. It's actively maintained by Infinite Red and works well with WaveMaker mobile applications.
+Reactotron is a desktop app from Infinite Red for inspecting React Native applications. It is an **optional** add-on for WaveMaker mobile apps: it is not included in Studio and requires setup in an **exported or locally synced** project.
 
 ---
 
 ## Overview
 
-Reactotron provides a desktop interface for debugging React Native applications with custom commands, benchmarking, and advanced logging capabilities.
+Reactotron provides a desktop interface for custom logging, benchmarks, image overlays, and custom commands while your app runs in development mode.
 
-**Platform Support:**
-- ✅ Web Preview
-- ✅ Expo (Go / Dev Build)
-- ❌ Release Build (APK/IPA)
+**Platform support:**
 
-:::note
-Reactotron is a complementary tool to [React Native DevTools](./react-native-devtools). Use React Native DevTools for breakpoint debugging and Reactotron for custom logging and benchmarking.
+- ❌ Web preview (use [Chrome DevTools](./chrome-devtools) or [React DevTools](./react-devtools))
+- ✅ Expo Go / development build (after you install and configure the plugin)
+- ❌ Release build (APK/IPA): use [WavePulse](../wm-debugging-tools/wavepulse)
+
+:::note How Reactotron fits with other tools
+Use [React Native DevTools](./react-native-devtools) first (`j` in the Expo CLI terminal, or **Open DevTools** in the developer menu) for breakpoints, Console, Sources, Network, and Components.
+
+Use Reactotron when you want extra logging, benchmarks, or custom commands in a **dev build** you control.
+
+Use [WavePulse](../wm-debugging-tools/wavepulse) for WaveMaker widgets, variables, services, and debugging release installs.
+
+Reactotron and React Native DevTools can run at the same time.
 :::
 
 ---
@@ -41,21 +48,28 @@ brew install --cask reactotron
 ```
 
 **Supported platforms:**
+
 - macOS
 - Windows
 - Linux
 
-### React Native Plugin
+### React Native plugin
 
-Install the React Native plugin in your exported WaveMaker project:
+Install the plugin in the **exported or local** project directory (the folder where you run `npx expo start`), not in Studio’s `src/main/webapp` tree alone.
 
 ```bash
-# Navigate to exported project directory
-cd /path/to/exported/project
+cd /path/to/your/expo/project
 
-# Install Reactotron React Native plugin
 npm install --save-dev reactotron-react-native
 ```
+
+**Prerequisites:**
+
+- App exported or pulled for local development. See [Set up WaveMaker project locally](/docs/guide/integration/set-up-wavemaker-project-locally/) and [Mobile build overview](/docs/build-and-deploy/build/mobile/overview).
+- Reactotron desktop app installed on your machine.
+- Physical device and computer on the same network when testing on hardware.
+
+Re-exporting from Studio can overwrite entry files. Re-apply `ReactotronConfig` and the `require` in your app entry if you export again.
 
 ---
 
@@ -89,28 +103,25 @@ if (__DEV__) {
 export default Reactotron;
 ```
 
-2. Import in your app entry point:
+2. Import in your app entry point (development only):
 
-For WaveMaker exported projects, add to the main app file (usually `App.js` or `index.js`):
+In the exported project, add this near the top of the root `App.js` (or the entry file your project uses), **before** other app imports:
 
 ```javascript
-// App.js
 if (__DEV__) {
   require('./ReactotronConfig');
 }
-
-// Rest of your app code
 ```
 
-3. Start Reactotron desktop app before launching your application
-
-4. Run your application:
+3. Start the Reactotron desktop app, then run your app:
 
 ```bash
 npx expo start
 ```
 
-Reactotron will automatically connect when the app launches.
+Connect a simulator or device (`i`, `a`, or QR code). Reactotron should connect when the dev client loads.
+
+If application logs are empty everywhere, enable `"enableLogs": true` under `preferences` in `src/main/webapp/wm_rn_config.json` in Studio and re-export, or set it in the exported project’s config. See [Enabling logs in WaveMaker mobile app](../debugging-overview#enabling-logs-in-wavemaker-mobile-app).
 
 ---
 
@@ -231,6 +242,7 @@ Reactotron.overlay(null);
 ```
 
 **Use cases:**
+
 - Compare implementation with designs
 - Verify pixel-perfect layouts
 - Check responsive design breakpoints
@@ -289,9 +301,13 @@ Reactotron.onCustomCommand({
 
 ## Using Reactotron with WaveMaker
 
-### Debug Service Variables
+Examples below use `Reactotron` APIs in page scripts or helper modules in your **exported** project. They are patterns you add manually; Studio does not wire Reactotron automatically.
 
-Track WaveMaker service variable calls and responses.
+For built-in inspection of WaveMaker variables and services without custom code, use [WavePulse](../wm-debugging-tools/wavepulse).
+
+### Debug service variables
+
+Track service variable calls and responses (adjust to match your app’s API layer).
 
 ```javascript
 import Reactotron from 'reactotron-react-native';
@@ -473,6 +489,7 @@ Reactotron
 ```
 
 **Features:**
+
 - View all AsyncStorage keys and values
 - Edit values directly
 - Delete keys
@@ -635,18 +652,20 @@ if (__DEV__) {
 
 ## Troubleshooting
 
-### Reactotron Not Connecting
+### Reactotron not connecting
 
 **Solutions:**
-1. Ensure Reactotron desktop app is running
-2. Check that device and computer are on the same network
-3. Verify import in app entry point
-4. Check for connection errors in console
-5. Try restarting both Reactotron and app
+
+1. Ensure the Reactotron desktop app is running before you launch the app.
+2. Confirm `ReactotronConfig` is loaded only in `__DEV__` and the `require` runs before the app mounts.
+3. On a **physical device**, put the device and computer on the same Wi-Fi network.
+4. Restart the dev server (`npx expo start`) and reload the app.
+5. Check the Metro terminal and device log for connection errors.
 
 ### Slow Performance
 
 **Solutions:**
+
 1. Reduce logging frequency
 2. Avoid logging large objects
 3. Disable network monitoring if not needed
@@ -655,6 +674,7 @@ if (__DEV__) {
 ### Network Requests Not Showing
 
 **Solutions:**
+
 1. Check `ignoreUrls` configuration
 2. Ensure using `fetch` or `XMLHttpRequest`
 3. Verify networking plugin is enabled
@@ -666,65 +686,69 @@ if (__DEV__) {
 
 ### Reactotron vs React Native DevTools
 
-| Feature | Reactotron | React Native DevTools |
-|---------|-----------|----------------------|
-| Works with Expo 51 and earlier | ✅ | ❌ |
-| Works with Expo 52+ | ✅ | ✅ |
-| Custom commands | ✅ | ❌ |
-| Image overlay | ✅ | ❌ |
-| Benchmarking | ✅ | ❌ |
-| JavaScript debugging | ❌ | ✅ |
-| Breakpoints | ❌ | ✅ |
-| Sources panel | ❌ | ✅ |
-| Network inspection | ✅ | ✅ |
-| Setup required | ✅ | ❌ |
-| WaveMaker compatible | ✅ | ✅ |
+| Feature                  | Reactotron            | React Native DevTools     |
+| ------------------------ | --------------------- | ------------------------- |
+| Built into Expo CLI      | ❌                     | ✅ (`j` or developer menu) |
+| Custom commands          | ✅                     | ❌                         |
+| Image overlay            | ✅                     | ❌                         |
+| Benchmarking             | ✅                     | ❌                         |
+| JavaScript breakpoints   | ❌                     | ✅                         |
+| Sources / step debugging | ❌                     | ✅                         |
+| Network inspection       | ✅                     | ✅                         |
+| React Components panel   | ❌                     | ✅                         |
+| Project setup required   | ✅ (npm + config file) | ❌                         |
+| Works in release APK/IPA | ❌                     | ❌                         |
 
-### When to Use Reactotron
+### When to use each tool
 
 **Use Reactotron when:**
-- Need custom debugging commands
-- Want benchmarking capabilities
-- Using Expo 51 or earlier
-- Need persistent debug logging
-- Want image overlay for design verification
-- Need AsyncStorage inspection
+
+- You need custom debugging commands or benchmarks in a dev build you control
+- You want structured logging beyond `console.log`
+- You want an image overlay for design comparison
+- You use the AsyncStorage plugin for storage inspection
 
 **Use React Native DevTools when:**
-- Need JavaScript debugging with breakpoints
-- Want to step through code
-- Need official, integrated solution
-- Debugging complex code flow
 
-**Use Both:**
-- Reactotron for logging and custom commands
-- React Native DevTools for breakpoint debugging
-- Best of both worlds!
+- You need breakpoints and step-through debugging
+- You want the default Expo workflow with no extra npm packages
+- You inspect components, network, and memory in one tool
+
+**Use WavePulse when:**
+
+- You debug WaveMaker widgets, variables, or services
+- You need insight on a release build installed on a device
+
+**Use both:** React Native DevTools for debugging code flow; Reactotron for extra logging and custom commands in development.
 
 ---
 
 ## Related Documentation
 
 **Other Debugging Tools:**
-- [React Native DevTools](./react-native-devtools) – Official debugging for Expo 52+
+
+- [React Native DevTools](./react-native-devtools) – Integrated debugging for Expo and dev builds
+- [Expo Dev Tools](./expo-dev-tools) – Developer menu and CLI shortcuts
 - [Chrome DevTools](./chrome-devtools) – Browser debugging for web preview
 - [React DevTools](./react-devtools) – React component inspection
 - [WavePulse](../wm-debugging-tools/wavepulse) – WaveMaker debugging tool
-- [Flipper](./flipper) – Deprecated debugging tool
 
 **Testing Documentation:**
+
 - [Debugging Overview](../debugging-overview) – All debugging tools and methods
 - [UI Testing Mobile](../testing-strategies/ui-testing-mobile) – Mobile testing strategies
 
 **Build Documentation:**
-- [Expo Builds](../../../../build-and-deploy/build/mobile/expo) – Expo EAS Build setup
-- [CLI Builds](../../../../build-and-deploy/build/mobile/cli) – Local builds with Expo CLI
+
+- [Expo Builds](/docs/build-and-deploy/build/mobile/expo) – Expo EAS Build setup
+- [CLI Builds](/docs/build-and-deploy/build/mobile/cli) – Local builds with Expo CLI
 
 **External Resources:**
+
 - [Reactotron GitHub](https://github.com/infinitered/reactotron) – Official repository
 - [Reactotron Documentation](https://github.com/infinitered/reactotron/tree/master/docs) – Detailed docs
 - [Reactotron Releases](https://github.com/infinitered/reactotron/releases) – Download desktop app
 
 :::tip
-Reactotron is an excellent complementary tool to React Native DevTools. Use React Native DevTools for breakpoint debugging and Reactotron for custom logging, benchmarking, and quick debugging commands. Both can run simultaneously!
+Reactotron is optional. Start with [React Native DevTools](./react-native-devtools) and [WavePulse](../wm-debugging-tools/wavepulse) for WaveMaker apps. Add Reactotron only when you need custom commands, benchmarks, or extra logging in an exported dev project.
 :::

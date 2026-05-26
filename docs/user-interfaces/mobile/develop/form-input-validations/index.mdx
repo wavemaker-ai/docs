@@ -1,16 +1,16 @@
 ---
-last_update: { author: 'Raj Kumar Reddy Abbadi' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Validation Flow in an Application
 
-Validation is a standard feature in modern web and mobile applications. Whenever users fill out a form, the application guides them by immediately pointing out missing or incorrect input. For instance, when a mandatory field is left empty, the UI clearly informs the user with messages such as:
+Validation is a standard feature in mobile applications. When users fill out a form, the app can point out missing or incorrect input right away. For example:
 
-- “**This field is required**” — indicating that the input must be provided before proceeding
-- “**Phone number must be in xxx-xxxx format**” — the data must follow a pattern
-- “**Password must include a number, symbol, and uppercase letter**” — specific rules must be met
+- **This field is required** — the user must enter a value before continuing
+- **Phone number must be in xxx-xxxx format** — the value must match a pattern
+- **Password must include a number, symbol, and uppercase letter** — custom rules must be met
 
-This is called **Validation**. When you enter data, the browser will check that the data is in the correct format and within the constraints set by the application. Validation done in the browser is called **client-side validation**, while validation done on the server is called **server-side validation**
+**Client-side validation** runs in the app as the user edits the form. **Server-side validation** runs on the backend when data is submitted.
 
 ```mermaid
 flowchart TD
@@ -22,182 +22,160 @@ flowchart TD
     E -->|Validation passed| G[Process request]
     G --> H[Send success response]
     H --> I[Update UI / Navigate user]
-``` 
+```
 
-## How Validation Is Achieved in WaveMaker
-WaveMaker provides built in validation capabilities that allow developers to define rules, enforce data correctness, and guide users while entering information, without writing extensive custom code. Validation in WaveMaker is primarily handled at the UI layer using Validator Functions, which can be applied to Forms, DataTables, and individual input fields.
+## How validation works in WaveMaker
 
-When creating a Form or DataTable, you can configure Validator Functions to define validation rules for the associated fields. These validators determine what values are allowed, when an error should be shown, and what message is displayed to the user. Using Validator Functions, you can apply validations to a single field or multiple fields using methods
+WaveMaker provides built-in validation so you can define rules and messages without writing everything from scratch. On mobile, validation is handled in the UI through **validator functions** on **form fields** (`wm-form` / `wm-liveform`).
 
+Add validation in the page **Script** tab in Studio (or in the Properties panel for common rules). When you run or preview the app, the same rules run when the user interacts with the form.
 
-### Validator Types:
-```VALIDATOR``` contains the default validators which can be accessed using the following validator types.
+You can validate a single field or coordinate several fields using:
 
-| Validator     | Validator Type            |
-|---------------|---------------------------|
-| required      | VALIDATOR.REQUIRED        |
-| maxchars      | VALIDATOR.MAXCHARS        |
-| minvalue      | VALIDATOR.MINVALUE        |
-| maxvalue      | VALIDATOR.MAXVALUE        |
-| regexp        | VALIDATOR.REGEXP          |
-| mindate       | VALIDATOR.MINDATE         |
-| maxdate       | VALIDATOR.MAXDATE         |
-| excludedates  | VALIDATOR.EXCLUDEDATES    |
-| excludedays   | VALIDATOR.EXCLUDEDAYS     |
-| mintime       | VALIDATOR.MINTIME         |
-| maxtime       | VALIDATOR.MAXTIME         |
+- `setValidators`
+- `observeOn`
+- `setAsyncValidators`
 
-#### There are three ways to apply Validations on a field as below 
+### Validator types
+
+Use `App.getDependency('CONSTANTS').VALIDATOR` for built-in validator types:
+
+| Validator    | Validator type           |
+| ------------ | ------------------------ |
+| required     | `VALIDATOR.REQUIRED`     |
+| maxchars     | `VALIDATOR.MAXCHARS`     |
+| minvalue     | `VALIDATOR.MINVALUE`     |
+| maxvalue     | `VALIDATOR.MAXVALUE`     |
+| regexp       | `VALIDATOR.REGEXP`       |
+| mindate      | `VALIDATOR.MINDATE`      |
+| maxdate      | `VALIDATOR.MAXDATE`      |
+| excludedates | `VALIDATOR.EXCLUDEDATES` |
+| excludedays  | `VALIDATOR.EXCLUDEDAYS`  |
+| mintime      | `VALIDATOR.MINTIME`      |
+| maxtime      | `VALIDATOR.MAXTIME`      |
+
+There are three ways to apply validation on a field:
 
 ```mermaid
 flowchart TD
-    A[Apply Validations on field] --> B[setValidators]
+    A[Apply validation on a field] --> B[setValidators]
     A --> C[observeOn]
     A --> D[setAsyncValidators]
 
-    B --> B1[Object Validators]
-    B --> B2[Custom Validators using Function]
+    B --> B1[Object validators]
+    B --> B2[Custom validator functions]
 ```
 
-
 ### setValidators
-WaveMaker provides validators which can be referenced and used in the setValidator method for setting default validations for Form/DataTable fields. This method accepts an array of:
 
-- Objects for default validators
-- Functions for custom validation
+Call `setValidators` on a form field. Pass an array of:
 
-#### Object Validators
-These validations also include default validators like required, min value, max value, and more. To apply required validation, follow the steps below:
+- **Objects** for built-in validators (`VALIDATOR.REQUIRED`, `VALIDATOR.REGEXP`, and so on)
+- **Functions** for custom validation
 
-    #### Form
-    ```javascript
-        var VALIDATOR = App.getDependency('CONSTANTS').VALIDATOR;
-        Page.Widgets.formName.formfields.fieldName.setValidators([{
-            type: VALIDATOR.REQUIRED,
-            validator: true,
-            // Display error message for the form field
-            errorMessage: "This field cannot be empty."
-        }]);
-    ```
+#### Object validators
 
-    #### DataTable
-    ```javascript
-        var VALIDATOR = App.getDependency('CONSTANTS').VALIDATOR;
-        Page.Widgets.tableName.columns.columnName.setValidators([{
-            type: VALIDATOR.REQUIRED,
-            validator: true,
-            // Display error message for the table column field
-            errorMessage: "This field cannot be empty."
-        }]);
-    ```
+These validations include built-in rules such as required, min value, max value, and regexp. To apply required validation on a form field:
 
-#### Custom Validators using Functions
-These validations can contain custom validations. Follow the steps below to add customizations to the form/table field.
+1. Open the page **Script** tab in Studio.
+2. In `Page.onReady` (or another event after the form is available), get the validator constants: `var VALIDATOR = App.getDependency('CONSTANTS').VALIDATOR;`
+3. Call `setValidators` on the form field with a required validator object.
 
-   
-    ```javascript
-        // Form
-        Page.Widgets.formName.formfields.fieldName.setValidators([lastNameVal]);
+```javascript
+var VALIDATOR = App.getDependency('CONSTANTS').VALIDATOR;
 
-        // DataTable
-        Page.Widgets.tableName.columns.columnName.setValidators([lastNameVal]);
+Page.Widgets.employeeForm.formfields.lastName.setValidators([{
+  type: VALIDATOR.REQUIRED,
+  validator: true,
+  errorMessage: "This field cannot be empty."
+}]);
+```
 
-        function lastNameVal(field, form) {
-            if (field.value && field.value.length < 2) {
-                return {
-                    errorMessage: "Enter your full name."
-                };
-            }
-        }
-    ```
+#### Custom validators using functions
 
-#### Example using Objects and Custom Validator Functions
+To add a custom validator function:
 
-In the following example, Form/DataTable EmployeeForm has multiple validations, including email, it should validate regular expression REGEXP and should not be empty.
+1. Define a function that receives `(field, form)` and returns `{ errorMessage }` when validation fails.
+2. Register it with `setValidators` on the target form field.
+3. Call `setValidators` from `Page.onReady` or when the form is available on the page.
 
-    ```javascript
-        // Form
-        Page.Widgets.EmployeeForm.formfields.email.setValidators([emailRequired, {
-            type: VALIDATOR.REGEXP,
-            validator: /\w+@\w+\.\w{2,3}/,
-            errorMessage: "Not a Valid Email"
-        }]);
+```javascript
+Page.Widgets.employeeForm.formfields.lastName.setValidators([lastNameVal]);
 
-        // DataTable
-        Page.Widgets.EmployeeTable.columns.email.setValidators([emailRequired, {
-            type: VALIDATOR.REGEXP,
-            validator: /\w+@\w+\.\w{2,3}/,
-            errorMessage: "Not a Valid Email"
-        }]);
+function lastNameVal(field, form) {
+  if (field.value && field.value.length < 2) {
+    return {
+      errorMessage: "Enter your full name."
+    };
+  }
+}
+```
 
-        function emailRequired(field, table) {
-            if (field.value && field.value.length < 1) {
-                return {
-                    errorMessage: "Email cannot be empty."
-                };
-            }
-        }
-    ```
+#### Objects and custom functions together
+
+Email must be present and match a pattern:
+
+```javascript
+var VALIDATOR = App.getDependency('CONSTANTS').VALIDATOR;
+
+Page.Widgets.employeeForm.formfields.email.setValidators([
+  emailRequired,
+  {
+    type: VALIDATOR.REGEXP,
+    validator: /\w+@\w+\.\w{2,3}/,
+    errorMessage: "Not a valid email"
+  }
+]);
+
+function emailRequired(field, form) {
+  if (!field.value || field.value.length < 1) {
+    return {
+      errorMessage: "Email cannot be empty."
+    };
+  }
+}
+```
 
 ### observeOn
-This validation type observes changes in two or more fields. This method accepts an array of field names. Registering observeOn on a field triggers the field validations whenever there are changes in the observing field values. For example, it notifies whenever there are changes in any of the fields specified in the array.
 
-#### Example for ObserveOn
+`observeOn` takes an array of **other form field names**. When any of those fields change, this field’s validators run again. Use it for cross-field rules (for example password and confirm password).
 
-In the following example, we are matching password and confirm password. Confirm password field depends on password field value. In the following lines of code, we are defining validator for confirmpassword field with confirmPasswordEval function which observes password form field.
+```javascript
+Page.Widgets.employeeForm.formfields.confirmpassword.setValidators([confirmPasswordEval]);
+Page.Widgets.employeeForm.formfields.confirmpassword.observeOn(['password']);
 
-    ```javascript
-        // Form
-        Page.Widgets.EmployeeForm.formfields.confirmpassword.setValidators([confirmFormPasswordEval]);
-        Page.Widgets.EmployeeForm.formfields.confirmpassword.observeOn(['password']);
-
-        function confirmFormPasswordEval(field, form) {
-            let errorMessage = "Password & ConfirmPassword are not the same value"
-            if (field.value && form.formfields.password.value != field.value) {
-                return { errorMessage };
-            }
-        }
-
-        // DataTable
-        Page.Widgets.staticVariableTable.columns.confirmpassword.setValidators([confirmTablePasswordEval]);
-        Page.Widgets.staticVariableTable.columns.confirmpassword.observeOn(['password']);
-
-        function confirmTablePasswordEval(field, form) {
-            let errorMessage = "Password & ConfirmPassword are not the same value"
-            if(field.value && table.columns.password.value != field.value){
-                return { errorMessage };
-            }
-        }
-    ```
+function confirmPasswordEval(field, form) {
+  const errorMessage = "Password and confirm password must match.";
+  if (field.value && form.formfields.password.value !== field.value) {
+    return { errorMessage };
+  }
+}
+```
 
 ### setAsyncValidators
-This method on the form field/table can be used to set async validations on the field. This method accepts an array of promises or function returning a promise.
 
-#### Example for setAsyncValidators
-In the following lines of code, we are setting async validation for email field by defining a function called emailAsync.
+`setAsyncValidators` accepts functions that **return a Promise**. Use it when validation must wait on data (for example checking a list variable or a service).
 
-    ```javascript
-        // Form
-        Page.Widgets.employeeInfoForm.formfields.email.setAsyncValidators([emailAsync]);
+```javascript
+Page.Widgets.employeeInfoForm.formfields.email.setAsyncValidators([emailAsync]);
 
-        // DataTable
-        Page.Widgets.employeeInfoTable.columns.email.setAsyncValidators([emailAsync]);
+function emailAsync(field, form) {
+  if (!field.value) {
+    return Promise.resolve();
+  }
+  return new Promise(function (resolve, reject) {
+    var emailExists = Page.Variables.EmailData.dataSet.filter(function (data) {
+      return data.dataValue === field.value;
+    });
+    if (emailExists.length !== 0) {
+      reject({
+        errorMessage: "The email address is already registered."
+      });
+    } else {
+      resolve();
+    }
+  });
+}
+```
 
-        function emailAsync(field, table) {
-            if (field.value) {
-                return new Promise(function(resolve, reject) {
-                    var emailExists = Page.Variables.EmailData.dataSet.filter(function(data) {
-                    if (data.dataValue === field.value) {
-                        return true;
-                    }
-                });
-                if (emailExists.length != 0) {
-                    reject({
-                        errorMessage: "The email address is already registered."
-                    });
-                }
-                resolve();
-                });
-            }
-        }
-    ```
+Call `setValidators`, `observeOn`, and `setAsyncValidators` from page lifecycle events (for example `Page.onReady`) or from an action such as a button tap, depending on when the form is available.

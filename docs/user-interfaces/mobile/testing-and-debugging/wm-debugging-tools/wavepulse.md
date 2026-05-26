@@ -2,7 +2,7 @@
 title: 'WavePulse'
 id: 'wavepulse'
 sidebar_label: 'WavePulse'
-last_update: { author: 'Vivek Raj' }
+last_update: { author: 'Praneeth reddy' }
 ---
 
 # WavePulse
@@ -87,7 +87,9 @@ View application metadata, version, and configuration details.
 
 ## Enabling WavePulse
 
-WavePulse must be enabled in the application configuration file.
+**Web preview:** WavePulse works without `enableWavePulse` in config. You still connect manually from the WavePulse client (see [Connecting WavePulse to Web Preview](#connecting-wavepulse-to-web-preview)).
+
+**Expo Go, development builds, and APK/IPA:** Set both preferences below in Studio, then export or rebuild the app. The setting is not applied to an already-built binary until you rebuild with WavePulse enabled.
 
 ### Configuration
 
@@ -106,21 +108,21 @@ WavePulse must be enabled in the application configuration file.
 ```
 
 :::tip
-Always enable logs (`enableLogs: true`) along with WavePulse to see console output in the Console panel.
+Enable [logs in the mobile app](../debugging-overview#enabling-logs-in-wavemaker-mobile-app) (`enableLogs: true`) along with WavePulse so the Console panel shows output.
 :::
 
 5. Save the file
-6. Restart Expo server if running (changes to config files require restart)
+6. Restart the Expo dev server if running (config changes require a restart)
 
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      left: 0,
-      top: 0
-    }}
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0
+  }}
     src="https://embed.app.guidde.com/playbooks/eNEZKgeMjr2cHEwvb8kNSq"
     title="Enable WavePulse in WaveMaker mobile apps"
     frameBorder={0}
@@ -159,18 +161,18 @@ Connect WavePulse to your application running in web preview.
 12. You can now use WavePulse to debug your application
 
 :::note
-In web preview, WavePulse is always enabled regardless of `enableWavePulse` setting. The setting only affects Expo and APK/IPA builds.
+`enableWavePulse` in `wm_rn_config.json` applies to exported native builds only. Web preview uses the manual connect flow above and does not require this flag.
 :::
 
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      left: 0,
-      top: 0
-    }}
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0
+  }}
     src="https://embed.app.guidde.com/playbooks/1tKCbzKBWYEgis3ZjfXhRQ"
     title="Connect WavePulse to Web Preview"
     frameBorder={0}
@@ -217,12 +219,12 @@ The QR code approach works for both Expo Go/Dev Build and APK/IPA installations.
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      left: 0,
-      top: 0
-    }}
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0
+  }}
     src="https://embed.app.guidde.com/playbooks/nLGL8FgNiBkhPfTbVgLnRY"
     title="Connect WavePulse to Expo Build"
     frameBorder={0}
@@ -244,7 +246,7 @@ Connect WavePulse to debug and release builds (APK/IPA) installed on devices.
 1. Enable WavePulse in `wm_rn_config.json` before building
 2. Build APK/IPA with WavePulse enabled
 3. Install APK/IPA on device
-4. If APK/IPA is built in debug mode, ensure it is connected with Expo CLI in Dev Build mode
+4. **Release builds:** connect with the QR code flow below; no Expo dev server required. **Debug builds:** you can also run through a development build with the dev server if your workflow uses one
 
 ### Steps
 
@@ -269,12 +271,12 @@ Connect WavePulse to debug and release builds (APK/IPA) installed on devices.
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      left: 0,
-      top: 0
-    }}
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0
+  }}
     src="https://embed.app.guidde.com/playbooks/nLGL8FgNiBkhPfTbVgLnRY"
     title="Connect WavePulse to APK/IPA"
     frameBorder={0}
@@ -339,7 +341,7 @@ The Elements panel shows the WaveMaker component hierarchy and component propert
 
 - Hierarchical view of WaveMaker components
 - Expand/collapse component nodes
-- Shows only WaveMaker widgets (Wm\* components)
+- Shows only WaveMaker widgets (not generic React internals)
 - Filters out React internals automatically
 
 **Component details:**
@@ -353,9 +355,9 @@ The Elements panel shows the WaveMaker component hierarchy and component propert
 ### Usage
 
 1. Open **Elements** panel
-2. Navigate component tree
-3. Click on any component to view details
-4. Right panel shows component properties
+2. Navigate the component tree
+3. Click a component to view details and highlight it in the running app (where supported)
+4. Use the right panel for properties and styles (including per-part widget styling)
 
 **What you can see:**
 
@@ -499,6 +501,7 @@ The Storage panel allows inspection of Local Storage and Session Storage.
 2. Select storage type (Local or Session)
 3. Browse key-value pairs
 4. Search for specific keys
+5. Use **Refresh** to load the latest storage values
 
 :::warning
 Storage panel is read-only. You cannot edit or delete storage items from WavePulse.
@@ -534,6 +537,7 @@ The Info panel displays application metadata and configuration.
 2. View application details
 3. Verify version numbers
 4. Check configuration
+5. Use **Refresh** to update metadata
 
 **Use cases:**
 
@@ -577,7 +581,7 @@ WavePulse allows exporting debugging sessions for sharing with team members or f
 
 ## Debugging with wm-reactnative sync
 
-WavePulse works seamlessly with WaveMaker's live sync feature.
+If you use WaveMaker live sync with the CLI, WavePulse can run alongside it.
 
 ### Setup
 
@@ -599,58 +603,19 @@ WavePulse works seamlessly with WaveMaker's live sync feature.
 
 ---
 
-## Using WavePulse Panels
+## WavePulse walkthrough
 
-After connecting WavePulse to your application, you can use various panels to debug and inspect your application.
-
-### Panel Overview
-
-1. **Console Panel** - View all logs, search for specific logs, clear logs, and filter by type
-2. **Elements Panel** - Inspect WaveMaker components with properties and styles
-3. **Network Panel** - Monitor all network requests with detailed information
-4. **Timeline Panel** - View time intervals for page loads, network calls, and service variables
-5. **Storage Panel** - Inspect application's local storage
-6. **Info Panel** - View application metadata
-
-### Elements Panel Features
-
-- Shows all WaveMaker components in hierarchical structure
-- Auto-updates when changes occur in the running application
-- Hover/select components to highlight them in the running app
-- View component properties as configured in WaveMaker Studio
-- Inspect styles with dropdown to select specific parts of widgets
-
-### Network Panel Features
-
-- View all network requests with complete details
-- Click on any request to see Headers, Response, and more
-- Filter requests by type using the filter button
-- Monitor service variable calls
-
-### Timeline Panel Features
-
-- Displays recorded time intervals for events
-- Track page loads, network calls, and service variables
-- Use filters to show specific event types or time intervals
-
-### Storage and Info Panels
-
-- Storage Panel shows local storage data (use refresh button for latest data)
-- Info Panel displays application metadata (use refresh button to update)
-
-### Exporting Debugging Sessions
-
-Click the **Export** button at the bottom right corner of WavePulse to save your current debugging session for later analysis or sharing with team members.
+After you connect, use the panels described above. This video walks through Console, Elements, Network, Timeline, Storage, and Info in the WavePulse UI.
 
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      left: 0,
-      top: 0
-    }}
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0
+  }}
     src="https://embed.app.guidde.com/playbooks/oa96srQW46ksPkRQMAKHPC"
     title="WavePulse Walkthrough"
     frameBorder={0}
@@ -804,36 +769,36 @@ View WaveMaker application variables:
 
 | Feature                    | WavePulse | Chrome DevTools |
 | -------------------------- | --------- | --------------- |
-| Works with APK/IPA         | ✅        | ❌              |
-| Works with Expo            | ✅        | ❌              |
-| Works with Web Preview     | ✅        | ✅              |
-| Shows WaveMaker components | ✅        | ❌              |
-| JavaScript debugging       | ❌        | ✅              |
-| Edit values                | ❌        | ✅              |
-| Performance profiler       | ❌        | ✅              |
-| Timeline view              | ✅        | ✅              |
+| Works with APK/IPA         | ✅         | ❌               |
+| Works with Expo on device  | ✅         | ❌               |
+| Works with Web Preview     | ✅         | ✅               |
+| Shows WaveMaker components | ✅         | ❌               |
+| JavaScript debugging       | ❌         | ✅               |
+| Edit values                | ❌         | ✅               |
+| Performance profiler       | ❌         | ✅               |
+| Timeline view              | ✅         | ✅               |
 
 ### WavePulse vs React DevTools
 
 | Feature                    | WavePulse | React DevTools |
 | -------------------------- | --------- | -------------- |
-| Works with APK/IPA         | ✅        | ❌             |
-| Shows WaveMaker widgets    | ✅        | ❌             |
-| Shows all React components | ❌        | ✅             |
-| Edit props/state           | ❌        | ✅             |
-| Profiler                   | ❌        | ✅             |
-| Service variables          | ✅        | ❌             |
+| Works with APK/IPA         | ✅         | ❌              |
+| Shows WaveMaker widgets    | ✅         | ❌              |
+| Shows all React components | ❌         | ✅              |
+| Edit props/state           | ❌         | ✅              |
+| Profiler                   | ❌         | ✅              |
+| Service variables          | ✅         | ❌              |
 
 ### WavePulse vs React Native DevTools
 
 | Feature              | WavePulse | React Native DevTools |
 | -------------------- | --------- | --------------------- |
-| Works with APK/IPA   | ✅        | ❌                    |
-| Requires Expo 52+    | ❌        | ✅                    |
-| JavaScript debugging | ❌        | ✅                    |
-| Breakpoints          | ❌        | ✅                    |
-| WaveMaker-specific   | ✅        | ❌                    |
-| Export sessions      | ✅        | ❌                    |
+| Works with APK/IPA   | ✅         | ❌                     |
+| On-device dev build  | ✅         | ✅ (via Expo tooling)  |
+| JavaScript debugging | ❌         | ✅                     |
+| Breakpoints          | ❌         | ✅                     |
+| WaveMaker-specific   | ✅         | ❌                     |
+| Export sessions      | ✅         | ❌                     |
 
 ---
 

@@ -1,65 +1,73 @@
 ---
-last_update: { author: 'Shahnawaz Ahmed' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Auto Layout
 
-Auto Layout in WaveMaker is a layout system designed to manage component layouting and spacing without requiring direct CSS authoring. It provides developers with a visual layout workflow that closely aligns with the way designers typically create and reason about layouts. By abstracting common layout patterns into configurable properties within the editor, Auto Layout enables the creation of both simple and complex UI structures efficiently. It can be applied at both the page and section levels, ensuring consistent layout behavior across an application. The underlying layout model is loosely based on **CSS3 Flexbox** principles.
+Auto Layout in WaveMaker is a layout system designed to manage component layout and spacing without requiring direct CSS authoring. It provides developers with a visual layout workflow that closely aligns with the way designers typically create and reason about layouts. By abstracting common layout patterns into configurable properties within the editor, Auto Layout enables the creation of both simple and complex UI structures efficiently. It can be applied at both the page and section levels, ensuring consistent layout behavior across an application. The underlying layout model is loosely based on **CSS3 Flexbox** principles.
 
-![Auto layout](../../assets/auto-layout.jpg);
+![WaveMaker Studio canvas with a Container using Auto Layout, showing direction, alignment, gap, and padding controls in the Properties panel](../../assets/auto-layout.jpg)
 
-## Let us go into details. 
+## Let us go into details.
 
 This feature can be used in two approaches:
+
 1. **Component first approach**: In this approach you don't worry about layout first. You bring in all or a bunch of  your components into the canvas. And then you decide how you visually want to group them. Then you multiselect one group of components using the shift key and mouse click. Now you right click on any of the selected components and select “Add Auto Layout”. Remember multi select works for only sibling components. This action wraps these siblings into an Auto Layout container. And now you apply your preferred layout configurations
 
 2. **Layout first approach**: This approach requires prior planning of the layout. You create layout containers first and then design your layout based on your visual design. And then you drop your children components, like, anchor, labels, picture etc and then create your page or sections of your page.
-
 
 Auto layout is provided in the WaveMaker component called Container. As soon as we select a Container in the canvas and shift our focus to the properties panel on the right, we have a section called “Layout”.
 Within Layout we have the following subsection with their respective configuration UI controls
 
 1. Direction
-    - Row(default)
-    - Column
-    - Wrap
+   - Row(default)
+   - Column
+   - Wrap
 2. Width
-    - Fill(default)
-    - Hug
-    - User defined(takes an integer with or without units. If without unit, it assigns pixels in obscurity)
+   - Fill(default)
+   - Hug
+   - User defined(takes an integer with or without units. If without unit, it assigns pixels in obscurity)
 3. Height
-    -Fill(default)
-    - Hug
-    - User defined(takes an integer with or without units. If without unit, it assigns pixels in obscurity)
-4. Clip Content(If enabled it provides options for various types of scrolling)
-    - No Scrolling(default)
-    - Vertical
-    - Horizontal
-    - Both Directions
+   -Fill(default)
+   - Hug
+   - User defined(takes an integer with or without units. If without unit, it assigns pixels in obscurity)
+4. Clip Content and Overflow
+   - Clip Content (toggle; clips children to the container bounds)
+   - Overflow
+   - No scrolling (default)
+   - Scroll
 5. Alignment(Provides 9 options)
-    - Top Left(default)
-    - Top Center
-    - Top Right
-    - Middle Left
-    - Middle Center
-    - Middle Right
-    - Bottom Left
-    - Bottom Center
-    - Bottom Right
+   - Top Left(default)
+   - Top Center
+   - Top Right
+   - Middle Left
+   - Middle Center
+   - Middle Right
+   - Bottom Left
+   - Bottom Center
+   - Bottom Right
 6. Gap(Accepts integer or Auto)
-    - Horizontal(default for Direction-row)
-    - Vertical(default for Direction-column)
-    - Auto
+   - Horizontal(default for Direction-row)
+   - Vertical(default for Direction-column)
+   - Auto
 7. Padding(Accepts horizontal/Vertical or individual padding)
-    - Left-Right(Horizontal)
-    - Top-Bottom(Vertical)
-    - Individual(four directions independently)
+   - Left-Right(Horizontal)
+   - Top-Bottom(Vertical)
+   - Individual(four directions independently)
+8. Position
+   - Relative (default)
+   - Absolute
+   - Fixed
+9. Z-Index
+   - Numeric stacking order for the container
+10. Position value
+    - Top, right, bottom, and left offsets (when position is absolute or fixed)
 
-## Now lets get to know them individually 
+## Now lets get to know them individually
 
 ### Direction
 
-This control allows you control the direction in which the children components will be laid out inside the container. On selecting the row, the direction will be left to right. On selecting the column the direction will be from top to bottom. 
+This control allows you control the direction in which the children components will be laid out inside the container. On selecting the row, the direction will be left to right. On selecting the column the direction will be from top to bottom.
 The wrap toggle is by default off, when turned on children will wrap to the next row or column if space of the container(Parent) runs out horizontally or vertically respectively. For the wrap property to work. The respective length, ie. Width, height, or both needs to be defined in number or percentage. Be careful while using this feature as it might cause problems in your responsive behaviours across devices.
 
 ### Width and Height
@@ -70,102 +78,118 @@ Similarly on selecting hug, the container takes up width based on its content(Ch
 The **Height** controls the height of the Container. If “fill” is selected it stretches to occupy the entire available vertical space.
 Similarly on selecting hug, the container takes up height based on its content(Children). On providing a custom number it takes up space, as much as defined.
 
-
 ### Clip Content
 
-This toggle by default stays off. On enabling, it provides scrolling options if contents overflow. We can either choose, horizontal, vertical or both types of scrolling as we prefer.   
+**Clip content** is off by default. Turn it on to clip children to the container bounds. Use **Overflow** together with clip content to control scrolling. On mobile, **Overflow** is **No scrolling** (default) or **Scroll**. When clip content is on and overflow is **Scroll**, the app renders a scrollable region for extra content. Otherwise children render without scrolling.
+
+The boolean **scrollable** property on **`wm-container`** and **`wm-page-content`** is deprecated. Use clip content and overflow instead of **scrollable**.
 
 ### Alignment
 
 Inside the container, the  children components are aligned based on the settings of this feature. The position that the children can take are any of the 9 grids which we get on dividing the container space into a 3x3=9 grid. And these are, Top-Left(default),  Top-Center, Top-Right, Middle-Left, Middle-Center, Middle-Right, Bottom-Left, Bottom-Center, Bottom-Right
 
 ### Gap
+
 This feature allows users to control the spacing between child components. When the direction is set to row, the spacing applies horizontally; when it is set to column, the spacing applies vertically. The gap can be configured in two ways: Auto or user-defined. When set to Auto, the child components expand to fill the available horizontal or vertical space and are spaced evenly. When a user-defined value is provided, the spacing is applied using explicit units such as pixels. Other units, including em, percentage, and similar CSS units, are also supported.
 
 It is important to note that the available alignment options change based on the selected direction and gap type. For example, when the direction is set to row and the gap is Auto, only vertical alignment options—top, center, and bottom—are available. In this case, horizontal alignment options are not shown. The same behavior applies inversely when the direction is set to Column.
 
 ### Padding
+
 This is fairly familiar and so the behaviour too is predictable. The padding unit by default is pixels unless declared explicitly. There are three types of options to provide padding, left-right, top-bottom, and independent defining on all four sides. To enable independent assignment of padding a button is provided on the right side of the padding section.
 
+### Position
+
+**Position** sets how the container is placed in its parent. In the Layout section you can choose:
+
+- **Relative** — default flow; the container stays in normal layout order.
+- **Absolute** — removes the container from normal flow so you can place it with **Position value** offsets.
+- **Fixed** — keeps the container fixed relative to the viewport while scrolling (where supported).
+
+**Absolute** positioning with **Position value** is the common pattern for overlays and anchored UI. Test **fixed** on your target devices when you use it.
+
+### Z-Index
+
+**Z-Index** defines the stacking order of the container relative to siblings. Higher values draw on top of lower values. Use it when panels, headers, or floating elements must sit above or below other content.
+
+Enter a **numeric** value (for example `10` or `100`). The app maps it to the container’s `zIndex` style.
+
+### Position value
+
+**Position value** sets the **top**, **right**, **bottom**, and **left** offsets for a positioned container. It applies when **Position** is **absolute** or **fixed**. Enter values in pixels or `auto` for each side.
+
+The runtime reads offsets as a single string (top, right, bottom, left) and maps them to layout styles on the container.
 
 For a complete understanding of how Auto Layout works in practice, watch the **Auto Layout video**, where the concepts and controls are demonstrated step by step.
 
-<AcademyCard
-  title="Auto Layout"
-  
-  academyLink="https://academy.wavemaker.ai/Walkthrough?wm=44FAE42ED5"
->
-
-
+<AcademyCard title="Auto Layout" academyLink="https://academy.wavemaker.ai/Walkthrough?wm=44FAE42ED5">
   <>
-  <div style={{ position: "relative", paddingBottom: "56.25%" }}>
-    <iframe
-      style={{
-        width: "100%",
-        height: "100%",
-        position: "absolute",
-        left: 0,
-        top: 0,
-        borderRadius: 10
-      }}
-      src="https://embed.app.guidde.com/playbooks/5o5iUfSnGjfTmySi58nwF8?mode=videoOnly"
-      title="Auto Layout"
-      frameBorder={0}
-      referrerPolicy="unsafe-url"
-      allowFullScreen="true"
-      allow="clipboard-write"
-      sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-forms allow-same-origin allow-presentation"
-    />
-  </div>
-  <div style={{ display: "none" }}>
-    <p>00:00: This video provides a comprehensive overview of Auto layout in wave maker.</p>
- <p>00:04: We will explore its features approaches and controls to help you create efficient and consistent layouts.</p>
- <p>00:12: Auto layout in wave maker is a system designed to manage component layout and spacing without requiring direct CSS authoring.</p>
- <p>00:20: This feature provides developers with a visual layout workflow that closely aligns with how designers typically create and reason about layouts.</p>
- <p>00:29: By abstracting Common layout patterns into configurable properties within the editor Auto layout enables the efficient creation of both simple and complex UI structures.</p>
- <p>00:40: It can be applied at both the page and section levels ensuring consistent layout behavior across an application.</p>
- <p>00:47: The underlying layout model is loosely based on css3 flexbox principles.</p>
- <p>00:52: let's dive in</p>
- <p>00:54: Auto layout offers two primary approaches the first is the component first approach where you bring components into the canvas, and then visually group and align them.</p>
- <p>01:05: Multi-select sibling components right click and select add Auto layout to wrap them in an auto layout container then configure the layout.</p>
- <p>01:14: The second approach is layout first which requires prior planning.</p>
- <p>01:19: Create layout containers first then drop in child components like anchors labels and pictures to create your page or sections.</p>
- <p>01:28: Auto layout is provided in the wavemaker component called container.</p>
- <p>01:33: Selecting a container in the canvas shifts Focus to the properties panel revealing the layout section with various UI controls.</p>
- <p>01:42: The direction control dictates how child components are laid out within the container?</p>
- <p>01:47: Selecting row Alliance components from left to right.</p>
- <p>01:51: selecting column arranges them from top to bottom</p>
- <p>01:54: the wrap toggle when enabled allows children to move to the next row or column if the container runs out of space</p>
- <p>02:02: For the wrap property to function correctly. Make sure to define the relevant dimension such as width or height using a number or percentage.</p>
- <p>02:10: The Width control determines the container’s horizontal size.</p>
- <p>02:15: Fill stretches the container to occupy all available horizontal space.</p>
- <p>02:20: Hug adjusts the width based on the content inside the container.</p>
- <p>02:24: A custom number sets a fixed width.</p>
- <p>02:28: The Height control works similarly to Width but affects the vertical dimension of the container, allowing you to control how much vertical space it occupies.</p>
- <p>02:37: Fill stretches the container vertically to use available space.</p>
- <p>02:41: Hug adjusts the height based on the content.</p>
- <p>02:44: A custom number defines a fixed height.</p>
- <p>02:48: The Clip Content toggle controls how overflowing content is handled.</p>
- <p>02:52: When enabled, scrolling options become available if the content exceeds the container size.</p>
- <p>02:59: You can choose horizontal scrolling, vertical scrolling, or both, depending on how the content overflows.</p>
- <p>03:05: the alignment feature positions child components within the container</p>
- <p>03:10: it uses a 3i 3 grid system to define placement.</p>
- <p>03:14: This provides 9 alignment options such as top left top Center and bottom right?</p>
- <p>03:22: The Gap feature controls the spacing between child components</p>
- <p>03:26: when direction is set to Row the spacing is applied horizontally.</p>
- <p>03:31: When direction is set to Column the spacing is applied vertically.</p>
- <p>03:35: Gap values can be configured in two ways.</p>
- <p>03:39: Auto child components expand to fill the available space</p>
- <p>03:44: custom value</p>
- <p>03:45: spacing is defined explicitly using units.</p>
- <p>03:49: padding provides spacing around the content inside the container</p>
- <p>03:53: You can set padding for left right and top bottom.</p>
- <p>03:57: You can also assign padding independently for all four sides for finer control.</p>
- <p>04:02: in summary Auto layout in wave maker offers a powerful and flexible system for managing component layouts</p>
- <p>04:11: by understanding its approaches and controls developers can create efficient and consistent user interfaces.</p>
-</div>
-</>
+    <div style={{ position: "relative", paddingBottom: "56.25%" }}>
+      <iframe
+        style={{
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0,
+    borderRadius: 10
+  }}
+        src="https://embed.app.guidde.com/playbooks/5o5iUfSnGjfTmySi58nwF8?mode=videoOnly"
+        title="Auto Layout"
+        frameBorder={0}
+        referrerPolicy="unsafe-url"
+        allowFullScreen="true"
+        allow="clipboard-write"
+        sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-forms allow-same-origin allow-presentation"
+      />
+    </div>
 
-
-  </AcademyCard>
-
+    <div style={{ display: "none" }}>
+      <p>00:00: This video provides a comprehensive overview of Auto layout in wave maker.</p>
+      <p>00:04: We will explore its features approaches and controls to help you create efficient and consistent layouts.</p>
+      <p>00:12: Auto layout in wave maker is a system designed to manage component layout and spacing without requiring direct CSS authoring.</p>
+      <p>00:20: This feature provides developers with a visual layout workflow that closely aligns with how designers typically create and reason about layouts.</p>
+      <p>00:29: By abstracting Common layout patterns into configurable properties within the editor Auto layout enables the efficient creation of both simple and complex UI structures.</p>
+      <p>00:40: It can be applied at both the page and section levels ensuring consistent layout behavior across an application.</p>
+      <p>00:47: The underlying layout model is loosely based on css3 flexbox principles.</p>
+      <p>00:52: let's dive in</p>
+      <p>00:54: Auto layout offers two primary approaches the first is the component first approach where you bring components into the canvas, and then visually group and align them.</p>
+      <p>01:05: Multi-select sibling components right click and select add Auto layout to wrap them in an auto layout container then configure the layout.</p>
+      <p>01:14: The second approach is layout first which requires prior planning.</p>
+      <p>01:19: Create layout containers first then drop in child components like anchors labels and pictures to create your page or sections.</p>
+      <p>01:28: Auto layout is provided in the WaveMaker component called container.</p>
+      <p>01:33: Selecting a container in the canvas shifts Focus to the properties panel revealing the layout section with various UI controls.</p>
+      <p>01:42: The direction control dictates how child components are laid out within the container?</p>
+      <p>01:47: Selecting row Alliance components from left to right.</p>
+      <p>01:51: selecting column arranges them from top to bottom</p>
+      <p>01:54: the wrap toggle when enabled allows children to move to the next row or column if the container runs out of space</p>
+      <p>02:02: For the wrap property to function correctly. Make sure to define the relevant dimension such as width or height using a number or percentage.</p>
+      <p>02:10: The Width control determines the container’s horizontal size.</p>
+      <p>02:15: Fill stretches the container to occupy all available horizontal space.</p>
+      <p>02:20: Hug adjusts the width based on the content inside the container.</p>
+      <p>02:24: A custom number sets a fixed width.</p>
+      <p>02:28: The Height control works similarly to Width but affects the vertical dimension of the container, allowing you to control how much vertical space it occupies.</p>
+      <p>02:37: Fill stretches the container vertically to use available space.</p>
+      <p>02:41: Hug adjusts the height based on the content.</p>
+      <p>02:44: A custom number defines a fixed height.</p>
+      <p>02:48: The Clip Content toggle controls how overflowing content is handled.</p>
+      <p>02:52: When enabled, scrolling options become available if the content exceeds the container size.</p>
+      <p>02:59: You can choose horizontal scrolling, vertical scrolling, or both, depending on how the content overflows.</p>
+      <p>03:05: the alignment feature positions child components within the container</p>
+      <p>03:10: it uses a 3i 3 grid system to define placement.</p>
+      <p>03:14: This provides 9 alignment options such as top left top Center and bottom right?</p>
+      <p>03:22: The Gap feature controls the spacing between child components</p>
+      <p>03:26: when direction is set to Row the spacing is applied horizontally.</p>
+      <p>03:31: When direction is set to Column the spacing is applied vertically.</p>
+      <p>03:35: Gap values can be configured in two ways.</p>
+      <p>03:39: Auto child components expand to fill the available space</p>
+      <p>03:44: custom value</p>
+      <p>03:45: spacing is defined explicitly using units.</p>
+      <p>03:49: padding provides spacing around the content inside the container</p>
+      <p>03:53: You can set padding for left right and top bottom.</p>
+      <p>03:57: You can also assign padding independently for all four sides for finer control.</p>
+      <p>04:02: in summary Auto layout in wave maker offers a powerful and flexible system for managing component layouts</p>
+      <p>04:11: by understanding its approaches and controls developers can create efficient and consistent user interfaces.</p>
+    </div>
+  </>
+</AcademyCard>

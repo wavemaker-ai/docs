@@ -1,42 +1,41 @@
 ---
-last_update: { author: "Priyanka Bhadri" }
+last_update: { author: "Praneeth Reddy" }
 ---
 
-# React Native Testing
+# Mobile app testing
 
-Testing is a critical part of building high-quality mobile applications using WaveMaker’s React Native platform. A strong testing strategy ensures applications function correctly, perform efficiently, and provide consistent user experiences across devices and platforms.
+Testing is a critical part of building high-quality mobile applications with WaveMaker. A strong testing strategy helps your app work correctly, perform well, and behave consistently on **iOS and Android** devices.
 
+WaveMaker supports multiple testing approaches to validate quality, usability, and performance.
 
-WaveMaker supports multiple testing approaches to validate application quality, functionality, usability, and performance.
+## Types of testing
 
-## Types of Testing
-
-- **Manual Testing**
+- **Manual testing**
   - Validates workflows, UI behavior, and real user interactions.
   - Helps identify usability issues and edge cases.
 
-- **Automation Testing**
+- **Automation testing**
   - Enables repeatable UI and functional testing.
-  - Uses tools like WebDriverIO, Appium, Mocha, and TypeScript.
+  - Uses tools such as Appium, WebDriverIO, Mocha, and TypeScript. See [Automated testing](automate-testing.md) for setup and workflows.
 
-- **Visual Testing**
+- **Visual testing**
   - Detects UI layout or styling regressions.
   - Compares screenshots with baseline images.
 
-- **Accessibility Testing**
-  - Ensures applications are usable by people with disabilities.
-  - Validates screen reader compatibility and navigation support.
+- **Accessibility testing**
+  - Validates VoiceOver (iOS) and TalkBack (Android) behavior.
+  - Confirms labels, hints, and focus order on device.
 
-- **Performance Testing**
-  - Measures responsiveness, resource utilization, and load handling.
+- **Performance testing**
+  - Measures responsiveness, resource use, and load handling.
 
-- **Device Compatibility Testing**
-  - Ensures application stability across multiple devices, screen sizes, and OS versions.
+- **Device compatibility testing**
+  - Ensures stability across screen sizes, devices, and OS versions.
 
-### Tools and Infrastructure
+### Tools and infrastructure
 
-- Physical devices and emulators
-- BrowserStack for cloud device testing
+- Physical devices and simulators
+- [BrowserStack](https://www.browserstack.com/) for cloud device testing
 - Appium and WebDriverIO for automation
 - Jenkins for CI/CD integration
 - Allure Reports for test reporting
@@ -44,120 +43,117 @@ WaveMaker supports multiple testing approaches to validate application quality, 
 
 ---
 
-## Manual Testing
+## Manual testing
 
-Manual testing helps validate real-world usability and ensures application workflows function correctly.
+Manual testing validates real-world usability and end-to-end workflows.
 
-### Key Validation Areas
+### Key validation areas
 
 - Functional workflows and feature validation
-- UI consistency and visual validation
-- Cross-device and cross-platform behavior
+- UI consistency and visual checks
+- Behavior on different phones, tablets, and OS versions
 - Early bug identification
 
-Manual testing should be performed on both simulators and real devices to detect device-specific issues.
+Test in **Studio web preview** for quick UI checks, and on a **simulator or physical device** (Expo Go or a development build) for native behavior, gestures, and performance.
+
+While testing manually, use [Debugging overview](../debugging-overview) for logs, network calls, and component inspection ([React Native DevTools](../community-debugging-tools/react-native-devtools) on device, [Chrome DevTools](../community-debugging-tools/chrome-devtools) in web preview).
 
 ---
 
-## Automation Testing
+## Automation testing
 
-WaveMaker supports automation testing using industry-standard frameworks.
+WaveMaker supports automation with industry-standard frameworks. This page summarizes the role of automation; for prerequisites, CLI setup, sample tests, and CI integration, see **[Automated testing](automate-testing.md)**.
 
-### Supported Tools
+Automation typically covers:
 
-- Appium
-- WebDriverIO
-- Mocha
-- TypeScript
-- Allure Reports
-
-### Automation Workflow
-
-1. Create test scripts using JavaScript or TypeScript.
-2. Execute tests locally or using cloud testing platforms.
-3. Integrate automated tests into CI/CD pipelines.
-4. Generate detailed reports with logs and screenshots.
-
-### Visual Regression Testing
-
-- Uses screenshot comparison tools such as Pixel Match.
-- Helps identify unexpected UI changes.
+- Functional and end-to-end workflows
+- UI interaction and regression checks
+- Runs on local devices, emulators, or cloud farms (for example BrowserStack)
+- Visual regression with screenshot comparison tools such as Pixel Match
 
 ---
 
-## Performance Testing
+## Performance testing
 
-Performance testing ensures applications provide smooth user experiences under various conditions.
+Performance testing helps ensure smooth experiences under real conditions.
 
-### Key Performance Areas
+### Key performance areas
 
 - Application launch time
 - Screen load and transition performance
 - CPU and memory usage
 - Network request performance
 - Frame rendering stability
-- Detection of memory leaks and dropped frames
+- Memory leaks and dropped frames
 
-### Performance Tools
+### Performance tools
 
-- BrowserStack performance testing
-- Apptim for CPU, memory, and resource analysis
+- **On device (development):** developer menu **performance monitor** and [React Native DevTools](../community-debugging-tools/react-native-devtools) Profiler tab. See [Expo Dev Tools](../community-debugging-tools/expo-dev-tools).
+- **Lab / cloud:** BrowserStack performance testing, Apptim for CPU, memory, and resource analysis
 
-### Important Metrics
+### Important metrics
 
-- Time to Interactive (TTI)
+- Time to interactive (TTI)
 - Screen rendering time
 - Frame rate stability
 - Resource utilization
 
 ---
 
-## Accessibility Testing
+## Accessibility testing
 
-Accessibility testing ensures applications are usable by all users, including those using assistive technologies.
+Accessibility testing confirms your app works with assistive technologies on device. Mobile apps use **VoiceOver** on iOS and **TalkBack** on Android, not browser-only patterns such as ARIA or keyboard-only web flows.
 
-### Accessibility Goals
+### What to validate
 
-- WCAG compliance validation
-- Screen reader compatibility
-- Logical navigation and focus order
-- Keyboard accessibility support
+- Spoken labels match control purpose (caption, **Accessibility label**, **Hint**)
+- Decorative elements are skipped (**Accessible** set appropriately)
+- Focus order and navigation are logical with the screen reader on
+- Contrast and touch targets are usable on real devices
 
-### Accessibility Features in WaveMaker
+### Configure and test in WaveMaker
 
-Developers can configure accessibility hints in WaveMaker Studio. These hints provide descriptive guidance for screen readers and improve user experience for visually impaired users.
+In Studio, set **Accessibility** properties on widgets (**Hint**, **Accessibility label**, **Accessibility role**, **Accessible**, **Alt text**, and related fields). Full guidance is in [Accessibility](../../enterprise-capabilities/accessibility.md).
+
+Always verify on a **physical device or simulator** with VoiceOver or TalkBack enabled. Studio preview does not fully match on-device screen reader behavior.
 
 ---
 
-## Device Compatibility Testing
+## Device compatibility testing
 
-Device compatibility testing ensures applications function consistently across different hardware and software environments.
+Device compatibility testing ensures the app behaves consistently across hardware and OS versions.
 
-### Testing Objectives
+### Testing objectives
 
-- Validate UI layout across various screen sizes
-- Verify behavior on phones and tablets
-- Test across multiple Android and iOS versions
-- Detect platform-specific functionality issues
+- Validate layout across screen sizes and densities
+- Verify phones and tablets
+- Test multiple Android and iOS versions
+- Catch platform-specific issues (permissions, native APIs, gestures)
 
-### Testing Methods
+### Testing methods
 
-- Testing on real devices
-- Using cloud platforms like BrowserStack
-- Testing across different OS versions and resolutions
+- Real devices and local simulators
+- Cloud platforms such as BrowserStack
+- Different OS versions and resolutions
 
 ---
 
 ## Summary
 
-WaveMaker’s React Native testing framework provides comprehensive support for:
+A balanced mobile testing strategy combines:
 
-- Manual and automated testing
-- Visual regression validation
-- Performance optimization
-- Accessibility compliance
-- Cross-device compatibility
-
-By combining these testing strategies and tools, developers can build reliable, scalable, and user-friendly mobile applications.
+- Manual validation in preview and on device
+- [Automated testing](automate-testing.md) for regression and CI
+- Visual and performance checks
+- [Accessibility](../../enterprise-capabilities/accessibility.md) verified with screen readers on device
+- Device and OS coverage on iOS and Android
 
 ---
+
+## Related documentation
+
+- [Automated testing](automate-testing.md) – Appium, WebDriverIO, setup, and CI
+- [Unit testing (mobile)](../unit-testing/unit-testing-mobile) – Jest and React Native Testing Library for custom logic
+- [Debugging overview](../debugging-overview) – Debug while testing manually
+- [Accessibility](../../enterprise-capabilities/accessibility.md) – Studio properties and on-device testing
+- [Mobile build overview](/docs/build-and-deploy/build/mobile/overview) – Export and run apps for test environments

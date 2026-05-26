@@ -1,170 +1,190 @@
 ---
-last_update: { author: 'Raj Kumar Reddy Abbadi' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
-# App and Page Lifecycle Events
+# App and page lifecycle events
 
-## App Events
+Application and page lifecycle events run logic at app scope or on a single screen. Define app handlers in **App.js** and page handlers in each page **Script** tab. For how events fit with variables and UI handlers, see [Event handling overview](/docs/user-interfaces/mobile/develop/events/).
 
-Application events allow developers to run logic at the app scope along with logic tied to specific pages or components. These events are triggered at predefined stages of the application lifecycle and are used to implement logic that applies across the entire application.
+## App events
 
-Application events are typically used for tasks like global configuration, initializing shared variables, setting up services, handling authentication, or performing app wide cleanup. This ensures common logic is centralized and reused across the entire application instead of being duplicated across pages.
+Use app events for global configuration, shared variables, authentication flows, and centralized error handling. Studio generates stub functions in **App.js** for:
 
-WaveMaker Studio defines application event functions in **```App.js```**. The application supports the following app events:
-- **onAppVariablesReady**
-- **onSessionTimeout**
-- **onPageReady**
-- **onServiceError**
- 
-#### onAppVariablesReady
-The ```onAppVariablesReady``` callback is invoked after all application variables are initialized and available for use. This callback should be used to perform actions that depend on application variables.
+- `onAppVariablesReady`
+- `onSessionTimeout`
+- `onPageReady`
+- `onServiceError`
 
-        ```javascript
-            /* perform any action on the variables within this block(on-page-load) */
-            App.onAppVariablesReady = function () {
-                /*
-                    * variables can be accessed through 'App.Variables' property here
-                    * e.g. App.Variables.staticVariable1.getData()
-                */
+### onAppVariablesReady
 
-                // ex-1: Load user profile data after login
-                App.Variables.GetUserProfile.invoke();
+Runs after application variables are initialized and available.
 
-                // ex-2: Initialize global configuration values
-                App.appConfig = App.Variables.AppConfigVariable.getData();
-            };
-        ```
+```javascript
+App.onAppVariablesReady = function () {
+    App.Variables.GetUserProfile.invoke();
+    App.appConfig = App.Variables.AppConfigVariable.getData();
+};
+```
 
-#### onSessionTimeout
-The ```onSessionTimeout``` callback is invoked when the user session expires due to timeout. This callback allows the application to handle session expiration events.
+Access variables through `App.Variables`, for example `App.Variables.staticVariable1.getData()`.
 
-        ```javascript
-            /* perform any action on session timeout here, e.g clearing some data, etc */
-            App.onSessionTimeout = function () {
-                /*
-                    * NOTE:
-                    * On re-login after session timeout:
-                    * if the same user logs in(through login dialog), app will retain its state
-                    * if a different user logs in, app will be reloaded and user is redirected to respective landing page configured in Security.
-                */
-                    
-                // ex-1: Clear sensitive application data
-                App.Variables.UserProfile.setData(null);
-                App.Variables.CartData.setData([]);
+### onSessionTimeout
 
-                // ex-2: Show session timeout notification
-                App.Variables.appNotification.setMessage(
-                    "Your session has expired. Please login again."
-                );
-            };
-        ```
+Runs when the user session expires.
 
-#### onPageReady
-The ```onPageReady``` callback is invoked after the execution of the page onPageReady function. This callback is intended for implementing logic that must execute across all pages.
+```javascript
+App.onSessionTimeout = function () {
+    App.Variables.UserProfile.setData(null);
+    App.Variables.CartData.setData([]);
+    App.Variables.appNotification.setMessage(
+        "Your session has expired. Please login again."
+    );
+};
+```
 
-        ```javascript
-            App.onPageReady = function (activePageName, activePageScope, $activePageEl) {
-                /*
-                    * This application callback function will be invoked after the invocation of PAGE onPageReady function.
-                    * Use this function to write common logic across the pages in the application.
-                    * activePageName : name of the page
-                    * activePageScope: scope of the page
-                    * $activePageEl  : page jQuery element
-                */
-                // ex-1: Track page navigation (analytics/logging)
-                console.log("Page loaded:", activePageName);
+On re-login after timeout, the same user may keep app state. A different user typically reloads the app and lands on the security landing page you configured.
 
-                // ex-2: Apply common UI behavior across pages
-                activePageScope.showHeader = true;
-            };
-        ```
+### onPageReady
 
-#### onServiceError
-The ```onServiceError``` callback is invoked when a service or variable invocation results in an error. This callback enables centralized handling of service errors across the application.
+Runs after a page’s own `Page.onReady` handler completes. Use it for logic that should run on every page (logging, shared UI flags, analytics).
 
-        ```javascript
-            App.onServiceError = function (errorMsg, xhrObj) {
-                /*
-                    * This application level callback function will be invoked after a Variable receives an error from the target service.
-                    * Use this function to write common error handling logic across the application.
-                    * errorMsg: The error message returned by the target service. This message will be displayed through appNotification variable
-                    * You can change this though App.Variables.appNotification.setMessage(YOUR_CUSTOM_MESSAGE)
-                    * xhrObj: The xhrObject used to make the service call
-                    * This object contains useful information like statusCode, url, request/response body.
-                */
-                // ex-1: Handle unauthorized access (401)
-                if (xhrObj.status === 401) {
-                    App.Variables.appNotification.setMessage(
-                        "Session expired. Please login again."
-                    );
-                }
+```javascript
+App.onPageReady = function (activePageName, activePageScope) {
+    console.log("Page loaded:", activePageName);
+    activePageScope.showHeader = true;
+};
+```
 
-                // ex-2: Log error details for debugging
-                console.error("Service Error:", {
-                    message: errorMsg,
-                    status: xhrObj.status,
-                    url: xhrObj.responseURL
-                });
-            };
-        ```
+| Parameter         | Description                                         |
+| ----------------- | --------------------------------------------------- |
+| `activePageName`  | Name of the page that finished loading              |
+| `activePageScope` | Page scope object (`Page` instance for that screen) |
 
-## Page Events
+### onServiceError
 
-In a WaveMaker application, each page is composed of Markup, Script, and CSS files. Page events are defined and managed within the page script file, which allows developers to implement logic specific to an individual page.
+Runs when a service variable invocation fails. Use it for shared error messages and status handling.
 
-#### Page.onReady
-The Page.onReady lifecycle method is invoked after the page has been fully rendered and initialized. This method is used to write initialization logic that must execute when the page is ready for interaction.
+```javascript
+App.onServiceError = function (errorMsg, error) {
+    if (error?.response?.status === 401) {
+        App.Variables.appNotification.setMessage(
+            "Session expired. Please login again."
+        );
+    }
+    console.error("Service error:", errorMsg, error?.response?.status);
+};
+```
 
-Invocation Timing:
-- Triggered once each time the page is loaded
-- Invoked after all widgets and variables on the page are available
+| Parameter  | Description                                                                                |
+| ---------- | ------------------------------------------------------------------------------------------ |
+| `errorMsg` | Message from the target service (often shown via `appNotification`)                        |
+| `error`    | Error object from the HTTP client (includes `response.status`, URL, and body when present) |
 
-        ```javascript
-            Page.onReady = function () {
-                /*
-                    * variables can be accessed through 'Page.Variables' property here
-                    * e.g. to get dataSet in a staticVariable named 'loggedInUser' use following script
-                    * Page.Variables.loggedInUser.getData()
-                    
-                    * widgets can be accessed through 'Page.Widgets' property here
-                    * e.g. to get value of text widget named 'username' use following script
-                    * 'Page.Widgets.username.datavalue'
-                */
-                
-                // ex-1: Track page navigation
-                console.log("Page loaded:", activePageName);
+Override the default notification with `App.Variables.appNotification.setMessage("Your message")`.
 
-                // ex-2: Invoke cardData variable
-                Page.Variables.CardData.invoke();
-            };
-        ```
+## Page events
 
-Page resources can be accessed within **```Page.onReady```** as follows:
-- **Variables:** Accessed using **```Page.Variables```**, include reading datasets, invoking service variables, or setting default values.
-    ```javascript
-    Page.Variables.getEmployeeDataset.invoke();
-    ```
-- **Components:** Accessed using **```Page.Widgets```**, Components can be read or modified to control UI behavior and display values.
-    ```javascript
-    Page.Widgets.UserButton.Caption = "Lucas";
-    ```
+WaveMaker exposes page-level lifecycle and viewport events so you can run custom logic at the right time. These are implemented in the runtime for React Native builds.
 
-#### onDestroy
-The page lifecycle event onDestroy event that is triggered when a page is about to be destroyed, typically when the user navigates to another page, app unloads the current page or page component is removed from memory.
+Each page has **Markup**, **Script**, and **Style**. Page lifecycle handlers live in the page script file.
 
-        ```javascript
-            Page.mainpageDestroy = function ($event, widget) {
-                // ex-1: Reset Page Variables
-                Page.Variables.tempData.setData(null);
-                Page.Variables.cartData.setData({});
+| Event                      | When it runs                                                      |
+| -------------------------- | ----------------------------------------------------------------- |
+| `Page.onReady`             | Page rendered; widgets and page variables are available           |
+| `Page.onAttach`            | Screen gains navigation focus (including return to a cached page) |
+| `Page.onDetach`            | Screen loses focus before the page may stay in cache              |
+| `Page.onDestroy`           | Page instance is disposed                                         |
+| `Page.onOrientationchange` | Orientation changes (portrait vs landscape)                       |
+| `Page.onResize`            | Viewport size changes                                             |
 
-                // ex-2: Clear Timers / Intervals
-                if (Page.autoRefreshInterval) {
-                    clearInterval(Page.autoRefreshInterval);
-                    Page.autoRefreshInterval = null;
-                }
-            };
-        ```
+Wire **on Resize** and **on Orientation Change** on the page root in markup, not on child widgets. Page cache behavior affects **on Attach** and **on Detach**; see [Page properties](/docs/user-interfaces/mobile/develop/page/properties).
 
+### Page.onReady
 
+Runs once each time the page loads, after widgets and page variables are ready.
 
+```javascript
+Page.onReady = function () {
+    Page.Variables.CardData.invoke();
+};
+```
+
+In `Page.onReady` you can use:
+
+- **Variables:** `Page.Variables.getEmployeeDataset.invoke()`
+- **Widgets:** `Page.Widgets.username.datavalue`
+
+### Page.onAttach
+
+Runs when the page becomes active again, including when you navigate back to a cached page and the screen receives focus.
+
+```javascript
+Page.onAttach = function ($event, widget) {
+    Page.Variables.GetOrders.invoke();
+};
+```
+
+### Page.onDetach
+
+Runs when the page loses focus before the page may stay in cache during navigation away. Use it to pause timers or clear in-memory state held on `Page`.
+
+```javascript
+Page.onDetach = function ($event, widget) {
+    if (Page.dashboardRefreshTimer) {
+        clearInterval(Page.dashboardRefreshTimer);
+        Page.dashboardRefreshTimer = null;
+    }
+    Page.Variables.selectedEmployee.setData(null);
+    Page.Variables.filterCriteria.setData({});
+};
+```
+
+### Page.onDestroy
+
+Runs when the page instance is disposed, for example when navigating away without cache or when the app tears the screen down.
+
+```javascript
+Page.onDestroy = function ($event, widget) {
+    if (Page.customSubscription) {
+        Page.customSubscription();
+        Page.customSubscription = null;
+    }
+};
+```
+
+### Page.onOrientationchange
+
+Fires when the viewport orientation changes (portrait versus landscape). The third argument `data` includes **screenWidth** and **screenHeight** when present, same as **on Resize**.
+
+```javascript
+Page.onOrientationchange = function ($event, widget, data) {
+    if (!data) {
+        return;
+    }
+    Page.isLandscape = data.screenWidth > data.screenHeight;
+};
+```
+
+Use `Page.isLandscape` in scripts or bindings to branch UI logic after rotation.
+
+### Page.onResize
+
+Fires when the viewport size changes (for example device rotation or a resized preview window in Studio). The callback receives **screenWidth** and **screenHeight** on `data`. Wire this event on the page root in markup, not on child widgets.
+
+```javascript
+Page.onResize = function ($event, widget, data) {
+    if (!data) {
+        return;
+    }
+    Page.lastScreenWidth = data.screenWidth;
+    Page.lastScreenHeight = data.screenHeight;
+};
+```
+
+Store dimensions on `Page` and use them in bindings or scripts when layout depends on the current viewport.
+
+## Related topics
+
+- [Event handling overview](/docs/user-interfaces/mobile/develop/events/)
+- [Page properties](/docs/user-interfaces/mobile/develop/page/properties)
+- [Variable events](/docs/user-interfaces/mobile/develop/events/variable-events)

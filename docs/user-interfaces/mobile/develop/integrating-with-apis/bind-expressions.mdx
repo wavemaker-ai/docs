@@ -1,0 +1,156 @@
+---
+last_update: { author: "Praneeth Reddy" }
+---
+
+# Bind expressions
+
+In a mobile app, widgets show data and capture input through **bindings**. In Studio you connect a widget property to a [variable](/docs/user-interfaces/mobile/develop/integrating-with-apis/variables), another widget, a project resource, a JavaScript expression, or a localized message. When you run or export the app, those bindings compile into the generated **React Native (Expo)** project and update the UI when the underlying data changes.
+
+Bindings serve two roles:
+
+- **Display and edit data**: connect variable fields (or expressions) to labels, lists, forms, and inputs
+- **Coordinate variables**: pass filters or parameters from one variable to another
+
+---
+
+## Bind widgets in Studio
+
+After you create variables on the page or at app scope, bind them to widgets so the running app can load and show data.
+
+1. Select a widget on the canvas.
+2. In the **Properties** panel, find a property that supports binding (marked with the bind chain icon).
+3. Click the bind icon to open the **Bind** dialog.
+4. Choose a source (variable, widget, resource, expression, or message), then click **Bind**.
+
+Studio shows whether the binding is valid before you save. You can edit or clear bindings from the same icon.
+
+From the Bind dialog you can:
+
+- Browse binding targets with field names and data types
+- Bind several fields in one pass when the dialog supports multi-field binding
+- Bind at object level (for example a whole `dataset` or `formdata` object) when appropriate
+
+---
+
+## Bind dialog sources
+
+| Source                 | Use for                                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------------------ |
+| **Variable**           | Page or app variables (`Variables.*`), including service and CRUD variables                |
+| **Widgets**            | Another widget on the same page (`Widgets.*`), such as form `formdata` or a list selection |
+| **Resource**           | Imported assets (images, fonts, and other files under project resources)                   |
+| **Use Expression**     | JavaScript expressions and formatter pipes for display logic                               |
+| **Localized Messages** | Keys from the application message repository (`appLocale.*`)                               |
+
+You can bind to variables and widgets defined on the **current page** or at **app** scope.
+
+---
+
+## Binding to variables
+
+Bind variable data to widget properties (for example `dataset` on a **List**, `datavalue` on a **Text** or form field, or `picturesource` on an **Image**).
+
+For **service variables** and other variables that fetch from the backend:
+
+- Enable **Request data on page load** (or the equivalent for app-scoped variables) so the widget has data when the page opens
+- Use **Update data on input change** when the variable should re-run after a filter field or input parameter changes
+
+See [Variables and types](/docs/user-interfaces/mobile/develop/integrating-with-apis/variables) for variable types, scope, and creation steps.
+
+---
+
+## Binding variables to each other
+
+Variables can bind to each other when one variable needs **filters** or **input parameters** from another. Configure filters and inputs on the variable **Data** tab in Studio.
+
+For example, a CRUD variable for `Employee` can filter on `departmentId` when a page variable or widget supplies that value. The dependent variable runs with the updated parameters when **Update data on input change** is enabled.
+
+---
+
+## Binding widget to widget
+
+Bind one widget property to another on the same page. Common patterns on mobile:
+
+- A **Text** or **Label** bound to the selected item from a **List**
+- A form field bound to `Widgets.myForm.formfields.status.datavalue`
+- A **Switch** or **Select** driving a filter on another widget through a bound variable
+
+Use the **Widgets** tab in the Bind dialog to pick the source widget and property.
+
+---
+
+## Binding to resources
+
+Bind image, icon, or other asset properties to files you **import** into the project (Resources in Studio). Import the resource first, then select it from the **Resource** tab in the Bind dialog.
+
+---
+
+## Binding with expressions
+
+On the **Use Expression** tab, write a **JavaScript** expression for display or computed values. Studio stores Angular-style bind expressions in the project; mobile codegen transpiles them into JavaScript watched in the generated app.
+
+Simple concatenation example:
+
+```javascript
+"User Name is: " + datavalue
+```
+
+Build richer expressions in the expression editor: pick variables and widgets from the left panel, use operators, and apply **formatters** (pipes) for dates, numbers, and currency.
+
+For complex logic, prefer a function in the page **Script** tab and call it from an expression or event handler.
+
+### Expression formatters (mobile)
+
+These formatters are available in bind expressions for mobile apps (implemented in the React Native runtime):
+
+| Formatter          | Purpose                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **numberToString** | Format a number as a localized string; **fraction size** sets decimal places (for example `12345.6789` with size `3` becomes `12,345.679`) |
+| **prefix**         | Add text before the value                                                                                                                  |
+| **suffix**         | Add text after the value                                                                                                                   |
+| **stringToNumber** | Parse a string to a number (for example `'123'` → `123`)                                                                                   |
+| **timeFromNow**    | Relative time (for example `an hour ago`); uses **moment** with locale support in the app                                                  |
+| **toCurrency**     | Format as currency with symbol and precision                                                                                               |
+| **toDate**         | Format a date with a chosen pattern                                                                                                        |
+
+You can add **custom formatters** under `src/extensions/formatters.js` in the generated project; they register as `custom.<name>` in expressions.
+
+:::note
+The **toNumber** formatter appears in some Studio bind editors for web projects. It is not registered in the default mobile formatter set. Use **stringToNumber** or a custom formatter on mobile unless you define one in `formatters.js`.
+:::
+
+---
+
+## Binding to localized messages
+
+Bind labels, buttons, and messages to keys from the **Application Messages** repository. At runtime the app resolves `appLocale.MESSAGE_KEY` (and related keys) for localization.
+
+Example binding target:
+
+```text
+appLocale.LABEL_TRANSACTION_MESSAGE
+```
+
+This is useful for static copy and validation-related messages that should change per locale.
+
+---
+
+## Expression reference
+
+| Kind              | Example                                             |
+| ----------------- | --------------------------------------------------- |
+| Variable          | `Variables.EmployeeList.dataSet.jobTitle`           |
+| Widget / form     | `Widgets.userForm.formfields.address.datavalue`     |
+| Resource          | Path to an imported image or asset                  |
+| Expression        | `"Total: " + Variables.orderSummary.dataSet.amount` |
+| Localized message | `appLocale.LABEL_SAVE`                              |
+
+Paths are case-sensitive and must match names in your page markup and variable definitions.
+
+---
+
+## Related topics
+
+- [Variables and types](/docs/user-interfaces/mobile/develop/integrating-with-apis/variables)
+- [Life cycle hooks](/docs/user-interfaces/mobile/develop/integrating-with-apis/life-cycle-hooks)
+- [Integrating with APIs overview](/docs/user-interfaces/mobile/develop/integrating-with-apis)

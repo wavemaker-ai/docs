@@ -1,93 +1,118 @@
 ---
-last_update: { author: 'Raj Kumar Reddy Abbadi' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
-# Custom Validators Using JavaScript
-While WaveMaker provides many built-in validators, there are scenarios where application-specific rules are required. For such cases, WaveMaker allows you to define custom validators using JavaScript functions.
+# Custom validators using JavaScript
 
-Custom validators give you complete control over how a field is validated and allow you to implement business rules or dynamic validations that go beyond basic constraints.
+WaveMaker includes built-in validators for common rules. When you need app-specific logic, define a **custom validator** as a JavaScript function on a **form field** in the page **Script** tab. The same function runs when the user interacts with the form in the running app.
 
-## How Custom Validators Work
-A custom validator is a JavaScript function that is executed whenever validation is triggered for a field. The function:
+For built-in validators, `setValidators`, `observeOn`, and `setAsyncValidators`, see [Validation flow in an application](/docs/user-interfaces/mobile/develop/form-input-validations).
+
+---
+
+## How custom validators work
+
+A custom validator is a JavaScript function that runs whenever validation is triggered for a form field. The function:
+
 - Receives the field object and the form context
 - Evaluates the value based on custom logic
 - Returns an error object if validation fails
-- Returns nothing (or undefined) if validation passes
+- Returns nothing (or `undefined`) if validation passes
 
-If an error object is returned, the field is marked invalid and the provided error message is displayed on the UI.
+If an error object is returned, the field is marked invalid and the provided error message is displayed in the app.
 
-Custom validators can be applied to **Form fields** & **DataTable**
+Register the validator with `setValidators` on a form field:
 
-    ```javascript
-        // Form
-        Page.Widgets.userForm.formfields.lastName.setValidators([lastNameValidator]);
+```javascript
+Page.Widgets.userForm.formfields.lastName.setValidators([lastNameValidator]);
 
-        // DataTable
-        Page.Widgets.userTable.columns.lastName.setValidators([lastNameValidator]);
+function lastNameValidator(field, form) {
+  if (field.value && field.value.length < 2) {
+    return {
+      errorMessage: "Please enter a valid last name."
+    };
+  }
+}
+```
 
-        function lastNameValidator(field, form) {
-            // Check if value exists and is at least 2 characters long
-            if (field.value && field.value.length < 2) {
-                return {
-                    errorMessage: "Please enter a valid last name."
-                };
-            }
-        }
-    ```
+Call `setValidators` from `Page.onReady` or another event after the form is available on the page.
 
-## Common Use Cases for Custom Validators
+---
 
-#### Cross-Field Validation (Password Match)
-    ```javascript
-        function confirmPasswordValidator(field, form) {
-            var password = form.formfields.password.value;
-            var confirmPassword = field.value;
+## Common use cases
 
-            if (password && confirmPassword && password !== confirmPassword) {
-                return {
-                    errorMessage: "Passwords do not match."
-                };
-            }
-        }
-    ```
+### Cross-field validation (password match)
 
-#### Conditional Validation Based on Another Field
-    ```javascript
-        function stateRequiredValidator(field, form) {
-            var country = form.formfields.country.value;
+Compare the field under validation with another form field. Use `observeOn` on the dependent field so it re-validates when the other field changes (see [observeOn](/docs/user-interfaces/mobile/develop/form-input-validations#observeon) in the overview).
 
-            if (country === "USA" && !field.value) {
-                return {
-                    errorMessage: "State is required when country is USA."
-                };
-            }
-        }
-    ```
+```javascript
+Page.Widgets.userForm.formfields.confirmpassword.setValidators([confirmPasswordValidator]);
+Page.Widgets.userForm.formfields.confirmpassword.observeOn(['password']);
 
-#### Disallow Special Characters in Username
-    ```javascript
-        function usernameValidator(field, form) {
-            var value = field.value;
+function confirmPasswordValidator(field, form) {
+  var password = form.formfields.password.value;
+  var confirmPassword = field.value;
 
-            if (value && !/^[a-zA-Z0-9]+$/.test(value)) {
-                return {
-                    errorMessage: "Username can contain only letters and numbers."
-                };
-            }
-        }
-    ```
+  if (password && confirmPassword && password !== confirmPassword) {
+    return {
+      errorMessage: "Passwords do not match."
+    };
+  }
+}
+```
 
-#### Age Validation Based on Date of Birth
-    ```javascript
-        function ageValidator(field, form) {
-            var dob = new Date(field.value);
-            var today = new Date();
-            var age = today.getFullYear() - dob.getFullYear();
+### Conditional validation based on another field
 
-            if (age < 18) {
-                return {
-                    errorMessage: "You must be at least 18 years old."
-                };
-            }
-        }
-    ```
+```javascript
+function stateRequiredValidator(field, form) {
+  var country = form.formfields.country.value;
+
+  if (country === "USA" && !field.value) {
+    return {
+      errorMessage: "State is required when country is USA."
+    };
+  }
+}
+```
+
+Register on the state field:
+
+```javascript
+Page.Widgets.userForm.formfields.state.setValidators([stateRequiredValidator]);
+```
+
+### Disallow special characters in username
+
+```javascript
+function usernameValidator(field, form) {
+  var value = field.value;
+
+  if (value && !/^[a-zA-Z0-9]+$/.test(value)) {
+    return {
+      errorMessage: "Username can contain only letters and numbers."
+    };
+  }
+}
+```
+
+### Age validation based on date of birth
+
+```javascript
+function ageValidator(field, form) {
+  var dob = new Date(field.value);
+  var today = new Date();
+  var age = today.getFullYear() - dob.getFullYear();
+
+  if (age < 18) {
+    return {
+      errorMessage: "You must be at least 18 years old."
+    };
+  }
+}
+```
+
+---
+
+## Summary
+
+Custom validators extend form validation on mobile without replacing built-in rules. Use `setValidators` for your function, return `{ errorMessage }` on failure, and use `observeOn` when one field must react to changes on another. Keep business rules in page script and combine with object validators (for example `VALIDATOR.REQUIRED`) when appropriate.

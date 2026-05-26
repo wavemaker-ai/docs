@@ -827,7 +827,6 @@ const isCacheExpired = (timestamp, maxAge = 3600000) => {
 
 ## Related Documentation
 
-- [Adding Plugins](./adding-plugins.md)
-- [Enabling Gestures](./enabling-gestures.md)
-- [WMX Components- Mobile](../enterprise-capabilities/prefabs/wmx-components-mobile.md)
+- [Third-party Expo plugins](./third-party-expo-plugins.md)
+- [WMX components](/docs/user-interfaces/mobile/enterprise-capabilities/wmx/)
 - [State Management](#)

@@ -1,96 +1,109 @@
 ---
-last_update: { author: 'Raj Kumar Reddy Abbadi' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
-# Component Events
+# UI events
 
-In WaveMaker, every UI component (such as Buttons, Forms, Dialogs, etc.) exposes a set of lifecycle methods and event callbacks. These events allow developers to respond to user interactions and component state changes by executing custom logic.
-UI component events provide a way to extend component behavior without modifying the component itself.
+UI events fire when the user interacts with a widget (tap, press, focus, text entry) or when a widget-specific callback runs. Wire them in Studio on the widget **Events** tab or in markup (for example `on-tap` on a button).
 
-For example, Handling Button Click to Trigger Login Action, the following would be the code:
-    ```javascript
-        Page.submitButtonClick = function ($event, widget) {
-            // Display a loading spinner to indicate processing
-            Page.Widgets.spinner.show = true; 
+For how UI events relate to page lifecycle and variable callbacks, see [Event handling overview](/docs/user-interfaces/mobile/develop/events/). Component behavior events (form submit, list selection) are documented per widget in [React Native component docs](https://react-components.wavemaker.ai/?path=/story/basic-anchor--docs#tab-events).
 
-            // Retrieve the submitted data from the User Credentials form
-            var output = Page.Widgets.UserCredentialsForm.dataoutput;
+## Handler names
 
-            // Bind form values to the login action parameters
-            App.Actions.loginAction.dataBinding = {
-                "j_username": output.email,
-                "j_password": output.password.value,
-                "j_rememberme": false
-            };
+Studio adds a function on the page script when you pick an event. The name combines the widget **name** and the event:
 
-            // Invoke the login action to authenticate the user
-            App.Actions.loginAction.invoke();
-        };
-    ``` 
+`Page.{widgetName}{EventName}`
 
-:::info
-For Component Life Cycle Events and Methods refer to the specific [Component Documentation](https://react-components.wavemaker.ai/?path=/story/basic-anchor--docs#tab-events).
-:::
+Examples: `Page.submitButtonTap`, `Page.emailInputChange`, `Page.employeeListSelect`.
 
+## Wire a tap handler
 
-Events can be grouped by the type of user interaction or browser action that triggers them:
-- **Mouse Events:** click, double click, mouse enter, mouse leave, and so on.
+```javascript
+Page.submitButtonTap = function ($event, widget) {
+    Page.Widgets.spinner.show = true;
 
-        ```javascript
-            // WM Script for button double click
-            Page.UserButtonDblclick = function ($event, widget) {
-                // Enable edit mode
-                Page.Widgets.employeeForm.isEditMode = true;
+    var output = Page.Widgets.UserCredentialsForm.dataoutput;
 
-                // Set focus to the first input field
-                Page.Widgets.firstNameInput.setFocus();
-            };
-        ```
+    App.Actions.loginAction.dataBinding = {
+        j_username: output.email,
+        j_password: output.password.value,
+        j_rememberme: false
+    };
 
-- **Keyboard Events:** keypress, keydown, keyup, etc.
-        ```javascript   
-            // WM Script for button key press
-            Page.UserButtonKeypress = function ($event, widget, item, currentItemWidgets) {
-                // Prevent action for restricted keys
-                if ($event.key === 'Tab') {
-                    $event.preventDefault();
-                }
-            };
-        ```
-- **Window/Document Events:** load, unload, resize, scroll, DOMContentLoaded, etc. 
-        ```javascript
-            window.onload = function () {
-                //  Register global event listeners
-                window.addEventListener('resize', function () {
-                    console.log('Window resized');
-                });
-            };
-        ```
-### UI Event Object
-For every event handler function, a parameter is often defined with names such as **```$event```** , **```event```** , or **```e```**. This parameter is referred as event object. It is automatically passed to event handlers and provides additional information and functionality related to the event that was triggered. This object contains useful properties and methods related to the event
-- **event.type:** Returns the type of the event as a string (e.g., 'click', 'keydown').
-- **event.target:** Refers to the element that triggered the event.
-- **event.preventDefault():** A method to stop the browser's default action for that event (e.g., preventing a form from submitting). 
+    App.Actions.loginAction.invoke();
+};
+```
 
-        ```javascript
-            Page.UserButtonclick = function ($event, widget) {
-                
-                // $event.type: Identify the event type
-                if ($event.type === 'click') {
-                    console.log('Button clicked');
-                } else if ($event.type === 'keydown') {
-                    console.log('Key pressed');
-                }
+## Common event groups
 
-                // $event.target: Access the element and apply UI change to the triggering element
-                var sourceElement = $event.target;
-                console.log("Triggered by element:", sourceElement);
-                sourceElement.style.border = "2px solid #4CAF50";
+| Group           | Typical events                                                                                                      | Use for                                                                   |
+| --------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Touch and press | `onTap` (most widgets); `onBackbtnclick`, `onChipclick`, `onDraghandleiconclick` on navbar, chips, and bottom sheet | Buttons, anchors, list rows, chips, navbar back, bottom sheet drag handle |
+| Focus           | `onFocus`, `onBlur`                                                                                                 | Inputs, search fields                                                     |
+| Value change    | `onChange`                                                                                                          | Text, number, toggle, select when the value changes                       |
+| Keyboard        | `onKeypress`, `onKeyup`                                                                                             | Hardware keyboards or Studio web preview when the widget supports them    |
 
-                // $event.preventDefault(): Prevent default browser behavior
-                if ($event.type === 'click') {
-                    $event.preventDefault();
-                    console.log("Default click behavior prevented");
-                }
-            };
-        ```
+Available events depend on the widget. Open the widget **Events** tab in Studio or the component Storybook **Events** tab for the full list.
+
+### Touch and press
+
+```javascript
+Page.saveButtonTap = function ($event, widget) {
+    Page.Variables.saveEmployee.invoke();
+};
+```
+
+### Input change and focus
+
+```javascript
+Page.quantityInputChange = function ($event, widget, newVal, oldVal) {
+    Page.Variables.lineTotal.setData(newVal * Page.unitPrice);
+};
+
+Page.searchFieldBlur = function ($event, widget) {
+    Page.Variables.searchProducts.invoke();
+};
+```
+
+### List and repeater context
+
+List, cards, and similar widgets may pass extra arguments (for example the selected item or row widgets):
+
+```javascript
+Page.orderListSelect = function ($event, widget, item, currentItemWidgets) {
+    Page.Variables.selectedOrderId.setData(item.id);
+};
+```
+
+### Viewport size and orientation
+
+Do not use `window.onload` or `window.addEventListener('resize')` in page scripts. Use page lifecycle handlers instead:
+
+- [Page properties: Events](/docs/user-interfaces/mobile/develop/page/properties#events) (`Page.onResize`, `Page.onOrientationchange`)
+
+## The `$event` and `widget` arguments
+
+Most UI handlers receive:
+
+| Argument | Description                                                              |
+| -------- | ------------------------------------------------------------------------ |
+| `$event` | Event payload from the runtime (type, native event details when present) |
+| `widget` | The WaveMaker widget instance that fired the event                       |
+
+Prefer `widget` (or `Page.Widgets.{name}`) to read or update UI state. Avoid DOM APIs such as `document`, `window`, or `element.style` in mobile page scripts.
+
+```javascript
+Page.confirmButtonTap = function ($event, widget) {
+    if ($event && $event.type) {
+        console.log("Event type:", $event.type);
+    }
+    widget.show = false;
+};
+```
+
+## Related topics
+
+- [Event handling overview](/docs/user-interfaces/mobile/develop/events/)
+- [App and page lifecycle events](/docs/user-interfaces/mobile/develop/events/app-page-events)
+- [Variable events](/docs/user-interfaces/mobile/develop/events/variable-events)
+- [Page properties](/docs/user-interfaces/mobile/develop/page/properties)

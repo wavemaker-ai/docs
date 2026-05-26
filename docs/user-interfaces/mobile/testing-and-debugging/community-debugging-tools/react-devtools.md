@@ -2,32 +2,35 @@
 title: "React DevTools"
 id: "react-devtools"
 sidebar_label: "React DevTools"
-last_update: { author: 'Vivek Raj' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # React DevTools
 
-React DevTools is a debugging tool designed to debug React and React Native apps. It can be used in browsers by installing its extension and provides powerful React component inspection capabilities.
+React DevTools inspects the **React component tree** (props, state, hooks, profiler). It does not replace [Chrome DevTools](./chrome-devtools), which shows HTML and network traffic.
 
 ---
 
 ## Overview
 
-React DevTools provides React-specific debugging capabilities including:
+React DevTools provides:
 
 - **Component hierarchy** inspection
 - **Props and state** viewing and editing
 - **Performance profiling** for React components
 - **Hooks** inspection
-- **Component trace** for style sources
+- **Style trace** for style sources (web preview)
 
-**Platform Support:**
-- ✅ Web Preview (Browser extension)
-- ✅ Expo (Go / Dev Build)
-- ❌ Release Build (APK/IPA)
+**Platform support:**
+
+- ✅ Web preview (browser extension in Chrome / Edge / Firefox)
+- ✅ Expo Go / development build (built into [React Native DevTools](./react-native-devtools) **Components** and **Profiler** panels; press **`j`** on device)
+- ❌ Release build (APK/IPA): use [WavePulse](../wm-debugging-tools/wavepulse)
 
 :::note
-React DevTools shows React components unlike Chrome DevTools which shows HTML elements. This is particularly useful for debugging component state and props in WaveMaker apps.
+On **web preview**, install the browser extension and open DevTools with [Chrome DevTools](./chrome-devtools) (Preview → **REMOVE TOOLBAR** → **Inspect**). You will see **Components** and **Profiler** tabs.
+
+On a **device or simulator**, use [React Native DevTools](./react-native-devtools) instead of the extension. The same React inspection features are included there.
 :::
 
 ---
@@ -35,9 +38,11 @@ React DevTools shows React components unlike Chrome DevTools which shows HTML el
 ## Available Panels
 
 ### Components Panel
+
 Shows React components in hierarchical structure with their props and state.
 
 ### Profiler Panel
+
 Collects timing information about each component to identify performance bottlenecks.
 
 ---
@@ -49,16 +54,19 @@ Collects timing information about each component to identify performance bottlen
 React DevTools can be installed as an extension in Chrome, Firefox, and Edge browsers.
 
 **Chrome:**
+
 1. Visit [Chrome Web Store](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
 2. Click "Add to Chrome"
 3. Accept permissions
 
 **Firefox:**
+
 1. Visit [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
 2. Click "Add to Firefox"
 3. Accept permissions
 
 **Edge:**
+
 1. Visit [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/react-developer-tools/gpphkfbcpidddadnkolkpfckpihlkkil)
 2. Click "Get"
 3. Accept permissions
@@ -66,12 +74,12 @@ React DevTools can be installed as an extension in Chrome, Firefox, and Edge bro
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      left: 0,
-      top: 0
-    }}
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0
+  }}
     src="https://embed.app.guidde.com/playbooks/1sMAWFG2RXrYq82p693aMW"
     title="Installing React DevTools"
     frameBorder={0}
@@ -82,20 +90,16 @@ React DevTools can be installed as an extension in Chrome, Firefox, and Edge bro
   />
 </div>
 
-### Standalone Application
+### Standalone application (optional)
 
-For React Native debugging without browser:
+A standalone `react-devtools` desktop app is available for legacy workflows. Current Expo projects should use the **Components** and **Profiler** tabs inside [React Native DevTools](./react-native-devtools) (`j` in the Expo CLI terminal).
 
 ```bash
-# Install globally
 npm install -g react-devtools
-
-# Or install for project
-npm install --save-dev react-devtools
-
-# Start standalone
 react-devtools
 ```
+
+Use this only if your team still relies on the standalone app; it is not required for WaveMaker mobile apps on current Expo stacks.
 
 ---
 
@@ -114,12 +118,12 @@ react-devtools
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-      width: "100%",
-      height: "100%",
-      position: "absolute",
-      left: 0,
-      top: 0
-    }}
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    left: 0,
+    top: 0
+  }}
     src="https://embed.app.guidde.com/playbooks/rJEJEs4wGrcAJexguS9LE9"
     title="React DevTools Walkthrough"
     frameBorder={0}
@@ -139,6 +143,7 @@ react-devtools
 The Components panel displays React components in a tree structure similar to the DOM tree, but showing React components instead of HTML elements.
 
 **Features:**
+
 - View component tree structure
 - Select components to inspect
 - Search for components by name
@@ -149,12 +154,14 @@ The Components panel displays React components in a tree structure similar to th
 When you select a component in the tree:
 
 **Right panel shows:**
+
 - **Props** – Data passed from parent component
 - **State** – Component's internal state (if using state)
 - **Hooks** – Hook values (if using hooks)
 - **Rendered by** – Parent component information
 
 **For WaveMaker components:**
+
 - Props show widget configuration from Studio
 - State shows current widget state
 - Can view data binding values
@@ -170,6 +177,7 @@ You can modify props and state values directly in React DevTools to test behavio
 5. Component re-renders with new value
 
 **Use cases:**
+
 - Test component with different prop values
 - Debug state-related issues
 - Validate conditional rendering logic
@@ -183,11 +191,13 @@ Changes in React DevTools are temporary and reset on page reload. They're useful
 In the component details, there's a **trace object** under styles:
 
 **What it shows:**
+
 - Sources that contributed to final styles
 - Style priority (later sources override earlier ones)
 - Helps debug style conflicts
 
 **Example:**
+
 ```
 trace: {
   default: { color: 'black' },
@@ -203,17 +213,19 @@ trace: {
 React DevTools shows many wrapper components along with WaveMaker components. To focus on WaveMaker components only:
 
 **Filter pattern:**
+
 ```
-^(?!Wm)
+^Wm
 ```
 
-This regex filters out all components except those starting with "Wm" (WaveMaker components).
+Shows components whose names start with `Wm` (WaveMaker widgets).
 
 **How to apply:**
-1. Click filter icon in Components panel
-2. Enter pattern: `^(?!Wm)`
-3. Press Enter
-4. Only WaveMaker components are shown
+
+1. Open the **Components** panel (browser extension or React Native DevTools)
+2. Use the search/filter field
+3. Enter `^Wm`
+4. Narrow the tree to WaveMaker components
 
 ---
 
@@ -231,17 +243,20 @@ The Profiler measures component render performance to identify bottlenecks.
 ### Analyzing Results
 
 **Flame Graph:**
+
 - Shows which components rendered
 - Width = render duration
 - Color intensity = relative performance
 - Hover for detailed timing
 
 **Ranked Chart:**
+
 - Lists components by render time
 - Longest renders at top
 - Click to see render details
 
 **Component Chart:**
+
 - Shows individual component renders over time
 - Useful for tracking repeated renders
 - Identify unnecessary re-renders
@@ -249,11 +264,13 @@ The Profiler measures component render performance to identify bottlenecks.
 ### Performance Metrics
 
 For each component render:
+
 - **Duration** – Time to render
 - **Commit time** – When changes committed to DOM
 - **Interactions** – User interactions during render
 
 **Use cases:**
+
 - Find slow rendering components
 - Identify unnecessary re-renders
 - Optimize component performance
@@ -263,19 +280,20 @@ For each component render:
 
 ## Key Features
 
-**✅ Advantages:**
+**Advantages:**
+
 - Shows React components (not HTML elements)
-- View and edit props and state in real-time
+- View and edit props and state in real time
 - Component hierarchy visualization
 - Performance profiling for React components
-- Works with both web preview and Expo builds
-- Trace object shows style source priority
-- Free and open source
+- Web preview via browser extension; on-device via React Native DevTools
+- Style trace helps debug conflicting styles in web preview
 
 **⚛️ WaveMaker Integration:**
+
 - Inspect WaveMaker widget components
 - View widget properties as props
-- Filter to show only Wm* components
+- Filter to show only Wm\* components
 - Debug data binding values
 - Trace style conflicts
 
@@ -286,9 +304,9 @@ For each component render:
 ### 1. Use Filters Effectively
 
 ```javascript
-// ✅ Good - Filter to relevant components
-^(?!Wm)          // Show only WaveMaker components
-UserProfile      // Search for specific component
+// Good - Filter to relevant components
+^Wm              // WaveMaker widget components
+UserProfile      // Search for a specific component name
 ```
 
 ### 2. Combine with Chrome DevTools
@@ -301,20 +319,10 @@ UserProfile      // Search for specific component
 // ❌ Bad - Using one tool for everything
 ```
 
-### 3. Profile in Production Mode
-
-For accurate performance measurements:
-```bash
-# Build in production mode
-npm run build
-
-# Or set NODE_ENV
-NODE_ENV=production npm start
-```
-
-### 4. Clean Up After Profiling
+### 3. Clean Up After Profiling
 
 Profiling can impact performance:
+
 - Stop recording when done
 - Clear profile data between tests
 - Don't leave profiler running continuously
@@ -335,6 +343,7 @@ Profiling can impact performance:
 ### React DevTools Not Showing
 
 **If panels don't appear:**
+
 1. Refresh the page
 2. Ensure extension is enabled
 3. Check if React is detected (icon color)
@@ -348,6 +357,7 @@ This warning is normal in development mode. Ignore it or build in production mod
 ### Components Not Updating
 
 If changes don't reflect:
+
 1. Check if component uses props/state correctly
 2. Verify re-render is triggered
 3. Check for memoization blocking updates
@@ -358,19 +368,23 @@ If changes don't reflect:
 ## Related Documentation
 
 **Other Debugging Tools:**
+
 - [Chrome DevTools](./chrome-devtools) – Browser debugging for web preview
-- [React Native DevTools](./react-native-devtools) – React Native debugging
+- [React Native DevTools](./react-native-devtools) – On-device debugging (includes Components / Profiler)
+- [Expo Dev Tools](./expo-dev-tools) – Developer menu and CLI shortcuts
 - [WavePulse](../wm-debugging-tools/wavepulse) – WaveMaker debugging tool
 
 **Testing Documentation:**
+
 - [Debugging Overview](../debugging-overview) – All debugging tools and methods
 - [UI Testing Mobile](../testing-strategies/ui-testing-mobile) – Mobile testing strategies
 
 **External Resources:**
+
 - [React DevTools Documentation](https://react.dev/learn/react-developer-tools) – Official guide
 - [React DevTools GitHub](https://github.com/facebook/react/tree/main/packages/react-devtools) – Source code
 - [Profiling Components](https://react.dev/reference/react/Profiler) – Profiling API
 
 :::tip
-React DevTools works with any React or React Native application, not just WaveMaker apps. It's a valuable tool for any React developer.
+In web preview, use the browser extension together with [Chrome DevTools](./chrome-devtools). On device, open [React Native DevTools](./react-native-devtools) and use the **Components** and **Profiler** tabs there.
 :::

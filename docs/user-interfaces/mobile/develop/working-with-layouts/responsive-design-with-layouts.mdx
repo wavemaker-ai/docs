@@ -1,42 +1,49 @@
 ---
-last_update: { author: 'Raj Kumar Reddy Abbadi' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
 # Responsive Design
 
-In WaveMaker, responsive design with layouts means building apps that automatically adapt their UI to different screen sizes like mobile, tablet, and desktop without creating separate apps.
+In WaveMaker, responsive design with layouts means building **React Native** apps whose UI adapts across **phone and tablet** widths and orientations without maintaining separate projects for each size.
 
-What is Responsive Design in WaveMaker?
+## What is responsive design in WaveMaker?
 
 Responsive design ensures that:
 
-- The UI adjusts smoothly based on screen size
-- Content rearranges, resizes, or hides/shows depending on the device
-- Users get a consistent experience on phone, tablet, or web
+- The UI adjusts smoothly when the viewport width or orientation changes
+- Content can rearrange, resize, or show and hide based on device class or breakpoint
+- Users get a consistent experience on small phones, large phones, and tablets
 
-## Device Visibility per Component
+## Device visibility per component
 
-WaveMaker provides a simple way to manage responsiveness using device-based visibility.
-For every Component, the Device tab allows you to:
-    - Show the Component only on specific screen sizes
-    - Hide the Component for certain devices
-    - Build separate UI patterns for mobile vs desktop (without duplicating pages)
+WaveMaker provides **device-based visibility** in Studio.
+
+For each widget, the **Device** tab lets you:
+
+- Show the widget only for selected screen sizes or breakpoints
+- Hide the widget for sizes where it does not fit the layout
+- Place alternative widgets for different widths on the same page (for example, a compact row on narrow widths and a wider row on tablet)
 
 This is useful when:
-    - A sidebar should appear only on large screens
-    - A compact menu should appear only on mobile
-    - A large table should be hidden on smaller devices and replaced with a card/list view
 
-## Auto Layout for Responsive Alignment
+- A secondary toolbar or chip row should appear only on **tablet** widths
+- A **bottom sheet** or condensed block should appear only on **phone** widths
+- A **list** or **grid** should use different density or columns at `xs` / `sm` / `md` / `lg` breakpoints
 
-WaveMaker also supports Auto Layout, which acts like a built-in responsive layout system. Instead of relying heavily on manual margins, paddings, and custom CSS, you can control responsiveness using container properties.
+## Auto Layout for responsive alignment
 
-With Auto Layout, containers can be configured using properties such as:
-    - Direction (row or column)
-    - Wrap (allow items to move to next line)
-    - Fill / Hug (dynamic sizing based on available space)
-    - Alignment (start, center, end)
-    - Gap (consistent spacing between widgets)
-    - Padding (container spacing)
-    
-These settings allow widgets to automatically resize and realign as the screen changes, giving you a clean responsive UI with minimal effort.
+WaveMaker **Auto Layout** on **`wm-container`** gives you a structured way to align and space children as the screen changes, using the **Layout** section in the Properties panel instead of tuning every margin by hand. For full control descriptions, see [Auto Layout](./auto-layout).
+
+Configure containers with properties such as:
+
+- **Direction**: **Row** (default) or **Column**, plus **Wrap** when children should move to the next line when space runs out
+- **Width** and **Height**: **Fill**, **Hug**, or a user-defined size so regions grow or shrink with available space
+- **Clip content** and **Overflow**: clip to bounds and choose **No scrolling** or **Scroll** on mobile (see [Auto Layout](./auto-layout) for `scrollable` deprecation)
+- **Alignment**: nine positions from a **3×3 grid** (default **Top Left**): Top Center, Top Right, Middle Left, Middle Center, Middle Right, Bottom Left, Bottom Center, Bottom Right
+- **Gap**: a number, **Auto**, or column gap where supported; with **Gap** set to **Auto**, available alignment options depend on **Direction** (for example, with **Row** and **Auto** gap, only vertical alignment choices—top, center, bottom—are offered)
+- **Padding**: horizontal and vertical pairs, or independent values on all four sides
+- **Position**: **Relative** (default), **Absolute**, or **Fixed** — use with **Position value** for overlays and anchored regions
+- **Z-Index**: a numeric stacking order so layers sit above or below siblings
+- **Position value**: **top**, **right**, **bottom**, and **left** offsets when **Position** is not **Relative**
+
+Together, **device visibility** and **Auto Layout** help lists, forms, and panels stay readable from narrow phones up to tablet layouts with minimal duplicated markup.

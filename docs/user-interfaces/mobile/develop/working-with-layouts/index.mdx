@@ -1,26 +1,28 @@
 ---
-last_update: { author: 'Raj Kumar Reddy Abbadi' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
-# Layout Container Components
+# Layout container components
 
-A container defines the structural arrangement of content on a page. It acts as the foundation for building any user interface by controlling where and how components are placed on the screen. To structure a page in the UI or position components in the desired locations, containers play a crucial role. Without containers, managing alignment, spacing, and responsiveness becomes difficult, especially as the page grows in complexity.
+Layout containers group widgets inside **`wm-page-content`** (and inside other containers). They control alignment, spacing, and how content flows on phone and tablet screens.
 
-In WaveMaker, a wide range of container components is available to help organize page content efficiently. These containers group ui components into meaningful sections, ensuring consistency, responsiveness, and ease of maintenance across the application. 
+WaveMaker mobile apps ship these layout widgets in the component panel. Each maps to a WML tag and renders as native views in the generated Expo app.
 
-By using containers, you can build consistent UI patterns across pages and applications, while also creating responsive designs with minimal effort.
-WaveMaker supports multiple container options to address different design needs, such as:
-- Container
-- Accordion
-- Panel
-- Tabs
-- Tile
-- Wizard
+## Container widgets
 
-Each container is designed to simplify UI development and improve the overall user experience.
+| Widget    | WML tag                             | Use when                                                                        |
+| --------- | ----------------------------------- | ------------------------------------------------------------------------------- |
+| Container | `wm-container`                      | General grouping, rows and columns, **Auto Layout** (direction, fill, hug, gap) |
+| Accordion | `wm-accordion` / `wm-accordionpane` | Stacked sections with one pane expanded at a time                               |
+| Panel     | `wm-panel`                          | Titled block with optional footer actions                                       |
+| Tabs      | `wm-tabs` / `wm-tabpane`            | Related content in tabs on the same page                                        |
+| Tile      | `wm-tile`                           | Compact dashboard-style metric or summary blocks                                |
+| Wizard    | `wm-wizard` / `wm-wizardstep`       | Multi-step flows with Next, Previous, and Done                                  |
 
----
+Place containers on a page markup, then drop inputs, lists, charts, and other widgets inside them. Partials can sit inside accordion panes, tab panes, and similar regions when you need reusable sections.
 
+## Related topics
 
-
-
+- [Auto Layout](/docs/user-interfaces/mobile/develop/working-with-layouts/auto-layout): configure `wm-container` layout properties in Studio without hand-writing styles for every child.
+- [Container types](/docs/user-interfaces/mobile/develop/working-with-layouts/container-types): markup patterns and Storybook links for accordion, tabs, wizard, panel, and tile.
+- [Responsive design with layouts](/docs/user-interfaces/mobile/develop/working-with-layouts/responsive-design-with-layouts): device visibility and layout behavior across screen sizes.

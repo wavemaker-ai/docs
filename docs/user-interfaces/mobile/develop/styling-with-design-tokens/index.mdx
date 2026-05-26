@@ -1,131 +1,89 @@
 ---
-last_update: { author: 'Sagar Vemala' }
+last_update: { author: "Praneeth Reddy" }
 ---
 
-# Styling Architecture 
+import StylingArchitecture from './assets/img/StylingArchitecture.png'
 
-In a [Design System project](../../../../design-system/design-system-project), styling in WaveMaker follows a structured, token-driven architecture.
+# Styling architecture
 
-The system ensures consistency, controlled customization, and safe extensibility.
-
----
-
-## Styling Flow Overview
-
+In a [Design System project](../../../../design-system/design-system-project), styling in WaveMaker follows a structured, token-driven architecture. The same ideas apply to mobile: consistency, controlled customization, and safe extensibility when you export a **React Native (Expo)** app.
 
 ---
 
-## 1. Design Token Mapping
+## Styling flow overview
 
-This layer connects external or predefined design tokens to WaveMaker's internal styling system.
+Styling is organized in layers that build on each other. Each layer has a clear role so tokens, defaults, and your changes stay separated.
 
-It ensures:
+Below are the same conceptual layers used across WaveMaker (your exported mobile app follows this flow end to end):
 
-- Tokens are recognized by the platform
-- Naming conventions are aligned
-- Tokens can be consumed through CSS variables
-- Styling remains system-driven, not hard-coded
-
-This is the entry point of styling into the application runtime.
+<img src={StylingArchitecture} style={{ maxWidth: '800px', width: '100%', display: 'block', margin: '0 auto' }} alt="Diagram of styling layers from design tokens through Foundation, components, and Style Workspace to the final app" />
 
 ---
 
-## 2. Foundation CSS
+## Layer 1 — Foundation and design tokens
 
-Foundation CSS is the core styling engine of the project.
+**Foundation CSS** is the default theme for mobile. It is produced from **mobile** design tokens and is the visual source of truth for the product: it is not edited directly when you customize a project. Token types, folders, and how overrides layer on top are described in [Design token architecture](./design-token-architecture) and [Introduction to Foundation CSS](./introduction-to-foundation-css).
 
-It is built entirely on **CSS variables** and defines:
+Tokens are mapped into the theme the mobile runtime uses. Values stay centralized so global updates (for example a new primary color) propagate instead of being copied onto each widget.
 
-- Color system
-- Typography scale
-- Spacing system
-- Border radius
-- Elevation and shadows
-- Surface and background layers
+### Typography on mobile
 
-All component styles resolve through these variables.
+In Style Workspace, **brand** and **plain** font settings use **one font family name** at a time (for example `Roboto`). Pick a family that is bundled or available on the devices you support.
 
-This enables:
-
-- Runtime theming
-- Centralized visual control
-- Scalable styling across the entire application
+A **backup** font may appear in token lists for reference, but mobile does **not** rely on a long “primary, then fallback, then system” font list the way a browser page often does.
 
 ---
 
-## 3. WaveMaker Components
+## Layer 2 — Components
 
-WaveMaker components are designed to:
+The **components** layer consumes the Foundation theme.
 
-- Consume Foundation CSS variables
-- Avoid hard-coded styling values
-- Support system-based variants
-- Maintain consistent visual behavior
-
-Components inherit their look and feel from the token layer.
-
-This ensures:
-
-- Uniform UI across screens
-- Predictable styling behavior
-- Easy global updates through token changes
+WaveMaker mobile widgets use Foundation CSS and tokens for their default look, support **variants** where the design system defines them, and avoid one-off styling that drifts from the theme. When you change a token or variant, dependent widgets update together so screens stay aligned after export. See [Introduction to Foundation CSS — Variants](./introduction-to-foundation-css#variants).
 
 ---
 
-## 4. Style Workspace
+## Layer 3 — Style Workspace and overrides
 
-Style Workspace is the management layer for styling customization.
+**Style Workspace** is where you customize and extend the theme.
 
-It allows developers to:
+You can:
 
-- Modify token values
-- Create component variants
-- Extend design definitions safely
-- Preview changes in real-time
+- Override token values (colors, fonts, spacing, and more)
+- Create or adjust component variants
+- Preview changes before you export or run the app
 
-All customizations are structured and system-aware.
+When you save changes:
 
-No direct CSS fragmentation.
+- Overrides are tracked separately from the base Foundation package
+- Your project keeps a clear split between system defaults and project-specific styling
 
----
+### In the running app
 
-## 5. Generated Overrides
-
-When tokens or component variants are modified:
-
-- Overridden tokens are tracked
-- Structured override files are generated (`override.css`)
-- Base Foundation CSS remains untouched
-
-This ensures:
-
-- Upgrade safety
-- Clear separation between system and customization
-- Controlled extensibility
+The built **Expo** app includes theme data from tokens plus your overrides. Widgets apply styles through the mobile runtime theme. Only what you changed differs from the default; the rest follows Foundation.
 
 ---
 
-## Runtime Behavior
+## Optional last mile
 
-At runtime:
-
-- Foundation CSS injects token values as CSS variables
-- Components resolve styles using those variables
-- Overrides apply only where defined
-- The final WM application renders consistently
-
-The system separates structure from styling, enabling applications to scale without visual inconsistency.
+Prefer tokens and variants first. If something still cannot be expressed there, use **widget properties** in Studio (layout, captions, show rules, and similar) before introducing unrelated styling patterns.
 
 ---
 
 ## Summary
 
-Styling in a Design System project is:
+The styling architecture stacks like this:
 
-- Token-driven
-- CSS variable based
-- Component-governed
-- Workspace-managed
-- Override-controlled
+1. **Foundation and design tokens** — default theme and global values for mobile (source of truth)
+2. **Components** — use Foundation and variants for a consistent UI
+3. **Style Workspace** — overrides and variants, tracked apart from the base theme
+4. **Widget properties** — optional fine-tuning in Studio when tokens and variants are not enough
+5. **Application and page styles** — `app.css` and page CSS for exceptions; see [Customising your application](./customising-your-application#application-and-page-styles)
 
-This architecture ensures scalable, maintainable, and enterprise-ready UI development in WaveMaker.
+Together, this keeps mobile apps maintainable, consistent, and easier to update when the design system evolves.
+
+---
+
+## Related topics
+
+- [Introduction to Foundation CSS](./introduction-to-foundation-css)
+- [Customising your application](./customising-your-application)

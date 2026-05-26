@@ -1,22 +1,50 @@
 ---
-last_update: { author: "Raj Kumar Reddy Abbadi" }
+last_update: { author: "Praneeth Reddy" }
 ---
+
 # Types of pages
 
-There are two types of pages that can be created in an application:
+WaveMaker mobile apps use **pages** for routable screens and **partials** for reusable UI fragments you embed inside a page or layout region. You design each one in Studio using **Markup**, **Script**, and **Style** views with WML tags such as `wm-page` and `wm-partial`.
 
-- Page 
-- Partial
+## Page
 
-### Page 
-Which can be loaded independently in the application. These act as a route within the application when associated with navigation events.
+A **page** is a full screen the app can navigate to. Each page maps to a route in the generated React Native app when you connect it to a **Navigation** action or tab bar item.
 
-### Partial
-These are associated with a component within a page. Common sections of a page such as headers or left navigation are typically built as reusable partials. This allows the same component to be used consistently across multiple pages in the application.
-- **Header:** The header appears at the top of the page and usually contains key elements like the page title, logo, or important actions.
-- **Top Nav:** The top navigation sits below or within the header and is used to move between major sections of the application. It gives users a clear, consistent way to navigate high-level pages without losing context.
-- **Left Panel:** The left panel typically contains menus, links, or navigation options related to the main content. It’s often used for section-based navigation and helps users quickly switch between related views or features.
-- **Right Panel:** The right panel is usually used for secondary content such as filters, additional details, settings, or contextual actions. It supports the main content without taking focus away from it.
-- **Footer:** The footer appears at the bottom of the page and is used for supplementary information like links, legal text, version details, or secondary actions. It provides helpful information without cluttering the main page area.
+Typical uses:
 
-**Popover** - Popover, also known as pop-up, can be built as a portion of a page, reusable and contains UI elements with data binding (e.g.: drill down details, pop-up menus etc.). These can be built like a partial page, but have pop-up based interaction.
+- Login, dashboard, or settings screens
+- List and detail flows opened from navigation actions
+- Any view that should appear as its own destination in the app stack
+
+See [Page elements](/docs/user-interfaces/mobile/develop/page) for the default mobile layout (mobile navbar, content, left panel, mobile tabbar).
+
+## Partial
+
+A **partial** is a reusable fragment. You do not navigate to a partial on its own. You reference it from a page or from a layout widget (for example `wm-left-panel` with `content="leftnav"`).
+
+Partials keep shared UI in one place so every page stays consistent. Common mobile partials include:
+
+| Partial role     | Mobile layout                                        | Typical content                                                            |
+| ---------------- | ---------------------------------------------------- | -------------------------------------------------------------------------- |
+| Left navigation  | `wm-left-panel` drawer (`type="left-panel"`)         | `wm-nav` links, section menus, profile shortcuts                           |
+| Embedded section | Inside `wm-page-content`, tabs, accordion, or wizard | Filters, shared form headers, repeated cards                               |
+| Popover overlay  | `wm-popover` on a page (`content="partialName"`)     | Menus, drill-down detail, contextual actions in a dropdown or action sheet |
+
+A partial can also supply content for the **`wm-popover`** widget. Set `content` to the partial name so the overlay opens on the current page without navigation.
+
+The **mobile navbar** and **mobile tabbar** are usually defined on each **page** markup. The left navigation drawer is the partial teams reuse most often.
+
+Example left-panel partial reference on a page:
+
+```html
+<wm-page name="mainpage">
+    <wm-mobile-navbar name="mobile_navbar1" title="Title"></wm-mobile-navbar>
+    <wm-content name="content1">
+        <wm-left-panel content="leftnav" name="left_panel1"></wm-left-panel>
+        <wm-page-content columnwidth="12" name="page_content1"></wm-page-content>
+    </wm-content>
+    <wm-mobile-tabbar name="mobile_tabbar1"></wm-mobile-tabbar>
+</wm-page>
+```
+
+The `leftnav` partial holds the drawer menu markup and logic.

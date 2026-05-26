@@ -37,17 +37,17 @@ export default [
     items: [
       {
         type: 'category',
-        label: 'Create Web App',
+        label: 'Create React Native App',
         collapsible: true,
         collapsed: true,
         link: {
           type: 'doc',
-          id: 'user-interfaces/mobile/develop/create-web-app-project/index',
+          id: 'user-interfaces/mobile/develop/create-reactnative-app-project/index',
         },
         items: [
           {
             type: 'doc',
-            id: 'user-interfaces/mobile/develop/create-web-app-project/project-structure',
+            id: 'user-interfaces/mobile/develop/create-reactnative-app-project/project-structure',
             label: 'Project structure',
           },
           {
@@ -58,13 +58,8 @@ export default [
             items: [
               {
                 type: 'doc',
-                id: 'user-interfaces/mobile/develop/create-web-app-project/angular-project-structure',
-                label: 'Angular',
-              },
-              {
-                type: 'doc',
-                id: 'user-interfaces/mobile/develop/create-web-app-project/react-project-structure',
-                label: 'React',
+                id: 'user-interfaces/mobile/develop/create-reactnative-app-project/reactnative-project-structure',
+                label: 'React Native',
               },
             ],
           },
@@ -109,8 +104,8 @@ export default [
           },
           {
             type: 'doc',
-            id: 'user-interfaces/mobile/develop/working-with-layouts/component-with-layouting-features',
-            label: 'Component with Layouting features',
+            id: 'user-interfaces/mobile/develop/working-with-layouts/container-types',
+            label: 'Container types',
           },
           {
             type: 'doc',
@@ -136,18 +131,18 @@ export default [
           },
           {
             type: 'doc',
+            id: 'user-interfaces/mobile/develop/styling-with-design-tokens/design-token-architecture',
+            label: 'Design Token Architecture',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/mobile/develop/styling-with-design-tokens/working-with-style-workspace',
+            label: 'Working with Style Workspace',
+          },
+          {
+            type: 'doc',
             id: 'user-interfaces/mobile/develop/styling-with-design-tokens/customising-your-application',
             label: 'Customising your Application',
-          },
-          {
-            type: 'doc',
-            id: 'user-interfaces/mobile/develop/styling-with-design-tokens/editing-foundation-css',
-            label: 'Editing Foundation CSS',
-          },
-          {
-            type: 'doc',
-            id: 'user-interfaces/mobile/develop/styling-with-design-tokens/overview',
-            label: 'Styling with Design Tokens',
           },
         ],
       },
@@ -170,26 +165,31 @@ export default [
             type: 'doc',
             id: 'user-interfaces/mobile/develop/integrating-with-apis/life-cycle-hooks',
           },
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Component behaviour & methods',
-        collapsible: true,
-        collapsed: true,
-        items: [
           {
             type: 'doc',
-            id: 'user-interfaces/mobile/develop/component-behaviour-and-methods/common-properties',
-            label: 'Common properties',
-          },
-          {
-            type: 'doc',
-            id: 'user-interfaces/mobile/develop/component-behaviour-and-methods/javascript-access',
-            label: 'JavaScript access methods',
+            id: 'user-interfaces/mobile/develop/integrating-with-apis/bind-expressions',
+            label: 'Bind expressions',
           },
         ],
       },
+      // {
+      //   type: 'category',
+      //   label: 'Component behaviour & methods',
+      //   collapsible: true,
+      //   collapsed: true,
+      //   items: [
+      //     {
+      //       type: 'doc',
+      //       id: 'user-interfaces/mobile/develop/component-behaviour-and-methods/common-properties',
+      //       label: 'Common properties',
+      //     },
+      //     {
+      //       type: 'doc',
+      //       id: 'user-interfaces/mobile/develop/component-behaviour-and-methods/javascript-access',
+      //       label: 'JavaScript access methods',
+      //     },
+      //   ],
+      // },
       {
         type: 'category',
         label: 'Validations',
@@ -204,11 +204,6 @@ export default [
             type: 'doc',
             id: 'user-interfaces/mobile/develop/form-input-validations/custom-validators-in-javascript',
             label: 'Custom validators in JavaScript',
-          },
-          {
-            type: 'doc',
-            id: 'user-interfaces/mobile/develop/form-input-validations/bind-expressions',
-            label: 'Bind expressions',
           },
         ],
       },
@@ -275,56 +270,48 @@ export default [
       },
       {
         type: 'category',
-        label: 'prefabs',
+        label: 'Prefabs',
         collapsible: true,
         collapsed: true,
+        link: {
+          type: 'doc',
+          id: 'user-interfaces/mobile/enterprise-capabilities/prefabs/index',
+        },
         items: [
-          // {
-          //   type: 'doc',
-          //   id: 'user-interfaces/mobile/enterprise-capabilities/prefabs/wmx-components-mobile',
-          // },
-          {
-            type: 'doc',
-            id: 'user-interfaces/mobile/enterprise-capabilities/prefabs/overview',
-          },
           {
             type: 'doc',
             id: 'user-interfaces/mobile/enterprise-capabilities/prefabs/create-prefab',
+            label: 'Creating prefabs',
           },
           {
             type: 'doc',
             id: 'user-interfaces/mobile/enterprise-capabilities/prefabs/publishing',
+            label: 'Publishing',
           },
         ],
       },
       {
         type: 'category',
-        label: 'WMX Components',
+        label: 'WMX components',
         collapsible: true,
         collapsed: true,
+        link: {
+          type: 'doc',
+          id: 'user-interfaces/mobile/enterprise-capabilities/wmx/index',
+        },
         items: [
           {
             type: 'doc',
-            id: 'user-interfaces/mobile/enterprise-capabilities/wmx/wmx-components',
-          },
-          {
-            type: 'doc',
             id: 'user-interfaces/mobile/enterprise-capabilities/wmx/wmx-schema-reference',
+            label: 'WMX schema reference',
           },
           {
             type: 'doc',
             id: 'user-interfaces/mobile/enterprise-capabilities/wmx/wmx-with-aira',
+            label: 'Creating with AIRA',
           },
         ],
       },
-      //   {
-      //     type: 'doc',
-      //     id: 'user-interfaces/mobile/enterprise-capabilities/prefabs',
-      //   },
-      //   {
-      //     type: 'doc',
-      //     id: 'user-interfaces/mobile/enterprise-capabilities/role-based-access-control',
-      //   },
     ],
   },
 
@@ -367,11 +354,6 @@ export default [
           },
           {
             type: 'doc',
-            id: 'user-interfaces/mobile/testing-and-debugging/community-debugging-tools/flipper',
-            label: 'Flipper (Deprecated)',
-          },
-          {
-            type: 'doc',
             id: 'user-interfaces/mobile/testing-and-debugging/community-debugging-tools/reactotron',
             label: 'Reactotron',
           },
@@ -399,10 +381,12 @@ export default [
           {
             type: 'doc',
             id: 'user-interfaces/mobile/testing-and-debugging/testing-strategies/ui-testing-mobile',
+            label: 'Mobile app testing',
           },
           {
             type: 'doc',
             id: 'user-interfaces/mobile/testing-and-debugging/testing-strategies/automate-testing',
+            label: 'Automated testing',
           },
         ],
       },
@@ -414,7 +398,7 @@ export default [
         items: [
           {
             type: 'doc',
-            id: 'user-interfaces/mobile/testing-and-debugging/unit-testing/web-and-mobile',
+            id: 'user-interfaces/mobile/testing-and-debugging/unit-testing/unit-testing-mobile',
           },
         ],
       },
@@ -428,16 +412,12 @@ export default [
     items: [
       {
         type: 'doc',
-        id: 'user-interfaces/mobile/device-capabilities-mobile/adding-plugins',
+        id: 'user-interfaces/mobile/device-capabilities-mobile/third-party-expo-plugins',
       },
-      {
-        type: 'doc',
-        id: 'user-interfaces/mobile/device-capabilities-mobile/enabling-gestures',
-      },
-      {
-        type: 'doc',
-        id: 'user-interfaces/mobile/device-capabilities-mobile/offline-support',
-      },
+      // {
+      //   type: 'doc',
+      //   id: 'user-interfaces/mobile/device-capabilities-mobile/offline-support',
+      // },
     ],
   },
 ];
