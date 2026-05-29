@@ -96,9 +96,50 @@ WaveMaker Enterprise AI can be installed on any machine that meets the following
   </tbody>
 </table>
 
+### **WME AI Observability Instance**
+
+<table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
+  <colgroup>
+    <col style={{ width: '120px' }} />
+    <col />
+  </colgroup>
+  <thead>
+    <tr>
+      <th style={{ fontSize: '0.875rem' }}>Requirement</th>
+      <th>Minimum configuration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ fontSize: '0.875rem' }}>Memory</td>
+      <td><ul><li>Minimum 16 GB</li></ul></td>
+    </tr>
+    <tr>
+      <td style={{ fontSize: '0.875rem' }}>CPU</td>
+      <td><ul><li>4-core, single CPU system</li></ul></td>
+    </tr>
+    <tr>
+      <td style={{ fontSize: '0.875rem' }}>Hard disk</td>
+      <td><ul><li>Minimum 200 GB to be allocated</li><li>For volume-based setups, allocate:<ul><li>200 GB for <code style={{ fontFamily: 'inherit' }}>/</code></li></ul></li></ul></td>
+    </tr>
+    <tr>
+      <td style={{ fontSize: '0.875rem' }}>Host OS</td>
+      <td><ul><li>Ubuntu 22.x LTS or RHEL 8.x/9.x</li><li>Kernel 4.4 or later</li><li>x86 architecture</li></ul></td>
+    </tr>
+    <tr>
+      <td style={{ fontSize: '0.875rem' }}>Software</td>
+      <td><ul><li>Docker 28.x</li><li>Docker Compose 28.x</li><li>Python 3.5 or later</li><li><code style={{ fontFamily: 'inherit' }}>wget</code></li><li><code style={{ fontFamily: 'inherit' }}>jq</code></li></ul></td>
+    </tr>
+    <tr>
+      <td style={{ fontSize: '0.875rem' }}>Network</td>
+      <td><ul><li>Static IP with valid DNS</li><li>Open the required ports for access from the Studio workspace Instance.</li></ul></td>
+    </tr>
+  </tbody>
+</table>
+
 ## **Port requirements**
 
-Open the following ports on the Platform Instance for access from the StudioWorkspace Instance and AppDeployment Instance.
+**Open the following ports on the Platform Instance for access from the StudioWorkspace Instance and AppDeployment Instance.**
 
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
@@ -130,7 +171,7 @@ Open the following ports on the Platform Instance for access from the StudioWork
   </tbody>
 </table>
 
-Open the following ports on the StudioWorkspace Instance and AppDeployment Instance for access from the Platform Instance.
+**Open the following ports on the StudioWorkspace Instance,  AppDeployment Instance and Observability Instance for access from the Platform Instance.**
 
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
@@ -161,6 +202,26 @@ Open the following ports on the StudioWorkspace Instance and AppDeployment Insta
     <tr><td style={{ fontSize: '0.875rem' }}>3002</td><td>Routing traffic from the load balancer to agent-server</td></tr>
     <tr><td style={{ fontSize: '0.875rem' }}>5010</td><td>Backend MCP</td></tr>
     <tr><td style={{ fontSize: '0.875rem' }}>5020</td><td>UI MCP</td></tr>
+  </tbody>
+</table>
+
+**Open the following ports on the Observability Instance.**
+
+<table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
+  <colgroup>
+    <col style={{ width: '120px' }} />
+    <col />
+  </colgroup>
+
+  <thead>
+    <tr>
+      <th style={{ fontSize: '0.875rem' }}>Port</th>
+      <th>Required for</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style={{ fontSize: '0.875rem' }}>3000</td><td>Open for access from the Studio workspace Instance to Observability Instance and vice-versa</td></tr>
+    <tr><td style={{ fontSize: '0.875rem' }}>443</td><td>Open within the network to access the Observability UI</td></tr>
   </tbody>
 </table>
 
@@ -217,9 +278,9 @@ Map a domain to the above IP for easy access.
 
 | **Domain**              | **Domain URL**                                                                      | **Description**                                                                          |
 | ----------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| WaveMaker Studio        | `wavemaker.[mycompany].com`                                                         | This domain will be used to access WaveMaker AI Studio                                      |
-| WaveMaker Deployed Apps | `wm-apps.[mycompany].com`  `wm-stage.[mycompany].com`     `wm-live.[mycompany].com` | These domains will be used to access WaveMaker AI Studio apps deployed onto WaveMaker AI Cloud |
-
+| WaveMaker Studio        | `wavemakerai.[mycompany].com`                                                         | This domain will be used to access WaveMaker AI Studio                                      |
+| WaveMaker Deployed Apps | `wmai-apps.[mycompany].com`  `wmai-stage.[mycompany].com`     `wmai-live.[mycompany].com` | These domains will be used to access WaveMaker AI Studio apps deployed onto WaveMaker AI Cloud |
+| WaveMaker AI Observability | `wmai-analytics.[mycompany].com` | This domain will be used to access WaveMaker AI Analytics service|
 :::note
 In the preceding table, `[mycompany]` is used as an example. You may have to replace `[mycompany]` with your appropriate domain name.
 :::

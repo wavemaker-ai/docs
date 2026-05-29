@@ -1,6 +1,6 @@
 ---
 title: WaveMaker Enterprise AI Setup Process
-last_update: { author: "WaveMaker" }
+last_update: { author: "Imtiyaz Mohammad" }
 id: getting-started
 sidebar_label: WaveMaker Enterprise AI Setup Process
 ---
