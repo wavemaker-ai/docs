@@ -1,11 +1,11 @@
 ---
 title: Setting Up WME AI Observability
-last_update: { author: "RohithPanditi" }
+last_update: { author: "rohithp_500308" }
 id: wme-ai-observability-setup
 sidebar_label: WME AI Observability Setup
 ---
 
-WME AI Observability is a monitoring and analytics service that provides visibility into your AI workloads running on the WaveMaker platform. Install and run this service on the **WME AI Observability instance**.
+WME AI Observability is a monitoring and analytics service that provides visibility into your AI workloads running on the WaveMaker Enterprise platform. It is built on **Langfuse** for LLM tracing and a custom **Analytics** service. Install and run this service on the **WME AI Observability instance**.
 
 ## Step 1 — Download and Extract Package
 
@@ -36,7 +36,7 @@ The extracted package contains installation scripts, Docker images, and configur
 #### Directory Structure
 
 ```
-ai-observability-1.0.0/
+ai-observability-<WME-AI-Version>/
 ├── INSTALL.md
 ├── certs/
 ├── docker-compose.yml
@@ -63,8 +63,10 @@ This method uses unencrypted HTTP access. It is recommended only for internal or
 
 #### Run the Installation Script
 
+Navigate into the extracted directory and run the installation script:
+
 ```bash
-cd ai-observability-<WME-AI-Version>
+cd ai-observability/ai-observability-<WME-AI-Version>
 bash install-ai-observability.sh
 ```
 
@@ -101,7 +103,7 @@ Use this method when accessing the application through a domain with HTTPS enabl
 Place the SSL certificate files inside:
 
 ```
-ai-observability-<WME-AI-Version>/certs/
+ai-observability/ai-observability-<WME-AI-Version>/certs/
 ```
 
 Required file names:
@@ -121,8 +123,10 @@ certs/
 
 #### Run the Installation Script
 
+Navigate into the extracted directory and run the installation script:
+
 ```bash
-cd ai-observability-<WME-AI-Version>
+cd ai-observability/ai-observability-<WME-AI-Version>
 bash install-ai-observability.sh
 ```
 
@@ -145,8 +149,8 @@ During execution, provide the following inputs:
 :::note
 By pressing Enter for `TLS certs directory [./certs]`, the installer automatically uses:
 
-- `ai-observability-<WME-AI-Version>/certs/bundle.crt`
-- `ai-observability-<WME-AI-Version>/certs/private.key`
+- `ai-observability/ai-observability-<WME-AI-Version>/certs/bundle.crt`
+- `ai-observability/ai-observability-<WME-AI-Version>/certs/private.key`
 
 :::
 
@@ -155,7 +159,7 @@ By pressing Enter for `TLS certs directory [./certs]`, the installer automatical
 After successful installation, access the application at:
 
 ```
-https://<domain-name>
+https://wmai-analytics.[mycompany].com
 ```
 
 The **Analytics URL** will also be displayed in the terminal output after execution of `install-ai-observability.sh`.
