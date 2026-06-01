@@ -1,0 +1,128 @@
+---
+title: Setting up WME AI Observability
+last_update: { author: "WaveMaker" }
+id: setting-up-wme-ai-observability
+sidebar_label: Setting Up WME AI Observability
+---
+
+Use WME AI Observability to install the analytics and tracing stack for WME AI. The installation package includes the scripts, Docker images, and configuration files required to run the observability services.
+
+---
+
+## **Download and extract the package**
+
+You will receive the WME AI Observability package from the WaveMaker team.
+
+```text
+ai-observability-<WME-AI-Version>.tar.gz
+```
+
+### **Download the package**
+
+Download the package on the WME AI Observability instance.
+
+```bash
+wget https://s3.us-east-1.amazonaws.com/downloads.wavemaker.com/wme/1.0.0./rhel/ai-observability-<WME-AI-Version>.tar.gz
+```
+
+### **Create the installation directory**
+
+```bash
+mkdir ai-observability
+```
+
+### **Extract the package**
+
+```bash
+tar -xzf ai-observability-<WME-AI-Version>.tar.gz -C ai-observability
+```
+
+---
+
+## **Package structure**
+
+The extracted package contains installation scripts, Docker images, and configuration files.
+
+```text
+ai-observability-1.0.0/
+|-- INSTALL.md
+|-- certs/
+|-- docker-compose.yml
+|-- env.example
+|-- images.tar.gz
+|-- init-db.sql
+|-- install-ai-observability.sh
+`-- nginx.conf.template
+```
+
+---
+
+## **Installation**
+
+Install WME AI Observability based on how users access the analytics application.
+
+
+#### Prepare SSL certificates
+
+Place the SSL certificate files in the following directory:
+
+```text
+ai-observability-1.0.0/certs/
+```
+
+Use these required file names:
+
+| File | Required name |
+| ---- | ------------- |
+| Certificate file | bundle.crt |
+| Private key file | private.key |
+
+Directory example:
+
+```text
+certs/
+|-- bundle.crt
+`-- private.key
+```
+
+#### Run the installation script
+
+```bash
+cd ai-observability-1.0.0
+bash install-ai-observability.sh
+```
+
+During execution, provide the following inputs:
+
+| Prompt | Value |
+| ------ | ----- |
+| Public domain for Analytics UI [analytics.example.com]: | Domain name |
+| Run nginx reverse proxy (HTTPS on 443) for domain name? [Y/n] | Y |
+| Also expose Langfuse UI via nginx? (otherwise internal only) [y/N] | y |
+| Domain for Langfuse [domain name] | Press Enter |
+| Also expose MinIO API via nginx? (otherwise internal only) [y/N] | y |
+| Domain for MinIO [minio.domain name] | Press Enter |
+| WaveMaker platform instance IP (leave blank to skip Consul registration) [127.0.0.1] | Platform private IP |
+| Langfuse project PUBLIC key (blank = auto-generate) | Press Enter |
+| Langfuse project SECRET key (blank = auto-generate) | Press Enter |
+| Analytics API key (blank = auto-generate) | Press Enter |
+| TLS certs directory [./certs] | Press Enter |
+
+#### Certificate directory
+
+When you press Enter for `TLS certs directory [./certs]`, the installer uses these files:
+
+```text
+ai-observability-1.0.0/certs/bundle.crt
+ai-observability-1.0.0/certs/private.key
+```
+
+#### Access the application
+
+After successful installation, access the Analytics URL displayed in the terminal output after the `install-ai-observability.sh` script runs.
+
+#### Login password
+
+The login password is the generated `ANALYTICS_API_KEY`.
+
+You can find this value in the terminal output after installation completes.
