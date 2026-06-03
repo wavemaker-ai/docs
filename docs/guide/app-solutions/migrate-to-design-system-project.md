@@ -9,6 +9,10 @@ last_update: { author: "Sagar Vemala" }
 
 This guide explains how to use the [`wm-design-system-migrator`](https://marketplace.wavemaker.ai/artifactDetails?name=Design%20System%20Project%20Migrator) AI Skill to convert an existing non-Design System WaveMaker project into a Design System project. The skill automates platform compatibility updates, layout modernisation, and design token extraction — producing a Studio-importable package that is functionally identical to the original. After importing, you complete the migration by refining the visual layout of each page using WaveMaker AI.
 
+<video controls width="100%" playsInline>
+  <source src={require('./assets/videos/wm-migrator-video.mp4').default} type="video/mp4" />
+</video>
+
 ---
 
 ## Prerequisites
@@ -42,7 +46,6 @@ Before you begin, make sure you have:
 
 4. Download the generated **Studio-Package** once the skill completes.
 
-{/* TODO: Add screenshot — Skill output showing the 3-step progress and download */}
 
 ---
 
