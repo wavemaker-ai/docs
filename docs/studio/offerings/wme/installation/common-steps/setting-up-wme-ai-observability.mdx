@@ -67,10 +67,10 @@ Install WME AI Observability based on how users access the analytics application
 Place the SSL certificate files in the following directory:
 
 ```text
-ai-observability-1.0.0/certs/
+ai-observability/ai-observability-<WME-AI-Version>/certs/
 ```
 
-Use these required file names:
+Use the following file names:
 
 | File | Required name |
 | ---- | ------------- |
@@ -82,13 +82,13 @@ Directory example:
 ```text
 certs/
 |-- bundle.crt
-`-- private.key
+|-- private.key
 ```
 
 #### Run the installation script
 
 ```bash
-cd ai-observability-1.0.0
+cd ai-observability/ai-observability-<WME-AI-Version>
 bash install-ai-observability.sh
 ```
 
@@ -113,14 +113,18 @@ During execution, provide the following inputs:
 When you press Enter for `TLS certs directory [./certs]`, the installer uses these files:
 
 ```text
-ai-observability-1.0.0/certs/bundle.crt
-ai-observability-1.0.0/certs/private.key
+ai-observability/ai-observability-<WME-AI-Version>/certs/bundle.crt
+ai-observability/ai-observability-<WME-AI-Version>/certs//private.key
 ```
 
 
 #### Access the application
 
-After successful installation, access the Analytics URL displayed in the terminal output after the `install-ai-observability.sh` script runs.
+After successful installation, access application at. 
+```text
+https://wmai-analytics.[mycompany].com
+```
+The Analytics URL is displayed in the terminal output after successful execution of the `install-ai-observability.sh` script.
 
 #### Login password
 
