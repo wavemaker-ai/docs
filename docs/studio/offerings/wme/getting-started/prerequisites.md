@@ -20,43 +20,35 @@ WaveMaker Enterprise AI can be installed on any machine that meets the following
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
     <col style={{ width: '120px' }} />
-
     <col />
   </colgroup>
-
   <thead>
     <tr>
       <th style={{ fontSize: '0.875rem' }}>Requirement</th>
       <th>Minimum configuration</th>
     </tr>
   </thead>
-
   <tbody>
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Memory</td>
       <td><ul><li>Minimum 32 GB</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>CPU</td>
       <td><ul><li>8-core, single CPU system</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Hard disk</td>
       <td><ul><li>Minimum 450 GB to be allocated</li><li>For volume-based setups, allocate:<ul><li>100 GB for <code style={{ fontFamily: 'inherit' }}>/</code></li><li>200 GB for <code style={{ fontFamily: 'inherit' }}>/wm-data</code></li><li>150 GB for <code style={{ fontFamily: 'inherit' }}>/wm-runtime</code></li></ul></li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Host OS</td>
       <td><ul><li>Ubuntu 22.x LTS or RHEL 8.x/9.x</li><li>Kernel 4.4 or later</li><li>x86 architecture</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Software</td>
       <td><ul><li>Docker 28.x</li><li>Python 3.5 or later</li><li><code style={{ fontFamily: 'inherit' }}>wget</code></li><li><code style={{ fontFamily: 'inherit' }}>jq</code></li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Network</td>
       <td><ul><li>Static IP with valid DNS</li><li>See <a href="#external-access-ports">External Access Ports</a> for required ports.</li></ul></td>
@@ -69,43 +61,35 @@ WaveMaker Enterprise AI can be installed on any machine that meets the following
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
     <col style={{ width: '120px' }} />
-
     <col />
   </colgroup>
-
   <thead>
     <tr>
       <th style={{ fontSize: '0.875rem' }}>Requirement</th>
       <th>Minimum configuration</th>
     </tr>
   </thead>
-
   <tbody>
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Memory</td>
       <td><ul><li>Minimum 32 GB</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>CPU</td>
       <td><ul><li>8-core, single CPU system</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Hard disk</td>
       <td><ul><li>Minimum 300 GB to be allocated</li><li>For volume-based setups, allocate:<ul><li>100 GB for <code style={{ fontFamily: 'inherit' }}>/</code></li><li>200 GB for <code style={{ fontFamily: 'inherit' }}>/data</code></li></ul></li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Host OS</td>
       <td><ul><li>Ubuntu 22.x LTS or RHEL 8.x/9.x</li><li>Kernel 4.4 or later</li><li>x86 architecture</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Software</td>
       <td><ul><li>Docker 28.x</li><li>Python 3.5 or later</li><li><code style={{ fontFamily: 'inherit' }}>wget</code></li><li><code style={{ fontFamily: 'inherit' }}>jq</code></li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Network</td>
       <td><ul><li>Static IP</li><li>See <a href="#internal-communication-ports">Internal Communication Ports</a> for required ports.</li></ul></td>
@@ -118,46 +102,38 @@ WaveMaker Enterprise AI can be installed on any machine that meets the following
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
     <col style={{ width: '120px' }} />
-
     <col />
   </colgroup>
-
   <thead>
     <tr>
       <th style={{ fontSize: '0.875rem' }}>Requirement</th>
       <th>Minimum configuration</th>
     </tr>
   </thead>
-
   <tbody>
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Memory</td>
       <td><ul><li>Minimum 16 GB</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>CPU</td>
       <td><ul><li>4-core, single CPU system</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Hard disk</td>
       <td><ul><li>Minimum 200 GB to be allocated</li><li>For volume-based setups, allocate:<ul><li>200 GB for <code style={{ fontFamily: 'inherit' }}>/</code></li></ul></li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Host OS</td>
       <td><ul><li>Ubuntu 22.x LTS or RHEL 8.x/9.x</li><li>Kernel 4.4 or later</li><li>x86 architecture</li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Software</td>
       <td><ul><li>Docker 28.x</li><li>Docker Compose 28.x</li><li>Python 3.5 or later</li><li><code style={{ fontFamily: 'inherit' }}>wget</code></li><li><code style={{ fontFamily: 'inherit' }}>jq</code></li></ul></td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>Network</td>
-      <td><ul><li>Static IP. DNS is optional — see <a href="#dns-mapping">DNS Mapping</a>.</li><li>See <a href="#external-access-ports">External Access Ports</a> for required ports.</li></ul></td>
+      <td><ul><li>Static IP, DNS <a href="#dns-mapping">DNS Mapping</a>.</li><li>See <a href="#external-access-ports">External Access Ports</a> for required ports.</li></ul></td>
     </tr>
   </tbody>
 </table>
@@ -181,7 +157,7 @@ A DNS domain is **mandatory** for the Platform instance — developers access Wa
 | -------------------------- | ---------------------------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------- |
 | WaveMaker Studio           | `wavemakerai.[mycompany].com`                                                            | Mandatory    | Used to access WaveMaker AI Studio                                                      |
 | WaveMaker Deployed Apps    | `wmai-apps.[mycompany].com`   `wmai-stage.[mycompany].com`   `wmai-live.[mycompany].com` | Optional     | Used to access WaveMaker AI Studio apps deployed onto WaveMaker AI Cloud                |
-| WaveMaker AI Observability | `wmai-analytics.[mycompany].com`                                                         | Optional     | Used to access WaveMaker AI Analytics service. If not configured, use port 5050 via IP. |
+| WaveMaker AI Observability | `wmai-analytics.[mycompany].com`                                                         | Mandatory     | Used to access WaveMaker AI Analytics service.|
 
 :::note
 In the preceding table, `[mycompany]` is used as an example. Replace `[mycompany]` with your actual domain name.
@@ -208,16 +184,11 @@ Ports 443 on the Platform, AppDeployment, and Observability instances are access
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
     <col style={{ width: '70px' }} />
-
     <col style={{ width: '140px' }} />
-
     <col style={{ width: '260px' }} />
-
     <col style={{ width: '150px' }} />
-
     <col />
   </colgroup>
-
   <thead>
     <tr>
       <th style={{ fontSize: '0.875rem' }}>Port</th>
@@ -227,7 +198,6 @@ Ports 443 on the Platform, AppDeployment, and Observability instances are access
       <th style={{ fontSize: '0.875rem' }}>Purpose</th>
     </tr>
   </thead>
-
   <tbody>
     <tr>
       <td style={{ fontSize: '0.875rem' }}>443</td>
@@ -236,31 +206,20 @@ Ports 443 on the Platform, AppDeployment, and Observability instances are access
       <td style={{ fontSize: '0.875rem' }}>Developer machines</td>
       <td style={{ fontSize: '0.875rem' }}>HTTPS access to WaveMaker Studio</td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>443</td>
       <td style={{ fontSize: '0.875rem' }}>AppDeployment</td>
-      <td style={{ fontSize: '0.875rem' }}><code style={{ fontFamily: 'inherit' }}>wmai-apps.\[mycompany].com</code><br /><code style={{ fontFamily: 'inherit' }}>wmai-stage.\[mycompany].com</code><br /><code style={{ fontFamily: 'inherit' }}>wmai-live.\[mycompany].com</code></td>
+      <td style={{ fontSize: '0.875rem' }}><code style={{ fontFamily: 'inherit' }}>wmai-apps.[mycompany].com</code><br /><code style={{ fontFamily: 'inherit' }}>wmai-stage.[mycompany].com</code><br /><code style={{ fontFamily: 'inherit' }}>wmai-live.[mycompany].com</code></td>
       <td style={{ fontSize: '0.875rem' }}>Developers / end users</td>
       <td style={{ fontSize: '0.875rem' }}>Access to deployed WaveMaker applications</td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>443</td>
       <td style={{ fontSize: '0.875rem' }}>Observability</td>
-      <td style={{ fontSize: '0.875rem' }}><code style={{ fontFamily: 'inherit' }}>wmai-analytics.\[mycompany].com</code></td>
+      <td style={{ fontSize: '0.875rem' }}><code style={{ fontFamily: 'inherit' }}>wmai-analytics.[mycompany].com</code></td>
       <td style={{ fontSize: '0.875rem' }}>DevOps machines</td>
       <td style={{ fontSize: '0.875rem' }}>AI observability UI — traces and analytics</td>
     </tr>
-
-    <tr>
-      <td style={{ fontSize: '0.875rem' }}>5050</td>
-      <td style={{ fontSize: '0.875rem' }}>Observability</td>
-      <td style={{ fontSize: '0.875rem' }}><em>IP-based, no DNS required</em></td>
-      <td style={{ fontSize: '0.875rem' }}>DevOps machines</td>
-      <td style={{ fontSize: '0.875rem' }}>Fallback access when DNS is not configured for the Observability instance</td>
-    </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>8080</td>
       <td style={{ fontSize: '0.875rem' }}>Platform</td>
@@ -268,7 +227,6 @@ Ports 443 on the Platform, AppDeployment, and Observability instances are access
       <td style={{ fontSize: '0.875rem' }}>Admin machines</td>
       <td style={{ fontSize: '0.875rem' }}>WaveMaker config portal</td>
     </tr>
-
     <tr>
       <td style={{ fontSize: '0.875rem' }}>22</td>
       <td style={{ fontSize: '0.875rem' }}>All instances</td>
@@ -292,17 +250,14 @@ If your security policy requires restricting traffic to specific ports, open onl
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
     <col style={{ width: '120px' }} />
-
     <col />
   </colgroup>
-
   <thead>
     <tr>
       <th style={{ fontSize: '0.875rem' }}>Port</th>
       <th style={{ fontSize: '0.875rem' }}>Purpose</th>
     </tr>
   </thead>
-
   <tbody>
     <tr><td style={{ fontSize: '0.875rem' }}>443</td><td>HTTPS access to the Platform Instance</td></tr>
     <tr><td style={{ fontSize: '0.875rem' }}>5000</td><td>Platform services</td></tr>
@@ -322,22 +277,19 @@ If your security policy requires restricting traffic to specific ports, open onl
   </tbody>
 </table>
 
-**Open on StudioWorkspace and AppDeployment instances** — for access from the Platform Instance:
+**Open on StudioWorkspace, AppDeployment instances and observability instance** — for access from the Platform Instance:
 
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
     <col style={{ width: '120px' }} />
-
     <col />
   </colgroup>
-
   <thead>
     <tr>
       <th style={{ fontSize: '0.875rem' }}>Port</th>
       <th style={{ fontSize: '0.875rem' }}>Purpose</th>
     </tr>
   </thead>
-
   <tbody>
     <tr><td style={{ fontSize: '0.875rem' }}>22</td><td>SSH access</td></tr>
     <tr><td style={{ fontSize: '0.875rem' }}>2375</td><td>Docker API access</td></tr>
@@ -364,17 +316,14 @@ If your security policy requires restricting traffic to specific ports, open onl
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
     <col style={{ width: '120px' }} />
-
     <col />
   </colgroup>
-
   <thead>
     <tr>
       <th style={{ fontSize: '0.875rem' }}>Port</th>
       <th style={{ fontSize: '0.875rem' }}>Purpose</th>
     </tr>
   </thead>
-
   <tbody>
     <tr><td style={{ fontSize: '0.875rem' }}>3000</td><td>Langfuse — AI trace data forwarding from the Platform and StudioWorkspace instances to the Observability instance</td></tr>
   </tbody>
@@ -420,17 +369,14 @@ WME AI capacity scales horizontally — add more StudioWorkspace or AppDeploymen
 <table style={{ fontSize: '0.875rem', fontFamily: 'inherit' }}>
   <colgroup>
     <col style={{ width: '200px' }} />
-
     <col />
   </colgroup>
-
   <thead>
     <tr>
       <th style={{ fontSize: '0.875rem' }}>Application Type</th>
       <th style={{ fontSize: '0.875rem' }}>Concurrent developer logins per instance</th>
     </tr>
   </thead>
-
   <tbody>
     <tr><td style={{ fontSize: '0.875rem' }}>WEB</td><td style={{ fontSize: '0.875rem' }}>18</td></tr>
     <tr><td style={{ fontSize: '0.875rem' }}>App-Preview-ESBuild</td><td style={{ fontSize: '0.875rem' }}>18</td></tr>
