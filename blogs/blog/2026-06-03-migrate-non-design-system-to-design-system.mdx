@@ -1,0 +1,100 @@
+---
+title: "Migrating to Design System Projects"
+authors: [SagarV]
+---
+
+## The shift happened. Most projects didn't come along.
+
+With WaveMaker AI, the standard for building web and mobile applications is now the **[Design System project](https://docs.wavemaker.ai/docs/design-system/design-system-project/)** — token-driven, component-governed, theme-controlled from the foundation. You define design tokens once, and every component in your application inherits them. Consistency is guaranteed by architecture, not discipline.
+
+The layout model changed too. Design System projects use **auto layout** to compose pages — replacing the older, rigid grid model with something cleaner, more flexible, and far easier to maintain over time.
+
+The result is better consistency, easier theming, simpler maintenance, and a more future-ready architecture.
+
+---
+
+## The problem: Most existing projects were built differently
+
+Most production WaveMaker applications today are **non-Design System projects**. Their look and feel comes from a CSS + Bootstrap theming approach. Their layouts sit on a grid layout system that is rigid, accumulates custom CSS quickly, and does not scale well as the application grows.
+
+Bringing those projects forward was genuinely hard — not because the applications themselves were complex, but because the transformation is structural. You are not just porting code. You are moving from one layout paradigm to another, from Bootstrap theming to design tokens, and from a grid model to auto layout. That is a deep change, and there has never been a clean automated path for it.
+
+---
+
+## The old answer: Rebuild from scratch
+
+Until now, the only reliable option was to **recreate the project** as a Design System project — reuse the backend, rebuild every UI page with AI assistance. It works. It also does not scale.
+
+For a small application with a handful of pages, that's manageable. For enterprises running applications with dozens of pages across multiple projects, it is slow, expensive, and nobody's idea of a migration.
+
+We wanted a better answer.
+
+---
+
+## The migration blueprint
+
+Before we built tooling, we mapped the problem. Moving a non-Design System project to a Design System project breaks down into four stages:
+
+**Stage 1 — Platform Compatibility.** Swap the project's metadata and configurations for the Design System equivalents so it can run on WaveMaker AI.
+
+**Stage 2 — Layout and Markup Modernisation.** Replace unsupported grid and linear layout elements with containers that support auto layout, preserving page structure as faithfully as possible.
+
+**Stage 3 — Branding as Design Tokens.** Extract the existing colour palette, branding, and theme artifacts and recreate them as design tokens so the application's identity carries forward.
+
+**Stage 4 — Package and Re-Import.** Bundle everything into a Studio-importable project, ready to run on the platform.
+
+The guiding principle across all four stages: the application retains all of its functionality, pages, and services. It behaves exactly as before. Only the visual layer needs work at the end.
+
+---
+
+## What the skill automates
+
+We packaged this blueprint into an AI Skill — **[`wm-design-system-migrator`](https://marketplace.wavemaker.ai/artifactDetails?name=Design%20System%20Project%20Migrator)** — that runs the entire migration as a single workflow.
+
+**Step 1 — Design System Conversion** *(Stages 1 & 3)*: updating project and runtime versions, converting metadata, migrating template configuration to PRISM, replacing legacy variable types with actions, updating package scopes, migrating theme artifacts to design tokens, and preserving migration history.
+
+**Step 2 — Auto Layout Conversion** *(Stage 2)*: Every legacy grid and linear layout element across your pages is replaced with an auto layout-compatible container, preserving the page structure as faithfully as possible.
+
+**Step 3 — Studio-Ready Output** *(Stage 4)*: generates a Studio-Package. Import it into an empty Design System project and the application is functionally identical to the original.
+
+> The skill does not ask you to understand the migration. It runs it. You give it the source project zip; it gives you back a Studio-importable package.
+
+---
+
+## The last mile: Where the developer comes in
+
+After importing, the application works. Its backend, pages, services, and variables are intact. But the **UI will look distorted** — the visual layout has been structurally migrated, not visually refined. That last part stays with the developer.
+
+The workflow is straightforward, page by page:
+1. Open the page in Studio.
+2. Capture a screenshot as a visual reference.
+3. Use WaveMaker AI's screenshot-to-code capability to recreate the layout.
+4. Apply changes and create the appropriate design variants in StyleWorkspace.
+
+It is still manual work. But it is work you do with AI, against a known reference, on a project that is already functionally complete — which is a very different starting point from rebuilding from scratch.
+
+---
+
+## What we are still working on
+
+The skill handles the common patterns well. There are areas we are continuing to deepen:
+
+- Container spacing and alignment
+- Responsive behaviour automation
+- Customised treatment for complex layouts
+- Migration of legacy LESS-based themes
+- Highly customised, project-specific implementations
+
+We will expand coverage as we go.
+
+---
+
+## Try it
+
+The [`wm-design-system-migrator`](https://marketplace.wavemaker.ai/artifactDetails?name=Design%20System%20Project%20Migrator) skill is available in the WaveMaker Marketplace. You need two things to get started: your non-Design System project zip, and an empty Design System project zip from the target Studio version you want to import into.
+
+For a step-by-step walkthrough, see the [migration guide](/docs/guide/app-solutions/migrate-to-design-system-project).
+
+Try it on an existing project and share your feedback.
+
+---

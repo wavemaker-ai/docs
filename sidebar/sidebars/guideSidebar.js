@@ -11,6 +11,11 @@ export default [
         id: 'guide/app-solutions/overview',
         label: 'App Solutions',
       },
+      {
+        type: 'doc',
+        id: 'guide/app-solutions/migrate-to-design-system-project',
+        label: 'Migrate to Design System',
+      },
     ],
   },
   {
