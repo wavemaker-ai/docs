@@ -25,3 +25,6 @@ yarn.lock
 
 # Husky build tracking (local only)
 .husky/.build-cache
+
+# Claude Code local config
+.claude/
