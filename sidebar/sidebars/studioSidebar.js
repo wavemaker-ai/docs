@@ -202,6 +202,10 @@ export default [
                     type: 'doc',
                     id: 'studio/offerings/wme/installation/common-steps/apply-license',
                   },
+                  {
+                    type: 'doc',
+                    id: 'studio/offerings/wme/installation/common-steps/wme-ai-observability-setup',
+                  },
                 ],
               },
             ],
