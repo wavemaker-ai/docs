@@ -13,7 +13,147 @@ WaveMaker announces the release of WaveMaker AI 1.0.0 Beta. This release is inte
 
 For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack).
 
-## 1.0.0 Beta RC 1
+## 1.0.0-BETA-RC3
+
+*Release date: 04 June 2026*
+
+<TabsWrapper>
+  <TabItem name="Features">
+    <Accordian title="Platform">
+      - ### Custom instructions via Agents.md <Pill type="web" /> <Pill type="mobile" />
+
+        Add an `Agents.md` file to your project to provide custom instructions that AIRA agents follow automatically when building the app.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="Platform">
+      - ### Selective container patching in Instance Patch API
+
+        The Instance Patch API now accepts a `patchComponents` parameter to update individual containers selectively without reloading the full instance.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="User Interface">
+      - ### Tab component exposing getter methods as callable functions <Pill type="web" />
+
+        Fixed getter properties on the tab component (e.g., `isFirstTabPane`) being incorrectly exposed as callable methods.
+
+      - ### Number formatter not applied to bound widget <Pill type="web" />
+
+        Fixed number formatters such as thousand separator not taking effect when bound to a widget property.
+    </Accordian>
+
+    <Accordian title="Backend">
+      - ### Swagger not refreshing after Java model class change
+
+        Fixed Swagger failing to regenerate when a Java service model class was updated, whether used as a return type, parameter, or nested model.
+
+      - ### Authorization header gets x-wm- prefix on REST service import
+
+        Fixed REST service import adding an unwanted `x-wm-` prefix to the `Authorization` header during design time.
+
+      - ### Custom formatter code generated in app.js instead of formatters.js
+
+        Fixed custom formatter code being written to `app.js` instead of the correct `formatters.js` file.
+
+      - ### API-aware live variable initialised with empty filterExpressions
+
+        Fixed `createApiAwareVariable` setting `filterExpressions` to `{}` on a live variable, which caused a downstream validation error.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### AIRA i18n skill not generating app.locale bindings for static texts <Pill type="web" />
+
+        Fixed the AIRA i18n skill failing to replace static page texts with `app.locale` bindings when localizing a page.
+
+      - ### Wizard callback events lose parameters after markup save <Pill type="web" />
+
+        Fixed cancel and done callback events on the wizard component receiving incorrect parameters when page markup was saved after an attribute change.
+
+      - ### Page markup formatting inconsistent before save <Pill type="web" />
+
+        Fixed page markup being formatted in ai-studio before save; it is now consistently prettified in Studio.
+    </Accordian>
+  </TabItem>
+</TabsWrapper>
+
+## 1.0.0-BETA-RC2
+
+*Release date: 18 May 2026*
+
+<TabsWrapper>
+  <TabItem name="Features">
+    <Accordian title="User Interface">
+      - ### Screenshot-to-Code for Mobile (BETA) <Pill type="mobile" />
+
+        Convert a screenshot of a mobile UI into a working WaveMaker mobile page with auto-generated components and layout.
+
+      - ### React output preview in Studio (BETA) <Pill type="web" />
+
+        Preview the generated React output of your app directly inside Studio without switching contexts.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### AIRA chat rebuilt on AG UI protocol <Pill type="web" />
+
+        The AIRA chat interface now runs on the AG UI protocol, replacing Theia for a more responsive and extensible experience.
+
+      - ### App resource suggestions in AIRA chat <Pill type="web" />
+
+        Type to search and select app resources — variables, widgets, and APIs — directly within the AIRA chat panel.
+
+      - ### WM AI Assistant runs on Python backend <Pill type="web" />
+
+        The WM AI Assistant server has been rewritten in Python, improving response performance and enabling deeper agent extensibility.
+
+      - ### Automatic sensitive data redaction in AIRA <Pill type="web" />
+
+        Sensitive content in conversation context is now redacted at the assistant level before being forwarded to agents.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="User Interface">
+      - ### Bind support for data table advanced settings <Pill type="web" />
+
+        Properties in the data table's advanced settings dialog now support bind expressions.
+
+      - ### Upgraded to Angular 20 <Pill type="web" />
+
+        Generated Angular apps now target Angular 20, bringing improved build performance and alignment with the latest framework release.
+
+      - ### UI library dependency upgrades <Pill type="web" />
+
+        Frontend library dependencies have been updated to their latest stable versions.
+    </Accordian>
+
+    <Accordian title="Backend">
+      - ### Backend library upgrades
+
+        Runtime backend dependencies — including jgit, Jackson BOM, Commons Codec, and Gson — have been updated to their latest stable versions.
+
+      - ### Agents use file system tools instead of codebase index <Pill type="web" />
+
+        Agents now browse and read project files using grep, glob, and read tools, replacing the previous codebase indexing approach for more accurate file lookup.
+
+      - ### Image input support for A2A agent requests
+
+        A2A clients can now include images in agent requests, either as a pre-uploaded file reference or as inline base64-encoded data.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="Backend">
+      - ### Bitbucket Cloud workspace listing API updated
+
+        Fixed Bitbucket Cloud integration by replacing the deprecated workspace listing endpoint with the current supported API.
+    </Accordian>
+  </TabItem>
+</TabsWrapper>
+
+## 1.0.0-BETA-RC1
 
 *Release date: 09 March 2026*
 
@@ -88,18 +228,6 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         [Marketplace](https://marketplace.wavemaker.ai)
     </Accordian>
   </TabItem>
-
-  <TabItem name="Enhancements" />
-
-  <TabItem name="Bug Fixes" />
-</TabsWrapper>
-
-## 1.0.0 Beta RC 2
-
-*Release date: 18 May 2026*
-
-<TabsWrapper>
-  <TabItem name="Features" />
 
   <TabItem name="Enhancements" />
 
