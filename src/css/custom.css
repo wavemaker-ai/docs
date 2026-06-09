@@ -9,7 +9,7 @@
 
 :root {
   --ifm-container-width-xl: 2000px;
-  --ifm-container-width:1600px;
+  --ifm-container-width: 1600px;
   --ifm-color-primary: rgba(23, 148, 239, 1);
   --ifm-color-primary-hover: var(--ifm-color-secondary);
   --ifm-color-dark: rgba(24, 24, 27, 1);
@@ -225,11 +225,12 @@
 [data-theme='dark'] .menu-label {
   color: rgba(255, 255, 255, 0.85);
 }
-[data-theme='dark'] .launcher-ecosystem>div>button>div div {
-    background:rgba(255, 255, 255, 0.85) !important;
-} 
-[data-theme='dark'] .launcher-ecosystem>div>button:hover,[data-theme='dark'] .launcher-ecosystem>div>button:focus{
-   background:rgba(255, 255, 255, 0.2) !important;
+[data-theme='dark'] .launcher-ecosystem > div > button > div div {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+[data-theme='dark'] .launcher-ecosystem > div > button:hover,
+[data-theme='dark'] .launcher-ecosystem > div > button:focus {
+  background: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* ── Sidebar ───────────────────────────────────────────────── */
@@ -274,7 +275,11 @@
 }
 
 /* ── Navbar search hover ───────────────────────────────────── */
-[data-theme='dark'] .navbar .navbar__items .search-bar-with-ai .DocSearch-Button:hover {
+[data-theme='dark']
+  .navbar
+  .navbar__items
+  .search-bar-with-ai
+  .DocSearch-Button:hover {
   background: rgba(255, 255, 255, 0.08);
 }
 
@@ -417,7 +422,8 @@ span.DocSearch-Button-Keys {
   padding-right: 16px;
 }
 
-.top_nav + .container .thin-scrollbar ,.thin-scrollbar.theme-doc-toc-desktop{
+.top_nav + .container .thin-scrollbar,
+.thin-scrollbar.theme-doc-toc-desktop {
   top: calc(var(--ifm-navbar-height) + 2rem + var(--ifm-top-nav-height));
 }
 
@@ -1595,4 +1601,26 @@ button.clean-btn.menu__caret::before {
 }
 
 @media only screen and (min-width: 993px) {
+}
+
+.doc-figure-right {
+  float: right;
+  max-width: 360px;
+  width: 100%;
+  margin: 0.25rem 0 1rem 1.5rem;
+  border-radius: 6px;
+}
+
+.doc-figure-right ~ h2,
+.doc-figure-right ~ h3 {
+  clear: both;
+}
+
+@media only screen and (max-width: 768px) {
+  .doc-figure-right {
+    float: none;
+    display: block;
+    max-width: 600px;
+    margin: 1.5rem auto;
+  }
 }
