@@ -13,6 +13,80 @@ WaveMaker announces the release of WaveMaker AI 1.0.0 Beta. This release is inte
 
 For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack).
 
+## 1.0.0-BETA-RC4
+
+*Release date: 15 June 2026*
+
+<TabsWrapper>
+  <TabItem name="Features">
+    <Accordian title="Platform">
+      - ### Export AI session as downloadable ZIP <Pill type="web" />
+
+        Export your AI session — including conversation history, uploaded files, and session context — as a ZIP archive.
+
+      - ### Upload resources to an AI session <Pill type="web" />
+
+        Upload project resources directly into an AI session for use during agent conversations.
+
+      - ### Live context window usage during agent conversations <Pill type="web" />
+
+        The current context window usage is now displayed live in the UI while an agent conversation is in progress.
+
+      - ### Automatic conversation history compaction <Pill type="web" />
+
+        The AI agent automatically compacts long conversation histories to keep responses fast and context relevant.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="Platform">
+      - ### Sync latest Studio changes to existing conversations <Pill type="web" />
+
+        Conversations now reflect the most recent project changes made in Studio without requiring a new session.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="User Interface">
+      - ### Time widget value cleared automatically <Pill type="web" />
+
+        Fixed a React app issue where values entered into the Time widget were cleared unexpectedly.
+
+      - ### Page unresponsive on Switch widget change in Figma-generated apps <Pill type="web" />
+
+        Fixed React pages becoming unresponsive when toggling the Switch widget value in apps generated from Figma designs.
+
+      - ### Auto layout incorrect in Figma-imported projects <Pill type="web" />
+
+        Fixed auto layout not rendering correctly when a project was imported from a Figma design.
+
+      - ### `formatpattern` attribute missing from datatable markup <Pill type="web" />
+
+        Fixed `formatpattern` not being written to the datatable markup when configured.
+    </Accordian>
+
+    <Accordian title="Backend">
+      - ### Connection pool for LangGraph Postgres checkpointer
+
+        Fixed idle-timeout failures by switching the LangGraph Postgres checkpointer to use a connection pool.
+
+      - ### REST service proxy failing with negative target port
+
+        Fixed REST service calls failing with "Target port must not be negative" when the app proxy was configured with include/exclude URLs.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### REACT - Page params not working <Pill type="web" />
+
+        Fixed page parameters not being passed or applied correctly in React app deployments.
+
+      - ### REACT - Authorization not working in React deployment <Pill type="web" />
+
+        Fixed authorization checks failing in React app deployments.
+    </Accordian>
+  </TabItem>
+</TabsWrapper>
+
 ## 1.0.0-BETA-RC3
 
 *Release date: 04 June 2026*
