@@ -1,0 +1,116 @@
+---
+title: "Evaluating Agentic Intelligence at Production Scale"
+authors: [SagarV]
+---
+
+**How we went from observability to evaluation: Golden datasets, RAGAS metrics, and LangFuse feedback loops that made agent quality a measurable number.**
+
+---
+
+<PillGroup>
+  <Pill type="Agentic RAG" />
+
+  <Pill type="Golden Datasets" />
+
+  <Pill type="RAGAS" />
+
+  <Pill type="LangFuse" />
+</PillGroup>
+
+---
+
+## The Problem
+
+After we shipped our [Ecosystem Agent](/blog/2026/04/09/AI-Native-Developer-Intelligence-at-scale), the agentic RAG system that unified Docs, Academy, Storybook, and Marketplace behind a single Ask-AI, the roadmap did what roadmaps do. Better re-ranking. New indexing strategies. Model upgrades. Prompt refinements.
+
+Every enhancement raised the same question: **did this change make the system better, or did it quietly break something?**
+
+For a while, we answered it manually, running a fixed set of real developer questions against the system and reviewing every answer before release. It worked, barely. And it made one thing obvious: manual verification of intelligence does not scale. It was becoming the bottleneck on our own velocity.
+
+> Shipping an agentic system without evals is a blind game. 
+The team's response was the same as last time. Don't add more process. Build the missing layer.
+
+---
+
+## Observability Is Not Evaluation
+
+We had full tracing from day one. Every agent invocation, every routing decision, every retrieval fan-out, all visible in LangFuse. It is essential infrastructure, and it answers every question except the one that matters.
+
+**A trace tells you what the agent did. It cannot tell you whether what it did was right.** The trace of a confidently wrong answer is indistinguishable from the trace of a correct one: same clean retrieval, same healthy latency, same tidy graph.
+
+Observability is the flight recorder. Evals are what keep the plane in the air. Teams conflate the two, and it costs them. Dashboards stay green while answer quality drifts.
+
+> Tracing tells you what happened. Evals tell you if it was any good.
+
+---
+
+## Golden Datasets + RAGAS: Quality Becomes a Number
+
+Agent quality is not one number. It spans everything from schema checks to end-to-end goal completion, the same way a testing pyramid spans unit tests to exploratory QA. We started where our risk actually lived, with two investments.
+
+{/* ![The Agent Eval Pyramid](./assets/img/infographic-1-agent-eval-pyramid.png) */}
+
+**A golden dataset built from production, not imagination.** We pulled real developer queries from traces, including the odd ones, and paired each with an expected outcome. Fifty scenarios to start. Production reality, frozen into test cases.
+
+**RAGAS to score every change against it.** The metrics map onto exactly the failure modes of a knowledge agent:
+
+- **Faithfulness, Context Precision and Recall:** is every answer grounded in retrieved knowledge, or is the model freelancing?
+- **Tool Call Accuracy:** did the orchestrator fan out to the right knowledge sources, with the right arguments?
+- **Agent Goal Accuracy:** end to end, did the developer's objective get met?
+- **Topic Adherence:** did the agent stay within its mandate?
+
+The impact was immediate. A release-day afternoon of manual review became a pipeline job. A model upgrade decision stopped being "answers feel better" and became: faithfulness up, tool routing stable, cost per query down. **Ship it.**
+
+> What took an afternoon of eyeballing now takes a CI run. And unlike the afternoon, the CI run never gets tired.
+
+---
+
+## Closing the Loop with LangFuse
+
+Evals without observability are tests without telemetry. Observability without evals is telemetry without judgment. The system needs both, connected:
+
+1. **Production traffic** flows through the agent, fully traced.
+2. **Interesting traces** (failures, edge cases) are curated into the golden dataset.
+3. **RAGAS scores** every change against that dataset, offline, before merge.
+4. **A CI gate** blocks any release that regresses the baseline.
+5. **Online evaluators** (LLM-as-judge, user feedback) score live traffic continuously.
+6. Scores land back in LangFuse: quality, cost, and latency in one place.
+
+{/* ![The Agent Eval Loop](./assets/img/infographic-2-agent-eval-loop.png) */}
+
+> Every production failure becomes next sprint's test case. Eval coverage compounds for free.
+
+---
+
+## Impact: What Actually Changed
+
+|  | Before | After |
+| --- | --- | --- |
+| **Release verification** | An afternoon of manual review per change | A CI run, on every commit |
+| **Model & prompt decisions** | "Answers feel better to me" | Faithfulness, routing, and cost deltas on a scorecard |
+| **Regressions** | Discovered by users, reported as tickets | Blocked at the merge, before release |
+| **Quality visibility** | Invisible between incidents | Tracked continuously, next to cost and latency |
+
+<StatPills>
+  <StatPill color="blue" label="Afternoon → CI Run" description="release verification went from manual review to an automated pipeline job on every commit" />
+
+  <StatPill color="green" label="Regressions Blocked" description="quality regressions are caught at the merge gate before they reach production" />
+
+  <StatPill color="indigo" label="Evals Compound" description="every production failure becomes next sprint's test case — coverage grows for free" />
+</StatPills>
+
+---
+
+## Closing Thought
+
+> Build for production. Learn from production. **Measure in production.**
+
+Last time, I ended with the first two clauses. Shipping evals taught us the third.
+
+None of this required a research team. Tracing, fifty golden scenarios, three RAGAS metrics, and a CI gate got us from vibes to numbers.
+
+A team that answers "how good is our agent, and is it getting better?" with a number will always out-ship a team that answers with a feeling.
+
+Evals are how you earn the right to move fast. Everything else is a blind game.
+
+---
