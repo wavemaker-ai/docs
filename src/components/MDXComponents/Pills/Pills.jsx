@@ -47,6 +47,8 @@ const pillConfig = {
   mcp: { icon: null, label: 'MCP Architecture' },
   langfuse: { icon: null, label: 'LangFuse' },
   ai: { icon: null, label: 'Production AI' },
+  ragas: { icon: null, label: 'RAGAS' },
+  'golden-datasets': { icon: null, label: 'Golden Datasets' },
 };
 
 export function PillGroup({ children }) {
