@@ -13,6 +13,74 @@ WaveMaker announces the release of WaveMaker AI 1.0.0 Beta. This release is inte
 
 For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack).
 
+## 1.0.0-BETA-RC6
+
+*Release date: 13 July 2026*
+
+<TabsWrapper>
+  <TabItem name="Features">
+    <Accordian title="Platform" />
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="Platform" />
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="User Interface" />
+
+    <Accordian title="Backend" />
+
+    <Accordian title="Platform" />
+  </TabItem>
+</TabsWrapper>
+
+## 1.0.0-BETA-RC5
+
+*Release date: 29 June 2026*
+
+<TabsWrapper>
+  <TabItem name="Features">
+    <Accordian title="Platform">
+      - ### Suggested next actions in AI chat <Pill type="web" />
+
+        AI Chat now surfaces relevant next actions at the end of a conversation, enabling users to quickly continue workflows, take follow-up actions, and maintain momentum without manually determining the next step.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="Platform">
+      - ### Restrict agents from edit/write for studio-managed files
+
+      AI agents are now blocked from writing or editing gitignored, build-managed, and other auto-generated files to prevent corruption of the project.
+
+      - ### Enhanced context discovery and selection in AI assistant input <Pill type="web" />
+
+        Typing @ now directly opens context suggestions with grouped categories and improved filtering, making it faster to find and insert relevant context without navigating multiple trigger levels.
+
+      - ### Enhanced change tracking and agent activity visibility in AI chat <Pill type="web" />
+
+        Redesigned the changes section, improved visibility of available updates, and introduced clearer agent activity and execution status indicators to provide better insight into AI-generated actions and progress.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="User Interface" />
+
+    <Accordian title="Backend" />
+
+    <Accordian title="Platform">
+      - ### Context suggestion filtering and placement fixes <Pill type="web" />
+
+        Fixed issues that prevented context suggestions from filtering correctly after pasting input and caused selected suggestions to appear in the wrong location after selection.
+
+      - ### Secret key resolution failing for sub-agents
+
+        Fixed sub-agents being unable to resolve secret keys from the main agent's store, causing the literal key to be used in place of the actual secret value.
+    </Accordian>
+  </TabItem>
+</TabsWrapper>
+
 ## 1.0.0-BETA-RC4
 
 *Release date: 15 June 2026*
@@ -35,6 +103,14 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Automatic conversation history compaction <Pill type="web" />
 
         The AI agent automatically compacts long conversation histories to keep responses fast and context relevant.
+
+      - ### Autocode project sync support with merge framework <Pill type="web" />
+
+        Seamlessly sync Autocode projects with merge framework support for improved collaboration and version control.
+
+      - ### Web and Mobile builder separation for Design2Code projects preview <Pill type="web" /> <Pill type="mobile" />
+
+        Separate web and mobile builders for Design2Code project previews to support better scalability and streamlined development workflows.
     </Accordian>
   </TabItem>
 
