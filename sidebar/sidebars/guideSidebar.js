@@ -39,6 +39,11 @@ export default [
         id: 'guide/integration/use-sse-in-wavemaker-ui',
         label: 'Handle SSE Events',
       },
+      {
+        type: 'doc',
+        id: 'guide/integration/integrate-github-app',
+        label: 'GitHub App Integration',
+      },
     ],
   },
 
