@@ -1,5 +1,5 @@
 ---
-title: "Evaluating Agentic Intelligence at Production Scale"
+title: "Evaluating Agentic Intelligence with Production"
 authors: [SagarV]
 ---
 
@@ -8,13 +8,13 @@ authors: [SagarV]
 ---
 
 <PillGroup>
-  <Pill type="Agentic RAG" />
+  <Pill type="rag" />
 
-  <Pill type="Golden Datasets" />
+  <Pill type="langfuse" />
 
-  <Pill type="RAGAS" />
+  <Pill type="ragas" />
 
-  <Pill type="LangFuse" />
+  <Pill type="golden-datasets" />
 </PillGroup>
 
 ---
@@ -44,11 +44,9 @@ Observability is the flight recorder. Evals are what keep the plane in the air. 
 
 ---
 
-## Golden Datasets + RAGAS: Quality Becomes a Number
+## Golden Datasets + [RAGAS](https://docs.ragas.io/): Quality Becomes a Number
 
 Agent quality is not one number. It spans everything from schema checks to end-to-end goal completion, the same way a testing pyramid spans unit tests to exploratory QA. We started where our risk actually lived, with two investments.
-
-{/* ![The Agent Eval Pyramid](./assets/img/infographic-1-agent-eval-pyramid.png) */}
 
 **A golden dataset built from production, not imagination.** We pulled real developer queries from traces, including the odd ones, and paired each with an expected outcome. Fifty scenarios to start. Production reality, frozen into test cases.
 
@@ -76,7 +74,8 @@ Evals without observability are tests without telemetry. Observability without e
 5. **Online evaluators** (LLM-as-judge, user feedback) score live traffic continuously.
 6. Scores land back in LangFuse: quality, cost, and latency in one place.
 
-{/* ![The Agent Eval Loop](./assets/img/infographic-2-agent-eval-loop.png) */}
+![Agentic RAG System with Eval Loop](./assets/img/Agent%20Eval%20Loop.png)
+*Observability and Evals are connected. Production feeds the tests, tests gate the releases.*
 
 > Every production failure becomes next sprint's test case. Eval coverage compounds for free.
 
@@ -105,7 +104,7 @@ Evals without observability are tests without telemetry. Observability without e
 
 > Build for production. Learn from production. **Measure in production.**
 
-Last time, I ended with the first two clauses. Shipping evals taught us the third.
+[Last time](/blog/2026/04/09/AI-Native-Developer-Intelligence-at-scale), I ended with the first two clauses. Shipping evals taught us the third.
 
 None of this required a research team. Tracing, fifty golden scenarios, three RAGAS metrics, and a CI gate got us from vibes to numbers.
 

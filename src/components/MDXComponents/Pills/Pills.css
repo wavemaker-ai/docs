@@ -114,6 +114,16 @@
   color: rgb(85, 119, 238);
 }
 
+.wm-pill-ragas {
+  background: rgba(0, 150, 136, 0.15);
+  color: rgb(0, 150, 136);
+}
+
+.wm-pill-golden-datasets {
+  background: rgba(245, 158, 11, 0.15);
+  color: rgb(200, 130, 0);
+}
+
 /* PillGroup */
 .wm-pill-group {
   display: flex;
