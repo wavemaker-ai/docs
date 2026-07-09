@@ -65,7 +65,11 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
   </TabItem>
 
   <TabItem name="Bug Fixes">
-    <Accordian title="User Interface" />
+    <Accordian title="User Interface">
+      - ### Widget labels not refreshing on locale change <Pill type="web" />
+
+        Fixed widgets and navigation components not updating translated labels immediately when the locale is changed via `i18nService.setSelectedLocale(locale)`, requiring an application reload.
+    </Accordian>
 
     <Accordian title="Backend" />
 
