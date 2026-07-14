@@ -35,6 +35,12 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Improved subagent header with task descriptions in AI chat <Pill type="web" />
 
         The AI chat subagent header now displays a descriptive task title alongside the agent name, making it easier to follow what each subagent is working on.
+
+      - ### Improved i18n performance when localizing pages and adding new languages <Pill type="web" /> <Pill type="mobile" />
+
+        - Adding a new label to a page no longer requires loading every message across all languages just to check for duplicates. The check is now quick and targeted, so localizing pages uses less context and completes faster, even in apps with thousands of messages.
+
+        - Adding a new language to your app now avoids reloading existing content from scratch each time. It's loaded once and shared across every language you add, whether together or one after another, using far less context.
     </Accordian>
   </TabItem>
 
