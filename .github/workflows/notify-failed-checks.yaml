@@ -31,6 +31,6 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: pr.number,
-                body: `⚠️ @${pullRequest.user.login} the check **${checkRun.name}** failed. [View details](${checkRun.details_url})`,
+                body: `⚠️ @${pullRequest.user.login} deployment on ${checkRun.name} failed. [View details](${checkRun.details_url})\n\ncc @shahatWM — this PR preview failed, please check with the author.`,
               });
             }
