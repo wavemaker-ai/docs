@@ -10,7 +10,7 @@ export default [
   },
   {
     type: 'doc',
-    id: 'developing-with-agents/how-aira-works',
+    id: 'developing-with-agents/how-aira-worksdede',
   },
   {
     type: 'doc',
