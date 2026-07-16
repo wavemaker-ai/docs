@@ -19,11 +19,29 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
 <TabsWrapper>
   <TabItem name="Features">
-    <Accordian title="Platform" />
+    <Accordian title="Platform">
+      - ### Restore conversation to a previous checkpoint in AI chat <Pill type="web" />
+
+        You can now restore an AI chat conversation to any previously saved checkpoint, permanently removing all messages, agent interactions, tool executions, and changes made after that point so you can continue from the selected state.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Enhancements">
-    <Accordian title="Platform" />
+    <Accordian title="Platform">
+      - ### Enhanced AI chat experience with improved suggestions, icons, and notifications <Pill type="web" />
+
+        Improves the AI chat experience with hover-highlighted suggestions, quick-access side popovers, updated icons and copy feedback, Studio-aligned notifications, and support for custom chat events such as context compaction.
+
+      - ### Improved subagent header with task descriptions in AI chat <Pill type="web" />
+
+        The AI chat subagent header now displays a descriptive task title alongside the agent name, making it easier to follow what each subagent is working on.
+
+      - ### Improved i18n performance when localizing pages and adding new languages <Pill type="web" /> <Pill type="mobile" />
+
+        - Adding a new label to a page no longer requires loading every message across all languages just to check for duplicates. The check is now quick and targeted, so localizing pages uses less context and completes faster, even in apps with thousands of messages.
+
+        - Adding a new language to your app now avoids reloading existing content from scratch each time. It's loaded once and shared across every language you add, whether together or one after another, using far less context.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Bug Fixes">
@@ -65,7 +83,11 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
   </TabItem>
 
   <TabItem name="Bug Fixes">
-    <Accordian title="User Interface" />
+    <Accordian title="User Interface">
+      - ### Widget labels not refreshing on locale change <Pill type="web" />
+
+        Fixed widgets and navigation components not updating translated labels immediately when the locale is changed via `i18nService.setSelectedLocale(locale)`, requiring an application reload.
+    </Accordian>
 
     <Accordian title="Backend" />
 
