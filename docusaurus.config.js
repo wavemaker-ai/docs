@@ -71,10 +71,7 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebar/sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          //TODO: Update the editUrl to point to correct branch
-          editUrl: 'https://github.com/wavemaker/ai-docs/tree/main/',
+          editUrl: 'https://github.com/wavemaker-ai/docs/tree/main/',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
         },
@@ -84,9 +81,7 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/wavemaker/ai-docs/tree/main/',
+          editUrl: 'https://github.com/wavemaker-ai/docs/tree/main/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'ignore',
@@ -115,8 +110,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/wavemaker-docs-social-card.png',
       algolia: {
         appId: 'QCVP2DTGFE',
         apiKey: '5c6569989dc17486081c8ab5cd736d10',
