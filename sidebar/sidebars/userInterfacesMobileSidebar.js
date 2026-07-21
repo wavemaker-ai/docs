@@ -141,6 +141,11 @@ export default [
           },
           {
             type: 'doc',
+            id: 'user-interfaces/mobile/develop/styling-with-design-tokens/uploading-custom-fonts',
+            label: 'Custom Fonts',
+          },
+          {
+            type: 'doc',
             id: 'user-interfaces/mobile/develop/styling-with-design-tokens/customising-your-application',
             label: 'Customising your Application',
           },
