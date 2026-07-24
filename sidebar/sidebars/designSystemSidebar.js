@@ -15,6 +15,7 @@ export default [
     items: [
       'design-system/figma-design-to-code-plugin/working-with-design-to-code-plugin',
       'design-system/figma-design-to-code-plugin/design-guidelines',
+      'design-system/figma-design-to-code-plugin/annotation-glossary',
       'design-system/figma-design-to-code-plugin/figma-cheat-sheet',
     ],
   },

@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="640" height="340" fill="#ffffff"/>
+
+  <text x="160" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#dc2626">Incorrect</text>
+  <text x="480" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#16a34a">Correct</text>
+
+  <!-- ===================== INCORRECT ===================== -->
+  <rect x="40" y="44" width="240" height="170" rx="4" fill="none" stroke="#9ca3af" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="52" y="60" font-size="11" fill="#6b7280">Page bounds</text>
+
+  <!-- portion of the list outside the page bounds -->
+  <rect x="40" y="214" width="240" height="60" fill="#fee2e2" opacity="0.6"/>
+  <line x1="40" y1="214" x2="280" y2="214" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+  <!-- scrollable list: 5 rows, each a rectangle with an image inside -->
+  <g id="rowsIncorrect">
+    <!-- row 1 -->
+    <g transform="translate(56,72)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+    <!-- row 2 -->
+    <g transform="translate(56,112)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+    <!-- row 3 -->
+    <g transform="translate(56,152)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+    <!-- row 4: straddles the page bounds edge -->
+    <g transform="translate(56,192)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+    <!-- row 5: fully outside page bounds -->
+    <g transform="translate(56,232)" opacity="0.55">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+  </g>
+
+  <!-- scrollbar hinting this is a scrollable list -->
+  <rect x="252" y="72" width="6" height="192" rx="3" fill="#e5e7eb"/>
+  <rect x="252" y="72" width="6" height="88" rx="3" fill="#9ca3af"/>
+
+  <text x="160" y="300" text-anchor="middle" font-size="11" fill="#dc2626">List items below the page bounds</text>
+  <text x="160" y="315" text-anchor="middle" font-size="11" fill="#dc2626">are hidden and fail to export</text>
+
+  <!-- ===================== CORRECT ===================== -->
+  <rect x="360" y="44" width="240" height="230" rx="4" fill="none" stroke="#9ca3af" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="372" y="60" font-size="11" fill="#6b7280">Page bounds (increased)</text>
+
+  <g id="rowsCorrect">
+    <g transform="translate(376,72)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+    <g transform="translate(376,112)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+    <g transform="translate(376,152)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+    <g transform="translate(376,192)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+    <g transform="translate(376,232)">
+      <rect width="190" height="32" rx="3" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+      <rect x="6" y="6" width="20" height="20" rx="2" fill="#ffffff" stroke="#9ca3af"/>
+      <circle cx="12" cy="12" r="2.5" fill="#fbbf24"/>
+      <path d="M6,24 L14,16 L20,20 L26,14 L26,24 Z" fill="#93c5fd"/>
+      <rect x="34" y="9" width="120" height="5" rx="2.5" fill="#d1d5db"/>
+      <rect x="34" y="19" width="80" height="5" rx="2.5" fill="#e5e7eb"/>
+    </g>
+  </g>
+
+  <rect x="572" y="72" width="6" height="192" rx="3" fill="#e5e7eb"/>
+  <rect x="572" y="72" width="6" height="88" rx="3" fill="#9ca3af"/>
+
+  <text x="480" y="300" text-anchor="middle" font-size="11" fill="#16a34a">Increasing the page height includes</text>
+  <text x="480" y="315" text-anchor="middle" font-size="11" fill="#16a34a">every list item for export</text>
+</svg>
