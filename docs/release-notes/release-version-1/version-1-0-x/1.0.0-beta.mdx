@@ -35,7 +35,19 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
   </TabItem>
 
   <TabItem name="Bug Fixes">
-    <Accordian title="User Interface" />
+    <Accordian title="User Interface">
+      - ### Form field show property ignored via script <Pill type="web" />
+
+        Fixed the form field's `show` property not taking effect when updated from script.
+
+      - ### Stale data shown during pagination load <Pill type="web" />
+
+        Fixed pagination briefly displaying the previous page's data alongside the loading spinner before the next page's data renders.
+
+      - ### Accordion pane onload event not triggering <Pill type="web" />
+
+        Fixed the accordion pane's onload event not firing when its content type is set to inline.
+    </Accordian>
 
     <Accordian title="Backend" />
 
