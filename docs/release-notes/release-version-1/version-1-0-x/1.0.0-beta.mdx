@@ -19,7 +19,15 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
 <TabsWrapper>
   <TabItem name="Features">
-    <Accordian title="Platform" />
+    <Accordian title="Platform">
+      - ### Cancel a Conversation in AIRA
+
+        The AIRA will complete the task already in progress, then stop. Any file changes made during this request will be undone, and the new conversation will continue from previous message state.
+
+      - ### Edit a Conversation in AIRA
+
+        Editing a prompt starts a new request from that point. Any messages and file changes made from the edited prompt are automatically reverted, and the conversation continues using your updated prompt.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Enhancements">
