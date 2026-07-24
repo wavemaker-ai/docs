@@ -1,0 +1,40 @@
+---
+title: "Configure security and localization"
+last_update: { author: "Vivek Raj" }
+---
+
+Security and localization affect several parts of an application. Choose the agent by the artifact being changed, and state whether the request is server-side, device-side, or user-interface work.
+
+## Server-side security
+
+Backend Expert Agent handles supported application security configuration, including:
+
+- Authentication providers and general security settings
+- Roles, landing pages, and role-based access control
+- Endpoint access rules
+- CORS, CSRF, XSS, SSL, content security policy, and mutual TLS settings
+- Supported custom filters
+
+The agent validates the existing configuration before changing it. Some providers or deployment-specific setups may remain unsupported. Review access rules carefully and test with representative roles.
+
+## Device-side security
+
+Mobile Screenshot to Code Agent handles supported Native Mobile device features such as biometric authentication, secure storage, rooted-device detection, and screen-capture controls.
+
+Do not treat a device biometric check as a replacement for server authentication or endpoint authorization. Coordinate both layers when the feature requires them.
+
+## Localization
+
+WaveMaker UI Expert handles application localization work, including locales, message resources, localized page content, prefab messages, and date, time, and currency formats.
+
+```text
+Add French localization for the Checkout page.
+Reuse existing message keys where they already match.
+Do not translate product names or values returned by the API.
+```
+
+Identify the pages or components in scope and specify whether translations are provided or the agent should prepare message keys for later translation.
+
+## Review sensitive changes
+
+For security changes, inspect the exact provider, role, and endpoint configuration and test both allowed and denied access. For localization, verify fallback behavior, formatting, text expansion, and missing-key behavior in the application.

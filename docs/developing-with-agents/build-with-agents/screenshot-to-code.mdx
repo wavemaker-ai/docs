@@ -1,0 +1,37 @@
+---
+title: "Build from screenshots and designs"
+last_update: { author: "Vivek Raj" }
+---
+
+WaveMaker provides platform-specific agents for turning visual references into WaveMaker pages. Choose the agent that matches the project and source material.
+
+## Web screenshot to code
+
+**Screenshot to Code** converts an attached screenshot or image into a WaveMaker Web page. Its workflow covers layout planning, page and partial markup, variables for the visual, design-token overrides, page styling, and visual comparison.
+
+The Web workflow creates the visual structure only. It does not add service calls, data bindings, events, application navigation, or page-to-page behavior. Use WaveMaker UI Expert for those changes after reviewing the generated page.
+
+If the requested page name already exists, the workflow avoids silently overwriting it and may create a suffixed page name. State explicitly when the screenshot should update an existing page.
+
+## Native Mobile screenshot and Figma input
+
+**Mobile Screenshot to Code Agent** builds or updates Native Mobile pages and partials from an image or supported Figma input. It can create the layout, variables, design tokens, and WaveMaker mobile markup required by the screen.
+
+The same agent handles supported device-side features, such as biometric authentication, secure storage, push notification setup, crash reporting, and screen-capture controls. Server-side authentication and role configuration remain backend tasks.
+
+## Write a visual request
+
+Include:
+
+- The target platform.
+- Whether to create a page or update an existing one.
+- The intended page name.
+- Whether visual fidelity or adaptation to the current design system has priority.
+- Features that must remain unchanged.
+- Whether wiring and behavior belong in a later task.
+
+## Review the output
+
+Compare the generated page with the source at representative viewport sizes. Check hierarchy, spacing, text, images, variants, tokens, responsive behavior, and any partials created for shared regions.
+
+Treat a screenshot as a visual source, not a complete functional specification. Confirm bindings, navigation, validation, accessibility, and runtime behavior in separate review steps.

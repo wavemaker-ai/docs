@@ -1,0 +1,29 @@
+---
+title: "Agent development terminology"
+last_update: { author: "Vivek Raj" }
+---
+
+This glossary defines the user-facing terms used throughout the Developing with agents documentation.
+
+| Term                       | Meaning                                                                                                |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **WaveMaker AI Assistant** | The built-in AI development experience in WaveMaker Studio.                                            |
+| **WaveMaker Agent**        | The general agent that coordinates multi-step work and delegates to specialists when needed.           |
+| **Agent**                  | The selected worker that receives a request, uses its assigned skills and tools, and returns a result. |
+| **Specialist**             | An agent with a focused scope, such as UI, backend, screenshot-to-code, or code review.                |
+| **Request**                | The natural-language instruction and attached context supplied by the developer.                       |
+| **Skill**                  | A reusable set of WaveMaker instructions for a type of development task.                               |
+| **Tool**                   | An operation an agent uses to inspect or change supported project resources.                           |
+| **Project context**        | Information about the current application, platform, artifacts, repository state, and instructions.    |
+| **Project instruction**    | An application-specific rule supplied by Studio and applied across agent tasks.                        |
+| **Project-provided skill** | A project-scoped playbook made available to the assistant by Studio.                                   |
+| **Session**                | One AI chat and its associated conversation, activity, draft state, and checkpoints.                   |
+| **Draft**                  | The separate change state prepared by an agent before the developer keeps it in the application.       |
+| **Checkpoint**             | A recorded application state in a session that can be inspected or restored.                           |
+| **Restore**                | Return the session draft to an earlier checkpoint and continue from that state.                        |
+| **Web**                    | A WaveMaker Web application and its Web-specific artifacts and skills.                                 |
+| **Native Mobile**          | A WaveMaker React Native application and its mobile-specific artifacts and skills.                     |
+
+## Retired terminology
+
+**AIRA** is a retired name for the agent development experience. Current documentation uses **WaveMaker AI Assistant** for the experience and the agent names shown in Studio.

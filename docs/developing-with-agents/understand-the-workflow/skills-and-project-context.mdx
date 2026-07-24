@@ -1,0 +1,49 @@
+---
+title: "Skills and project context"
+last_update: { author: "Vivek Raj" }
+---
+
+WaveMaker AI Assistant combines current project context with reusable development skills. Project context tells the agent what exists; skills tell it how to perform a particular kind of work.
+
+## What project context includes
+
+Depending on the project and task, Studio can supply:
+
+| Context                    | How the agent uses it                                                              |
+| -------------------------- | ---------------------------------------------------------------------------------- |
+| Project platform           | Selects behavior for Web or Native Mobile applications                             |
+| Existing artifacts         | Finds pages, partials, variables, services, components, and configuration to reuse |
+| Project metadata           | Supplies application details required by WaveMaker tools                           |
+| Draft and repository state | Identifies current changes and records checkpoints                                 |
+| Project instructions       | Applies project-specific development and review rules                              |
+| Project skills             | Makes project-provided playbooks available during the session                      |
+
+The agent still inspects the artifacts required for the task. Project context does not mean that every file is placed into every request.
+
+## Built-in skills
+
+Built-in skills are maintained with WaveMaker. They cover areas such as UI markup and bindings, design systems, Java services, databases, Query Services, security, web services, screenshot-to-code workflows, Marketplace artifacts, extensions, code review, and recovery.
+
+Each agent has an assigned skill set. Selecting a specialist limits the task to the skills and tools configured for that specialist.
+
+Developers select the agent, not an individual built-in skill. The agent matches the request to relevant skills and loads their instructions as the task progresses.
+
+## Common and platform-specific skills
+
+WaveMaker organizes built-in skills into common, Web, and Native Mobile groups.
+
+- **Common skills** contain instructions shared across project types.
+- **Web skills** describe Web-specific artifacts and workflows.
+- **Native Mobile skills** describe mobile UI and device integration.
+
+When a skill has a platform-specific version, WaveMaker uses the version for the current project. Otherwise, it can use a common version. Availability still depends on the selected agent.
+
+## Project-provided skills
+
+A project can supply additional skills to the session. These project-scoped playbooks can describe an application-specific pattern, a required component, naming rules, or validation for a business workflow. Project skills use a `project:` prefix inside the agent session.
+
+The authoring format, storage, permissions, and management controls for project skills are not yet confirmed for public documentation. If no project skills are configured, the assistant uses built-in skills and project instructions.
+
+## Skills load when needed
+
+The assistant starts with skill names and short descriptions. It loads complete instructions when a request matches a skill. This keeps unrelated database or mobile instructions out of a focused UI task.

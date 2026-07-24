@@ -1,0 +1,41 @@
+---
+title: "Add project instructions"
+last_update: { author: "Vivek Raj" }
+---
+
+Project instructions give WaveMaker AI Assistant rules that apply across tasks in one application. Use them for project-specific conventions that the agent cannot infer reliably from the code alone.
+
+## Write specific rules
+
+Useful instructions name the behavior, scope, and boundary:
+
+```text
+Reuse the existing AppError model for service errors.
+Do not edit generated service files.
+Place page-level text in the project localization resources.
+Use the compact form-field variant in admin pages.
+```
+
+Avoid broad statements such as “write good code” or “follow best practices.” Built-in skills already contain WaveMaker rules. Project instructions should record what is different or especially important in this application.
+
+## Keep instructions testable
+
+Good project instructions can be checked in a review:
+
+- Required naming or folder conventions
+- Generated files that must remain unchanged
+- Existing components or models to reuse
+- Validation commands required for a type of change
+- Security or review boundaries
+
+Do not place credentials, tokens, customer data, or private keys in project instructions.
+
+## Understand how instructions enter a session
+
+Studio supplies project instructions to the agent at the start of a session. The assistant combines them with the selected agent's built-in instructions and relevant skills.
+
+The exact editing interface for general project instructions is not yet confirmed. In current Web code-review workflows, custom review rules can be read from the code-review section of `src/main/webapp/agents.md`. The file may be absent when the project has no custom rules. Do not treat this confirmed code-review path as proof that every agent reads the same file or section.
+
+## Review instruction changes
+
+Treat project instructions as development configuration. Keep them short, remove outdated rules, and test an example request after changing them. A rule that conflicts with current project behavior can make otherwise valid requests produce the wrong result.

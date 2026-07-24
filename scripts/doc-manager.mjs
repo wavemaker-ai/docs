@@ -743,8 +743,8 @@ function insertItemIntoSidebar(filepath, parentLabels, newItem, atIndex = null) 
   }
   
   if (insertionPoint !== -1) {
-    let prefix = '';
-    let suffix = '';
+    let prefix;
+    let suffix;
     
     const isAtStart = insertionPoint === searchIndex;
     const textAfter = content.slice(insertionPoint).trim();

@@ -2,6 +2,19 @@
 export default [
   {
     type: 'category',
+    label: 'AI development',
+    collapsible: true,
+    collapsed: true,
+    items: [
+      {
+        type: 'doc',
+        id: 'guide/ai-development/complete-your-first-task',
+        label: 'Complete your first agent task',
+      },
+    ],
+  },
+  {
+    type: 'category',
     label: 'App Solutions',
     collapsible: true,
     collapsed: true,

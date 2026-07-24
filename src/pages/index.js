@@ -42,7 +42,7 @@ const envData = [
     icon: '/img/icon/aira.svg',
     title: 'Developing with Agents',
     desc: 'Suite of Agents for Developer Workflows',
-    link: '/docs/developing-with-agents/overview',
+    link: '/docs/developing-with-agents/',
   },
   {
     id: 4,
@@ -66,7 +66,6 @@ const envData = [
     link: '/docs/build-and-deploy/overview',
   },
 ];
-
 
 export function EnvList({ prop }) {
   return (
