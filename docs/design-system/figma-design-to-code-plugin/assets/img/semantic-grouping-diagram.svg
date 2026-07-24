@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" font-family="-apple-system, Helvetica, Arial, sans-serif">
+  <rect width="640" height="340" fill="#ffffff"/>
+
+  <text x="160" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#dc2626">Incorrect</text>
+  <text x="480" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#16a34a">Correct</text>
+
+  <!-- ===================== INCORRECT ===================== -->
+  <!-- Outer containing frame (not canvas) -->
+  <rect x="40" y="44" width="240" height="230" rx="4" fill="none" stroke="#9ca3af" stroke-width="2"/>
+  <text x="52" y="62" font-size="11" fill="#6b7280">Screen (frame)</text>
+
+  <!-- flat sibling bracket -->
+  <path d="M60,78 L54,78 L54,208 L60,208" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="46" y="146" font-size="10" fill="#dc2626" text-anchor="middle" transform="rotate(-90 46 146)">flat siblings</text>
+
+  <rect x="70" y="78" width="190" height="38" rx="3" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="165" y="102" text-anchor="middle" font-size="12" fill="#1e3a8a">Header Row</text>
+
+  <rect x="70" y="124" width="190" height="38" rx="3" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="165" y="148" text-anchor="middle" font-size="12" fill="#1e3a8a">Cell Row</text>
+
+  <rect x="70" y="170" width="190" height="38" rx="3" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="165" y="194" text-anchor="middle" font-size="12" fill="#78350f">Footer (unrelated)</text>
+
+  <text x="160" y="300" text-anchor="middle" font-size="11" fill="#6b7280">Header Row and Cell Row sit as flat siblings</text>
+  <text x="160" y="315" text-anchor="middle" font-size="11" fill="#6b7280">alongside an unrelated Footer — no semantic unit</text>
+
+  <!-- ===================== CORRECT ===================== -->
+  <rect x="360" y="44" width="240" height="230" rx="4" fill="none" stroke="#9ca3af" stroke-width="2"/>
+  <text x="372" y="62" font-size="11" fill="#6b7280">Screen (frame)</text>
+
+  <!-- new Data Table frame grouping Header + Cell rows -->
+  <rect x="390" y="78" width="190" height="104" rx="4" fill="none" stroke="#22c55e" stroke-width="2"/>
+  <text x="400" y="94" font-size="11" fill="#16a34a" font-weight="600">Data Table</text>
+
+  <rect x="400" y="104" width="170" height="32" rx="3" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="485" y="125" text-anchor="middle" font-size="12" fill="#1e3a8a">Header Row</text>
+
+  <rect x="400" y="144" width="170" height="32" rx="3" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="485" y="165" text-anchor="middle" font-size="12" fill="#1e3a8a">Cell Row</text>
+
+  <!-- Footer stays a sibling of Data Table, outside it -->
+  <rect x="390" y="196" width="190" height="38" rx="3" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="485" y="220" text-anchor="middle" font-size="12" fill="#78350f">Footer</text>
+
+  <text x="480" y="300" text-anchor="middle" font-size="11" fill="#6b7280">A new Data Table frame groups the related rows;</text>
+  <text x="480" y="315" text-anchor="middle" font-size="11" fill="#6b7280">Footer remains a sibling outside it</text>
+</svg>
