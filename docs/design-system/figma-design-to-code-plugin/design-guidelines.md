@@ -2,7 +2,7 @@
 id: design-guidelines
 title: Creating Design to Code-Friendly Designs in Figma
 sidebar_label: Design Guideline
-last_update: { author: "WaveMaker" }
+last_update: { author: "Pronoy Roy" }
 ---
 
 ---
@@ -76,3 +76,25 @@ When a section contains repeatable or related elements, group them under a meani
 This isn't strictly necessary, and the plugin can often still generate usable code without it. But semantic grouping goes a long way toward improving code quality, since it helps the plugin correctly infer the relationship between elements and generate more accurate, better-structured components. It's a small extra step in the design phase that can save significant time during development.
 
 ![diagram comparing loose sibling rows versus rows grouped under a meaningfully named parent frame](./assets/img/semantic-grouping-diagram.svg)
+
+## Additional Considerations
+
+A few more things worth knowing as you design for Design to Code.
+
+### Structuring Tabs
+
+Tabs convert most reliably when the header and content are organized with a bit of intent:
+
+- Keep the frame that holds the tab headers dedicated to just the tab items themselves. Mixing in other elements — a page title, an action button, a search field — inside that same frame makes it harder for the plugin to tell what's actually part of the tab strip. Isolating related elements like this is the same principle behind [Semantic Grouping](#semantic-grouping): the clearer the grouping, the clearer the signal.
+- Wrap the tab header and its corresponding tab content in a single parent frame. This pairing tells the plugin exactly how the two relate, which leads to a more predictable and accurate code output.
+
+### Wizard Widgets
+
+Wizard flows are on our roadmap for the Design to Code annotation flow. Support for detecting wizards automatically isn't available yet, so wizard-style flows in your design won't be picked up during conversion for the time being. We're actively extending the underlying Wizard widget to make this possible, and this guide will be updated with full annotation guidance as soon as that support ships.
+
+### Widget Fidelity in Preview
+
+On rare occasions, a widget that's correctly detected may not behave exactly like its runtime counterpart in preview. This is almost always a sign that the widget is missing some metadata the plugin relies on, rather than an issue with detection itself — and it's easy to avoid:
+
+- If you're using the WaveMaker UI kit, keep the original widget's structure intact. Modifying it can strip away metadata the plugin depends on to reproduce its behavior.
+- If you're using the annotation flow, make sure every child element inside an annotated widget is also annotated appropriately, following the [Annotation Glossary](./annotation-glossary.md). A fully annotated widget gives the plugin the context it needs to match runtime behavior accurately.

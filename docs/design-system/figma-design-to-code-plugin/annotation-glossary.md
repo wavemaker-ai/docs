@@ -2,7 +2,7 @@
 id: annotation-glossary
 title: Annotation Glossary for the Design to Code Plugin
 sidebar_label: Annotation Glossary
-last_update: { author: "WaveMaker" }
+last_update: { author: "Mansi Raj" }
 ---
 
 ---
