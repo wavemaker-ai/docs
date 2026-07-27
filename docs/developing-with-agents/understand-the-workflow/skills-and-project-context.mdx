@@ -3,7 +3,9 @@ title: "Skills and project context"
 last_update: { author: "Vivek Raj" }
 ---
 
-WaveMaker AI Assistant combines current project context with reusable development skills. Project context tells the agent what exists; skills tell it how to perform a particular kind of work.
+WaveMaker AI Assistant combines current project context with reusable WaveMaker skills. Project context tells the agent what exists in the application. Skills tell it how to carry out a supported kind of work in Studio.
+
+Together, they give the agent a working view of the application and a platform-aware way to act on it.
 
 ## What project context includes
 
@@ -23,6 +25,8 @@ The agent still inspects the artifacts required for the task. Project context do
 ## Built-in skills
 
 Built-in skills are maintained with WaveMaker. They cover areas such as UI markup and bindings, design systems, Java services, databases, Query Services, security, web services, screenshot-to-code workflows, Marketplace artifacts, extensions, code review, and recovery.
+
+Each skill describes the artifacts, conventions, tool steps, and checks that apply to its task. This lets an agent work with WaveMaker patterns instead of making a generic guess about the project structure.
 
 Each agent has an assigned skill set. Selecting a specialist limits the task to the skills and tools configured for that specialist.
 
@@ -46,4 +50,4 @@ The authoring format, storage, permissions, and management controls for project 
 
 ## Skills load when needed
 
-The assistant starts with skill names and short descriptions. It loads complete instructions when a request matches a skill. This keeps unrelated database or mobile instructions out of a focused UI task.
+The assistant starts with skill names and short descriptions. It loads complete instructions when a request matches a skill. A focused UI request therefore does not bring unrelated database or mobile instructions into the task.

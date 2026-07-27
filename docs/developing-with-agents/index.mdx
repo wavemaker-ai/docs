@@ -3,11 +3,23 @@ title: "Developing with agents"
 last_update: { author: "Vivek Raj" }
 ---
 
-WaveMaker AI Assistant brings agent-based development into WaveMaker Studio. Describe an outcome in natural language, and the assistant can inspect the application, use WaveMaker development tools, and prepare a set of changes for review.
+WaveMaker AI Assistant is the AI workspace in WaveMaker Studio. Describe the outcome you want, and the selected agent can inspect the application, use WaveMaker development tools, and prepare changes for you to review.
 
-![A developer gives an application request to an agent that combines project context, skills, and tools before returning the change for review](./assets/img/how-agentic-development-works.png)
+![WaveMaker Studio showing agent activity, generated changes, and a dialog for creating a Login page](./assets/img/wavemaker-agents-in-studio.png)
 
-The assistant works with the application that is open in Studio. It can use the project's pages, services, variables, design system, and configuration as context instead of treating every request as an isolated chat message.
+The assistant works with the application open in Studio. It can use the project's pages, services, variables, design system, and configuration, so a request starts from the application you already have rather than from a blank chat.
+
+## What keeps agent work on track
+
+WaveMaker agents combine three parts of the Studio experience:
+
+| Part                 | What it does for the task                                                                                                   |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **Project context**  | Gives the agent the current application structure, existing artifacts, project instructions, and relevant draft state.      |
+| **WaveMaker skills** | Supplies task-specific instructions for supported work, including the expected artifacts, platform conventions, and checks. |
+| **Draft and review** | Keeps work reviewable while you inspect the result, request a correction, or restore a checkpoint.                          |
+
+This is the practical difference between asking for code in a general chat and asking an agent to work in Studio: the request, the application, and the review all stay connected.
 
 ## The development loop
 
@@ -15,11 +27,11 @@ Agent-based development follows a short loop:
 
 1. **Describe the outcome.** State what to build, where it belongs, and any boundaries the agent must respect.
 2. **Choose an agent.** Select a general coordinator or a specialist for the task.
-3. **Let the agent inspect and act.** The agent reads relevant project context, loads task-specific skills, and uses WaveMaker tools.
+3. **Let the agent inspect and act.** The agent reads relevant project context, loads task-specific WaveMaker skills, and uses the tools assigned to it.
 4. **Review the result.** Inspect the response and the proposed application changes.
 5. **Refine or keep the change.** Continue the conversation, restore an earlier checkpoint, or apply the result to the application.
 
-The selected agent controls the task, but the developer controls the result.
+The agent manages the task. You decide what becomes part of the application.
 
 ## What agents can work on
 
@@ -37,10 +49,10 @@ The available agents and skills depend on the project type and the WaveMaker rel
 
 ## Agents, skills, and tools
 
-These terms describe different parts of the system:
+These terms describe the parts of the Studio workflow:
 
 - An **agent** receives the request and manages the task. Some agents coordinate work across several domains; others focus on UI, backend, screenshots, or code review.
-- A **skill** is a set of WaveMaker-specific instructions for a kind of work. Skills describe the expected files, conventions, checks, and sequence for that task.
+- A **skill** is a set of WaveMaker-specific instructions for a kind of work. Skills describe the expected artifacts, conventions, checks, and sequence for that task.
 - A **tool** reads or changes the application. Tools inspect files and metadata, update project artifacts, run checks, and return results to the agent.
 - **Project context** gives the agent information about the current application, including its type, structure, existing artifacts, and project instructions.
 - A **checkpoint** records a useful point in the session so that the work can be inspected or restored.
