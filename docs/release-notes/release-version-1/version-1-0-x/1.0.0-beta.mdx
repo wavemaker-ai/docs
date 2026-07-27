@@ -31,6 +31,14 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
   </TabItem>
 
   <TabItem name="Enhancements">
+    <Accordian title="User Interface">
+      - ### Fill sizing (`width=fill` / `height=fill`) for auto-layout children <Pill type="web" />
+
+        Auto Layout now supports `width=fill` and `height=fill` in addition to fixed values like px and %, letting a component occupy the available space within its parent container instead of sizing to content (`hug`).
+
+        This Fill sizing, previously available only for containers, is now supported for all components placed inside Auto Layout containers, making it easier to build responsive, flexible layouts. Currently available in Angular.
+    </Accordian>
+
     <Accordian title="Platform" />
   </TabItem>
 
@@ -73,10 +81,24 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
 <TabsWrapper>
   <TabItem name="Features">
+    <Accordian title="User Interface">
+      - ### Sync new pages from Design-to-Code plugin into existing projects <Pill type="web" />
+
+        The Design-to-Code plugin now supports a Sync flow that lets you add new pages to any existing WaveMaker project directly from the plugin.
+
+      - ### SVG generation and Icon URL support in Design-to-Code plugin <Pill type="web" />
+
+        Icons used in Figma designs are now exported as SVGs. This enhancement improves icon rendering by enabling support for icons outside the design system and produces outputs that more closely match the original design.
+    </Accordian>
+
     <Accordian title="Platform">
       - ### Restore conversation to a previous checkpoint in AI chat
 
         You can now restore an AI chat conversation to any previously saved checkpoint, permanently removing all messages, agent interactions, tool executions, and changes made after that point so you can continue from the selected state.
+
+      - ### Code Review agent
+
+        Introducing the WaveMaker Code Review Agent — a dedicated AI agent that audits your WaveMaker project files against best practices and surfaces violations as structured, actionable tables. It is report-only — it never edits or rewrites your files. Currently, the agent specializes only in identifying issues related to HTML and CSS files.
     </Accordian>
 
     <Accordian title="User Interface">
@@ -112,6 +134,16 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
     <Accordian title="Backend" />
 
     <Accordian title="Platform" />
+
+    <Accordian title="Product Ecosystem">
+      - ### Google Fonts not resolving on mobile <Pill type="mobile" />
+
+        Fixed a font resolution edge case on mobile by updating `font.json` with the correct PostScript names.
+
+      - ### Nested wizard support
+
+        Fixed wizard page generation to correctly handle nested wizards. The tool now scans each page's markup for `wm-wizard` elements and their direct `wm-wizardstep` children, capturing each step's name, title, and inner content, and walks up the DOM to detect whether a wizard is nested inside another wizard's step. Only top-level (non-nested) wizards get their own host page — nested wizards are now merged into their parent instead.
+    </Accordian>
   </TabItem>
 </TabsWrapper>
 
