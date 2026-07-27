@@ -39,7 +39,11 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         This Fill sizing, previously available only for containers, is now supported for all components placed inside Auto Layout containers, making it easier to build responsive, flexible layouts. Currently available in Angular.
     </Accordian>
 
-    <Accordian title="Platform" />
+    <Accordian title="Platform">
+      ### Section-level reads and edits for large project files
+
+      Large files can now be read and edited in sections using offset and limit, instead of the whole file. Edits are checked only against that section, so unrelated changes elsewhere don't block them, giving faster edits with less token usage.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Bug Fixes">
