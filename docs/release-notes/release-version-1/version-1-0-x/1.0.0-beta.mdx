@@ -13,16 +13,134 @@ WaveMaker announces the release of WaveMaker AI 1.0.0 Beta. This release is inte
 
 For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack).
 
+## 1.0.0-BETA-RC7
+
+*Release date: 27 July 2026*
+
+<TabsWrapper>
+  <TabItem name="Features">
+    <Accordian title="Platform">
+      - ### Cancel a running conversation in AI chat
+
+        You can now cancel an AI chat conversation while it's in progress, letting the agent finish whatever it's currently doing — generating a response, running a tool, or delegating to a sub-agent — before stopping.
+
+      - ### Edit a previously sent prompt in AI chat
+
+        You can now edit a prompt you've already sent in an AI chat conversation and resubmit it, replacing all messages, agent actions, and file changes made after that point, along with any images or chat suggestions carried over from the original prompt.
+    </Accordian>
+
+    <Accordian title="Product Ecosystem">
+      #### Design to Code Release Notes
+
+      <br />
+
+      - ### All Design Systems are Welcome <Pill type="web" /> <Pill type="mobile" />
+
+        A brand-new Annotation Flow brings code generation to any design system by leveraing AI for component detection.
+
+      - ### Smarter Variants <Pill type="web" /> <Pill type="mobile" />
+
+        More design tokens, more flexibility, more customisation across component variants.
+
+      - ### Sync, Don't Duplicate <Pill type="web" /> <Pill type="mobile" />
+
+        Add new pages to an existing project instead of spinning up a new project each time.
+
+      - ### Truly Flexible Hug & Fill <Pill type="web" /> <Pill type="mobile" />
+
+        Real flexbox behaviour at every level, with no more hard-coded 100% width or height. See [Design Guidelines](../../../design-system/figma-design-to-code-plugin/design-guidelines#proper-use-of-auto-layout)
+
+      - ### Wizards Stay Together <Pill type="web" />
+
+        Prototype-linked wizard pages are automatically merged into a single wizard.
+
+      - ### Native SVGs <Pill type="web" />
+
+        SVG is now a first-class citizen across all widgets, with no font-icon workarounds needed.
+
+      - ### Better Mobile Fonts <Pill type="mobile" />
+
+        Full support for `.woff2` and `.ttf` fonts on mobile builds.
+
+      - ### A Brand New UI
+
+        A redesigned plugin interface delivers a cleaner, faster experience.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="User Interface">
+      - ### Fill sizing (`width=fill` / `height=fill`) for auto-layout children <Pill type="web" />
+
+        Auto Layout now supports `width=fill` and `height=fill` in addition to fixed values like px and %, letting a component occupy the available space within its parent container instead of sizing to content (`hug`).
+
+        This Fill sizing, previously available only for containers, is now supported for all components placed inside Auto Layout containers, making it easier to build responsive, flexible layouts. Currently available in Angular.
+    </Accordian>
+
+    <Accordian title="Platform">
+      ### Section-level reads and edits for large project files
+
+      Large files can now be read and edited in sections using offset and limit, instead of the whole file. Edits are checked only against that section, so unrelated changes elsewhere don't block them, giving faster edits with less token usage.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="User Interface">
+      - ### Form field show property ignored via script <Pill type="web" />
+
+        Fixed the form field's `show` property not taking effect when updated from script.
+
+      - ### Stale data shown during pagination load <Pill type="web" />
+
+        Fixed pagination briefly displaying the previous page's data alongside the loading spinner before the next page's data renders.
+
+      - ### Accordion pane onload event not triggering <Pill type="web" />
+
+        Fixed the accordion pane's onload event not firing when its content type is set to inline.
+    </Accordian>
+
+    <Accordian title="Backend" />
+
+    <Accordian title="Platform">
+      - ### Wizard pages not rendered in Autocode project preview
+
+        Fixed an issue where Wizard pages failed to appear in the preview of Autocode projects.
+
+      - ### Autocode sync call errors not handled
+
+        Fixed Autocode sync call errors not being handled on both the backend and the frontend.
+
+      - ### Autocode project landing on an Invalid Page on Launch in case of Wizards
+
+        Fixed Autocode projects landing on an invalid page on launch when the app contains Wizards.
+    </Accordian>
+  </TabItem>
+</TabsWrapper>
+
 ## 1.0.0-BETA-RC6
 
 *Release date: 13 July 2026*
 
 <TabsWrapper>
   <TabItem name="Features">
+    <Accordian title="User Interface">
+      - ### Sync new pages from Design-to-Code plugin into existing projects <Pill type="web" />
+
+        The Design-to-Code plugin now supports a Sync flow that lets you add new pages to any existing WaveMaker project directly from the plugin.
+
+      - ### SVG generation and Icon URL support in Design-to-Code plugin <Pill type="web" />
+
+        Icons used in Figma designs are now exported as SVGs. This enhancement improves icon rendering by enabling support for icons outside the design system and produces outputs that more closely match the original design.
+    </Accordian>
+
     <Accordian title="Platform">
       - ### Restore conversation to a previous checkpoint in AI chat
 
         You can now restore an AI chat conversation to any previously saved checkpoint, permanently removing all messages, agent interactions, tool executions, and changes made after that point so you can continue from the selected state.
+
+      - ### Code Review agent
+
+        Introducing the WaveMaker Code Review Agent — a dedicated AI agent that audits your WaveMaker project files against best practices and surfaces violations as structured, actionable tables. It is report-only — it never edits or rewrites your files. Currently, the agent specializes only in identifying issues related to HTML and CSS files.
     </Accordian>
 
     <Accordian title="User Interface">
@@ -58,6 +176,16 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
     <Accordian title="Backend" />
 
     <Accordian title="Platform" />
+
+    <Accordian title="Product Ecosystem">
+      - ### Google Fonts not resolving on mobile <Pill type="mobile" />
+
+        Fixed a font resolution edge case on mobile by updating `font.json` with the correct PostScript names.
+
+      - ### Nested wizard support
+
+        Fixed wizard page generation to correctly handle nested wizards. The tool now scans each page's markup for `wm-wizard` elements and their direct `wm-wizardstep` children, capturing each step's name, title, and inner content, and walks up the DOM to detect whether a wizard is nested inside another wizard's step. Only top-level (non-nested) wizards get their own host page — nested wizards are now merged into their parent instead.
+    </Accordian>
   </TabItem>
 </TabsWrapper>
 
