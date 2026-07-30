@@ -124,6 +124,7 @@ For specific workflows, load the matching skill under `ai-skills/` rather than i
 
 - `wm-ai-release-notes` — add or edit entries in a versioned release notes file under `docs/release-notes/`.
 - `wm-feature-announcements` — new post under `blogs/feature-announcements/`.
+- `wm-ai-blog` — new narrative or thought-leadership post under `blogs/blog/`.
 - `wm-ai-create-guide` — create a how-to or tutorial page under `docs/guide/`.
 - `wm-ai-documentation` — write, update, move, or delete a core reference or conceptual doc under `docs/<section>/...` (interactive: outlines first, drafts section by section, handles assets, links, and sidebar wiring).
 
