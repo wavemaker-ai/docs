@@ -1,0 +1,46 @@
+---
+title: "Build user interfaces"
+last_update: { author: "Vivek Raj" }
+---
+
+WaveMaker UI Expert handles focused user-interface work in Web and supported Native Mobile projects. WaveMaker Agent can coordinate UI work when the feature also requires backend, data, security, or extension changes.
+
+## Supported UI work
+
+Depending on the project platform, UI work can include:
+
+- Create, update, rename, or remove pages and partials.
+- Add and configure supported widgets.
+- Create variables, actions, parameters, and bindings.
+- Add page-level JavaScript and event behavior.
+- Apply design tokens and component variants.
+- Update localization messages and bindings.
+- Inspect component metadata before using properties, events, or methods.
+
+The agent follows the current application's widget hierarchy and naming patterns. It should reuse existing artifacts when the request identifies them.
+
+## Give the agent an explicit boundary
+
+```text
+On the Orders page, add a summary row above the table.
+Reuse the existing Orders variable and current card variant.
+Do not change the table, page navigation, or backend services.
+```
+
+Name the target page and the data source when several similar resources exist. State whether the agent may add behavior or should produce only the visual structure.
+
+## Separate visuals from wiring when useful
+
+For a new page, a reviewable sequence is:
+
+1. Create the layout and visual hierarchy.
+2. Confirm widgets and responsive behavior.
+3. Add variables and service bindings.
+4. Add actions, navigation, and client logic.
+5. Preview the completed flow.
+
+This sequence is especially useful when the first input is a screenshot. Screenshot to Code builds the Web visual but does not wire service calls, events, or navigation. Use WaveMaker UI Expert for that follow-up work.
+
+## Review UI changes
+
+Inspect the page in both Design and preview modes. Confirm widget structure, variable definitions, bindings, variants, and responsive behavior. If only one part is wrong, ask the agent to preserve the accepted parts and change the smallest possible area.

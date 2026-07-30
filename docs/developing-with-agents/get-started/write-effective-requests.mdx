@@ -1,0 +1,55 @@
+---
+title: "Write effective requests"
+last_update: { author: "Vivek Raj" }
+---
+
+A useful request describes the result to produce, the part of the application to change, and the boundaries around the work. It gives the agent enough direction to inspect the project without prescribing every file operation.
+
+## Include the details that change the implementation
+
+For most tasks, name:
+
+- **Outcome**: what the user should see or be able to do.
+- **Target**: the page, partial, service, feature, or flow to change.
+- **Context to reuse**: existing variables, operations, components, layouts, or design tokens.
+- **Constraints**: platform requirements, design rules, or areas that must remain unchanged.
+- **Acceptance checks**: behavior or output that confirms the task is complete.
+
+```text
+Add a status filter above the orders table on the Main page.
+Bind it to the existing status input on the Orders variable.
+Use the project's current form-field variant.
+Keep the table columns and backend services unchanged.
+The All option should load the unfiltered result.
+```
+
+## Replace vague requests with observable outcomes
+
+| Vague request            | Better request                                                                                                                                              |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| “Improve the dashboard.” | “On the Dashboard page, place the three existing summary cards in one row on desktop and stack them on narrow screens. Keep their data bindings unchanged.” |
+| “Fix the API.”           | “The `createOrder` operation returns a validation error when `notes` is empty. Allow an empty value without changing the other request fields.”             |
+| “Make this screen.”      | “Create a new Web page from the attached screenshot. Match the layout and design tokens. Do not add API bindings or navigation yet.”                        |
+
+## Split work at review boundaries
+
+Break a large goal into requests when each part can be reviewed on its own. A reliable sequence is:
+
+1. Create or update the visual structure.
+2. Add variables and service bindings.
+3. Add client behavior.
+4. Add or change backend behavior.
+5. Review the complete change.
+
+Use WaveMaker Agent when the parts must be coordinated in one goal. Keep explicit boundaries even when the agent delegates work.
+
+## Correct only what is wrong
+
+During refinement, preserve the parts that already work:
+
+```text
+Keep the table, columns, and service binding.
+Change only the status dropdown to three filter chips: All, Pending, and Completed.
+```
+
+This narrows the next edit and reduces the chance of disturbing an accepted part of the draft.

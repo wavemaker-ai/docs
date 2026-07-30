@@ -1,0 +1,36 @@
+---
+title: "Work with APIs, data, and backend logic"
+last_update: { author: "Vivek Raj" }
+---
+
+Backend Expert Agent handles server-side work and service configuration. WaveMaker Agent can coordinate that work with UI changes when a feature crosses application layers.
+
+## Java services and custom code
+
+The backend agent can create or update Java services, service methods, models, dependencies, and supported custom code. A request should describe the business behavior, input, output, and failure cases.
+
+```text
+Add a method to InvoiceService that returns the subtotal, tax, and total
+for an invoice ID. Return a not-found response for an unknown invoice.
+Do not change the database schema.
+```
+
+WaveMaker-managed service files have different editing rules from user-managed custom code. Let the agent inspect the project and load the matching skill before naming a file path.
+
+## Web services
+
+Supported tasks can include importing and managing REST or OpenAPI services, reimporting a changed definition, and working with OAuth 2.0 providers used by those service definitions.
+
+Provide the service definition or verified endpoint information and state whether an existing service should be updated or a new one should be imported.
+
+## Databases and Query Services
+
+The backend agent can inspect configured databases and their metadata and can manage Query Services. Query changes should include the intended result shape, parameters, and filtering behavior.
+
+The current backend scope does not create or import a database service, modify the database schema, or configure SAML authentication. Tables, columns, keys, relationships, and constraints remain outside that workflow.
+
+## UI-to-API binding
+
+Use WaveMaker Agent for an end-to-end feature, or complete the backend and UI work in separate reviewable steps. The UI uses variables to invoke service operations and binds input and output values to page widgets.
+
+Review the generated service behavior first, then confirm operation identifiers, variable inputs, response bindings, and error states in the UI.

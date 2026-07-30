@@ -92,5 +92,5 @@ Treat `pull` the way you'd treat `git pull` before starting work: run it at the 
 ## See Also
 
 - [WMX components](/docs/user-interfaces/mobile/enterprise-capabilities/wmx/) — build custom React Native components that slot into WaveMaker mobile apps
-- [WMX Agent](../../developing-with-agents/aira-agents/wmx-agent.md) — generate WMX components with AIRA
+- [Developing with agents](../../developing-with-agents/) — generate WMX components with WaveMaker AI Assistant
 - [Building Project with Maven](../../build-and-deploy/build/web/package/war/build-war-from-projectzip.md) — generate a deployable WAR from a locally-synced project

@@ -1,0 +1,38 @@
+---
+title: "Capabilities and limitations"
+last_update: { author: "Vivek Raj" }
+---
+
+Agent capabilities depend on the project platform, selected agent, assigned skills, available tools, and WaveMaker release. Use this page to set task boundaries before starting a session.
+
+## Capability map
+
+| Area                | Supported work                                                                                                   | Important boundary                                                                                                                  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Web UI              | Pages, partials, widgets, variables, bindings, actions, JavaScript, tokens, and localization                     | Use component metadata and project conventions; review responsive behavior                                                          |
+| Backend             | Java services, supported custom code, dependencies, web services, databases, Query Services, and server security | Does not create or import database services, modify database schemas, or configure SAML authentication in the current backend scope |
+| Screenshot to Code  | Web visuals from images; Native Mobile UI from images or supported Figma input                                   | Web screenshot workflow does not add behavior, service wiring, or navigation                                                        |
+| Native Mobile       | Mobile UI and supported device capabilities                                                                      | Device features can require external configuration and device testing                                                               |
+| Extensions          | Marketplace discovery and supported WaveMaker Extension workflows                                                | Verify version, platform, ownership, and license                                                                                    |
+| Review and recovery | Draft review, checkpoint restore, stopping, interrupted-run recovery, and code review                            | Exact controls and partial-accept behavior depend on the Studio version                                                             |
+
+## Platform selection
+
+Built-in skills can be common, Web-specific, or Native Mobile-specific. WaveMaker selects platform instructions for the current project when available.
+
+A shared skill is not necessarily available to every agent. Agent configuration still controls the tools and skills that can run.
+
+## Project-provided skills
+
+The agent service supports project-scoped skills supplied by Studio and identifies them with a `project:` prefix during the session. Their authoring format, storage, permissions, and management interface are not yet confirmed for public documentation.
+
+## General limitations
+
+- The agent can misunderstand an ambiguous request.
+- A visual reference does not specify runtime behavior, accessibility, or data wiring.
+- Generated changes still require project-specific testing.
+- External services, credentials, Marketplace artifacts, and mobile SDKs can add setup outside the agent workflow.
+- The assistant cannot safely choose between conflicting manual and draft changes without an explicit intended result.
+- Availability in a stage branch does not guarantee production availability.
+
+Use the agent selector, current Studio controls, and release notes as the source of truth for the environment.
