@@ -36,6 +36,16 @@ mayankPrakashWavemaker:
   socials:
     github: mayankPrakashWavemaker
 
+DeepikaS:
+  name: Deepika Srimanthula
+  title: Sr. Engineering Manager at WaveMaker
+  url: https://github.com/apitive
+  image_url: https://github.com/apitive.png
+  page: true
+  socials:
+    github: apitive
+    linkedin: deepika-srimanthula-b54a9133
+
 # yangshun:
 #   name: Yangshun Tay
 #   title: Ex-Meta Staff Engineer, Co-founder GreatFrontEnd
