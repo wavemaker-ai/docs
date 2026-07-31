@@ -1,43 +1,43 @@
-import React from "react";
-import Link from "@docusaurus/Link";
-import { useLocation } from "@docusaurus/router";
+import React from 'react';
+import Link from '@docusaurus/Link';
+import { useLocation } from '@docusaurus/router';
 
 const topNavData = [
   {
     id: 1,
-    label: "User Interface",
-    firstItemLink: "/docs/user-interfaces/web/concepts/overview",
-    rootLink: "/docs/user-interfaces/",
+    label: 'User Interface',
+    firstItemLink: '/docs/user-interfaces/web/concepts/overview',
+    rootLink: '/docs/user-interfaces/',
   },
   {
     id: 2,
-    label: "Design System",
-    firstItemLink: "/docs/design-system/concepts/",
-    rootLink: "/docs/design-system/",
+    label: 'Design System',
+    firstItemLink: '/docs/design-system/concepts/',
+    rootLink: '/docs/design-system/',
   },
   {
     id: 3,
-    label: "Developing with Agents",
-    firstItemLink: "/docs/developing-with-agents/overview",
-    rootLink: "/docs/developing-with-agents/",
+    label: 'Developing with Agents',
+    firstItemLink: '/docs/developing-with-agents/',
+    rootLink: '/docs/developing-with-agents/',
   },
   {
     id: 4,
-    label: "Building APIs & Microservices",
-    firstItemLink: "/docs/apis-and-services/concepts/overview",
-    rootLink: "/docs/apis-and-services/",
+    label: 'Building APIs & Microservices',
+    firstItemLink: '/docs/apis-and-services/concepts/overview',
+    rootLink: '/docs/apis-and-services/',
   },
   {
     id: 5,
-    label: "Platform",
-    firstItemLink: "/docs/studio/overview",
-    rootLink: "/docs/studio/",
+    label: 'Platform',
+    firstItemLink: '/docs/studio/overview',
+    rootLink: '/docs/studio/',
   },
   {
     id: 6,
-    label: "Build & Deploy",
-    firstItemLink: "/docs/build-and-deploy/overview",
-    rootLink: "/docs/build-and-deploy/",
+    label: 'Build & Deploy',
+    firstItemLink: '/docs/build-and-deploy/overview',
+    rootLink: '/docs/build-and-deploy/',
   },
 ];
 
@@ -52,12 +52,9 @@ export default function SecondaryNavbar({ navItems = topNavData }) {
           return (
             <li
               key={item.id}
-              className={`top-nav-link-item ${isActive ? "active" : ""}`}
+              className={`top-nav-link-item ${isActive ? 'active' : ''}`}
             >
-              <Link
-                to={item.firstItemLink}
-                className="top-nav-link"
-              >
+              <Link to={item.firstItemLink} className="top-nav-link">
                 {item.label}
               </Link>
             </li>

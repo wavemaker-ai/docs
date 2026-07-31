@@ -1,0 +1,55 @@
+---
+title: "Troubleshoot agent tasks"
+last_update: { author: "Vivek Raj" }
+---
+
+Most agent problems fall into availability, scope, project state, session state, or validation. Start with the user-visible condition before repeating the request.
+
+## The AI workspace or agent is missing
+
+- Confirm that the application is open in the intended environment.
+- Check whether **AI** appears in the workspace switcher.
+- Confirm that the project platform matches the agent. Screenshot to Code is Web-specific; Mobile Screenshot to Code Agent is Native Mobile-specific.
+- Ask the environment administrator whether the feature or agent is enabled.
+
+## The agent asks for clarification
+
+Name the target artifact, expected outcome, existing resource to reuse, and boundary. If two pages or operations have similar names, identify the exact one.
+
+Do not answer with “use the right one.” Give the difference that affects the implementation.
+
+## The result changes too much
+
+Stop the run if it is still active. Inspect the changed artifacts, then restore the last useful checkpoint or send a narrow correction:
+
+```text
+Restore the table and service variable from the previous checkpoint.
+Change only the empty-state message.
+```
+
+## A session was interrupted
+
+Reopen the chat from history and inspect its status. Use the resume, restore, edit, or regenerate option shown in the current environment.
+
+If the session cannot continue, start a new chat and restate the current application state. Do not keep an unreviewed partial draft.
+
+## A change conflicts with manual work
+
+Identify the shared artifact and decide which values or structure should remain. Restore the agent draft and repeat a smaller request when the intended merge is unclear.
+
+## The output looks correct but fails at runtime
+
+Check:
+
+- Diagnostics for changed files
+- Service operation identifiers and variable inputs
+- Response bindings and empty or error states
+- Role and endpoint access
+- Required dependencies and external configuration
+- Web responsive behavior or mobile device behavior
+
+Give the agent the exact error and the action that produced it. Remove credentials and customer data before pasting logs.
+
+## Code review reports issues
+
+WaveMaker Code Review Agent reports findings but does not edit files. Switch to an editing agent, identify the finding or file to fix, and review the new draft after the correction.

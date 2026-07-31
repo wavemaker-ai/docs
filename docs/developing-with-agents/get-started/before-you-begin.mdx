@@ -1,0 +1,44 @@
+---
+title: "Before you begin"
+last_update: { author: "Vivek Raj" }
+---
+
+WaveMaker AI Assistant works inside the application open in WaveMaker Studio. Before starting a task, confirm that the project, source state, and task boundary are ready for agent changes.
+
+## Check availability
+
+Open the application and look for **AI** in the workspace switcher. The agents in the selector depend on the project platform and the features enabled in the current environment.
+
+If the AI workspace or a required agent does not appear, check with the WaveMaker administrator for the environment. Do not assume that an agent shown in another project is available in the current one.
+
+## Prepare the application
+
+Before submitting a request:
+
+- Open the project and branch that should receive the change.
+- Save or finish unrelated work in the Design workspace.
+- Confirm that the pages, services, and variables named in the request exist.
+- Check that required service connections and project configuration are usable.
+- Decide what the agent may change and what it must leave alone.
+
+The assistant works from the current application state. Ambiguous names, stale services, or unfinished manual changes make the result harder to review.
+
+## Start with a bounded task
+
+Choose a result that can be checked in Studio, such as adding a filter to one table or creating a page that uses an existing service. State the boundary in the request:
+
+```text
+On the Orders page, add a status filter above the existing table.
+Use the table's current service variable.
+Do not change the table columns or any backend service.
+```
+
+A bounded task gives the agent a clear target and gives the developer a short review path.
+
+## Know what remains under your control
+
+Agent work stays in a draft while the session is active. Review the affected artifacts, preview the application when behavior changes, and keep the result only when it matches the request.
+
+Use checkpoints to return to an earlier draft state. Start a separate chat when a new task needs an independent context and change history.
+
+Continue with [Choose an agent](./choose-an-agent), or follow [Complete your first task](../../guide/ai-development/complete-your-first-task).

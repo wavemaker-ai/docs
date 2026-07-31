@@ -19,7 +19,7 @@ Use this skill to author a new entry on the Feature Announcements page (`/featur
 
 ## When NOT to use
 
-- The user wants a technical blog post with a narrative or deep-dive → use the blog skill.
+- The user wants a technical blog post with a narrative or deep-dive → use the `wm-ai-blog` skill.
 - The user wants to document a versioned release → use the release-notes skill.
 - The user wants a reference/how-to page → use the docs-page skill.
 

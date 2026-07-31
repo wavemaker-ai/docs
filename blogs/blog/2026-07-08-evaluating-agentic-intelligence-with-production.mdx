@@ -27,8 +27,10 @@ Every enhancement raised the same question: **did this change make the system be
 
 For a while, we answered it manually, running a fixed set of real developer questions against the system and reviewing every answer before release. It worked, barely. And it made one thing obvious: manual verification of intelligence does not scale. It was becoming the bottleneck on our own velocity.
 
-> Shipping an agentic system without evals is a blind game. 
-The team's response was the same as last time. Don't add more process. Build the missing layer.
+> Shipping an agentic system without evals is a blind game.
+> The team's response was the same as last time. Don't add more process. Build the missing layer.
+
+{/* truncate */}
 
 ---
 
@@ -83,12 +85,12 @@ Evals without observability are tests without telemetry. Observability without e
 
 ## Impact: What Actually Changed
 
-|  | Before | After |
-| --- | --- | --- |
-| **Release verification** | An afternoon of manual review per change | A CI run, on every commit |
-| **Model & prompt decisions** | "Answers feel better to me" | Faithfulness, routing, and cost deltas on a scorecard |
-| **Regressions** | Discovered by users, reported as tickets | Blocked at the merge, before release |
-| **Quality visibility** | Invisible between incidents | Tracked continuously, next to cost and latency |
+|                              | Before                                   | After                                                 |
+| ---------------------------- | ---------------------------------------- | ----------------------------------------------------- |
+| **Release verification**     | An afternoon of manual review per change | A CI run, on every commit                             |
+| **Model & prompt decisions** | "Answers feel better to me"              | Faithfulness, routing, and cost deltas on a scorecard |
+| **Regressions**              | Discovered by users, reported as tickets | Blocked at the merge, before release                  |
+| **Quality visibility**       | Invisible between incidents              | Tracked continuously, next to cost and latency        |
 
 <StatPills>
   <StatPill color="blue" label="Afternoon → CI Run" description="release verification went from manual review to an automated pipeline job on every commit" />

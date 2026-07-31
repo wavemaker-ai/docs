@@ -2,6 +2,7 @@
 title: "AI Guardrails vs Assembly Explained"
 authors: [DeepakA]
 ---
+
 ## Stop thinking about guardrails. Start thinking about the AI assembly model.
 
 *The real shift in enterprise AI app generation isn't better validation — it's reducing how much needs validating in the first place.*
@@ -12,6 +13,8 @@ As AI-generated code becomes the norm, the review gap is growing faster than the
 
 Guardrails in this model become a perpetual catch-up game. WaveMaker takes a different position. With the AI assembly model, the focus shifts from fixing generated code to not generating the wrong code in the first place.
 
+{/* truncate */}
+
 ---
 
 ## The problem with generate-then-check
@@ -20,13 +23,13 @@ When AI generates a UI component from scratch — a data table, a form, a naviga
 
 So platforms add guardrails: static analysis, token linting, visual regression, accessibility audits, code security scans. Each is a reasonable response to a real problem. Together, they describe a system permanently compensating for its own unreliability. The output is checked — not prevented.
 
-| Dimension | Generate → then check | Assemble → quality inherited |
-|---|---|---|
-| Output quality | Probabilistic — varies every time | Deterministic — same component, every time |
-| Quality enforcement | Downstream checks per component, per app | Baked in once, inherited by every app |
-| Security posture | Caught after code exists | OWASP compliance lives inside the component |
-| Design consistency | Token drift risk on every generation | Token bindings verified once at certification |
-| Scale | More apps = more checks = more cost | More apps = same cost, more leverage |
+| Dimension           | Generate → then check                    | Assemble → quality inherited                  |
+| ------------------- | ---------------------------------------- | --------------------------------------------- |
+| Output quality      | Probabilistic — varies every time        | Deterministic — same component, every time    |
+| Quality enforcement | Downstream checks per component, per app | Baked in once, inherited by every app         |
+| Security posture    | Caught after code exists                 | OWASP compliance lives inside the component   |
+| Design consistency  | Token drift risk on every generation     | Token bindings verified once at certification |
+| Scale               | More apps = more checks = more cost      | More apps = same cost, more leverage          |
 
 ---
 
@@ -85,15 +88,14 @@ Backend services are where the most code is generated — persistence layers, AP
 
 **Security validated against industry standards.** Generated applications are tested against the OWASP Top 10 and verified under real-world conditions through dynamic application security testing (DAST). Compliance teams get independently auditable evidence of security posture at every release.
 
-| Guardrail | Standard | Business outcome |
-|---|---|---|
-| Stateless services | 12-factor | Horizontal scale without architecture changes |
-| Generated data access layer | OWASP Top 10 | Injection safety and audit trail by default |
-| Secrets at deployment | 12-factor | No credentials in code; rotation without redeployment |
-| RBAC across UI, API, database | OWASP | One definition enforced across all layers |
-| API-bounded contracts | 12-factor | Independent deployability per service |
-| OWASP + DAST validation | OWASP / Veracode | Auditable security posture per release |
-
+| Guardrail                     | Standard         | Business outcome                                      |
+| ----------------------------- | ---------------- | ----------------------------------------------------- |
+| Stateless services            | 12-factor        | Horizontal scale without architecture changes         |
+| Generated data access layer   | OWASP Top 10     | Injection safety and audit trail by default           |
+| Secrets at deployment         | 12-factor        | No credentials in code; rotation without redeployment |
+| RBAC across UI, API, database | OWASP            | One definition enforced across all layers             |
+| API-bounded contracts         | 12-factor        | Independent deployability per service                 |
+| OWASP + DAST validation       | OWASP / Veracode | Auditable security posture per release                |
 
 ## The cost argument — honestly
 
@@ -103,14 +105,14 @@ But that overhead is more than offset by what doesn't get generated. In a genera
 
 Context overhead is paid once per session. Generation savings compound across every component assembled — and compound further with every additional app built on the same library.
 
-| Cost dimension | Generate-first | Assembly-first |
-|---|---|---|
-| Context per session | Low | Higher — library schema required |
-| Code generated per component | Full implementation every time | Props and bindings only |
-| Self-correction loops | High — probabilistic output | Low — configuration against a fixed schema |
-| Quality audit per app | Full — every component, every app | Minimal — component is pre-certified |
-| Defect remediation | Recurs with every generation | Near zero for the assembled portion |
-| Cost at scale | Grows linearly | Amortises — savings compound |
+| Cost dimension               | Generate-first                    | Assembly-first                             |
+| ---------------------------- | --------------------------------- | ------------------------------------------ |
+| Context per session          | Low                               | Higher — library schema required           |
+| Code generated per component | Full implementation every time    | Props and bindings only                    |
+| Self-correction loops        | High — probabilistic output       | Low — configuration against a fixed schema |
+| Quality audit per app        | Full — every component, every app | Minimal — component is pre-certified       |
+| Defect remediation           | Recurs with every generation      | Near zero for the assembled portion        |
+| Cost at scale                | Grows linearly                    | Amortises — savings compound               |
 
 The real advantage isn't token cost. It's **defect cost** — developer hours diagnosing wrong output, QA cycles catching it, production incidents when it slips through. A pre-built component absorbs that cost once. Every app that uses it inherits the saving.
 

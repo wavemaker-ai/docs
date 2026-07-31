@@ -27,7 +27,7 @@ Use this skill to help a writer or developer fill in a versioned release notes f
 ## When NOT to use
 
 - User wants a public-facing post celebrating a feature → use the `wm-ai-feature-announcements` skill.
-- User wants a narrative blog post or engineering story → use the blog skill.
+- User wants a narrative blog post or engineering story → use the `wm-ai-blog` skill.
 - User wants a reference or how-to doc page → use the `wm-ai-create-guide` skill.
 
 ## Inputs to collect

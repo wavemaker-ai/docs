@@ -1,0 +1,36 @@
+---
+title: "Build Native Mobile applications"
+last_update: { author: "Vivek Raj" }
+---
+
+Native Mobile projects use platform-specific skills for WaveMaker mobile markup, design tokens, responsive layout, and device integration. The agent selector shows only agents available for the current project type.
+
+## Build mobile screens
+
+For a screen based on an image or Figma design, use Mobile Screenshot to Code Agent. It can create or update pages and partials through a platform-specific artifact workflow.
+
+For changes to an existing screen that do not start from a visual reference, select the UI-capable agent available in the project and name the existing page, widgets, bindings, and behavior to preserve.
+
+## Add device features
+
+Supported mobile skills cover device-side capabilities such as:
+
+- Biometric authentication
+- Secure storage
+- Push notifications
+- Crash and error reporting
+- Rooted-device detection
+- Screen-capture controls
+- Supported React Native plugin installation
+
+Availability can change by WaveMaker version and mobile runtime. Check the agent's response and generated configuration for required external accounts, keys, native settings, or build steps.
+
+## Distinguish mobile security from server security
+
+Device authentication and secure local storage belong to the mobile workflow. Authentication providers, role-based access control, endpoint permissions, CORS, CSRF, SSL, and other server-side settings belong to Backend Expert Agent.
+
+For a login feature that needs both, use WaveMaker Agent to coordinate the work or keep the server and device changes as separate review steps.
+
+## Review beyond the canvas
+
+Run or preview the application on the supported target. Verify layout at relevant device sizes, keyboard and safe-area behavior, native permissions, failure states, and platform-specific configuration. A screen that looks correct in Studio can still require device testing.

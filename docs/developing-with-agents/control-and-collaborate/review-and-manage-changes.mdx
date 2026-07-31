@@ -1,0 +1,48 @@
+---
+title: "Review and manage agent changes"
+last_update: { author: "Vivek Raj" }
+---
+
+Agent changes remain in a separate draft while a task is in progress. Keep only the result that belongs in the application.
+
+## Review the scope
+
+After an agent finishes a turn:
+
+- Confirm that the intended page, service, or configuration changed.
+- Look for unrelated artifacts.
+- Inspect bindings, generated code, and configuration values.
+- Run or preview the application when behavior changed.
+- Use WaveMaker Code Review Agent when a focused review is needed.
+
+Review the result against the request, not only against whether the run finished without an error.
+
+## Refine the current draft
+
+Continue in the same chat when the goal remains the same. Point out the correct part and the part that must change:
+
+```text
+Keep the service binding and table columns.
+Change only the empty state to include a Retry action.
+```
+
+This gives the agent a smaller edit surface than repeating the original request.
+
+## Restore or stop
+
+Use **Restore Checkpoint** when later changes are no longer useful. Restoring returns the session draft to an earlier state and removes later work from the active path.
+
+Stop a running task when the request is wrong, the agent is operating on an unintended area, or the task no longer needs to finish. After stopping, inspect the draft and either revise the request or restore the last useful checkpoint.
+
+## Keep or discard the result
+
+Use the Studio review controls available in the current environment to keep the proposed changes. If the result should not become part of the application, discard the draft or restore a useful checkpoint.
+
+Before keeping a larger change:
+
+1. Inspect the changed artifacts.
+2. Preview the affected flow.
+3. Run the project's relevant checks.
+4. Resolve overlap with manual changes.
+
+The exact labels for keeping, discarding, regenerating, and resuming a run can vary by environment. Follow the controls shown in the current Studio version.

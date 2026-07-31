@@ -35,6 +35,13 @@
   padding-top: 1px;
 }
 
+/* Fallback for unrecognized/custom types */
+.wm-pill-default {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-700);
+  --wm-pill-icon-color: var(--ifm-color-emphasis-700);
+}
+
 /* Base styling */
 .wm-pill-web {
   background: rgba(23, 148, 239, 0.2);
@@ -157,17 +164,17 @@
   line-height: 1;
 }
 
-.wm-stat-pill[data-color="blue"] {
+.wm-stat-pill[data-color='blue'] {
   background: rgba(23, 148, 239, 0.15);
   color: rgb(23, 148, 239);
 }
 
-.wm-stat-pill[data-color="green"] {
+.wm-stat-pill[data-color='green'] {
   background: rgba(120, 194, 87, 0.15);
   color: rgb(100, 174, 67);
 }
 
-.wm-stat-pill[data-color="indigo"] {
+.wm-stat-pill[data-color='indigo'] {
   background: rgba(85, 119, 238, 0.15);
   color: rgb(85, 119, 238);
 }

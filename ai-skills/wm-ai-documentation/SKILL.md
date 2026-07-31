@@ -32,7 +32,7 @@ This skill is **interactive**. Work with the user one decision at a time. Outlin
 - User wants a step-by-step how-to or tutorial → use `wm-ai-create-guide`. Guides live under `docs/guide/` and are task-oriented.
 - User wants to log a shipped item in a versioned release notes file → use `wm-ai-release-notes`.
 - User wants a public-facing announcement on `/feature-announcements` → use `wm-feature-announcements`.
-- User wants a narrative engineering blog post → no skill exists for blog posts yet; handle manually or ask the user to follow the blog contribution guide.
+- User wants a narrative engineering blog post → use `wm-ai-blog`.
 
 If the request is borderline, ask one clarifying question before activating: "Is this a reference page that explains the topic, or a step-by-step guide to do something specific?"
 

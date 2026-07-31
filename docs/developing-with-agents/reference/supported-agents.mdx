@@ -1,0 +1,44 @@
+---
+title: "Supported agents"
+last_update: { author: "Vivek Raj" }
+---
+
+WaveMaker Studio shows the agents enabled for the current application and environment. Project platform filtering means the selector may contain fewer agents than this reference.
+
+| Agent                               | Primary scope                                                                                                               | Platform                       |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| **WaveMaker Agent**                 | Coordinates multi-step development across specialists; also works with Marketplace artifacts and supported extensions       | Web and Native Mobile          |
+| **WaveMaker UI Expert**             | Pages, partials, widgets, variables, actions, bindings, JavaScript, design tokens, localization, and supported extension UI | Web and supported UI workflows |
+| **Backend Expert Agent**            | Java services, custom backend code, dependencies, databases, Query Services, web services, and server-side security         | Web and Native Mobile backends |
+| **Screenshot to Code**              | Converts an image into WaveMaker Web page visuals and design artifacts                                                      | Web                            |
+| **Mobile Screenshot to Code Agent** | Converts screenshot or Figma input into mobile UI and adds supported device-side capabilities                               | Native Mobile                  |
+| **WaveMaker Code Review Agent**     | Reports issues in draft changes or an explicitly requested full scope; applies built-in and project review rules            | Web and Native Mobile          |
+
+## WaveMaker Agent
+
+Choose WaveMaker Agent when a goal crosses development areas or needs coordination. It can divide work among specialists and continue related delegated work from saved context.
+
+## Specialists
+
+Specialists have narrower instructions and tools:
+
+- WaveMaker UI Expert can create and change functional UI artifacts.
+- Backend Expert Agent handles backend and server configuration within supported boundaries.
+- Screenshot agents use platform-specific visual workflows.
+- WaveMaker Code Review Agent reports findings and does not edit the project.
+
+Code Review Agent reviews local draft changes by default. Use **entire**, **whole**, or **full** when requesting a full page, file, or application review:
+
+```text
+Review the entire Login page.
+```
+
+```text
+Review the whole application.
+```
+
+## Availability
+
+An agent can be absent because of project platform, release status, feature configuration, or environment policy. The selector in Studio is the source of truth for the current project.
+
+Internal or beta agents may exist in the agent service without being intended for public use. Do not depend on an agent that is not visible in Studio.

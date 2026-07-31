@@ -1,0 +1,44 @@
+---
+title: "Security and data handling"
+last_update: { author: "Vivek Raj" }
+---
+
+WaveMaker AI Assistant needs project context to inspect and change an application. Treat every request and attached resource as project data, and follow the organization's rules for what may be sent to the AI workspace.
+
+## Project data used during a task
+
+Depending on the selected agent and request, the session can use:
+
+- User messages and attached images or resources
+- Project metadata and platform type
+- Project files and application artifacts
+- Tool results and diagnostics
+- Repository and draft state
+- Project instructions and project-provided skills
+- Prior messages and checkpoints in the session
+
+The agent loads the resources needed for the task. A project-aware session is not the same as sending every project file with every request.
+
+## Sensitive-value redaction
+
+The agent service redacts recognized sensitive values from user messages and tool results before model processing. Redaction tokens stand in for the original values. The system restores values at the tool boundary when an authorized operation needs them.
+
+Do not use redaction as a reason to paste secrets into a chat. Keep credentials in the approved project or platform store and reference the configured resource.
+
+## Access follows the session
+
+Agent tools operate with the project and user context supplied by Studio. The available agents and tools determine which resources a session can inspect or change.
+
+Review changes to authentication, roles, endpoints, dependencies, external services, and deployment configuration with the same care as a manual change.
+
+## Confirm organization-specific policies
+
+Deployment, model provider, data retention, regional processing, audit, and training policies are environment-specific. Use the organization's approved WaveMaker security and privacy information for those questions.
+
+Before using the assistant with regulated or customer data, confirm:
+
+- Which data may be included in requests and attachments
+- Which model providers and regions are configured
+- How session history and uploaded resources are retained or deleted
+- Which logs, traces, and audit records are stored
+- Whether project content is used for model training
