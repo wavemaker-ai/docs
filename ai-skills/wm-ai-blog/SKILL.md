@@ -34,7 +34,7 @@ If the request is borderline (e.g., "write about the feature we shipped"), ask: 
 
 ## Operating principles
 
-- **This skill is more editorially loose than its siblings.** There is no sidebar to wire, no required tab/accordion classification, and no enforced truncate marker — the site only warns on an untruncated post, it does not fail the build. Do not invent structure the codebase doesn't enforce.
+- **This skill is more editorially loose than its siblings.** There is no sidebar to wire and no required tab/accordion classification. The site only *warns* (doesn't fail the build) on an untruncated post, but this skill always places a `{/* truncate */}` marker regardless — ask the user where they'd like the preview to cut if the default (right after the hook) doesn't fit. Do not invent structure beyond that the codebase doesn't enforce.
 - **Read 1–2 existing posts in `blogs/blog/` before drafting.** Tone, section rhythm, and component usage vary by author; match the nearest sibling rather than a fixed formula.
 - **Outline first for long or multi-section posts.** For a short opinion piece, a single-shot draft is fine — ask the user which they want.
 - **Confirm before writing.** Present the draft (or section-by-section, for a long post) and get confirmation before creating the file.
@@ -86,7 +86,9 @@ Never place post assets under `static/img/` — that directory is for globally-s
 4. **Draft the post** using `assets/blog-template.mdx` as the starting skeleton.
    - Fill frontmatter (`title`, `authors`, optional `tags`/`image`).
    - Write the hook, then the body, following the tone and component conventions in `references/conventions.md`.
+   - **Always place `{/* truncate */}`.** Default to right after the hook (and after any pill strip, if used) — tell the user that's where you're putting it, and ask if they'd prefer a different cut point. Never leave it out just because the build only warns without it.
    - Use `{/* ... */}` for any MDX comments (including `{/* truncate */}`) — never HTML `<!-- ... -->`, which fails the MDX build.
+   - **Pills, if used**: list the existing preset types (see `references/conventions.md`) and prefer one. If the user wants a new type not in that list, ask for (or suggest) a label and a color before adding it — see "New pill types" in `references/conventions.md`.
 
 5. **Place media**
    - Images → `blogs/blog/assets/img/<file>.png`, referenced as `./assets/img/<file>.png`, with descriptive `alt` text and an optional italic caption line below.
@@ -114,7 +116,9 @@ Unlike guides and core docs, blog posts do not need a sidebar entry. The blog pl
 
 ## Common mistakes to avoid
 
-- **Copying the feature-announcement rules verbatim.** This is a different, more relaxed surface: no required "Available from vX.Y" line, no mandatory truncate marker, no sidebar file, and tags are rare rather than required.
+- **Copying the feature-announcement rules verbatim.** This is a different, more relaxed surface: no required "Available from vX.Y" line, no sidebar file, and tags are rare rather than required. (Unlike announcements, though, still always add `{/* truncate */}` — see below.)
+- **Forgetting `{/* truncate */}`.** The build only warns, never fails, without one — but this skill places one anyway. Default to right after the hook and confirm the placement with the user rather than skipping it.
+- **Inventing a one-off pill `type` without checking existing presets first.** List the presets from `references/conventions.md` to the user and prefer one of them. Only add a brand-new type (with its own color) to `Pills.jsx`/`Pills.css` after the user confirms a label and color for it.
 - **Reusing `blogs/blog/tags.yml` placeholders** (`facebook`, `hola`, `hello`, `docusaurus`) as if they were real topic tags. They are unedited starter content. Add a real entry first if the user wants a tag.
 - **HTML comments (`<!-- ... -->`) anywhere in the body** — MDX parses `<` as JSX and the build fails. Use `{/* ... */}`.
 - **Importing `Pill`, `PillGroup`, `StatPill`, `StatPills`, `AcademyCard`, `VideoCard`, `Accordian`, `TabsWrapper`** — all globally registered in `src/theme/MDXComponents/index.js`. An `import` causes a redeclaration error.
@@ -132,7 +136,8 @@ Unlike guides and core docs, blog posts do not need a sidebar entry. The blog pl
 - [ ] `title` and `authors` are set in frontmatter; the author key exists in `data/author/authors.yml`.
 - [ ] Any `tags` used already exist as real (non-placeholder) entries in `blogs/blog/tags.yml`.
 - [ ] No HTML comments (`<!-- ... -->`) anywhere in the body; MDX comments use `{/* ... */}`.
-- [ ] A `{/* truncate */}` marker is present after the hook (recommended, not build-enforced).
+- [ ] A `{/* truncate */}` marker is present (placed after the hook by default, or wherever the user requested).
+- [ ] Any pill `type` used is either an existing preset (listed to the user beforehand) or a new one added to `Pills.jsx`/`Pills.css` with a label and color the user confirmed.
 - [ ] Images live under `blogs/blog/assets/img/`, referenced with a single `./assets/img/...` (no double slash).
 - [ ] Local videos live under `blogs/blog/assets/videos/<slug>/` and use the `<video>` + `require()` embed.
 - [ ] Any Academy walkthrough/video URL was supplied by the user, not invented.

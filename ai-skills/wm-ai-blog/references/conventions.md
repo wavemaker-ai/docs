@@ -142,7 +142,11 @@ The `wm=<ID>` identifier is generated when content is published on Academy — a
 
 ### `<Pill>` / `<PillGroup>` — tech-stack tags at the top of a post
 
-Used as a visual "what this post is about" strip right under the hook. Known preset types (from `src/components/MDXComponents/Pills/Pills.jsx`): `web`, `mobile`, `desktop`, `android`, `ios`, `backend`, `platform`, `design`, `beta`, `langgraph`, `rag`, `mcp`, `langfuse`, `ai`, `ragas`, `golden-datasets`. Any other `type` still renders (falls back to the raw string as the label), but prefer an existing preset or pass explicit `text`.
+Used as a visual "what this post is about" strip right under the hook. Known preset types, each with its own defined color (from `src/components/MDXComponents/Pills/Pills.jsx` and `Pills.css`):
+
+`web`, `mobile`, `desktop`, `android`, `ios`, `backend`, `platform`, `design`, `beta`, `langgraph`, `rag`, `mcp`, `langfuse`, `ai`, `ragas`, `golden-datasets`.
+
+**Always list these presets to the user before adding pills** so they can pick a fitting one instead of inventing a `type` string ad hoc.
 
 ```mdx
 <PillGroup>
@@ -151,6 +155,21 @@ Used as a visual "what this post is about" strip right under the hook. Known pre
   <Pill type="rag" />
 </PillGroup>
 ```
+
+#### Unrecognized types
+
+Any `type` not in the list above still renders — it falls back to a neutral gray `wm-pill-default` style rather than looking broken — but it won't get a distinct color. Don't rely on this fallback as if it were a real option.
+
+#### New pill types
+
+If the user wants a genuinely new, distinctly-colored pill type:
+
+1. Ask for (or suggest) the exact display label and a color that doesn't clash with the existing preset colors.
+2. Add an entry to `pillConfig` in `src/components/MDXComponents/Pills/Pills.jsx`.
+3. Add a matching `.wm-pill-<type>` rule with that color to `src/components/MDXComponents/Pills/Pills.css`.
+4. Confirm the addition with the user before using the new type in the post.
+
+Do not silently invent a new type+color combination, and do not add it to `pillConfig`/`Pills.css` without the user confirming the name and color first.
 
 ### `<StatPill>` / `<StatPills>` — callout stats near the close of a post
 
@@ -166,7 +185,9 @@ Valid `color` values (from `Pills.css`): `blue`, `green`, `indigo`. Do not use a
 
 ## Truncation
 
-`{/* truncate */}` marks where the listing-page preview cuts off. No current post uses it (the site only warns via `onUntruncatedBlogPosts: 'warn'`), so it is a recommendation, not a requirement. Recommend adding it after the hook so the `/blog` listing doesn't render the entire post.
+`{/* truncate */}` marks where the listing-page preview cuts off. The site only *warns* if it's missing (`onUntruncatedBlogPosts: 'warn'`) rather than failing the build — but this skill always adds one regardless of that leniency.
+
+Default placement: immediately after the hook (and after any pill strip, if one is used), before the first `---` section break. Tell the user where you're placing it, and ask if they'd prefer a different cut point — but never omit it outright.
 
 In `.md` files the equivalent marker is `<!--truncate-->`, but posts here are `.mdx`, where HTML comments are invalid syntax (MDX parses `<` as JSX) and break the build. Always use `{/* truncate */}` and `{/* ... */}` for any other comment.
 
