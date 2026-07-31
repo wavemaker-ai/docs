@@ -58,7 +58,9 @@ export function PillGroup({ children }) {
 export function StatPill({ label, description, color }) {
   return (
     <div className="wm-stat-pill-row">
-      <span className="wm-stat-pill" data-color={color}>{label}</span>
+      <span className="wm-stat-pill" data-color={color}>
+        {label}
+      </span>
       <span className="wm-stat-pill-desc">{description}</span>
     </div>
   );
@@ -69,11 +71,13 @@ export function StatPills({ children }) {
 }
 
 export function Pill({ type, text, icon: CustomIcon, children }) {
-  const preset = pillConfig[type?.toLowerCase()] || {};
+  const key = type?.trim().toLowerCase();
+  const preset = pillConfig[key] || {};
   const IconComponent = CustomIcon || preset.icon;
   const displayText = text || preset.label || children || type;
 
-  const typeClass = type ? `wm-pill-${type.toLowerCase()}` : 'wm-pill-default';
+  const typeClass =
+    key && pillConfig[key] ? `wm-pill-${key}` : 'wm-pill-default';
 
   return (
     <span className={`wm-pill ${typeClass}`}>
