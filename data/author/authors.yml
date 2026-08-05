@@ -46,6 +46,16 @@ deepikaSrimanthulaWavemaker:
     github: apitive
     linkedin: deepika-srimanthula-b54a9133
 
+VibhuS:
+  name: Vibhu Singhal
+  title: Sr Engineering Manager at WaveMaker
+  url: https://github.com/vibhus
+  image_url: https://github.com/vibhus.png
+  page: true
+  socials:
+    github: vibhus
+    linkedin: vibhu-singhal
+
 # yangshun:
 #   name: Yangshun Tay
 #   title: Ex-Meta Staff Engineer, Co-founder GreatFrontEnd

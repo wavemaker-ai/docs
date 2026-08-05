@@ -49,6 +49,9 @@ const pillConfig = {
   ai: { icon: null, label: 'Production AI' },
   ragas: { icon: null, label: 'RAGAS' },
   'golden-datasets': { icon: null, label: 'Golden Datasets' },
+  sdd: { icon: null, label: 'Spec Driven Development' },
+  figma: { icon: null, label: 'Figma' },
+  'design-system': { icon: null, label: 'Design System' },
 };
 
 export function PillGroup({ children }) {
