@@ -85,7 +85,8 @@
   --wm-pill-icon-color: rgba(0, 131, 143);
 }
 
-.wm-pill-design {
+.wm-pill-design,
+.wm-pill-design-system {
   background: rgba(194, 24, 91, 0.2);
   color: rgba(194, 24, 91);
   --wm-pill-icon-color: rgba(194, 24, 91);
@@ -129,6 +130,16 @@
 .wm-pill-golden-datasets {
   background: rgba(245, 158, 11, 0.15);
   color: rgb(200, 130, 0);
+}
+
+.wm-pill-sdd {
+  background: rgba(103, 58, 183, 0.15);
+  color: rgb(103, 58, 183);
+}
+
+.wm-pill-figma {
+  background: rgba(162, 89, 255, 0.15);
+  color: rgb(162, 89, 255);
 }
 
 /* PillGroup */
