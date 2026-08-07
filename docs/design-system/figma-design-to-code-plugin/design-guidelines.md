@@ -47,6 +47,12 @@ Do not turn images into components. Unlike components, images aren't reused as r
 
 ![diagram comparing an image wrapped as a component versus an image applied as a frame fill](./assets/img/images-as-fills-diagram.svg)
 
+## Charts
+
+Design to Code does not support charts yet. Any chart in your design is converted to an image in the generated code.
+
+Because of this, treat charts as images during annotation review. If a chart has not been annotated as **Image**, change it to Image yourself. A chart that comes through as a clean image is easier to replace with a real chart bound to real data using the WaveMaker AI Assistant once the project has been created.
+
 ## Color Management
 
 WaveMaker Design to Code strictly follows the designer's intent, and this principle extends directly to how colors are handled in the generated code. If a designer defines a color as a local variable and applies it consistently across the design, particularly within components, that variable is preserved and translated into a corresponding CSS variable in the final code.
@@ -76,3 +82,11 @@ When a section contains repeatable or related elements, group them under a meani
 This isn't strictly necessary, and the plugin can often still generate usable code without it. But semantic grouping goes a long way toward improving code quality, since it helps the plugin correctly infer the relationship between elements and generate more accurate, better-structured components. It's a small extra step in the design phase that can save significant time during development.
 
 ![diagram comparing loose sibling rows versus rows grouped under a meaningfully named parent frame](./assets/img/semantic-grouping-diagram.svg)
+
+## Optional Features
+
+The Design to Code plugin has two features that are turned off by default and can be enabled from its settings: **Wizards** and **Data Table**. When enabled, the plugin recognises these widgets in your design and generates the corresponding WaveMaker widgets instead of plain frames.
+
+They are optional because they depend on the annotations being right. Both map to WaveMaker widgets with their own structural rules — a wizard needs its steps and step content identified correctly, and a data table needs its header, rows, and cells labelled consistently. See [Data table](./annotation-glossary#data-table-web) in the annotation glossary for the structure a data table expects. When one of these annotations is wrong, the generated widget takes more work to correct than a plain frame would.
+
+Enable them only if you understand how WaveMaker handles these widgets and you are already reviewing every annotation, not just the ones the plugin marks as **Needs review**. If you are relying on the default review pass, leave both off.
