@@ -85,8 +85,8 @@ This isn't strictly necessary, and the plugin can often still generate usable co
 
 ## Optional Features
 
-The Design to Code plugin has two features that are turned off by default and can be enabled from its settings: **Wizards** and **Data Table**. When enabled, the plugin recognises these widgets in your design and generates the corresponding WaveMaker widgets instead of plain frames.
+The plugin settings include two features that start off switched off: **Wizards** and **Data Table**. While they are off, a wizard comes through as plain frames and a data table comes through as a list. Switch them on and the plugin builds the real WaveMaker widget instead.
 
-They are optional because they depend on the annotations being right. Both map to WaveMaker widgets with their own structural rules — a wizard needs its steps and step content identified correctly, and a data table needs its header, rows, and cells labelled consistently. See [Data table](./annotation-glossary#data-table-web) in the annotation glossary for the structure a data table expects. When one of these annotations is wrong, the generated widget takes more work to correct than a plain frame would.
+They start off because wizards and tables are among the trickier things to design for. Every designer builds them a little differently, and WaveMaker has its own expectations about how the pieces fit together — which layer is a step, which row is the header, which cell sits where. Whether the generated widget turns out well comes down to those annotations being right, and you are in a far better position to judge that than the plugin is. So for now this one is left to you.
 
-Enable them only if you understand how WaveMaker handles these widgets and you are already reviewing every annotation, not just the ones the plugin marks as **Needs review**. If you are relying on the default review pass, leave both off.
+Turn them on if you already know how WaveMaker structures these widgets and you go through every annotation, not just the ones marked **Needs review**. If you would rather stick to the flagged ones, leave them off for now — you lose nothing, and you can always come back to this later. The [Data table](./annotation-glossary#data-table-web) entry in the annotation glossary is a good place to see what the plugin expects.
