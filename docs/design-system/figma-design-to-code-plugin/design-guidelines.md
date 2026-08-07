@@ -85,7 +85,7 @@ This isn't strictly necessary, and the plugin can often still generate usable co
 
 ## Optional Features
 
-The plugin settings include two features that start off switched off: **Wizards** and **Data Table**. While they are off, a wizard comes through as plain frames and a data table comes through as a list. Switch them on and the plugin builds the real WaveMaker widget instead.
+The plugin settings include two features that are off by default: **Wizards** and **Data Table**. While they are off, a wizard comes through as plain frames and a data table comes through as a list. Switch them on and the plugin builds the real WaveMaker widget instead.
 
 They start off because wizards and tables are among the trickier things to design for. Every designer builds them a little differently, and WaveMaker has its own expectations about how the pieces fit together — which layer is a step, which row is the header, which cell sits where. Whether the generated widget turns out well comes down to those annotations being right, and you are in a far better position to judge that than the plugin is. So for now this one is left to you.
 
