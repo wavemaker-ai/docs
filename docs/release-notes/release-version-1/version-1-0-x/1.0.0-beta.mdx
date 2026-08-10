@@ -101,6 +101,12 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Auto Layout now supports `width=fill` and `height=fill` in addition to fixed values like px and %, letting a component occupy the available space within its parent container instead of sizing to content (`hug`).
 
         This Fill sizing, previously available only for containers, is now supported for all components placed inside Auto Layout containers, making it easier to build responsive, flexible layouts. Currently available in Angular.
+
+      - ### Charts widget migrated to ECharts <Pill type="mobile" />
+
+        The Area, Bar, Column, Line, Bubble, Pie, and Donut chart types on mobile now render using [ECharts](https://github.com/wavemaker/wm-react-native-echarts) instead of Victory Native.
+
+        As a result, these charts render with smoother animations, richer tooltips, and a more polished look and feel with the existing markup.
     </Accordian>
 
     <Accordian title="Platform">
