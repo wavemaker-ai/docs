@@ -13,6 +13,28 @@ WaveMaker announces the release of WaveMaker AI 1.0.0 Beta. This release is inte
 
 For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack).
 
+## 1.0.0-BETA-RC9
+
+*Release date: 10 August 2026*
+
+<TabsWrapper>
+  <TabItem name="Features">
+    <Accordian title="Platform" />
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="Platform" />
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="User Interface" />
+
+    <Accordian title="Backend" />
+
+    <Accordian title="Platform" />
+  </TabItem>
+</TabsWrapper>
+
 ## 1.0.0-BETA-RC8
 
 *Release date: 03 August 2026*
@@ -27,7 +49,11 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
   </TabItem>
 
   <TabItem name="Bug Fixes">
-    <Accordian title="User Interface" />
+    <Accordian title="User Interface">
+      - ### Hover line overlapping properties panel <Pill type="web" />
+
+        Fixed the hover indicator line overlapping the properties panel while hovering over a canvas component whose content is wider than the canvas.
+    </Accordian>
 
     <Accordian title="Backend" />
 
@@ -101,6 +127,12 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Auto Layout now supports `width=fill` and `height=fill` in addition to fixed values like px and %, letting a component occupy the available space within its parent container instead of sizing to content (`hug`).
 
         This Fill sizing, previously available only for containers, is now supported for all components placed inside Auto Layout containers, making it easier to build responsive, flexible layouts. Currently available in Angular.
+
+      - ### Charts widget migrated to ECharts <Pill type="mobile" />
+
+        The Area, Bar, Column, Line, Bubble, Pie, and Donut chart types on mobile now render using [ECharts](https://github.com/wavemaker/wm-react-native-echarts) instead of Victory Native.
+
+        As a result, these charts render with smoother animations, richer tooltips, and a more polished look and feel with the existing markup.
     </Accordian>
 
     <Accordian title="Platform">
