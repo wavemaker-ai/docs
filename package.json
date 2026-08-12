@@ -31,7 +31,7 @@
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
     "redoc": "^2.5.2",
-    "wm-ui-components": "^1.0.0"
+    "wm-ui-components": "^2.0.0"
   },
   "devDependencies": {
     "@docusaurus/eslint-plugin": "^3.9.2",
