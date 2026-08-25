@@ -128,31 +128,31 @@
           "name": "Spring Framework",
           "description": "Comprehensive programming and configuration model for modern Java-based enterprise applications.",
           "link": "https://spring.io/projects/spring-framework",
-          "version": "6.2.18"
+          "version": "6.2.19"
         },
         {
           "name": "Spring Security",
           "description": "Authentication and access-control framework.",
           "link": "https://spring.io/projects/spring-security",
-          "version": "6.5.10"
+          "version": "6.5.11"
         },
         {
           "name": "Spring Data",
           "description": "Simplifies data access for relational and non-relational databases.",
           "link": "https://spring.io/projects/spring-data",
-          "version": "2025.0.11"
+          "version": "2025.0.13"
         },
         {
           "name": "Spring Boot",
           "description": "Framework to create stand-alone, production-grade Spring based Applications.",
           "link": "https://spring.io/projects/spring-boot",
-          "version": "3.5.13"
+          "version": "3.5.16"
         },
         {
           "name": "Spring Session",
           "description": "Provides an API and implementations for managing a user's session information.",
           "link": "https://spring.io/projects/spring-session",
-          "version": "3.5.6"
+          "version": "3.5.7"
         },
         {
           "name": "Hibernate (Jakarta)",
@@ -170,19 +170,19 @@
           "name": "Jackson",
           "description": "Standard JSON library for Java (streaming, DOM, binding).",
           "link": "https://github.com/FasterXML/jackson",
-          "version": "2.21.3"
+          "version": "2.22.1"
         },
         {
           "name": "SLF4J",
           "description": "Simple Logging Facade for Java.",
           "link": "https://www.slf4j.org/",
-          "version": "2.0.17"
+          "version": "2.0.18"
         },
         {
           "name": "Log4j2",
           "description": "Java-based logging utility.",
           "link": "https://logging.apache.org/log4j/2.x/",
-          "version": "2.25.4"
+          "version": "2.26.1"
         },
         {
           "name": "HttpComponents HttpClient5",
@@ -200,7 +200,7 @@
           "name": "HikariCP",
           "description": "High-performance JDBC connection pool.",
           "link": "https://github.com/brettwooldridge/HikariCP",
-          "version": "7.0.2"
+          "version": "7.1.0"
         },
         {
           "name": "Apache Commons Lang3",
@@ -218,7 +218,7 @@
           "name": "PostgreSQL Driver",
           "description": "JDBC driver for PostgreSQL.",
           "link": "https://jdbc.postgresql.org/",
-          "version": "42.7.11"
+          "version": "42.7.13"
         },
         {
           "name": "Hibernate Validator",
@@ -230,7 +230,7 @@
           "name": "JGit",
           "description": "Java implementation of the Git version control system.",
           "link": "https://www.eclipse.org/jgit/",
-          "version": "7.6.0.202603022253-r"
+          "version": "7.7.0.202606012155-r"
         },
         {
           "name": "Apache Commons Codec",
@@ -266,7 +266,7 @@
           "name": "Apache Tika",
           "description": "Content analysis toolkit to detect and extract metadata and text.",
           "link": "https://tika.apache.org/",
-          "version": "3.3.0"
+          "version": "3.3.2"
         },
         {
           "name": "MariaDB JDBC Driver",
@@ -278,7 +278,7 @@
           "name": "MongoDB Driver",
           "description": "Java driver for MongoDB.",
           "link": "https://www.mongodb.com/docs/drivers/java/sync/current/",
-          "version": "5.7.0"
+          "version": "5.9.1"
         },
         {
           "name": "Jakarta Validation API",
