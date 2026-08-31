@@ -20,7 +20,7 @@ WaveMaker platform focuses on 3 key areas to provide acceleration to large teams
 2. **Squad of AI Agents** for SDLC workflows, with standards based app generation
 3. **Integrated Studio** experience to develop, test, configure & deploy apps
 
-![Three Pillars](../release-notes/release-version-1/assets/img/1-ThreePillar.png)
+![Three Pillars](../release-notes/release-version-12/assets/img/1-ThreePillar.png)
 
 ## 1. Design to Code Automation
 
