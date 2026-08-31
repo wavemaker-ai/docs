@@ -5,6 +5,10 @@ import './Accordian.css';
 export const Accordian = ({ title, children, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
+  if (!children) {
+    return null;
+  }
+
   return (
     <div className={`wm-accordian ${isOpen ? 'wm-accordian--open' : ''}`}>
       <button
