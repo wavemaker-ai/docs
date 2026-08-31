@@ -170,7 +170,7 @@
           "name": "Jackson",
           "description": "Standard JSON library for Java (streaming, DOM, binding).",
           "link": "https://github.com/FasterXML/jackson",
-          "version": "2.22.1"
+          "version": "2.22.2"
         },
         {
           "name": "SLF4J",
@@ -212,7 +212,7 @@
           "name": "Guava",
           "description": "Google core libraries for Java.",
           "link": "https://github.com/google/guava",
-          "version": "33.6.0-jre"
+          "version": "33.7.1-jre"
         },
         {
           "name": "PostgreSQL Driver",
@@ -230,13 +230,13 @@
           "name": "JGit",
           "description": "Java implementation of the Git version control system.",
           "link": "https://www.eclipse.org/jgit/",
-          "version": "7.7.0.202606012155-r"
+          "version": "7.7.1.202607240634-r"
         },
         {
           "name": "Apache Commons Codec",
           "description": "Implementations of common encoders and decoders (Base64, Hex, etc).",
           "link": "https://commons.apache.org/proper/commons-codec/",
-          "version": "1.22.0"
+          "version": "1.22.1"
         },
         {
           "name": "Apache Commons IO",
@@ -260,7 +260,7 @@
           "name": "Apache FreeMarker",
           "description": "Java template engine to generate text output.",
           "link": "https://freemarker.apache.org/",
-          "version": "2.3.34"
+          "version": "2.3.35"
         },
         {
           "name": "Apache Tika",
@@ -278,7 +278,7 @@
           "name": "MongoDB Driver",
           "description": "Java driver for MongoDB.",
           "link": "https://www.mongodb.com/docs/drivers/java/sync/current/",
-          "version": "5.9.1"
+          "version": "5.11.0"
         },
         {
           "name": "Jakarta Validation API",
@@ -290,7 +290,7 @@
           "name": "Apache Commons Validator",
           "description": "Client-side validation and server-side validation support.",
           "link": "https://commons.apache.org/proper/commons-validator/",
-          "version": "1.10.1"
+          "version": "1.11.0"
         },
         {
           "name": "JSON-Smart",
@@ -314,7 +314,7 @@
           "name": "Apache Maven",
           "description": "Software project management and comprehension tool.",
           "link": "https://maven.apache.org/",
-          "version": "3.9.15"
+          "version": "3.9.16"
         },
         {
           "name": "Apache Ant",
