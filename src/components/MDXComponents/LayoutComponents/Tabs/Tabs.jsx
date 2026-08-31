@@ -40,7 +40,11 @@ function FallbackState({ data }) {
  * Used inside TabsWrapper to define individual tabs.
  */
 export function TabItem({ children, name, active }) {
-  const isEmpty = React.Children.count(children) === 0;
+  // A tab is empty when every Accordian child has no content of its own
+  // (React.Children.count would still be 1 for `<Accordian />` even though it renders null).
+  const isEmpty = React.Children.toArray(children).every(
+    (child) => React.isValidElement(child) && !child.props.children,
+  );
   const fallbackKey = name?.toLowerCase();
   const fallbackData = FALLBACK_DATA[fallbackKey];
 
