@@ -1,6 +1,6 @@
 import React, { useState, useId } from 'react';
 import { motion } from 'framer-motion';
-import { Accordian } from '../Accordian/Accordian';
+import { Accordian, getAccordianItemCount } from '../Accordian/Accordian';
 import './Tabs.css';
 
 // Accordians with no content render as `null` (see Accordian.jsx), so a
@@ -11,6 +11,16 @@ function getNonEmptyAccordians(children) {
       React.isValidElement(child) &&
       child.type === Accordian &&
       child.props.children,
+  );
+}
+
+// A tab's count is the total number of entries across all of its accordions,
+// not the number of accordions.
+function getTabItemCount(children) {
+  return getNonEmptyAccordians(children).reduce(
+    (total, accordian) =>
+      total + getAccordianItemCount(accordian.props.children),
+    0,
   );
 }
 
@@ -112,11 +122,9 @@ export function TabsWrapper({ children }) {
       <div className="tabs-nav">
         {tabs.map((tab, index) => {
           const isActive = activeIndex === index;
-          const accordianCount = getNonEmptyAccordians(
-            tab.props.children,
-          ).length;
-          const label = accordianCount
-            ? `${tab.props.name} (${accordianCount})`
+          const itemCount = getTabItemCount(tab.props.children);
+          const label = itemCount
+            ? `${tab.props.name} (${itemCount})`
             : tab.props.name;
           return (
             <button
