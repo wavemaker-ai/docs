@@ -311,9 +311,9 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
         Fixed requesting a custom WMX component on Web projects failing with a "skill could not be loaded" error.
 
-      - ### AIRA binding skill not loading for bind expressions
+      - ### WaveMaker Agent binding skill not loading for bind expressions
 
-        Fixed AIRA sometimes not loading its binding skill when generating bind expressions, which could result in hallucinated bindings to incorrect properties.
+        Fixed WaveMaker Agent sometimes not loading its binding skill when generating bind expressions, which could result in hallucinated bindings to incorrect properties.
 
       - ### Accept and connect timeout regression
 
@@ -341,11 +341,11 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
       - ### Global design tokens before mobile generation <Pill type="mobile" />
 
-        AIRA now resolves global design tokens and brand styling before generating mobile screens from a Figma design or screenshot, and derives required-field rules from the design.
+        WaveMaker Agent now resolves global design tokens and brand styling before generating mobile screens from a Figma design or screenshot, and derives required-field rules from the design.
 
       - ### AI-generated charts for mobile apps <Pill type="mobile" />
 
-        AIRA can now generate chart widgets, covering all 8 chart types, for mobile apps from a design or a direct request.
+        WaveMaker Agent can now generate chart widgets, covering all 8 chart types, for mobile apps from a design or a direct request.
 
       - ### Image support in AI file reads
 
@@ -359,9 +359,9 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
         You can now regenerate a previous run in an AI chat conversation, creating a new branch from that point without losing your prior work.
 
-      - ### Notifications when AIRA finishes tasks
+      - ### Notifications when WaveMaker Agent finishes tasks
 
-        AIRA now shows a Studio toast and a blue-dot unread indicator when a conversation completes, plus a desktop notification that opens the conversation directly when you're away from the tab.
+        WaveMaker Agent now shows a Studio toast and a blue-dot unread indicator when a conversation completes, plus a desktop notification that opens the conversation directly when you're away from the tab.
     </Accordian>
   </TabItem>
 
@@ -395,11 +395,11 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
       - ### Faster design token override writes
 
-        AIRA design token overrides are now written more efficiently, avoiding redundant file reads.
+        WaveMaker Agent design token overrides are now written more efficiently, avoiding redundant file reads.
 
       - ### Delete and rename WMX web components <Pill type="web" />
 
-        AIRA can now delete and rename React WMX web components, in addition to creating them.
+        WaveMaker Agent can now delete and rename React WMX web components, in addition to creating them.
 
       - ### Capped reads with total line count
 
@@ -527,13 +527,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
     <Accordian title="Backend" />
 
     <Accordian title="Platform">
-      - ### AIRA skill retrieval on first attempt <Pill type="web" />
+      - ### WaveMaker Agent skill retrieval on first attempt <Pill type="web" />
 
-        Fixed AIRA failing to retrieve the skill needed to create a React WMX web component on the first attempt, prompting for a prefab instead.
+        Fixed WaveMaker Agent failing to retrieve the skill needed to create a React WMX web component on the first attempt, prompting for a prefab instead.
 
       - ### WMX folder naming case <Pill type="web" />
 
-        Fixed AIRA creating WMX component folder names in lowercase instead of PascalCase.
+        Fixed WaveMaker Agent creating WMX component folder names in lowercase instead of PascalCase.
 
       - ### Raw syntax passed to sub-agents
 
