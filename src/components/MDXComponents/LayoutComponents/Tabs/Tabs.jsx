@@ -1,6 +1,28 @@
 import React, { useState, useId } from 'react';
 import { motion } from 'framer-motion';
+import { Accordian, getAccordianItemCount } from '../Accordian/Accordian';
 import './Tabs.css';
+
+// Accordians with no content render as `null` (see Accordian.jsx), so a
+// "real" accordion is one that is both an Accordian element and non-empty.
+function getNonEmptyAccordians(children) {
+  return React.Children.toArray(children).filter(
+    (child) =>
+      React.isValidElement(child) &&
+      child.type === Accordian &&
+      child.props.children,
+  );
+}
+
+// A tab's count is the total number of entries across all of its accordions,
+// not the number of accordions.
+function getTabItemCount(children) {
+  return getNonEmptyAccordians(children).reduce(
+    (total, accordian) =>
+      total + getAccordianItemCount(accordian.props.children),
+    0,
+  );
+}
 
 const FALLBACK_DATA = {
   features: {
@@ -40,13 +62,25 @@ function FallbackState({ data }) {
  * Used inside TabsWrapper to define individual tabs.
  */
 export function TabItem({ children, name, active }) {
-  // A tab is empty when every Accordian child has no content of its own
-  // (React.Children.count would still be 1 for `<Accordian />` even though it renders null).
-  const isEmpty = React.Children.toArray(children).every(
-    (child) => React.isValidElement(child) && !child.props.children,
-  );
   const fallbackKey = name?.toLowerCase();
   const fallbackData = FALLBACK_DATA[fallbackKey];
+
+  // Auto-expand the first accordion with content in each tab.
+  let firstAccordianSeen = false;
+  const content = React.Children.map(children, (child) => {
+    const isNonEmptyAccordian =
+      React.isValidElement(child) &&
+      child.type === Accordian &&
+      child.props.children;
+    if (isNonEmptyAccordian && !firstAccordianSeen) {
+      firstAccordianSeen = true;
+      if (child.props.defaultOpen === undefined) {
+        return React.cloneElement(child, { defaultOpen: true });
+      }
+    }
+    return child;
+  });
+  const isEmpty = !firstAccordianSeen;
 
   return (
     <div
@@ -56,7 +90,7 @@ export function TabItem({ children, name, active }) {
       {isEmpty && fallbackData ? (
         <FallbackState data={fallbackData} />
       ) : (
-        children
+        content
       )}
     </div>
   );
@@ -88,12 +122,16 @@ export function TabsWrapper({ children }) {
       <div className="tabs-nav">
         {tabs.map((tab, index) => {
           const isActive = activeIndex === index;
+          const itemCount = getTabItemCount(tab.props.children);
+          const label = itemCount
+            ? `${tab.props.name} (${itemCount})`
+            : tab.props.name;
           return (
             <button
               key={index}
               className={`tab-btn ${isActive ? 'active' : ''}`}
               onClick={() => setActiveIndex(index)}
-              data-text={tab.props.name}
+              data-text={label}
             >
               {isActive && (
                 <motion.div
@@ -103,7 +141,7 @@ export function TabsWrapper({ children }) {
                   transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <span className="tab-btn-text">{tab.props.name}</span>
+              <span className="tab-btn-text">{label}</span>
             </button>
           );
         })}
