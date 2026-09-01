@@ -328,19 +328,229 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
 <TabsWrapper>
   <TabItem name="Features">
-    <Accordian title="Platform" />
+    <Accordian title="User Interface">
+      - ### Web Components support in React codegen <Pill type="web" />
+
+        React codegen now supports embedding custom Web Components in generated pages, wrapping them automatically with a WebComponent helper.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### WaveMaker Assistant (BETA) agent
+
+        Introduced WaveMaker Assistant (BETA), a single-agent entry point available alongside the default WaveMaker Agent that handles UI and backend tasks directly without delegating to sub-agents.
+
+      - ### Global design tokens before mobile generation <Pill type="mobile" />
+
+        AIRA now resolves global design tokens and brand styling before generating mobile screens from a Figma design or screenshot, and derives required-field rules from the design.
+
+      - ### AI-generated charts for mobile apps <Pill type="mobile" />
+
+        AIRA can now generate chart widgets, covering all 8 chart types, for mobile apps from a design or a direct request.
+
+      - ### Image support in AI file reads
+
+        The AI assistant's file-reading tool can now read image files and include them as visual content in the conversation instead of failing on binary content.
+
+      - ### Draft review actions shared with agent
+
+        The AI agent is now informed, at the start of its next run, of any accept, reject, edit, or Studio-sync actions taken on its previous code changes.
+
+      - ### Regenerate a previous run in AI chat
+
+        You can now regenerate a previous run in an AI chat conversation, creating a new branch from that point without losing your prior work.
+
+      - ### Notifications when AIRA finishes tasks
+
+        AIRA now shows a Studio toast and a blue-dot unread indicator when a conversation completes, plus a desktop notification that opens the conversation directly when you're away from the tab.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Enhancements">
-    <Accordian title="Platform" />
+    <Accordian title="User Interface">
+      - ### Width and height fill for widgets <Pill type="mobile" />
+
+        Widgets now support width and height set to fill their parent container.
+
+      - ### Native SVG icons on mobile <Pill type="mobile" />
+
+        Mobile widgets — including Menu, Switch, and Tabbar — now render icons as SVGs instead of font icons, extending existing web SVG support to mobile.
+
+      - ### Loader asset delivered from CDN
+
+        Studio's animated loading screen now streams its loader asset from a CDN instead of bundling it with the app.
+
+      - ### List item state design tokens
+
+        Added default, hover, and selected state style tokens for list items.
+
+      - ### Design tab renamed to Studio
+
+        Renamed the "Design" tab to "Studio", updated its icon, and added highlighting for the active tab.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### Improved AI-generated mobile app skills <Pill type="mobile" />
+
+        Improved AI-authored React Native forms, containers, push notification handling, and plugin version lookups.
+
+      - ### Faster design token override writes
+
+        AIRA design token overrides are now written more efficiently, avoiding redundant file reads.
+
+      - ### Delete and rename WMX web components <Pill type="web" />
+
+        AIRA can now delete and rename React WMX web components, in addition to creating them.
+
+      - ### Capped reads with total line count
+
+        Reads of M2, log, and chat-session files are now capped per call and report the file's total line count, so it's clear when only part of a file was returned.
+
+      - ### Core version in implementation branch naming
+
+        Core version information is now included in the linked implementation's branch naming and shown under the project name.
+
+      - ### AI chat and VCS review UX improvements
+        - Conversation execution time now shown at the end of a completed conversation.
+        - Changes header shows the total count of changed files.
+        - Edit confirmation now happens inline in the chat input instead of a separate dialog.
+        - Redesigned the cancelled-conversation indicator.
+        - The conversation panel auto-collapses and restores around the file editor.
+        - Agent descriptions appear on hover during agent selection.
+        - Clearer failed-status icons for sub-agents and tool calls.
+        - The editor refreshes automatically when new VCS changes arrive.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Bug Fixes">
-    <Accordian title="User Interface" />
+    <Accordian title="User Interface">
+      - ### Menu item navigation in React <Pill type="web" />
+
+        Fixed a menu item click not navigating to the linked page in React apps.
+
+      - ### Default sidebar shown with custom sidebar <Pill type="web" />
+
+        Fixed the default sidebar appearing alongside a page's custom sidebar in React Preview.
+
+      - ### Popover on-load filter ignored <Pill type="web" />
+
+        Fixed a Popover's on-load event not applying a LiveVariable's filter before loading records in React apps.
+
+      - ### Chips Match Mode not applied <Pill type="web" />
+
+        Fixed the Chips widget's Match Mode property not filtering results as you type in React apps.
+
+      - ### List widget event and selection issues <Pill type="web" />
+        - Corrected the order in which list events fire.
+        - Fixed `$index`, `$first`, and `$last` not resolving correctly for list items.
+        - Fixed infinite scroll not working on a grouped list.
+        - Fixed deselecting a list item not working.
+
+      - ### Cache not cleared on page navigation <Pill type="web" />
+
+        Fixed page navigation not partially clearing cached data.
+
+      - ### Cancel button not closing dialog <Pill type="web" />
+
+        Fixed the Cancel button not closing a dialog opened from a form action in React apps.
+
+      - ### Toast position incorrect in React <Pill type="web" />
+
+        Fixed the toast notification appearing at the bottom-right instead of the configured position in React apps.
+
+      - ### File Upload not showing uploaded files <Pill type="web" />
+
+        Fixed File Upload not showing uploaded files and crashing when a file was selected from the list.
+
+      - ### Table row-selection event was null <Pill type="web" />
+
+        Fixed Table row-selection scripts receiving a null event instead of the actual native event.
+
+      - ### Table checkbox selection color <Pill type="web" />
+
+        Fixed incorrect selection color on Table row checkboxes in React apps.
+
+      - ### Missing border on expanded table row <Pill type="web" />
+
+        Fixed a missing border on expanded Table rows in React apps.
+
+      - ### Composite Show property with data value <Pill type="web" />
+
+        Fixed a composite widget's Show property not working when bound to another widget's data value.
+
+      - ### Advanced Filter search and reset <Pill type="web" />
+
+        Fixed Search and Reset buttons not working for date fields in the Advanced Filter dialog.
+
+      - ### Chips dropdown after regaining focus <Pill type="web" />
+
+        Fixed the Chips widget's dropdown not reappearing after the widget lost and regained focus.
+
+      - ### Datetime format inside forms <Pill type="web" />
+
+        Fixed Datetime and Timestamp fields inside a form showing an incorrect display format.
+
+      - ### Missing reset type on dynamic forms <Pill type="web" />
+
+        Fixed generated dynamic forms missing the `type="reset"` attribute on their reset button.
+
+      - ### Table styling mismatched with Angular <Pill type="web" />
+
+        Fixed a table's conditional class styling not matching Angular's rendering for Label widgets in React.
+
+      - ### Button position without parent container <Pill type="web" />
+
+        Fixed incorrect flex-grow and alignment causing misplaced buttons in containers with no parent container widget.
+
+      - ### Inline scripts blocked by strict CSP <Pill type="web" />
+
+        Fixed generated Next.js output failing under strict Content Security Policy by externalizing inline scripts.
+
+      - ### Wmx-bound label caption error on reload <Pill type="web" />
+
+        Fixed a Label's caption showing an error after reload when bound to a WMX widget's value.
+
+      - ### Height=fill column container sizing
+
+        Fixed `height=fill` column containers using an incorrect flex-basis value, causing incorrect sizing.
+
+      - ### Unsaved file changes lost in Explorer
+
+        Fixed unsaved file changes being lost when switching files in the File Explorer without saving first.
+
+      - ### Chart rendering after ECharts migration <Pill type="mobile" />
+        - Fixed the Shape property having no effect on Bubble chart markers after the ECharts migration.
+        - Fixed the Area/Line chart's default Step Position not taking effect until changed manually.
+        - Fixed Pie/Donut chart category labels overlapping when Display Position is set to Top or Bottom.
+        - Hid unimplemented chart properties (`reducexticks`, `showxdistance`, `barspacing`) from the mobile properties panel.
+    </Accordian>
 
     <Accordian title="Backend" />
 
-    <Accordian title="Platform" />
+    <Accordian title="Platform">
+      - ### AIRA skill retrieval on first attempt <Pill type="web" />
+
+        Fixed AIRA failing to retrieve the skill needed to create a React WMX web component on the first attempt, prompting for a prefab instead.
+
+      - ### WMX folder naming case <Pill type="web" />
+
+        Fixed AIRA creating WMX component folder names in lowercase instead of PascalCase.
+
+      - ### Raw syntax passed to sub-agents
+
+        Fixed the WaveMaker agent passing implementation syntax directly to sub-agents instead of having them check the relevant skill first.
+
+      - ### read\_files error on high limit
+
+        Fixed `read_files` erroring when the requested limit exceeded a file's line count, instead of returning the available lines.
+
+      - ### grep\_in\_files tool errors
+
+        Fixed multiple `grep_in_files` errors, including GNU-grep-style flags, patterns starting with `--`, an over-blocked `--no-filename` option, and a hard error on a nonexistent path.
+
+      - ### Commit pointer after Studio draft sync
+
+        Fixed the agent's recorded code checkpoint not updating after syncing a draft with Studio, which could cause later restore actions to use stale state.
+    </Accordian>
   </TabItem>
 </TabsWrapper>
 
@@ -354,14 +564,18 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
   </TabItem>
 
   <TabItem name="Enhancements">
-    <Accordian title="Platform" />
+    <Accordian title="User Interface">
+      - ### Animated loading screen in Studio
+
+        Studio's loading screen now uses an animated Lottie-based loader instead of the previous static spinner.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Bug Fixes">
     <Accordian title="User Interface">
       - ### Hover line overlapping properties panel <Pill type="web" />
 
-        Fixed the hover indicator line overlapping the properties panel while hovering over a canvas component whose content is wider than the canvas.
+        Fixed the hover indicator line overlapping the properties panel and misaligning at certain zoom levels while hovering over a canvas component whose content is wider than the canvas.
     </Accordian>
 
     <Accordian title="Backend" />
