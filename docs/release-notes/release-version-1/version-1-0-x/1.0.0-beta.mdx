@@ -17,7 +17,7 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
 *Release date: 24 August 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="User Interface">
       - ### Server-side pagination for Table <Pill type="web" />
@@ -320,13 +320,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed a shared 300-second timeout incorrectly applying to connection attempts, causing dead Studio hosts to hang workers for 5 minutes with no surfaced error.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC9
 
 *Release date: 10 August 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="User Interface">
       - ### Web Components support in React codegen <Pill type="web" />
@@ -552,13 +552,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed the agent's recorded code checkpoint not updating after syncing a draft with Studio, which could cause later restore actions to use stale state.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC8
 
 *Release date: 03 August 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="Platform" />
   </TabItem>
@@ -582,13 +582,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
     <Accordian title="Platform" />
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC7
 
 *Release date: 27 July 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="Platform">
       - ### Cancel a running conversation in AI chat
@@ -696,13 +696,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) projects landing on an invalid page on launch when the app contains Wizards.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC6
 
 *Release date: 13 July 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="User Interface">
       - ### Sync new pages from Design-to-Code plugin into existing projects <Pill type="web" />
@@ -768,13 +768,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed wizard page generation to correctly handle nested wizards. The tool now scans each page's markup for `wm-wizard` elements and their direct `wm-wizardstep` children, capturing each step's name, title, and inner content, and walks up the DOM to detect whether a wizard is nested inside another wizard's step. Only top-level (non-nested) wizards get their own host page — nested wizards are now merged into their parent instead.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC5
 
 *Release date: 29 June 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="Platform">
       - ### Suggested next actions in AI chat
@@ -818,13 +818,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed sub-agents being unable to resolve secret keys from the main agent's store, causing the literal key to be used in place of the actual secret value.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC4
 
 *Release date: 15 June 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="Platform">
       - ### Export AI session as downloadable ZIP <Pill type="web" />
@@ -900,13 +900,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed authorization checks failing in React app deployments.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC3
 
 *Release date: 04 June 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="Platform">
       - ### Custom instructions via Agents.md <Pill type="web" /> <Pill type="mobile" />
@@ -966,13 +966,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed page markup being formatted in ai-studio before save; it is now consistently prettified in Studio.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC2
 
 *Release date: 18 May 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="User Interface">
       - ### Screenshot-to-Code for Mobile (BETA) <Pill type="mobile" />
@@ -1040,13 +1040,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed Bitbucket Cloud integration by replacing the deprecated workspace listing endpoint with the current supported API.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
 
 ## 1.0.0-BETA-RC1
 
 *Release date: 09 March 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="User Interface">
       - ### Design System based projects <Pill type="web" /> <Pill type="mobile" />
@@ -1121,4 +1121,4 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
   <TabItem name="Enhancements" />
 
   <TabItem name="Bug Fixes" />
-</TabsWrapper>
+</ReleaseNotesTabs>
