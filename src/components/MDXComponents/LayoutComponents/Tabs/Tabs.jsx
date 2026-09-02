@@ -1,97 +1,34 @@
 import React, { useState, useId } from 'react';
 import { motion } from 'framer-motion';
-import { Accordian, getAccordianItemCount } from '../Accordian/Accordian';
 import './Tabs.css';
-
-// Accordians with no content render as `null` (see Accordian.jsx), so a
-// "real" accordion is one that is both an Accordian element and non-empty.
-function getNonEmptyAccordians(children) {
-  return React.Children.toArray(children).filter(
-    (child) =>
-      React.isValidElement(child) &&
-      child.type === Accordian &&
-      child.props.children,
-  );
-}
-
-// A tab's count is the total number of entries across all of its accordions,
-// not the number of accordions.
-function getTabItemCount(children) {
-  return getNonEmptyAccordians(children).reduce(
-    (total, accordian) =>
-      total + getAccordianItemCount(accordian.props.children),
-    0,
-  );
-}
-
-const FALLBACK_DATA = {
-  features: {
-    icon: '/img/icon/no-enhancements.svg',
-    title: 'Waiting for the sequel.',
-    description: 'No new stars today, but the current cast is killing it.',
-  },
-  enhancements: {
-    icon: '/img/icon/no-enhancements.svg',
-    title: 'Tuned to perfection.',
-    description: 'We reached peak polish. For now.',
-  },
-  'bug fixes': {
-    icon: '/img/icon/no-bugs.svg',
-    title: 'No bugs to squash!',
-    description: 'We looked under the rug. It’s spotless.',
-  },
-};
-
-function FallbackState({ data }) {
-  return (
-    <motion.div
-      className="empty-state-container"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <img src={data.icon} alt={data.title} className="empty-state-icon" />
-      <h3 className="empty-state-title">{data.title}</h3>
-      <p className="empty-state-text">{data.description}</p>
-    </motion.div>
-  );
-}
 
 /**
  * TabItem Component
  * Used inside TabsWrapper to define individual tabs.
+ *
+ * Also accepts:
+ * - an optional numeric `count` prop, read directly by TabsWrapper (not by
+ *   TabItem itself) to show a badge next to the tab name and to decide
+ *   which tab is active by default.
+ * - an optional `emptyState` node, rendered instead of `children` when the
+ *   tab has no meaningful content.
+ * TabItem has no opinion on what it counts or what the empty state looks
+ * like — that's left entirely to the caller.
  */
-export function TabItem({ children, name, active }) {
-  const fallbackKey = name?.toLowerCase();
-  const fallbackData = FALLBACK_DATA[fallbackKey];
-
-  // Auto-expand the first accordion with content in each tab.
-  let firstAccordianSeen = false;
-  const content = React.Children.map(children, (child) => {
-    const isNonEmptyAccordian =
-      React.isValidElement(child) &&
-      child.type === Accordian &&
-      child.props.children;
-    if (isNonEmptyAccordian && !firstAccordianSeen) {
-      firstAccordianSeen = true;
-      if (child.props.defaultOpen === undefined) {
-        return React.cloneElement(child, { defaultOpen: true });
-      }
-    }
-    return child;
-  });
-  const isEmpty = !firstAccordianSeen;
+export function TabItem({ children, active, emptyState }) {
+  // A tab is empty when every child has no content of its own (e.g. a
+  // self-closing `<Accordian />` still counts as 1 child even though it
+  // renders null).
+  const isEmpty = React.Children.toArray(children).every(
+    (child) => React.isValidElement(child) && !child.props.children,
+  );
 
   return (
     <div
-      className={`tab-pane ${active ? 'active' : ''} ${active && isEmpty && fallbackData ? 'has-empty-state' : ''}`}
+      className={`tab-pane ${active ? 'active' : ''} ${active && isEmpty && emptyState ? 'has-empty-state' : ''}`}
       style={{ display: active ? 'block' : 'none' }}
     >
-      {isEmpty && fallbackData ? (
-        <FallbackState data={fallbackData} />
-      ) : (
-        content
-      )}
+      {isEmpty && emptyState ? emptyState : children}
     </div>
   );
 }
@@ -99,6 +36,9 @@ export function TabItem({ children, name, active }) {
 /**
  * TabsWrapper Component
  * Manages the state and rendering of tabs.
+ *
+ * If any TabItem has a numeric `count` prop, the first tab with `count > 0`
+ * is selected by default; otherwise the first tab is selected, as usual.
  */
 export function TabsWrapper({ children }) {
   // Extract children and filter out non-TabItem components if necessary
@@ -106,7 +46,10 @@ export function TabsWrapper({ children }) {
     (child) => child.props && child.props.name,
   );
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(() => {
+    const firstWithCount = tabs.findIndex((tab) => tab.props.count > 0);
+    return firstWithCount === -1 ? 0 : firstWithCount;
+  });
   const uniqueId = useId();
 
   if (tabs.length === 0) return null;
@@ -122,10 +65,8 @@ export function TabsWrapper({ children }) {
       <div className="tabs-nav">
         {tabs.map((tab, index) => {
           const isActive = activeIndex === index;
-          const itemCount = getTabItemCount(tab.props.children);
-          const label = itemCount
-            ? `${tab.props.name} (${itemCount})`
-            : tab.props.name;
+          const { name, count } = tab.props;
+          const label = count ? `${name} (${count})` : name;
           return (
             <button
               key={index}

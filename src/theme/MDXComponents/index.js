@@ -18,8 +18,14 @@ import {
   TabsWrapper,
   TabItem,
 } from '@site/src/components/MDXComponents/LayoutComponents/Tabs/Tabs';
-import { Pill, PillGroup, StatPill, StatPills } from '@site/src/components/MDXComponents/Pills/Pills';
+import {
+  Pill,
+  PillGroup,
+  StatPill,
+  StatPills,
+} from '@site/src/components/MDXComponents/Pills/Pills';
 import { Accordian } from '@site/src/components/MDXComponents/LayoutComponents/Accordian/Accordian';
+import { ReleaseNotesTabs } from '@site/src/components/MDXComponents/LayoutComponents/ReleaseNotesTabs/ReleaseNotesTabs';
 import * as Common from '@site/src/components/MDXComponents/Common/Common';
 
 const MDXComponents = {
@@ -46,6 +52,7 @@ const MDXComponents = {
   AcademyCard,
   TabsWrapper,
   TabItem,
+  ReleaseNotesTabs,
   Pill,
   PillGroup,
   StatPill,
