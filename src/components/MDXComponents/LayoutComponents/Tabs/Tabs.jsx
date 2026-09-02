@@ -106,7 +106,14 @@ export function TabsWrapper({ children }) {
     (child) => child.props && child.props.name,
   );
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  // Default to the first tab that actually has items; fall back to the
+  // first tab (Features) when none of them do.
+  const [activeIndex, setActiveIndex] = useState(() => {
+    const firstWithItems = tabs.findIndex(
+      (tab) => getTabItemCount(tab.props.children) > 0,
+    );
+    return firstWithItems === -1 ? 0 : firstWithItems;
+  });
   const uniqueId = useId();
 
   if (tabs.length === 0) return null;
