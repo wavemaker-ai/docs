@@ -150,6 +150,7 @@ We follow a simple branching setup to keep the docs stable, while still making i
   - Delete the branch after merging to keep things tidy
   - Never merge feature branches directly into `main`
 
+
 ### Prod Branch (`prod`)
 - This is the **stable, production** version of the documentation.
 - Please **don’t commit directly or raise pr** to `prod`.
