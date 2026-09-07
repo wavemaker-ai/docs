@@ -22,7 +22,11 @@
   --shadow:
     0 8px 40px rgba(27, 67, 130, 0.14), 0 2px 12px rgba(27, 67, 130, 0.08);
   --shadow-card: 0 2px 8px rgba(27, 67, 130, 0.08);
-  --askai-source-card-label:rgba(90, 90, 90, 1);
+  --askai-source-card-label: rgba(90, 90, 90, 1);
+  --sb-pink: #ff4785;
+  --sb-pink-light: #fff0f5;
+  --sb-pink-mid: #ffc2d6;
+  --sb-pink-dark: #d81b60;
 }
 
 /* Dark mode — follows Docusaurus [data-theme='dark'] convention */
@@ -45,8 +49,11 @@
   --purple: #a78bfa;
   --shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 2px 12px rgba(0, 0, 0, 0.3);
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --askai-source-card-label:rgba(255, 255, 255, 0.92);
-  
+  --askai-source-card-label: rgba(255, 255, 255, 0.92);
+  --sb-pink: #ff6b9d;
+  --sb-pink-light: rgba(255, 71, 133, 0.12);
+  --sb-pink-mid: rgba(255, 71, 133, 0.35);
+  --sb-pink-dark: #ff8fb3;
 }
 
 /* OVERLAY */
@@ -2532,6 +2539,341 @@
   transition: color 0.15s;
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+/* ── STORYBOOK: component card + doc sections ──────────────── */
+.componentCard {
+  margin: 6px 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-modal);
+  transition: border-color 0.15s;
+}
+
+.componentCard:hover {
+  border-color: var(--sb-pink-mid);
+}
+
+.componentCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  text-decoration: none !important;
+  background: var(--sb-pink-light);
+  transition: background 0.15s;
+}
+
+.componentCardHeader:hover .componentCardOpen {
+  color: var(--sb-pink);
+}
+
+.componentCardInfo {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+  flex: 1;
+}
+
+.componentCardTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: var(--mono);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.componentCardCategory {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text3);
+  flex-shrink: 0;
+}
+
+.componentCardOpen {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text3);
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.componentSectionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border-top: 1px solid var(--border);
+  text-decoration: none !important;
+  transition: background 0.12s;
+}
+
+.componentSectionRow:hover {
+  background: var(--bg-hover);
+}
+
+.componentSectionTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 20px;
+  background: var(--sb-pink-light);
+  color: var(--sb-pink-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.componentSectionHint {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--text2);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Keeps the affordance right-aligned on rows whose chunk had no prose line. */
+.componentSectionSpacer {
+  flex: 1;
+}
+
+.componentSectionOpen {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text4);
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.componentSectionRow:hover .componentSectionOpen {
+  color: var(--sb-pink);
+}
+
+/* ── MARKETPLACE: artifact card + actions ─────────────────── */
+.artifactCard {
+  margin: 6px 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-modal);
+  transition: border-color 0.15s;
+}
+
+.artifactCard:hover {
+  border-color: var(--wm-blue-mid);
+}
+
+/* All padding lives here so the clamped description below has no padding of its
+   own — -webkit-line-clamp clips at the content box, so bottom padding on the
+   clamped element leaks the next line into view. */
+.artifactCardBody {
+  display: block;
+  padding: 10px 11px;
+  text-decoration: none !important;
+}
+
+.artifactCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.artifactCardBody:hover .artifactCardTitle {
+  color: var(--wm-blue);
+}
+
+.artifactThumbnail {
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  overflow: hidden;
+  /* Thumbnails are artwork on their own light ground; a white box keeps logos
+     legible in dark mode too. */
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.artifactThumbnailImg {
+  width: 100%;
+  height: 100%;
+  /* cover, not contain: these are wide artwork crops and letterboxing them into
+     a square left visible bars. */
+  object-fit: cover;
+}
+
+.artifactThumbnailFallback {
+  font-size: 15px;
+  font-weight: 700;
+  /* Fixed neutral: the thumbnail box is white in both themes. */
+  color: #8892aa;
+  font-family: var(--sans);
+}
+
+.artifactCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.artifactCardTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: color 0.15s;
+}
+
+.artifactCardMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.artifactTypeTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--wm-blue-light);
+  color: var(--wm-blue-dark);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artifactCardVersion {
+  font-size: 10.5px;
+  color: var(--text4);
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+
+.artifactCardDescription {
+  margin: 7px 0 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  /* Belt and braces: if the webkit clamp is ever neutralised, the height still
+     clips at two lines instead of spilling a half-rendered third. */
+  max-height: 2.9em;
+  overflow: hidden;
+}
+
+.artifactCapabilities {
+  margin: 7px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.artifactCapability {
+  position: relative;
+  padding-left: 10px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--text2);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.artifactCapability::before {
+  content: '';
+  position: absolute;
+  left: 1px;
+  top: 7px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--text4);
+}
+
+.artifactCardFooter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 11px;
+  border-top: 1px solid var(--border);
+}
+
+.artifactPublisher {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text3);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.artifactPublisherAvatar {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.artifactAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-decoration: none !important;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.artifactAction::after {
+  content: '↗';
+  font-size: 9px;
+}
+
+.artifactAction:hover {
+  color: var(--wm-blue);
 }
 
 /* ═══════════════════════════════════════════════════════════════

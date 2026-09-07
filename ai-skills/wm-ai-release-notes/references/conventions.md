@@ -2,7 +2,9 @@
 
 ## Fixed structure
 
-Release notes use a fixed three-tab, four-accordian layout. **Never add, rename, or remove any tab or accordian.**
+Release notes use a fixed three-tab, four-accordian layout, wrapped in `<ReleaseNotesTabs>` (not the generic `<TabsWrapper>` — that's a plain, content-agnostic tabs component used elsewhere; `<ReleaseNotesTabs>` is the release-notes-specific composition on top of it). **Never add, rename, or remove any tab or accordian.**
+
+`<ReleaseNotesTabs>` automatically computes each tab's item-count badge (the sum of entries across its accordians) and auto-expands the first non-empty accordian in each tab. Do not add `count`, `badge`, `emptyState`, or `defaultOpen` props by hand — write plain `<TabItem>` and `<Accordian>` tags as shown below and this is handled for you.
 
 ### Tabs
 

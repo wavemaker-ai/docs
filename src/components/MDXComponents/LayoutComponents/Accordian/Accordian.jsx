@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import './Accordian.css';
 
-export const Accordian = ({ title, children, defaultOpen = false }) => {
+// `badge`, when provided, renders next to the title (e.g. an item count).
+// Accordian has no opinion on what it means or how it's computed.
+export const Accordian = ({ title, children, defaultOpen = false, badge }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   if (!children) {
@@ -17,7 +19,10 @@ export const Accordian = ({ title, children, defaultOpen = false }) => {
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        <span className="wm-accordian-title">{title}</span>
+        <span className="wm-accordian-title">
+          {title}
+          {badge != null && <span className="wm-accordian-count">{badge}</span>}
+        </span>
         <span
           className={`wm-accordian-icon ${isOpen ? 'wm-accordian-icon--open' : ''}`}
         >

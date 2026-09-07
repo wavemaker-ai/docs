@@ -2,62 +2,33 @@ import React, { useState, useId } from 'react';
 import { motion } from 'framer-motion';
 import './Tabs.css';
 
-const FALLBACK_DATA = {
-  features: {
-    icon: '/img/icon/no-enhancements.svg',
-    title: 'Waiting for the sequel.',
-    description: 'No new stars today, but the current cast is killing it.',
-  },
-  enhancements: {
-    icon: '/img/icon/no-enhancements.svg',
-    title: 'Tuned to perfection.',
-    description: 'We reached peak polish. For now.',
-  },
-  'bug fixes': {
-    icon: '/img/icon/no-bugs.svg',
-    title: 'No bugs to squash!',
-    description: 'We looked under the rug. It’s spotless.',
-  },
-};
-
-function FallbackState({ data }) {
-  return (
-    <motion.div
-      className="empty-state-container"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <img src={data.icon} alt={data.title} className="empty-state-icon" />
-      <h3 className="empty-state-title">{data.title}</h3>
-      <p className="empty-state-text">{data.description}</p>
-    </motion.div>
-  );
-}
-
 /**
  * TabItem Component
  * Used inside TabsWrapper to define individual tabs.
+ *
+ * Also accepts:
+ * - an optional numeric `count` prop, read directly by TabsWrapper (not by
+ *   TabItem itself) to show a badge next to the tab name and to decide
+ *   which tab is active by default.
+ * - an optional `emptyState` node, rendered instead of `children` when the
+ *   tab has no meaningful content.
+ * TabItem has no opinion on what it counts or what the empty state looks
+ * like — that's left entirely to the caller.
  */
-export function TabItem({ children, name, active }) {
-  // A tab is empty when every Accordian child has no content of its own
-  // (React.Children.count would still be 1 for `<Accordian />` even though it renders null).
+export function TabItem({ children, active, emptyState }) {
+  // A tab is empty when every child has no content of its own (e.g. a
+  // self-closing `<Accordian />` still counts as 1 child even though it
+  // renders null).
   const isEmpty = React.Children.toArray(children).every(
     (child) => React.isValidElement(child) && !child.props.children,
   );
-  const fallbackKey = name?.toLowerCase();
-  const fallbackData = FALLBACK_DATA[fallbackKey];
 
   return (
     <div
-      className={`tab-pane ${active ? 'active' : ''} ${active && isEmpty && fallbackData ? 'has-empty-state' : ''}`}
+      className={`tab-pane ${active ? 'active' : ''} ${active && isEmpty && emptyState ? 'has-empty-state' : ''}`}
       style={{ display: active ? 'block' : 'none' }}
     >
-      {isEmpty && fallbackData ? (
-        <FallbackState data={fallbackData} />
-      ) : (
-        children
-      )}
+      {isEmpty && emptyState ? emptyState : children}
     </div>
   );
 }
@@ -65,6 +36,9 @@ export function TabItem({ children, name, active }) {
 /**
  * TabsWrapper Component
  * Manages the state and rendering of tabs.
+ *
+ * If any TabItem has a numeric `count` prop, the first tab with `count > 0`
+ * is selected by default; otherwise the first tab is selected, as usual.
  */
 export function TabsWrapper({ children }) {
   // Extract children and filter out non-TabItem components if necessary
@@ -72,7 +46,10 @@ export function TabsWrapper({ children }) {
     (child) => child.props && child.props.name,
   );
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(() => {
+    const firstWithCount = tabs.findIndex((tab) => tab.props.count > 0);
+    return firstWithCount === -1 ? 0 : firstWithCount;
+  });
   const uniqueId = useId();
 
   if (tabs.length === 0) return null;
@@ -88,12 +65,14 @@ export function TabsWrapper({ children }) {
       <div className="tabs-nav">
         {tabs.map((tab, index) => {
           const isActive = activeIndex === index;
+          const { name, count } = tab.props;
+          const label = count ? `${name} (${count})` : name;
           return (
             <button
               key={index}
               className={`tab-btn ${isActive ? 'active' : ''}`}
               onClick={() => setActiveIndex(index)}
-              data-text={tab.props.name}
+              data-text={label}
             >
               {isActive && (
                 <motion.div
@@ -103,7 +82,7 @@ export function TabsWrapper({ children }) {
                   transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <span className="tab-btn-text">{tab.props.name}</span>
+              <span className="tab-btn-text">{label}</span>
             </button>
           );
         })}

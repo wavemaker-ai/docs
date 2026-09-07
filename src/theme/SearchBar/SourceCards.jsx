@@ -142,6 +142,235 @@ function DocLinkList({ groups }) {
   );
 }
 
+// ── STORYBOOK: component card + doc sections ─────────────────
+// Order the component's doc pages the way its Storybook sidebar reads.
+const SECTION_ORDER = [
+  'overview',
+  'props',
+  'events',
+  'methods',
+  'styling',
+  'style',
+  'token',
+];
+
+const sectionRank = (section) => {
+  const index = SECTION_ORDER.indexOf(section);
+  return index === -1 ? SECTION_ORDER.length : index;
+};
+
+const titleCase = (value) =>
+  value
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+// Chunks are raw markdown — mostly prop tables and code samples. Show the first
+// line that reads as prose, and nothing at all when there isn't one.
+const proseLine = (text) => {
+  if (!text) return '';
+  const line = text
+    .split('\n')
+    .map((l) =>
+      l
+        .replace(/^[#>\s*-]+/, '')
+        .replace(/[`*_]/g, '')
+        .trim(),
+    )
+    .find(
+      (l) =>
+        l.length > 24 &&
+        l.includes(' ') &&
+        /^[A-Za-z]/.test(l) &&
+        !/[|=<>{}]/.test(l),
+    );
+  return line ? line.slice(0, 90) : '';
+};
+
+function StorybookComponentCard({ group }) {
+  const firstChunk = group.chunks[0];
+  const category = firstChunk?.meta?.category || '';
+  // Chunk URLs carry a #section fragment so fusion keeps them apart; the header
+  // links to the component's page itself.
+  const storyUrl = firstChunk?.meta?.story_url || group.url;
+
+  // One row per doc section — the same section can arrive as several chunks,
+  // and chunks are already ranked, so the first one wins.
+  const sections = [];
+  group.chunks.forEach((chunk) => {
+    const section = chunk.meta?.section;
+    if (!section || sections.some((row) => row.section === section)) return;
+    sections.push({
+      section,
+      label: chunk.meta?.section_title || titleCase(section),
+      hint: proseLine(chunk.excerpt),
+      href: chunk.url || storyUrl,
+    });
+  });
+  sections.sort((a, b) => sectionRank(a.section) - sectionRank(b.section));
+
+  return (
+    <div className={styles.componentCard}>
+      <a
+        className={styles.componentCardHeader}
+        href={storyUrl || '#'}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div className={styles.componentCardInfo}>
+          <span className={styles.componentCardTitle}>{group.title}</span>
+          {category && (
+            <span className={styles.componentCardCategory}>{category}</span>
+          )}
+        </div>
+        {storyUrl && (
+          <span className={styles.componentCardOpen}>
+            Storybook
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M7 17 17 7" />
+              <path d="M8 7h9v9" />
+            </svg>
+          </span>
+        )}
+      </a>
+
+      {sections.map((row) => (
+        <a
+          key={row.section}
+          href={row.href || '#'}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.componentSectionRow}
+        >
+          <span className={styles.componentSectionTag}>{row.label}</span>
+          {row.hint ? (
+            <span className={styles.componentSectionHint}>{row.hint}</span>
+          ) : (
+            <span className={styles.componentSectionSpacer} />
+          )}
+          <span className={styles.componentSectionOpen} aria-hidden="true">
+            ↗
+          </span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+// ── MARKETPLACE: artifact card + actions ─────────────────────
+function MarketplaceArtifactCard({ group }) {
+  const meta = group.chunks[0]?.meta || {};
+  const detailUrl = meta.detail_url || group.url;
+  // Description and capabilities restate each other, so show one: the summary
+  // when there is one, otherwise the capability list standing in for it.
+  const description = meta.description?.trim();
+  const capabilities = description
+    ? []
+    : (meta.features?.length ? meta.features : meta.tags || [])
+        .filter((item) => item && String(item).trim())
+        .slice(0, 2);
+  const actions = [
+    meta.preview_url && { label: 'Preview', href: meta.preview_url },
+    meta.github_url && { label: 'GitHub', href: meta.github_url },
+  ].filter(Boolean);
+
+  return (
+    <div className={styles.artifactCard}>
+      <a
+        className={styles.artifactCardBody}
+        href={detailUrl || '#'}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div className={styles.artifactCardHeader}>
+          <div className={styles.artifactThumbnail}>
+            {meta.thumbnail ? (
+              <img
+                src={meta.thumbnail}
+                alt=""
+                className={styles.artifactThumbnailImg}
+                loading="lazy"
+              />
+            ) : (
+              <span className={styles.artifactThumbnailFallback}>
+                {group.title.charAt(0)}
+              </span>
+            )}
+          </div>
+          <div className={styles.artifactCardInfo}>
+            <span className={styles.artifactCardTitle}>{group.title}</span>
+            <span className={styles.artifactCardMetaRow}>
+              {meta.artifact_type && (
+                <span className={styles.artifactTypeTag}>
+                  {titleCase(meta.artifact_type)}
+                </span>
+              )}
+              {meta.version && (
+                <span className={styles.artifactCardVersion}>
+                  v{meta.version}
+                </span>
+              )}
+            </span>
+          </div>
+        </div>
+
+        {description && (
+          <p className={styles.artifactCardDescription}>{description}</p>
+        )}
+
+        {capabilities.length > 0 && (
+          <ul className={styles.artifactCapabilities}>
+            {capabilities.map((capability, ci) => (
+              <li key={ci} className={styles.artifactCapability}>
+                {capability}
+              </li>
+            ))}
+          </ul>
+        )}
+      </a>
+
+      {(meta.published_by || actions.length > 0) && (
+        <div className={styles.artifactCardFooter}>
+          {meta.published_by && (
+            <span className={styles.artifactPublisher}>
+              {meta.published_icon && (
+                <img
+                  src={meta.published_icon}
+                  alt=""
+                  className={styles.artifactPublisherAvatar}
+                  loading="lazy"
+                />
+              )}
+              {meta.published_by}
+            </span>
+          )}
+          {actions.map((action) => (
+            <a
+              key={action.label}
+              href={action.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.artifactAction}
+            >
+              {action.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── ACADEMY: video card + timestamps ─────────────────────────
 function AcademyVideoCard({ group, onVideoOpen }) {
   const firstChunk = group.chunks[0];
@@ -343,11 +572,19 @@ function AcademyVideoCard({ group, onVideoOpen }) {
 }
 
 // ── Per-source accordion section ──────────────────────────────
+const SOURCE_RENDERERS = {
+  storybook: (group) => <StorybookComponentCard key={group.id} group={group} />,
+  marketplace: (group) => (
+    <MarketplaceArtifactCard key={group.id} group={group} />
+  ),
+};
+
 function SourceSection({ source, groups, defaultOpen, onVideoOpen }) {
   const [open, setOpen] = useState(defaultOpen);
   const IconComponent = SOURCE_ICONS[source] || SOURCE_ICONS.docs;
   const color = SOURCE_COLORS[source] || '#6b7280';
   const isAcademy = source === 'academy';
+  const renderGroup = SOURCE_RENDERERS[source];
 
   return (
     <div className={styles.sourceSection}>
@@ -378,6 +615,8 @@ function SourceSection({ source, groups, defaultOpen, onVideoOpen }) {
                 onVideoOpen={onVideoOpen}
               />
             ))
+          ) : renderGroup ? (
+            groups.map(renderGroup)
           ) : (
             <DocLinkList groups={groups} />
           )}
@@ -463,9 +702,10 @@ export default function SourceCards({ cards, activeQuestion, isLoading }) {
     <div className={styles.sourcesCol}>
       {navHeader}
       <div className={styles.sourcesColScroll} ref={scrollRef}>
-        {sortedSources.map((source) => {
+        {sortedSources.map((source, si) => {
           const groups = Object.values(bySource[source]);
-          const defaultOpen = source === 'docs' || source === 'academy';
+          // Open the top-ranked sources; the rest stay one click away.
+          const defaultOpen = si < 2;
           return (
             <SourceSection
               key={source}
