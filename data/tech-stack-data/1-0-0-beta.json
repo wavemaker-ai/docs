@@ -6,7 +6,7 @@
           "name": "Angular",
           "description": "Platform for building mobile and desktop web applications",
           "link": "https://angular.io/",
-          "version": "18.2.13"
+          "version": "21.2.20"
         },
         {
           "name": "jQuery",
@@ -24,13 +24,13 @@
           "name": "ngx-bootstrap",
           "description": "Native Angular directives for Bootstrap.",
           "link": "https://valor-software.com/ngx-bootstrap/",
-          "version": "9.0.0"
+          "version": "21.2.0"
         },
         {
           "name": "Bootstrap",
           "description": "The most popular HTML, CSS, and JS library for developing responsive, mobile-first projects.",
           "link": "https://getbootstrap.com/docs/3.3/",
-          "version": "3.3.7"
+          "version": "3.4.1"
         },
         {
           "name": "D3.js",
@@ -54,7 +54,7 @@
           "name": "Lodash (lodash-es)",
           "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
           "link": "https://lodash.com/",
-          "version": "4.17.12"
+          "version": "4.18.1"
         }
       ],
       "React": [
@@ -326,7 +326,7 @@
           "name": "npm",
           "description": "Package manager for the JavaScript programming language.",
           "link": "https://www.npmjs.com/",
-          "version": "10.9.2"
+          "version": "10.9.3"
         }
       ],
       "React": [],
