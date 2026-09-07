@@ -1,0 +1,1050 @@
+---
+last_update: { author: 'Shahnawaz Ahmed' }
+hide_table_of_contents: true
+hide_title: true
+
+---
+
+<Common.WaveMakerAIHeading scale={1.5}>
+  <Pill type="beta" />
+</Common.WaveMakerAIHeading>
+
+WaveMaker announces the release of WaveMaker AI 12.0.0.
+
+For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack).
+
+## 12.0.0
+
+*Release date: 07 September 2026*
+
+<TabsWrapper>
+  <TabItem name="Features">
+    <Accordian title="User Interface">
+      - ### Sync new pages from Design-to-Code plugin into existing projects <Pill type="web" />
+
+        The Design-to-Code plugin now supports a Sync flow that lets you add new pages to any existing WaveMaker project directly from the plugin.
+
+      - ### SVG generation and Icon URL support in Design-to-Code plugin <Pill type="web" />
+
+        Icons used in Figma designs are now exported as SVGs. This enhancement improves icon rendering by enabling support for icons outside the design system and produces outputs that more closely match the original design.
+
+      - ### Upload custom fonts in Style Workspace <Pill type="mobile" />
+
+        Style Workspace now has an **Upload Font Family** option under the **Text** tab's **Font.Family** token, letting you add custom `.ttf` fonts directly from Studio instead of manually copying files and hand-editing `font.config.js`. Uploaded files are grouped into families automatically, and **Font.Family** becomes a dropdown of the uploaded weights and styles.
+
+        [Documentation](../../../user-interfaces/mobile/develop/styling-with-design-tokens/uploading-custom-fonts)
+
+      - ### Screenshot-to-Code for Mobile (BETA) <Pill type="mobile" />
+
+        Convert a screenshot of a mobile UI into a working WaveMaker mobile page with auto-generated components and layout.
+
+      - ### React output preview in Studio (BETA) <Pill type="web" />
+
+        Preview the generated React output of your app directly inside Studio without switching contexts.
+
+      - ### Design System based projects <Pill type="web" /> <Pill type="mobile" />
+
+        Build web and mobile apps using design tokens and standardized component variants for consistent, scalable theming.
+
+        [Documentation](../../../design-system/concepts)
+
+      - ### Auto Layout for responsive UIs <Pill type="web" /> <Pill type="mobile" />
+
+        Create structured, responsive layouts visually with precise control over alignment, spacing, orientation and sizing—without writing CSS.
+
+        [Documentation](../../../user-interfaces/web/develop/working-with-layouts/auto-layout)
+
+      - ### Design to Code for converting Design-to-code <Pill type="web" />
+
+        Convert supported Figma designs into working WaveMaker applications with layouts, components, and auto-generated tokens.
+
+        [Documentation](../../../design-system/figma-design-to-code-plugin/working-with-design-to-code-plugin)
+
+      - ### Web Applications <Pill type="web" />
+        - **Angular (Default)**: Build robust enterprise grade web applications with our optimized Angular-based output.
+        - **React (Beta)**: **React as a build output for Web**. This beta feature allows you to export production-ready React code while using the same visual development experience.
+
+      - ### Mobile Applications <Pill type="mobile" />
+        - **React Native (Default)**: Build and deploy high-performance, native mobile applications for iOS and Android using **React Native** as the primary target framework.
+
+      - ### Web Components support in React codegen <Pill type="web" />
+
+        React codegen now supports embedding custom Web Components in generated pages, wrapping them automatically with a WebComponent helper.
+
+      - ### Server-side pagination for Table <Pill type="web" />
+
+        Table now supports server-side pagination configured through a dataset binding.
+
+      - ### Device-specific prefab rendering at design time <Pill type="web" /> <Pill type="mobile" />
+
+        Prefab components configured to render based on device type or items-per-row now reflect that configuration at design time, not just at runtime, when added to a web or mobile app.
+
+      - ### Design token highlighting and templates in Style Workspace <Pill type="mobile" />
+
+        Style Workspace now highlights components using a selected design token, adds a menu-dropdown template for native mobile projects, and removes extraneous grid overlays from the canvas and mobile index file.
+
+      - ### WMX component preview in React Preview <Pill type="web" />
+
+        React Preview now supports previewing WMX components, using a centralized preview model.
+    </Accordian>
+
+    <Accordian title="Backend">
+      - Build scaleable microservices with Java and Spring. Connect to any data source, import API endpoints, and create custom APIs (BFF), and implement complex business logic with ease.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### Cancel a running conversation in AI chat
+
+        You can now cancel an AI chat conversation while it's in progress, letting the agent finish whatever it's currently doing — generating a response, running a tool, or delegating to a sub-agent — before stopping.
+
+      - ### Edit a previously sent prompt in AI chat
+
+        You can now edit a prompt you've already sent in an AI chat conversation and resubmit it, replacing all messages, agent actions, and file changes made after that point, along with any images or chat suggestions carried over from the original prompt.
+
+      - ### Introducing AI Analytics in Team Portal
+
+        A single AI Analytics page that gives Team Portal admins full visibility into AI usage, cost, and code-change acceptance across their team.
+
+      - ### Restore conversation to a previous checkpoint in AI chat
+
+        You can now restore an AI chat conversation to any previously saved checkpoint, permanently removing all messages, agent interactions, tool executions, and changes made after that point so you can continue from the selected state.
+
+      - ### Code Review agent
+
+        Introducing the WaveMaker Code Review Agent — a dedicated AI agent that audits your WaveMaker project files against best practices and surfaces violations as structured, actionable tables. It is report-only — it never edits or rewrites your files. Currently, the agent specializes only in identifying issues related to HTML and CSS files.
+
+      - ### Suggested next actions in AI chat
+
+        AI Chat now surfaces relevant next actions at the end of a conversation, enabling users to quickly continue workflows, take follow-up actions, and maintain momentum without manually determining the next step.
+
+      - ### Export AI session as downloadable ZIP <Pill type="web" />
+
+        Export your AI session — including conversation history, uploaded files, and session context — as a ZIP archive.
+
+      - ### Upload resources to an AI session <Pill type="web" />
+
+        Upload project resources directly into an AI session for use during agent conversations.
+
+      - ### Live context window usage during agent conversations <Pill type="web" />
+
+        The current context window usage is now displayed live in the UI while an agent conversation is in progress.
+
+      - ### Automatic conversation history compaction <Pill type="web" />
+
+        The AI agent automatically compacts long conversation histories to keep responses fast and context relevant.
+
+      - ### [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) project sync support with merge framework <Pill type="web" />
+
+        Seamlessly sync [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) projects with merge framework support for improved collaboration and version control.
+
+      - ### Web and Mobile builder separation for Design2Code projects preview <Pill type="web" /> <Pill type="mobile" />
+
+        Separate web and mobile builders for Design2Code project previews to support better scalability and streamlined development workflows.
+
+      - ### Custom instructions via Agents.md <Pill type="web" /> <Pill type="mobile" />
+
+        Add an `Agents.md` file to your project to provide custom instructions that AIRA agents follow automatically when building the app.
+
+      - ### AIRA chat rebuilt on AG UI protocol <Pill type="web" />
+
+        The AIRA chat interface now runs on the AG UI protocol, replacing Theia for a more responsive and extensible experience.
+
+      - ### App resource suggestions in AIRA chat <Pill type="web" />
+
+        Type to search and select app resources — variables, widgets, and APIs — directly within the AIRA chat panel.
+
+      - ### WM AI Assistant runs on Python backend <Pill type="web" />
+
+        The WM AI Assistant server has been rewritten in Python, improving response performance and enabling deeper agent extensibility.
+
+      - ### Automatic sensitive data redaction in AIRA <Pill type="web" />
+
+        Sensitive content in conversation context is now redacted at the assistant level before being forwarded to agents.
+
+      - ### AI agents for application development <Pill type="web" />
+
+        Use prompt-driven AI agents for API integration, backend creation, JavaScript generation, security configuration, and screenshot-to-code workflows, where the most relevant agents are automatically selected for your requested task.
+
+        [Documentation](../../../developing-with-agents/)
+
+      - ### Style Workspace for design tokens <Pill type="web" />
+
+        Manage global and component-level design tokens, themes, and variants from a dedicated styling workspace.
+
+        [Documentation](../../../user-interfaces/web/develop/styling-with-design-tokens/working-with-style-workspace.mdx)
+
+      - ### WaveMaker Assistant (BETA) agent
+
+        Introduced WaveMaker Assistant (BETA), a single-agent entry point available alongside the default WaveMaker Agent that handles UI and backend tasks directly without delegating to sub-agents.
+
+      - ### Global design tokens before mobile generation <Pill type="mobile" />
+
+        WaveMaker Agent now resolves global design tokens and brand styling before generating mobile screens from a Figma design or screenshot, and derives required-field rules from the design.
+
+      - ### AI-generated charts for mobile apps <Pill type="mobile" />
+
+        WaveMaker Agent can now generate chart widgets, covering all 8 chart types, for mobile apps from a design or a direct request.
+
+      - ### Image support in AI file reads
+
+        The AI assistant's file-reading tool can now read image files and include them as visual content in the conversation instead of failing on binary content.
+
+      - ### Draft review actions shared with agent
+
+        The AI agent is now informed, at the start of its next run, of any accept, reject, edit, or Studio-sync actions taken on its previous code changes.
+
+      - ### Regenerate a previous run in AI chat
+
+        You can now regenerate a previous run in an AI chat conversation, creating a new branch from that point without losing your prior work.
+
+      - ### Notifications when WaveMaker Agent finishes tasks
+
+        WaveMaker Agent now shows a Studio toast and a blue-dot unread indicator when a conversation completes, plus a desktop notification that opens the conversation directly when you're away from the tab.
+
+      - ### Search across project files in Studio
+
+        Search for text across all project files from the File Explorer, with in-file result navigation, a dedicated search toggle, and clear no-results and start states.
+
+      - ### Core details and upgrade in Projects Hub
+
+        Projects Hub now shows Core details for an app, including the current Core version, an Upgrade Core dialog, and a current-version badge.
+
+      - ### Localizable API variable spinner message
+
+        The API variable's loading spinner message can now be localized using a bind expression.
+
+      - ### WaveMaker Assistant is now the default assistant
+
+        WaveMaker Assistant is now the default assistant for new conversations, replacing WaveMaker Agent, and the "(BETA)" label has been removed from its name.
+
+      - ### Per-request LLM model override in AG-UI API
+
+        The AG-UI WebSocket run API now accepts a per-request LLM model override (`llm_model_id` or `llm_config`), applied to the run and every delegated sub-agent.
+
+      - ### HQL query support for AI-created queries
+
+        WaveMaker Agent can now create HQL queries in addition to native SQL queries.
+
+      - ### Offline-aware caching for service variables <Pill type="mobile" />
+
+        Added a configurable cache interceptor for service variable API calls that stores GET responses in session or on-device persistent storage with a configurable TTL and automatic background cleanup of expired entries, keeping previously fetched data available when connectivity drops.
+    </Accordian>
+
+    <Accordian title="Product Ecosystem">
+      #### Design to Code Release Notes
+
+      <br />
+
+      - ### All Design Systems are Welcome <Pill type="web" /> <Pill type="mobile" />
+
+        A brand-new Annotation Flow brings code generation to any design system by leveraing AI for component detection.
+
+      - ### Smarter Variants <Pill type="web" /> <Pill type="mobile" />
+
+        More design tokens, more flexibility, more customisation across component variants.
+
+      - ### Sync, Don't Duplicate <Pill type="web" /> <Pill type="mobile" />
+
+        Add new pages to an existing project instead of spinning up a new project each time.
+
+      - ### Truly Flexible Hug & Fill <Pill type="web" /> <Pill type="mobile" />
+
+        Real flexbox behaviour at every level, with no more hard-coded 100% width or height. See [Design Guidelines](../../../design-system/figma-design-to-code-plugin/design-guidelines#proper-use-of-auto-layout)
+
+      - ### Wizards Stay Together <Pill type="web" />
+
+        Prototype-linked wizard pages are automatically merged into a single wizard.
+
+      - ### Native SVGs <Pill type="web" />
+
+        SVG is now a first-class citizen across all widgets, with no font-icon workarounds needed.
+
+      - ### Better Mobile Fonts <Pill type="mobile" />
+
+        Full support for `.woff2` and `.ttf` fonts on mobile builds.
+
+      - ### A Brand New UI
+
+        A redesigned plugin interface delivers a cleaner, faster experience.
+
+      - ### Clean documentation experience
+        Documentation reorganized around developer personas and workflows, with deep linking across Academy and Storybook.
+
+      - ### WaveMaker Academy as a learning platform
+
+        Mentor-led learning paths, self-paced tutorial videos, and certification-oriented programs for faster developer onboarding.
+
+        [Academy](https://academy.wavemaker.ai)
+
+      - ### Component Storybook for Web and Mobile
+
+        Interactive component documentation with live property manipulation for React and React Native components.
+
+        [Web Storybook](https://react-components.wavemaker.ai)
+        [Mobile Storybook](https://reactnative-components.wavemaker.ai)
+
+      - ### Product Marketplace for reusable assets
+
+        Discover and reuse components, prefabs, connectors, design systems, and industry-specific solutions.
+
+        [Marketplace](https://marketplace.wavemaker.ai)
+
+      - ### Automatic thumbnails for Figma imports
+
+        Figma import flows now automatically generate thumbnail images for imported designs.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="User Interface">
+      - ### Fill sizing (`width=fill` / `height=fill`) for auto-layout children <Pill type="web" />
+
+        Auto Layout now supports `width=fill` and `height=fill` in addition to fixed values like px and %, letting a component occupy the available space within its parent container instead of sizing to content (`hug`).
+
+        This Fill sizing, previously available only for containers, is now supported for all components placed inside Auto Layout containers, making it easier to build responsive, flexible layouts. Currently available in Angular.
+
+      - ### Bind support for data table advanced settings <Pill type="web" />
+
+        Properties in the data table's advanced settings dialog now support bind expressions.
+
+      - ### Upgraded to Angular 20 <Pill type="web" />
+
+        Generated Angular apps now target Angular 20, bringing improved build performance and alignment with the latest framework release.
+
+      - ### UI library dependency upgrades <Pill type="web" />
+
+        Frontend library dependencies have been updated to their latest stable versions.
+
+      - ### Animated loading screen in Studio
+
+        Studio's loading screen now uses an animated Lottie-based loader instead of the previous static spinner.
+
+      - ### Width and height fill for widgets <Pill type="mobile" />
+
+        Widgets now support width and height set to fill their parent container.
+
+      - ### Native SVG icons on mobile <Pill type="mobile" />
+
+        Mobile widgets — including Menu, Switch, and Tabbar — now render icons as SVGs instead of font icons, extending existing web SVG support to mobile.
+
+      - ### Loader asset delivered from CDN
+
+        Studio's animated loading screen now streams its loader asset from a CDN instead of bundling it with the app.
+
+      - ### List item state design tokens
+
+        Added default, hover, and selected state style tokens for list items.
+
+      - ### Design tab renamed to Studio
+
+        Renamed the "Design" tab to "Studio", updated its icon, and added highlighting for the active tab.
+
+      - ### Field-level validation triggers in Form Field <Pill type="web" />
+
+        Form Field now supports triggering field-level validation programmatically.
+
+      - ### Configurable column widths in Table <Pill type="web" />
+
+        Table columns now support `minWidth` and `maxWidth` properties for finer control over column sizing.
+
+      - ### Partial container registration for React apps <Pill type="web" />
+
+        Containers and components can now register and update partially instead of as a whole, improving update performance for React output.
+
+      - ### Class and className prop aliasing for components <Pill type="web" />
+
+        Components now alias `class` and `className` props to the same underlying prop.
+    </Accordian>
+
+    <Accordian title="Backend">
+      - ### Backend library upgrades
+
+        Runtime backend dependencies have been updated to their latest stable versions, including JGit (7.7.1), Jackson (2.22.2), Guava (33.7.1-jre), Apache Commons Codec (1.22.1), Apache FreeMarker (2.3.35), MongoDB Driver (5.11.0), and Apache Commons Validator (1.11.0).
+
+      - ### Agents use file system tools instead of codebase index <Pill type="web" />
+
+        Agents now browse and read project files using grep, glob, and read tools, replacing the previous codebase indexing approach for more accurate file lookup.
+
+      - ### Image input support for A2A agent requests
+
+        A2A clients can now include images in agent requests, either as a pre-uploaded file reference or as inline base64-encoded data.
+
+      - ### Pull-to-refresh update property for variables
+
+        Service, CRUD, and Live variables now support a `pulltorefreshUpdate` property.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### Section-level reads and edits for large project files
+
+        Large files can now be read and edited in sections using offset and limit, instead of the whole file. Edits are checked only against that section, so unrelated changes elsewhere don't block them, giving faster edits with less token usage.
+
+      - ### Enhanced AI chat experience with improved suggestions, icons, and notifications
+
+        Improves the AI chat experience with hover-highlighted suggestions, quick-access side popovers, updated icons and copy feedback, Studio-aligned notifications, and support for custom chat events such as context compaction.
+
+      - ### Improved subagent header with task descriptions in AI chat
+
+        The AI chat subagent header now displays a descriptive task title alongside the agent name, making it easier to follow what each subagent is working on.
+
+      - ### Improved i18n performance when localizing pages and adding new languages <Pill type="web" /> <Pill type="mobile" />
+
+        - Adding a new label to a page no longer requires loading every message across all languages just to check for duplicates. The check is now quick and targeted, so localizing pages uses less context and completes faster, even in apps with thousands of messages.
+
+        - Adding a new language to your app now avoids reloading existing content from scratch each time. It's loaded once and shared across every language you add, whether together or one after another, using far less context.
+
+      - ### Restrict agents from edit/write for studio-managed files
+
+        AI agents are now blocked from writing or editing gitignored, build-managed, and other auto-generated files to prevent corruption of the project.
+
+      - ### Enhanced context discovery and selection in AI assistant input
+
+        Typing @ now directly opens context suggestions with grouped categories and improved filtering, making it faster to find and insert relevant context without navigating multiple trigger levels.
+
+      - ### Enhanced change tracking and agent activity visibility in AI chat
+
+        Redesigned the changes section, improved visibility of available updates, and introduced clearer agent activity and execution status indicators to provide better insight into AI-generated actions and progress.
+
+      - ### Sync latest Studio changes to existing conversations <Pill type="web" />
+
+        Conversations now reflect the most recent project changes made in Studio without requiring a new session.
+
+      - ### Selective container patching in Instance Patch API
+
+        The Instance Patch API now accepts a `patchComponents` parameter to update individual containers selectively without reloading the full instance.
+
+      - ### Improved AI-generated mobile app skills <Pill type="mobile" />
+
+        Improved AI-authored React Native forms, containers, push notification handling, and plugin version lookups.
+
+      - ### Faster design token override writes
+
+        WaveMaker Agent design token overrides are now written more efficiently, avoiding redundant file reads.
+
+      - ### Delete and rename WMX web components <Pill type="web" />
+
+        WaveMaker Agent can now delete and rename React WMX web components, in addition to creating them.
+
+      - ### Capped reads with total line count
+
+        Reads of M2, log, and chat-session files are now capped per call and report the file's total line count, so it's clear when only part of a file was returned.
+
+      - ### Core version in implementation branch naming
+
+        Core version information is now included in the linked implementation's branch naming and shown under the project name.
+
+      - ### AI chat and VCS review UX improvements
+        - Conversation execution time now shown at the end of a completed conversation.
+        - Changes header shows the total count of changed files.
+        - Edit confirmation now happens inline in the chat input instead of a separate dialog.
+        - Redesigned the cancelled-conversation indicator.
+        - The conversation panel auto-collapses and restores around the file editor.
+        - Agent descriptions appear on hover during agent selection.
+        - Clearer failed-status icons for sub-agents and tool calls.
+        - The editor refreshes automatically when new VCS changes arrive.
+
+      - ### Screenshot-to-Code agent scoped to fewer files
+
+        The Screenshot-to-Code agent is now restricted to editing only a specific set of files.
+
+      - ### Improved orchestration for UI and backend tasks
+
+        Improved orchestration between agents for tasks that span both UI and backend, without relying on workflow skill files.
+
+      - ### Font-manager skill updates
+
+        Updated the font-manager skill used by AI agents.
+
+      - ### Fewer unnecessary background tasks in AI Assistant
+
+        The AI Assistant now handles small lookups directly and writes bulky results to files instead of unnecessarily using background tasks or echoing full content as text.
+
+      - ### Removed unused skill from UI expert agent
+
+        Removed the unused explore-codebase skill from the UI expert agent.
+
+      - ### Per-app log isolation for the rescue agent
+
+        Each previewed app now writes to its own log file instead of a shared one, so the diagnostic (rescue) agent can reliably isolate that app's errors.
+
+      - ### Skipped Angular codegen on preview events
+
+        Project preview no longer triggers an unnecessary Angular code-generation pass.
+
+      - ### Introduced offline banner <Pill type="mobile" />
+
+        Enhanced the offline banner shown when the device loses connectivity with refined visual styling and standardized the `showofflinebanner` page property casing.
+
+      - ### Charts widget migrated to ECharts <Pill type="mobile" />
+
+        The Area, Bar, Column, Line, Bubble, Pie, and Donut chart types on mobile now render using [ECharts](https://github.com/wavemaker/wm-react-native-echarts) instead of Victory Native.
+
+        As a result, these charts render with smoother animations, richer tooltips, and a more polished look and feel with the existing markup.
+
+      - ### Minimum touchable area for interactive components <Pill type="mobile" />
+
+        Tappable components now automatically enforce the platform-recommended minimum touch target size (44pt on iOS, 48dp on Android) when the visible size is smaller, improving usability and accessibility without changing their visual size, controllable via a new `enableMinTouchArea` UI preference enabled by default.
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="User Interface">
+      - ### Hover line overlapping properties panel <Pill type="web" />
+
+        Fixed the hover indicator line overlapping the properties panel and misaligning at certain zoom levels while hovering over a canvas component whose content is wider than the canvas.
+
+      - ### Form field show property ignored via script <Pill type="web" />
+
+        Fixed the form field's `show` property not taking effect when updated from script.
+
+      - ### Stale data shown during pagination load <Pill type="web" />
+
+        Fixed pagination briefly displaying the previous page's data alongside the loading spinner before the next page's data renders.
+
+      - ### Accordion pane onload event not triggering <Pill type="web" />
+
+        Fixed the accordion pane's onload event not firing when its content type is set to inline.
+
+      - ### Widget labels not refreshing on locale change <Pill type="web" />
+
+        Fixed widgets and navigation components not updating translated labels immediately when the locale is changed via `i18nService.setSelectedLocale(locale)`, requiring an application reload.
+
+      - ### Time widget value cleared automatically <Pill type="web" />
+
+        Fixed a React app issue where values entered into the Time widget were cleared unexpectedly.
+
+      - ### Page unresponsive on Switch widget change in Figma-generated apps <Pill type="web" />
+
+        Fixed React pages becoming unresponsive when toggling the Switch widget value in apps generated from Figma designs.
+
+      - ### Auto layout incorrect in Figma-imported projects <Pill type="web" />
+
+        Fixed auto layout not rendering correctly when a project was imported from a Figma design.
+
+      - ### `formatpattern` attribute missing from datatable markup <Pill type="web" />
+
+        Fixed `formatpattern` not being written to the datatable markup when configured.
+
+      - ### Tab component exposing getter methods as callable functions <Pill type="web" />
+
+        Fixed getter properties on the tab component (e.g., `isFirstTabPane`) being incorrectly exposed as callable methods.
+
+      - ### Number formatter not applied to bound widget <Pill type="web" />
+
+        Fixed number formatters such as thousand separator not taking effect when bound to a widget property.
+
+      - ### Menu item navigation in React <Pill type="web" />
+
+        Fixed a menu item click not navigating to the linked page in React apps.
+
+      - ### Default sidebar shown with custom sidebar <Pill type="web" />
+
+        Fixed the default sidebar appearing alongside a page's custom sidebar in React Preview.
+
+      - ### Popover on-load filter ignored <Pill type="web" />
+
+        Fixed a Popover's on-load event not applying a LiveVariable's filter before loading records in React apps.
+
+      - ### Chips Match Mode not applied <Pill type="web" />
+
+        Fixed the Chips widget's Match Mode property not filtering results as you type in React apps.
+
+      - ### List widget event and selection issues <Pill type="web" />
+        - Corrected the order in which list events fire.
+        - Fixed `$index`, `$first`, and `$last` not resolving correctly for list items.
+        - Fixed infinite scroll not working on a grouped list.
+        - Fixed deselecting a list item not working.
+
+      - ### Cache not cleared on page navigation <Pill type="web" />
+
+        Fixed page navigation not partially clearing cached data.
+
+      - ### Cancel button not closing dialog <Pill type="web" />
+
+        Fixed the Cancel button not closing a dialog opened from a form action in React apps.
+
+      - ### Toast position incorrect in React <Pill type="web" />
+
+        Fixed the toast notification appearing at the bottom-right instead of the configured position in React apps.
+
+      - ### File Upload not showing uploaded files <Pill type="web" />
+
+        Fixed File Upload not showing uploaded files and crashing when a file was selected from the list.
+
+      - ### Table row-selection event was null <Pill type="web" />
+
+        Fixed Table row-selection scripts receiving a null event instead of the actual native event.
+
+      - ### Table checkbox selection color <Pill type="web" />
+
+        Fixed incorrect selection color on Table row checkboxes in React apps.
+
+      - ### Missing border on expanded table row <Pill type="web" />
+
+        Fixed a missing border on expanded Table rows in React apps.
+
+      - ### Composite Show property with data value <Pill type="web" />
+
+        Fixed a composite widget's Show property not working when bound to another widget's data value.
+
+      - ### Advanced Filter search and reset <Pill type="web" />
+
+        Fixed Search and Reset buttons not working for date fields in the Advanced Filter dialog.
+
+      - ### Chips dropdown after regaining focus <Pill type="web" />
+
+        Fixed the Chips widget's dropdown not reappearing after the widget lost and regained focus.
+
+      - ### Datetime format inside forms <Pill type="web" />
+
+        Fixed Datetime and Timestamp fields inside a form showing an incorrect display format.
+
+      - ### Missing reset type on dynamic forms <Pill type="web" />
+
+        Fixed generated dynamic forms missing the `type="reset"` attribute on their reset button.
+
+      - ### Table styling mismatched with Angular <Pill type="web" />
+
+        Fixed a table's conditional class styling not matching Angular's rendering for Label widgets in React.
+
+      - ### Button position without parent container <Pill type="web" />
+
+        Fixed incorrect flex-grow and alignment causing misplaced buttons in containers with no parent container widget.
+
+      - ### Inline scripts blocked by strict CSP <Pill type="web" />
+
+        Fixed generated Next.js output failing under strict Content Security Policy by externalizing inline scripts.
+
+      - ### Wmx-bound label caption error on reload <Pill type="web" />
+
+        Fixed a Label's caption showing an error after reload when bound to a WMX widget's value.
+
+      - ### Height=fill column container sizing
+
+        Fixed `height=fill` column containers using an incorrect flex-basis value, causing incorrect sizing.
+
+      - ### Unsaved file changes lost in Explorer
+
+        Fixed unsaved file changes being lost when switching files in the File Explorer without saving first.
+
+      - ### Component identity in dynamic Tabs and Accordion <Pill type="web" />
+
+        Fixed dynamic Tabs and Accordion built from a Repeat not preserving component identity, visibility, or dataset updates when items were added, removed, or hidden.
+
+      - ### Inner navigation spacing and delete icon styling <Pill type="web" />
+
+        Fixed missing spacing around inner-navigation child elements and the delete icon not being colored in React output, matching Angular.
+
+      - ### Menu inside List returns wrong data value <Pill type="web" />
+
+        Fixed a Menu component inside a List returning the parent list item's data value instead of the selected menu item's value.
+
+      - ### Expression and JSX generation errors <Pill type="web" />
+
+        Fixed JSX and expression generation errors involving semicolon-separated statements, Angular-style text nodes, and HTML-entity-encoded text.
+
+      - ### State proxy support for Set values <Pill type="web" />
+
+        Fixed the app state proxy not supporting values of type `Set`.
+
+      - ### Crash from circular references in partial parameter keys <Pill type="web" />
+
+        Fixed a crash caused by circular references when computing partial parameter keys.
+
+      - ### Offer Labels tab styling in Additional Attributes dialog <Pill type="web" />
+
+        Fixed styling issues in the Offer Labels tab of the Additional Attributes dialog.
+
+      - ### Optional fields stripped in Repeat data <Pill type="web" />
+
+        Fixed the Repeat component's generated code stripping optional fields from item data.
+
+      - ### Fragment-scoped identifiers in navigation <Pill type="web" />
+
+        Fixed the navigation transformer incorrectly rewriting identifiers scoped to a fragment.
+
+      - ### Cancel and Submit buttons missing in Roles dialog <Pill type="web" />
+
+        Fixed the Cancel and Submit buttons in dialog actions being dropped when nested within a dialog, such as the Roles dialog shown when adding a role.
+
+      - ### Left-nav icon missing on CategoryListView page <Pill type="web" />
+
+        Fixed the left-navigation icon missing on the CategoryListView page, which prevented navigating to other screens.
+
+      - ### Checkboxes in table column configuration <Pill type="web" />
+
+        Fixed checkboxes in table column configuration not updating individually when using the select-all checkbox.
+
+      - ### Export All action not working <Pill type="web" />
+
+        Fixed the Export All action in the Options menu not doing anything on the CharacteristicsListView page.
+
+      - ### Extra line in Meta Extension dialog table <Pill type="web" />
+
+        Fixed an extra line appearing in the Meta Extension dialog's table when editing a meta extension, using new container class, table footer, form-field icon, and radio-select accessibility support.
+
+      - ### Form data not pre-populating <Pill type="web" />
+
+        Fixed form data not pre-populating correctly in React, matching Angular, by supporting asynchronously resolved default values in Form Field.
+
+      - ### Remove item for static variable via script <Pill type="web" />
+
+        Fixed removing an item from a static variable via script not actually deleting the item from the list.
+
+      - ### Live Filter not filtering in React Preview <Pill type="web" />
+
+        Fixed the Live Filter component not filtering a bound Table's data in React preview, showing all records instead of only the filtered ones.
+
+      - ### Pagination shown for single-page tables <Pill type="web" />
+
+        Fixed DataTable pagination showing navigation controls and an incorrect page count when all the data fits on a single page.
+
+      - ### Invalid auto-generated form field labels <Pill type="web" />
+
+        Fixed auto-generated form field labels showing incorrect or unreadable text, such as "Id" instead of "Identifier".
+
+      - ### DataTable crash on New record <Pill type="web" />
+
+        Fixed clicking the New button in a DataTable showing a "Something went wrong" error instead of opening the new-record form, caused by nested object values in Form Field.
+
+      - ### Values accordion missing third field <Pill type="web" />
+
+        Fixed the Values accordion only displaying two form fields instead of three after clicking Add.
+
+      - ### Wizard step visibility and navigation <Pill type="web" />
+
+        Fixed the Wizard component's hidden DOM attribute not being set when a step's visibility is bound to a checkbox, and dynamic navigation to a wizard step based on a bound value not working.
+
+      - ### onSetRecord callback and pagination API calls <Pill type="web" />
+
+        Fixed changing a table's pagination not triggering the API with updated offset and limit values, caused by the onSetRecord callback receiving a click event instead of a setRecord event.
+
+      - ### CSV import crash <Pill type="web" />
+
+        Fixed importing a CSV file throwing a TypeError and crashing the React app.
+
+      - ### Stale value in onChange handler <Pill type="web" />
+
+        Fixed the `onChange` handler using a stale value after being updated.
+
+      - ### Floating labels on empty composite inputs <Pill type="web" />
+
+        Fixed the floating label's active state being applied by default to composite components like TextArea and Select, even without focus or a value.
+
+      - ### Status popover overlapping confirmation dialog <Pill type="web" />
+
+        Fixed the status options popover overlapping the confirmation dialog when changing a status, and the status not actually updating after confirming.
+
+      - ### Delete-selection bar not appearing <Pill type="web" />
+
+        Fixed the delete-selection action bar not appearing when table rows were selected.
+
+      - ### Table row actions not working <Pill type="web" />
+
+        Fixed Table row delete and download actions not working in React, matching Angular's behavior.
+
+      - ### DataTable value expression error <Pill type="web" />
+
+        Fixed a DataTable with a value expression configured for its columns throwing an error in React preview, including quick-edit rows losing property access and their input not clearing after being added.
+
+      - ### Sort callback missing sortDirection <Pill type="web" />
+
+        Fixed clicking a table column header to sort throwing a TypeError because the sort callback's data was missing the expected `sortDirection` key.
+
+      - ### Console error and missing data on CreateUser Review step <Pill type="web" />
+
+        Fixed a console error and missing preview data on the CreateUser page's Review step by adding multi-value component support to the form controller's default value handling.
+
+      - ### Styling breaking when expanding rows <Pill type="web" />
+
+        Fixed styling breaking when expanding rows in List view.
+
+      - ### Missing font-size design token
+
+        Fixed a missing font-size design token that caused the app to crash when navigating between certain pages.
+
+      - ### Font config csspath key parsing
+
+        Fixed font configuration parsing to support both quoted and unquoted csspath keys.
+
+      - ### Header tab rendering on Linux
+
+        Fixed a header tab border rendering incorrectly on Linux and at reduced zoom levels.
+
+      - ### DataTable inline-edit validators skipped in React <Pill type="web" />
+
+        Fixed DSL field validators (Required, Min/Max Value, RegExp/Email, Min/Max Date/Time) not being triggered when saving a new row via DataTable Inline Edit in React mode.
+
+      - ### Console errors opening a list row's details <Pill type="web" />
+
+        Fixed console errors when clicking a row to view its details in a list view, caused by an undefined toaster-position reference.
+
+      - ### Hierarchy node moves on menu selection <Pill type="web" />
+
+        Fixed a hierarchy node shifting position when a menu item was selected from within it.
+
+      - ### Status column color missing on page 2 <Pill type="web" />
+
+        Fixed the Status column's background color not showing after navigating to a second page using table pagination.
+
+      - ### Order Management Workflow tab layout <Pill type="web" />
+
+        Fixed checkbox and text placement in the Order Management Workflow tab of the Additional Attributes dialog.
+
+      - ### Crash adding assets via checkbox dialog <Pill type="web" />
+
+        Fixed a crash when selecting a checkbox in the Assets section's Add dialog.
+
+      - ### Deployment-only styling gap in header and nav <Pill type="web" />
+
+        Fixed some header and left-navigation styles not applying in React deployment, while working correctly in React Preview.
+
+      - ### Table alignment in Source Offers dialog <Pill type="web" />
+
+        Fixed table alignment breaking in the Source Offers dialog.
+
+      - ### Preview step data missing in view mode <Pill type="web" />
+
+        Fixed preview-step data not rendering when navigating to a record's view mode from a list view row.
+
+      - ### Wrong value shown after selecting Catalog Version <Pill type="web" />
+
+        Fixed the Export dialog showing Markup instead of the selected Catalog Version.
+
+      - ### Character count shown in read-only view <Pill type="web" />
+
+        Fixed a text area's character-count helper text showing in read-only View mode.
+
+      - ### Row selection checkbox fails with error <Pill type="web" />
+
+        Fixed individual table rows failing to select via their checkbox, caused by an undefined row-handler reference.
+
+      - ### Dynamic tab content not loading <Pill type="web" />
+
+        Fixed dynamic tab content failing to load and throwing a console error when a tab is selected.
+
+      - ### Variants step order in product offer wizard <Pill type="web" />
+
+        Fixed the Variants step being added at the end of the wizard instead of immediately after the General step.
+    </Accordian>
+
+    <Accordian title="Backend">
+      - ### Connection pool for LangGraph Postgres checkpointer
+
+        Fixed idle-timeout failures by switching the LangGraph Postgres checkpointer to use a connection pool.
+
+      - ### REST service proxy failing with negative target port
+
+        Fixed REST service calls failing with "Target port must not be negative" when the app proxy was configured with include/exclude URLs.
+
+      - ### Swagger not refreshing after Java model class change
+
+        Fixed Swagger failing to regenerate when a Java service model class was updated, whether used as a return type, parameter, or nested model.
+
+      - ### Authorization header gets x-wm- prefix on REST service import
+
+        Fixed REST service import adding an unwanted `x-wm-` prefix to the `Authorization` header during design time.
+
+      - ### Custom formatter code generated in app.js instead of formatters.js
+
+        Fixed custom formatter code being written to `app.js` instead of the correct `formatters.js` file.
+
+      - ### API-aware live variable initialised with empty filterExpressions
+
+        Fixed `createApiAwareVariable` setting `filterExpressions` to `{}` on a live variable, which caused a downstream validation error.
+
+      - ### Bitbucket Cloud workspace listing API updated
+
+        Fixed Bitbucket Cloud integration by replacing the deprecated workspace listing endpoint with the current supported API.
+
+      - ### Role-lookup query validation on save
+
+        Custom database role-lookup queries in a security provider are now validated against the project's live preview at save time, instead of only failing at user login.
+
+      - ### Callback not saved to variables.json
+
+        Fixed a success or error callback sometimes being added to the page script but not saved to `variables.json` when added to an existing variable.
+
+      - ### Swagger re-import spinner never completes
+
+        Fixed the Swagger re-import spinner continuing to load indefinitely after the import completed successfully.
+
+      - ### CRUD endpoints not selectable for API variable
+
+        Fixed being unable to select CRUD endpoints while creating an API variable.
+
+      - ### REST variable input fields lost on reopen
+
+        Fixed a Web Service (REST) variable's configured input fields not showing when the variable was reopened.
+
+      - ### Multiple REST query parameter values dropped
+
+        Fixed multiple values for the same REST API query parameter not all being sent in Web Projects.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### Wizard pages not rendered in [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) project preview
+
+        Fixed an issue where Wizard pages failed to appear in the preview of [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) projects.
+
+      - ### [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) sync call errors not handled
+
+        Fixed [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) sync call errors not being handled on both the backend and the frontend.
+
+      - ### [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) project landing on an Invalid Page on Launch in case of Wizards
+
+        Fixed [Design to Code](https://www.figma.com/community/plugin/1463127344166357646/wavemaker-design-to-code) projects landing on an invalid page on launch when the app contains Wizards.
+
+      - ### Context suggestion filtering and placement fixes
+
+        Fixed issues that prevented context suggestions from filtering correctly after pasting input and caused selected suggestions to appear in the wrong location after selection.
+
+      - ### Secret key resolution failing for sub-agents
+
+        Fixed sub-agents being unable to resolve secret keys from the main agent's store, causing the literal key to be used in place of the actual secret value.
+
+      - ### REACT - Page params not working <Pill type="web" />
+
+        Fixed page parameters not being passed or applied correctly in React app deployments.
+
+      - ### REACT - Authorization not working in React deployment <Pill type="web" />
+
+        Fixed authorization checks failing in React app deployments.
+
+      - ### AIRA i18n skill not generating app.locale bindings for static texts <Pill type="web" />
+
+        Fixed the AIRA i18n skill failing to replace static page texts with `app.locale` bindings when localizing a page.
+
+      - ### Wizard callback events lose parameters after markup save <Pill type="web" />
+
+        Fixed cancel and done callback events on the wizard component receiving incorrect parameters when page markup was saved after an attribute change.
+
+      - ### Page markup formatting inconsistent before save <Pill type="web" />
+
+        Fixed page markup being formatted in ai-studio before save; it is now consistently prettified in Studio.
+
+      - ### WaveMaker Agent skill retrieval on first attempt <Pill type="web" />
+
+        Fixed WaveMaker Agent failing to retrieve the skill needed to create a React WMX web component on the first attempt, prompting for a prefab instead.
+
+      - ### WMX folder naming case <Pill type="web" />
+
+        Fixed WaveMaker Agent creating WMX component folder names in lowercase instead of PascalCase.
+
+      - ### Raw syntax passed to sub-agents
+
+        Fixed the WaveMaker agent passing implementation syntax directly to sub-agents instead of having them check the relevant skill first.
+
+      - ### read\_files error on high limit
+
+        Fixed `read_files` erroring when the requested limit exceeded a file's line count, instead of returning the available lines.
+
+      - ### grep\_in\_files tool errors
+
+        Fixed multiple `grep_in_files` errors, including GNU-grep-style flags, patterns starting with `--`, an over-blocked `--no-filename` option, and a hard error on a nonexistent path.
+
+      - ### Commit pointer after Studio draft sync
+
+        Fixed the agent's recorded code checkpoint not updating after syncing a draft with Studio, which could cause later restore actions to use stale state.
+
+      - ### Agent name fallback and VCS pill overflow
+        - Corrected the fallback order used to resolve an agent's display name.
+        - Hidden overflowing VCS change pills on resize instead of breaking layout.
+        - Blocked restore and edit actions after a change has been synced.
+
+      - ### Preview routing when page name is omitted
+
+        Fixed preview routing failing to parse the base path correctly when a page name was omitted.
+
+      - ### Core version state in deployment and preview
+
+        Fixed the Core version state showing incorrectly in deployment (should read Active) and preview (should read Current).
+
+      - ### Command injection in agent file-search tool
+
+        Fixed a command injection vulnerability in the AI agent's file-search tool by replacing free-form ripgrep options with explicit typed fields.
+
+      - ### Incorrect project-prefix guess for built-in skills
+
+        Fixed WaveMaker Assistant incorrectly guessing a project-specific prefix for built-in sub-skills, causing failed skill-load attempts before recovering.
+
+      - ### Assistant reading images before delegation
+
+        Fixed WaveMaker Assistant reading user-attached screenshots itself before delegating to the Screenshot-to-Code sub-agent, adding unnecessary latency and token usage.
+
+      - ### Stale doc-search references in security skill
+
+        Fixed WaveMaker Assistant's security skill referencing a non-existent documentation-search tool and the wrong documentation repository.
+
+      - ### Old chats 404 and lose memory on continue
+
+        Fixed old chat sessions returning a 404 when opened and silently losing conversation context when continued, for conversations that predate run checkpoints.
+
+      - ### A2A reattach crash
+
+        Fixed reconnecting to a chat session started via the external A2A integration crashing with an error, and live accept/reject notifications silently failing to reach the UI.
+
+      - ### Sub-skills not reliably loaded before tasks
+
+        Fixed the AI Assistant not reliably loading the skills it depends on before performing a task, leading to avoidable errors or incorrect first attempts.
+
+      - ### Context compaction silently skipped
+
+        Fixed conversation history compaction silently being skipped due to a checkpoint read race condition.
+
+      - ### WMX component skill not loading on Web <Pill type="web" /> <Pill type="mobile" />
+
+        Fixed requesting a custom WMX component on Web projects failing with a "skill could not be loaded" error.
+
+      - ### WaveMaker Agent binding skill not loading for bind expressions
+
+        Fixed WaveMaker Agent sometimes not loading its binding skill when generating bind expressions, which could result in hallucinated bindings to incorrect properties.
+
+      - ### Accept and connect timeout regression
+
+        Fixed a shared 300-second timeout incorrectly applying to connection attempts, causing dead Studio hosts to hang workers for 5 minutes with no surfaced error.
+
+      - ### Internal text leaking from background tasks
+
+        Fixed internal compaction text leaking into a background task's visible output, and its status indicator appearing outside that task's own card.
+
+      - ### Draft restore and base tracking errors
+
+        Fixed incorrect restore behavior and failed base lookups after combinations of accepting, rejecting, and syncing draft changes with Studio, by tracking each action with its own marker instead of a single shared pointer.
+
+      - ### Stale project-template cache after migration
+
+        Fixed a project continuing to route through its old template for up to 30 minutes after being migrated to the latest template.
+
+      - ### Context compaction triggered too late
+
+        Fixed context compaction triggering later than intended (or not at all) for agents with a large system prompt or many tools, by counting their real token usage instead of just the conversation messages.
+
+      - ### Context size not shown for sub-agents
+
+        Fixed the context-size indicator not appearing for delegated sub-agents and being misattributed to the wrong run.
+
+      - ### Mismatched compaction and cancel indicators
+
+        Fixed the AI chat being unable to reliably match a compaction or cancel indicator's start to its own completion when more than one occurred in the same run.
+
+      - ### Misleading tool suggestion in error message
+
+        Removed a misleading suggestion to try an alternate tool from the AI Assistant's file-write error message, since the suggested alternatives fail the same way.
+
+      - ### React Native preview build memory failures <Pill type="mobile" />
+
+        Fixed React Native preview builds intermittently failing with out-of-memory or `esbuild not found` errors caused by unnecessary `npm install` reruns on unchanged projects, cutting unchanged build time from about 2m47s to 23s.
+    </Accordian>
+
+    <Accordian title="Product Ecosystem">
+      - ### Google Fonts not resolving on mobile <Pill type="mobile" />
+
+        Fixed a font resolution edge case on mobile by updating `font.json` with the correct PostScript names.
+
+      - ### Nested wizard support
+
+        Fixed wizard page generation to correctly handle nested wizards. The tool now scans each page's markup for `wm-wizard` elements and their direct `wm-wizardstep` children, capturing each step's name, title, and inner content, and walks up the DOM to detect whether a wizard is nested inside another wizard's step. Only top-level (non-nested) wizards get their own host page — nested wizards are now merged into their parent instead.
+    </Accordian>
+  </TabItem>
+</TabsWrapper>

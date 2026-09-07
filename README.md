@@ -1,6 +1,6 @@
-# wavemaker.ai Documentation
+# WaveMaker.ai Documentation
 
-Welcome to the wavemaker.ai Documentation repository! This site is built with [Docusaurus](https://docusaurus.io/) and serves as the comprehensive documentation hub for the Agentic Application Development Platform.
+Welcome to the WaveMaker.ai Documentation repository! This site is built with [Docusaurus](https://docusaurus.io/) and serves as the comprehensive documentation hub for the Agentic Application Development Platform.
 
 🌐 **Production Site** (prod branch): [WaveMaker.ai Docs](https://docs.wavemaker.ai/)
 
@@ -28,10 +28,11 @@ Welcome to the wavemaker.ai Documentation repository! This site is built with [D
    ```
 
 3. **Start development server**
+
    ```bash
    npm start
    ```
-   
+
    This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
 4. **Access the site**
@@ -85,6 +86,7 @@ npm run manage-docs
 ```
 
 This interactive tool allows you to:
+
 - Create new sidebars
 - Add categories to existing sidebars
 - Create new documentation pages
@@ -110,8 +112,7 @@ We welcome contributions! Please see our [CONTRIBUTING.md](./CONTRIBUTING.md) fo
 
 ## License
 
-This project is licensed under the terms specified by WaveMaker, Inc. 
-
+This project is licensed under the terms specified by WaveMaker, Inc.
 
 ## Branching & Contribution Workflow
 
@@ -150,12 +151,8 @@ We follow a simple branching setup to keep the docs stable, while still making i
   - Delete the branch after merging to keep things tidy
   - Never merge feature branches directly into `main`
 
-
 ### Prod Branch (`prod`)
+
 - This is the **stable, production** version of the documentation.
 - Please **don’t commit directly or raise pr** to `prod`.
 - Updates reach `prod` **only through a Pull Request from `main`**.
-
-
-
-
