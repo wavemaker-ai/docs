@@ -224,6 +224,10 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### HQL query support for AI-created queries
 
         WaveMaker Agent can now create HQL queries in addition to native SQL queries.
+
+      - ### Offline-aware caching for service variables <Pill type="mobile" />
+
+        Added a configurable cache interceptor for service variable API calls that stores GET responses in session or on-device persistent storage with a configurable TTL and automatic background cleanup of expired entries, keeping previously fetched data available when connectivity drops.
     </Accordian>
 
     <Accordian title="Product Ecosystem">
@@ -298,12 +302,6 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Auto Layout now supports `width=fill` and `height=fill` in addition to fixed values like px and %, letting a component occupy the available space within its parent container instead of sizing to content (`hug`).
 
         This Fill sizing, previously available only for containers, is now supported for all components placed inside Auto Layout containers, making it easier to build responsive, flexible layouts. Currently available in Angular.
-
-      - ### Charts widget migrated to ECharts <Pill type="mobile" />
-
-        The Area, Bar, Column, Line, Bubble, Pie, and Donut chart types on mobile now render using [ECharts](https://github.com/wavemaker/wm-react-native-echarts) instead of Victory Native.
-
-        As a result, these charts render with smoother animations, richer tooltips, and a more polished look and feel with the existing markup.
 
       - ### Bind support for data table advanced settings <Pill type="web" />
 
@@ -472,6 +470,20 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Skipped Angular codegen on preview events
 
         Project preview no longer triggers an unnecessary Angular code-generation pass.
+
+      - ### Introduced offline banner <Pill type="mobile" />
+
+        Enhanced the offline banner shown when the device loses connectivity with refined visual styling and standardized the `showofflinebanner` page property casing.
+
+      - ### Charts widget migrated to ECharts <Pill type="mobile" />
+
+        The Area, Bar, Column, Line, Bubble, Pie, and Donut chart types on mobile now render using [ECharts](https://github.com/wavemaker/wm-react-native-echarts) instead of Victory Native.
+
+        As a result, these charts render with smoother animations, richer tooltips, and a more polished look and feel with the existing markup.
+
+      - ### Minimum touchable area for interactive components <Pill type="mobile" />
+
+        Tappable components now automatically enforce the platform-recommended minimum touch target size (44pt on iOS, 48dp on Android) when the visible size is smaller, improving usability and accessibility without changing their visual size, controllable via a new `enableMinTouchArea` UI preference enabled by default.
     </Accordian>
   </TabItem>
 
@@ -614,12 +626,6 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Unsaved file changes lost in Explorer
 
         Fixed unsaved file changes being lost when switching files in the File Explorer without saving first.
-
-      - ### Chart rendering after ECharts migration <Pill type="mobile" />
-        - Fixed the Shape property having no effect on Bubble chart markers after the ECharts migration.
-        - Fixed the Area/Line chart's default Step Position not taking effect until changed manually.
-        - Fixed Pie/Donut chart category labels overlapping when Display Position is set to Top or Bottom.
-        - Hid unimplemented chart properties (`reducexticks`, `showxdistance`, `barspacing`) from the mobile properties panel.
 
       - ### Component identity in dynamic Tabs and Accordion <Pill type="web" />
 
