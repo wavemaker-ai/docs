@@ -224,6 +224,10 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### HQL query support for AI-created queries
 
         WaveMaker Agent can now create HQL queries in addition to native SQL queries.
+
+      - ### Automatic conversation recovery after network interruption
+
+        A temporary network interruption no longer fails the conversation, since reconnecting automatically recovers it once the network is available again.
     </Accordian>
 
     <Accordian title="Product Ecosystem">
@@ -472,6 +476,16 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Skipped Angular codegen on preview events
 
         Project preview no longer triggers an unnecessary Angular code-generation pass.
+
+      - ### Redesigned context compaction and context size UI
+
+        Redesigned the context compaction and context size UI in AI chat for a clearer, more consistent experience.
+
+      - ### AI assistant Studio sync and editor improvements
+        - **Merge conflicts banner**: Redesigned to match the existing Studio look and feel.
+        - **Context compaction**: Fixed a bug where a new compaction event didn't refresh the component with the latest state.
+        - **Studio sync**: Added a success toaster to confirm when Studio changes have synced to the conversation.
+        - **Editor updates**: Reduced unnecessary editor refreshes while a conversation is running, then force-updates the editor once it finishes so AI changes show up correctly.
     </Accordian>
   </TabItem>
 
