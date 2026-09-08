@@ -416,6 +416,11 @@ export default [
       },
       {
         type: 'doc',
+        id: 'studio/workspaces/content-search',
+        label: 'Content Search',
+      },
+      {
+        type: 'doc',
         id: 'studio/workspaces/database-explorer',
       },
       {
