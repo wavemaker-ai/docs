@@ -86,6 +86,10 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### WMX component preview in React Preview <Pill type="web" />
 
         React Preview now supports previewing WMX components, using a centralized preview model.
+
+      - ### Service layer in generated React code <Pill type="web" />
+
+        Generated React apps now include a dedicated service layer, so API and variable calls are exposed as typed service functions instead of being inlined into page components — making the generated code easier to read, extend, and hand off to developers.
     </Accordian>
 
     <Accordian title="Backend">
@@ -228,6 +232,10 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Offline-aware caching for service variables <Pill type="mobile" />
 
         Added a configurable cache interceptor for service variable API calls that stores GET responses in session or on-device persistent storage with a configurable TTL and automatic background cleanup of expired entries, keeping previously fetched data available when connectivity drops.
+
+      - ### Automatic conversation recovery after network interruption
+
+        A temporary network interruption no longer fails the conversation, since reconnecting automatically recovers it once the network is available again.
     </Accordian>
 
     <Accordian title="Product Ecosystem">
@@ -484,6 +492,16 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Minimum touchable area for interactive components <Pill type="mobile" />
 
         Tappable components now automatically enforce the platform-recommended minimum touch target size (44pt on iOS, 48dp on Android) when the visible size is smaller, improving usability and accessibility without changing their visual size, controllable via a new `enableMinTouchArea` UI preference enabled by default.
+
+      - ### Redesigned context compaction and context size UI
+
+        Redesigned the context compaction and context size UI in AI chat for a clearer, more consistent experience.
+
+      - ### AI assistant Studio sync and editor improvements
+        - **Merge conflicts banner**: Redesigned to match the existing Studio look and feel.
+        - **Context compaction**: Fixed a bug where a new compaction event didn't refresh the component with the latest state.
+        - **Studio sync**: Added a success toaster to confirm when Studio changes have synced to the conversation.
+        - **Editor updates**: Reduced unnecessary editor refreshes while a conversation is running, then force-updates the editor once it finishes so AI changes show up correctly.
     </Accordian>
   </TabItem>
 
