@@ -17,7 +17,7 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
 *Release date: 07 September 2026*
 
-<TabsWrapper>
+<ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="User Interface">
       - ### Sync new pages from Design-to-Code plugin into existing projects <Pill type="web" />
@@ -502,6 +502,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         - **Context compaction**: Fixed a bug where a new compaction event didn't refresh the component with the latest state.
         - **Studio sync**: Added a success toaster to confirm when Studio changes have synced to the conversation.
         - **Editor updates**: Reduced unnecessary editor refreshes while a conversation is running, then force-updates the editor once it finishes so AI changes show up correctly.
+
+      - ### Support for Multiple and Optional Query Parameters <Pill type="web" />
+        - REST API import now supports multiple values for the same query parameter.
+
+          **Example:** `?category=books&category=electronics`
+
+        - Query parameter values can now be left empty during import and bound later when creating variables or configuring API orchestration.
     </Accordian>
   </TabItem>
 
@@ -1065,4 +1072,4 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Fixed wizard page generation to correctly handle nested wizards. The tool now scans each page's markup for `wm-wizard` elements and their direct `wm-wizardstep` children, capturing each step's name, title, and inner content, and walks up the DOM to detect whether a wizard is nested inside another wizard's step. Only top-level (non-nested) wizards get their own host page — nested wizards are now merged into their parent instead.
     </Accordian>
   </TabItem>
-</TabsWrapper>
+</ReleaseNotesTabs>
