@@ -271,6 +271,11 @@ For the story behind the release, read [A New Era of AI-Accelerated Application 
 
         For the exact versions, see the [12.0.0 technology stack](/tech-stack?v=12-0-0).
 
+      - ### Support for multiple and optional query parameters in REST import <Pill type="web" />
+
+        - REST API import now supports multiple values for the same query parameter, for example `?category=books&category=electronics`.
+        - Query parameter values can now be left empty during import and bound later when creating variables or configuring API orchestration.
+
       - ### Role-lookup query validation at save time
 
         Custom database role-lookup queries in a security provider are now validated against the project's live preview when you save them, instead of only failing later at user login.
@@ -606,10 +611,6 @@ For the story behind the release, read [A New Era of AI-Accelerated Application 
       - ### Authorization header gets x-wm- prefix on REST service import
 
         Fixed REST service import adding an unwanted `x-wm-` prefix to the `Authorization` header during design time.
-
-      - ### Multiple REST query parameter values dropped
-
-        Fixed multiple values for the same REST API query parameter not all being sent in Web Projects.
 
       - ### REST variable input fields lost on reopen
 
