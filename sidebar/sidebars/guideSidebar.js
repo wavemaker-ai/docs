@@ -19,11 +19,12 @@ export default [
     collapsible: true,
     collapsed: true,
     items: [
-      {
-        type: 'doc',
-        id: 'guide/app-solutions/overview',
-        label: 'App Solutions',
-      },
+      // stub doc (title only) - hidden until content is written
+      // {
+      //   type: 'doc',
+      //   id: 'guide/app-solutions/overview',
+      //   label: 'App Solutions',
+      // },
       {
         type: 'doc',
         id: 'guide/app-solutions/migrate-to-design-system-project',
@@ -37,11 +38,12 @@ export default [
     collapsible: true,
     collapsed: true,
     items: [
-      {
-        type: 'doc',
-        id: 'guide/integration/overview',
-        label: 'Integration',
-      },
+      // stub doc (title only) - hidden until content is written
+      // {
+      //   type: 'doc',
+      //   id: 'guide/integration/overview',
+      //   label: 'Integration',
+      // },
       {
         type: 'doc',
         id: 'guide/integration/set-up-wavemaker-project-locally',
@@ -66,11 +68,12 @@ export default [
     collapsible: true,
     collapsed: true,
     items: [
-      {
-        type: 'doc',
-        id: 'guide/components/overview',
-        label: 'Components',
-      },
+      // stub doc (title only) - hidden until content is written
+      // {
+      //   type: 'doc',
+      //   id: 'guide/components/overview',
+      //   label: 'Components',
+      // },
       {
         type: 'doc',
         id: 'guide/components/dynamic-form-metadata',
@@ -104,11 +107,12 @@ export default [
     collapsible: true,
     collapsed: true,
     items: [
-      {
-        type: 'doc',
-        id: 'guide/deployment/overview',
-        label: 'Deployment',
-      },
+      // stub doc (title only) - hidden until content is written
+      // {
+      //   type: 'doc',
+      //   id: 'guide/deployment/overview',
+      //   label: 'Deployment',
+      // },
       {
         type: 'doc',
         id: 'guide/deployment/ssl-offloading',
@@ -131,19 +135,20 @@ export default [
     ],
   },
 
-  {
-    type: 'category',
-    label: 'variables',
-    collapsible: true,
-    collapsed: true,
-    items: [
-      {
-        type: 'doc',
-        id: 'guide/variables/overview',
-        label: 'Variables',
-      },
-    ],
-  },
+  // 'variables' category hidden - its only doc is a stub (title only)
+  // {
+  //   type: 'category',
+  //   label: 'variables',
+  //   collapsible: true,
+  //   collapsed: true,
+  //   items: [
+  //     {
+  //       type: 'doc',
+  //       id: 'guide/variables/overview',
+  //       label: 'Variables',
+  //     },
+  //   ],
+  // },
 
   {
     type: 'category',

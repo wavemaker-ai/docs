@@ -108,7 +108,7 @@
   list-style: none;
 }
 
-.wm-accordian-content > ul > li:last-child {
+.wm-accordian-content > ul:last-child > li:last-child {
   border-bottom: none;
   padding-bottom: 0;
   margin-bottom: 0;
@@ -123,6 +123,19 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.wm-accordian-content h4 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin: 32px 0 20px;
+}
+
+.wm-accordian-content > h4:first-child {
+  margin-top: 0;
 }
 
 .wm-accordian-content p {
@@ -179,6 +192,10 @@
 
 [data-theme='dark'] .wm-accordian-content h3 {
   color: var(--ifm-color-content);
+}
+
+[data-theme='dark'] .wm-accordian-content h4 {
+  color: var(--ifm-color-emphasis-600);
 }
 
 [data-theme='dark'] .wm-accordian-content a {
