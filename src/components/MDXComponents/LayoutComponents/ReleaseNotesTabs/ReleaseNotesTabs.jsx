@@ -46,12 +46,8 @@ function FallbackState({ data }) {
   );
 }
 
-function isNonEmptyAccordian(child) {
-  return (
-    React.isValidElement(child) &&
-    child.type === Accordian &&
-    child.props.children
-  );
+function isAccordian(child) {
+  return React.isValidElement(child) && child.type === Accordian;
 }
 
 // Each accordion's content is either a markdown list (one <li> = one entry)
@@ -71,7 +67,7 @@ function getAccordianItemCount(children) {
     }
   });
 
-  return sawList ? itemCount : 1;
+  return itemCount;
 }
 
 // Clones each non-empty Accordian with its item-count badge and, for the
@@ -82,7 +78,7 @@ function withCountsAndAutoExpand(children) {
   let tabCount = 0;
 
   const content = React.Children.map(children, (child) => {
-    if (!isNonEmptyAccordian(child)) return child;
+    if (!isAccordian(child)) return child;
 
     const itemCount = getAccordianItemCount(child.props.children);
     tabCount += itemCount;
@@ -91,8 +87,8 @@ function withCountsAndAutoExpand(children) {
     firstAccordianSeen = true;
 
     return React.cloneElement(child, {
-      badge: child.props.badge ?? itemCount,
-      defaultOpen: child.props.defaultOpen ?? isFirst,
+      badge: child.props.badge ?? (itemCount || undefined),
+      defaultOpen: child.props.defaultOpen ?? (isFirst && itemCount > 0),
     });
   });
 

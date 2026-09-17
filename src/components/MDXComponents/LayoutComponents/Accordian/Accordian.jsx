@@ -7,10 +7,6 @@ import './Accordian.css';
 export const Accordian = ({ title, children, defaultOpen = false, badge }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
-  if (!children) {
-    return null;
-  }
-
   return (
     <div className={`wm-accordian ${isOpen ? 'wm-accordian--open' : ''}`}>
       <button
@@ -29,7 +25,9 @@ export const Accordian = ({ title, children, defaultOpen = false, badge }) => {
           <ChevronRight size={20} strokeWidth={2.5} />
         </span>
       </button>
-      {isOpen && <div className="wm-accordian-content">{children}</div>}
+      {isOpen && children && (
+        <div className="wm-accordian-content">{children}</div>
+      )}
     </div>
   );
 };

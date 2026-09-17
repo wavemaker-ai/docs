@@ -19,9 +19,8 @@ export function TabItem({ children, active, emptyState }) {
   // A tab is empty when every child has no content of its own (e.g. a
   // self-closing `<Accordian />` still counts as 1 child even though it
   // renders null).
-  const isEmpty = React.Children.toArray(children).every(
-    (child) => React.isValidElement(child) && !child.props.children,
-  );
+  const isEmpty =
+    React.Children.toArray(children).filter(React.isValidElement).length === 0;
 
   return (
     <div
