@@ -16,32 +16,116 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
 <ReleaseNotesTabs>
   <TabItem name="Features">
-    <Accordian title="User Interface" />
+    <Accordian title="User Interface">
+      - ### WMX component preview in React Preview <Pill type="web" />
 
-    <Accordian title="Backend" />
+        React Preview now supports previewing WMX components.
+    </Accordian>
 
-    <Accordian title="Platform" />
+    <Accordian title="Platform">
+      - ### Per-request LLM model override for agent runs
 
-    <Accordian title="Product Ecosystem" />
+        A single agent run can now be pointed at a different LLM model through the AG-UI run request, using either a named model configuration or an inline one, and the override applies to every sub-agent that run delegates to.
+
+      - ### HQL query support for AI-generated queries
+
+        WaveMaker Agent can now create HQL queries in addition to native SQL queries.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Enhancements">
-    <Accordian title="User Interface" />
+    <Accordian title="Platform">
+      - ### Dependency install skipped on unchanged builds <Pill type="mobile" />
 
-    <Accordian title="Backend" />
+        React Native preview builds now skip dependency installation when nothing has changed, cutting a no-change preview build from about 2m 47s to 23s.
 
-    <Accordian title="Platform" />
+      - ### Context size reported for delegated sub-agents
 
-    <Accordian title="Product Ecosystem" />
+        The context-size indicator now reports each delegated sub-agent's own context usage, and no longer requires context compaction to be enabled for that agent.
+
+      - ### Correlating ids on compaction and cancel events
+
+        Context-compaction and run-cancel events now carry a correlating id, so a start event can be reliably matched to its own completion when a run triggers more than one.
+
+      - ### No Angular codegen on project preview
+
+        Previewing a project no longer triggers a redundant Angular code-generation pass.
+    </Accordian>
   </TabItem>
 
   <TabItem name="Bug Fixes">
-    <Accordian title="User Interface" />
+    <Accordian title="User Interface">
+      - ### DataTable inline-edit validators not triggered <Pill type="web" />
 
-    <Accordian title="Backend" />
+        Fixed field validators (Required, Min/Max Value, Email/RegExp, Min/Max Date, Time, and DateTime) not running when a new row is saved through DataTable inline edit in React apps, allowing invalid values to be saved with no error shown.
 
-    <Accordian title="Platform" />
+      - ### Column background color lost after paging <Pill type="web" />
 
-    <Accordian title="Product Ecosystem" />
+        Fixed a table column's conditional background color not being re-applied to rows after moving to another page.
+
+      - ### Select widget shows wrong selected value <Pill type="web" />
+
+        Fixed a Select widget displaying a different option than the one chosen.
+
+      - ### Table row checkbox not selecting rows <Pill type="web" />
+
+        Fixed a table's row-selection checkbox failing to select a row when its change handler could not be resolved from the host partial.
+
+      - ### Table alignment inside a dialog <Pill type="web" />
+
+        Fixed table column alignment breaking when a table is rendered inside a dialog.
+
+      - ### Checkbox and label alignment in dialog forms <Pill type="web" />
+
+        Fixed incorrect placement of a checkbox relative to its label text in a form inside a tabbed dialog.
+
+      - ### Page crash on indexed style assignment <Pill type="web" />
+
+        Fixed a page crash reporting `Indexed property setter is not supported` when a widget's style was applied through an indexed assignment, such as selecting a checkbox inside a dialog.
+
+      - ### Wizard review step empty in view mode <Pill type="web" />
+
+        Fixed a wizard's review step not rendering its data when the page is opened in view mode.
+
+      - ### Conditional wizard step appended at the end <Pill type="web" />
+
+        Fixed a conditionally shown wizard step being appended to the end of the wizard instead of keeping its declared position, matching Angular's behavior.
+
+      - ### Toaster error navigating to a detail page <Pill type="web" />
+
+        Fixed console errors caused by an unresolved toaster configuration when navigating from a list row to a record's detail page.
+    </Accordian>
+
+    <Accordian title="Backend">
+      - ### Multiple values dropped for REST query parameter
+
+        Fixed only one value being sent when a REST API query parameter is configured with multiple values in web projects.
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### Preview build memory failures <Pill type="mobile" />
+
+        Fixed React Native preview builds intermittently failing with out-of-memory or `esbuild not found` errors, caused by dependencies being reinstalled on nearly every build.
+
+      - ### Internal compaction text in task output
+
+        Fixed a background task's visible output including internal compaction text, and its context-compaction indicator appearing on the main conversation instead of inside that task's own card.
+
+      - ### Draft restore after accept and Studio sync
+
+        Fixed restore failing, or restoring to the wrong point, after a draft had both accepted changes and Studio changes synced into it.
+
+      - ### Context compaction triggering too late
+
+        Fixed context compaction triggering later than intended, or not at all, for agents with a large system prompt or many tools, because neither was counted when measuring context usage.
+
+      - ### Context size misattributed to top-level run
+
+        Fixed context-size updates from a delegated sub-agent being recorded against the top-level run, so replaying that sub-agent's own history showed none of its updates.
+
+      - ### Misleading tool suggestion in write error
+
+        Removed alternate-tool suggestions from the agent's file-write error message, since those tools call the same unavailable service and fail the same way.
+    </Accordian>
   </TabItem>
 </ReleaseNotesTabs>
