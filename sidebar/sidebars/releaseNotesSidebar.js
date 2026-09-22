@@ -24,6 +24,11 @@ export default [
         items: [
           {
             type: 'doc',
+            id: 'release-notes/release-version-12/version-12-0-x/12.0.1',
+            label: '12.0.1',
+          },
+          {
+            type: 'doc',
             id: 'release-notes/release-version-12/version-12-0-x/12.0.0',
             label: '12.0.0',
           },
