@@ -39,10 +39,6 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
         The context-size indicator now reports each delegated sub-agent's own context usage, and no longer requires context compaction to be enabled for that agent.
 
-      - ### Correlating ids on compaction and cancel events
-
-        Context-compaction and run-cancel events now carry a correlating id, so a start event can be reliably matched to its own completion when a run triggers more than one.
-
       - ### No Angular codegen on project preview
 
         Previewing a project no longer triggers a redundant Angular code-generation pass.
