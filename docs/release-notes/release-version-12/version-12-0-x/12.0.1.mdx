@@ -42,6 +42,11 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### No Angular codegen on project preview
 
         Previewing a project no longer triggers a redundant Angular code-generation pass.
+
+      - ### Enhanced AI Conversation State Management and Subagent Support
+
+        Improved AI conversation state management so Restore and Edit for earlier conversation states remain available even after Reject All or Sync Studio Changes.
+        Context size upper limits are now agent-specific, with accurate context usage displayed for delegated subagents, along with clearer handling of failed subagents.
     </Accordian>
   </TabItem>
 
@@ -118,6 +123,15 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Misleading tool suggestion in write error
 
         Removed alternate-tool suggestions from the agent's file-write error message, since those tools call the same unavailable service and fail the same way.
+
+      - ### Merge Workspace reload loop after conflicts
+
+        Fixed the reload dialog repeatedly appearing after resolving merge conflicts and clicking Reload Project, so the Merge Workspace now reloads correctly and opens the configured Home Page.
+
+      - ### Fixed App Preview Loading and Editor Navigation Issues
+
+        Fixed an issue where App Preview remained stuck on the loading state until the cursor moved over the document.
+        Also fixed unexpected navigation from editor tabs back to Canvas after refreshing and switching between editor and Canvas views.
     </Accordian>
   </TabItem>
 </ReleaseNotesTabs>
