@@ -62,51 +62,6 @@
   margin-bottom: 4rem;
 }
 
-.sectionTitle {
-  font-size: 1.75rem;
-  margin-bottom: 1.5rem;
-  color: var(--ifm-heading-color);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.sectionTitle::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--ifm-color-emphasis-200);
-}
-
-.nestedGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 1.5rem;
-}
-
-.subSection {
-  background: var(--ifm-card-background-color);
-  border: 1px solid var(--ifm-color-emphasis-200);
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.subSection:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: var(--ifm-color-primary-lighter);
-}
-
-.subSection h3 {
-  margin-bottom: 1.5rem;
-  font-size: 1.25rem;
-  color: var(--ifm-color-primary);
-  border-bottom: 2px solid var(--ifm-color-primary-lightest);
-  padding-bottom: 0.5rem;
-}
-
 .list {
   list-style: none;
   padding: 0;
@@ -115,7 +70,6 @@
 
 .list li {
   padding: 0.75rem 0.75rem;
-  border-bottom: 1px solid var(--ifm-color-emphasis-100);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -124,16 +78,24 @@
   border-radius: 4px;
 }
 
-.itemChanged {
-  background-color: rgba(255, 166, 0, 0.08);
-  border-left: 3px solid orange;
-  animation: pulse 2s infinite;
+.itemAdded {
+  background-color: rgba(34, 197, 94, 0.08);
+  border-left: 3px solid #22c55e;
 }
 
-@keyframes pulse {
-  0% { background-color: rgba(255, 166, 0, 0.05); }
-  50% { background-color: rgba(255, 166, 0, 0.12); }
-  100% { background-color: rgba(255, 166, 0, 0.05); }
+.itemUpdated {
+  background-color: rgba(255, 166, 0, 0.08);
+  border-left: 3px solid orange;
+}
+
+.itemRemoved {
+  background-color: rgba(239, 68, 68, 0.06);
+  border-left: 3px solid #ef4444;
+}
+
+.itemRemoved .libraryName {
+  text-decoration: line-through;
+  color: var(--ifm-color-emphasis-500);
 }
 
 .compareNote {
@@ -143,15 +105,33 @@
   font-style: italic;
 }
 
-.updateBadge {
+.nameRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
   font-size: 0.65rem;
-  background: orange;
   color: white;
   padding: 0.1rem 0.4rem;
   border-radius: 10px;
-  margin-left: 0.5rem;
   vertical-align: middle;
   font-weight: 700;
+  white-space: nowrap;
+}
+
+.badgeAdded {
+  background: #22c55e;
+  text-transform: uppercase;
+}
+
+.badgeUpdated {
+  background: orange;
+}
+
+.badgeRemoved {
+  background: #ef4444;
   text-transform: uppercase;
 }
 
@@ -173,6 +153,19 @@
 }
 
 .libraryLink:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+}
+
+/* Beats Accordian.css's prose-link styling for rows nested inside it. */
+.accordionContent .libraryLink {
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: inherit;
+}
+
+.accordionContent .libraryLink:hover {
   color: var(--ifm-color-primary);
   text-decoration: underline;
 }
@@ -200,53 +193,46 @@
   }
 }
 
-.accordion {
-  margin-bottom: 1rem;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--ifm-card-background-color);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+/* "Has changes" cue via Accordian's className/headerClassName props.
+   Element-qualified (div/button) to beat Accordian.css at equal specificity. */
+div.accordionHasChanges {
+  border-color: rgba(139, 92, 246, 0.35);
 }
 
-.accordionSummary {
-  padding: 1rem 1.5rem;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.1rem;
-  background-color: var(--ifm-background-surface-color);
-  color: var(--ifm-color-primary);
-  display: flex;
+button.accordionHeaderHasChanges {
+  background-color: rgba(139, 92, 246, 0.07);
+}
+
+button.accordionHeaderHasChanges:hover {
+  background-color: rgba(139, 92, 246, 0.12);
+}
+
+.changeBadge {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  list-style: none; /* Hide default triangle */
+  gap: 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.15);
+  padding: 0.2rem 0.55rem 0.2rem 0.45rem;
+  border-radius: 10px;
+  margin-left: 0.6rem;
+  vertical-align: middle;
 }
 
-/* Hide default triangle in Webkit */
-.accordionSummary::-webkit-details-marker {
-  display: none;
+.changeBadge::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: #8b5cf6;
 }
 
-.accordionSummary::after {
-  content: '+';
-  font-size: 1.5rem;
-  font-weight: 400;
-  line-height: 1;
-  color: var(--ifm-color-emphasis-600);
-  transition: transform 0.2s ease;
-}
-
-details[open] .accordionSummary::after {
-  content: '-';
-  transform: rotate(0deg); /* Optional: add rotation if using an arrow icon */
-}
-
-.accordionContent {
-  padding: 0;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-}
-
-/* Subsection styles */
 .subsection {
   margin-top: 1.5rem;
   margin-bottom: 2.5rem;
@@ -263,15 +249,27 @@ details[open] .accordionSummary::after {
 }
 
 .subsectionTitle::after {
-  content: "";
+  content: '';
   flex: 1;
   height: 1px;
   background: var(--ifm-color-emphasis-200);
   opacity: 0.5;
 }
 
+/* Cancels Accordian's content padding so highlighted rows bleed to its edges;
+   rows restore the inset via their own padding. */
+.accordionContent .list {
+  margin: -24px;
+}
+
 .accordionContent .list li {
   padding: 1rem 1.5rem;
   margin: 0;
   border-radius: 0;
+}
+
+/* !important: Accordian's own last-child rule zeroes padding-bottom and
+   outranks us on specificity. */
+.accordionContent .list li:last-child {
+  padding-bottom: 1rem !important;
 }
