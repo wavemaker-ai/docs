@@ -11,7 +11,9 @@ import MDXImg from '@theme/MDXComponents/Img';
 import Admonition from '@theme/Admonition';
 import Mermaid from '@theme/Mermaid';
 import VideoCard from '@site/src/components/MDXComponents/VideoCard/VideoCard';
-import WMComponents from '@site/src/components/MDXComponents/WMComponents/WMComponents';
+import WMComponents, {
+  ComponentCount,
+} from '@site/src/components/MDXComponents/WMComponents/WMComponents';
 import Link from '@docusaurus/Link';
 import AcademyCard from '@site/src/components/MDXComponents/AcademyCard/AcademyCard';
 import {
@@ -48,6 +50,7 @@ const MDXComponents = {
   mermaid: Mermaid,
   VideoCard,
   WMComponents,
+  ComponentCount,
   Link,
   AcademyCard,
   TabsWrapper,

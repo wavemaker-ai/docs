@@ -75,4 +75,32 @@ const WMComponents = ({ show }) => {
     </>
   );
 };
+
+export const ComponentCount = ({ show }) => {
+  const count = componentsData.reduce((total, category) => {
+    return (
+      total +
+      (category.content?.filter((item) =>
+        item.supportedPlatforms?.includes(show),
+      ).length || 0)
+    );
+  }, 0);
+
+  return (
+    <div
+      style={{
+        padding: '6px 12px',
+        display: 'inline-block',
+        backgroundColor: '#f0f0f0',
+        color: '#555',
+        fontSize: 14,
+        fontWeight: 600,
+        borderRadius: 12,
+      }}
+    >
+      {count} Components
+    </div>
+  );
+};
+
 export default WMComponents;
