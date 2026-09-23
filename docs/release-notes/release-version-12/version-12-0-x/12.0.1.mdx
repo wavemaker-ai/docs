@@ -31,17 +31,17 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
   <TabItem name="Enhancements">
     <Accordian title="Platform">
-      - ### Dependency install skipped on unchanged builds <Pill type="mobile" />
+      - ### Faster React Native Preview Builds <Pill type="mobile" />
 
-        React Native preview builds now skip dependency installation when nothing has changed, cutting a no-change preview build from about 2m 47s to 23s.
+        React Native preview builds now skip dependency installation when no changes are detected, reducing build time from approximately 2 minutes 47 seconds to just 23 seconds.
 
       - ### Context size reported for delegated sub-agents
 
         The context-size indicator now reports each delegated sub-agent's own context usage, and no longer requires context compaction to be enabled for that agent.
 
-      - ### No Angular codegen on project preview
+      - ### Angular Web Project Previews Are Optimised
 
-        Previewing a project no longer triggers a redundant Angular code-generation pass.
+        Previewing an Angular web project no longer triggers a redundant code-generation pass, reducing unnecessary processing during preview initialization.
 
       - ### Enhanced AI Conversation State Management and Subagent Support
 
