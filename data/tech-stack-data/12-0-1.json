@@ -176,7 +176,7 @@
           "name": "SLF4J",
           "description": "Simple Logging Facade for Java.",
           "link": "https://www.slf4j.org/",
-          "version": "2.0.18"
+          "version": "2.0.19"
         },
         {
           "name": "Log4j2",
@@ -230,7 +230,7 @@
           "name": "JGit",
           "description": "Java implementation of the Git version control system.",
           "link": "https://www.eclipse.org/jgit/",
-          "version": "7.7.1.202607240634-r"
+          "version": "7.8.0.202609011348-r"
         },
         {
           "name": "Apache Commons Codec",
@@ -266,7 +266,7 @@
           "name": "Apache Tika",
           "description": "Content analysis toolkit to detect and extract metadata and text.",
           "link": "https://tika.apache.org/",
-          "version": "3.3.2"
+          "version": "4.0.0"
         },
         {
           "name": "MariaDB JDBC Driver",
@@ -278,7 +278,7 @@
           "name": "MongoDB Driver",
           "description": "Java driver for MongoDB.",
           "link": "https://www.mongodb.com/docs/drivers/java/sync/current/",
-          "version": "5.11.0"
+          "version": "5.11.1"
         },
         {
           "name": "Jakarta Validation API",
