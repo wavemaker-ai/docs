@@ -27,6 +27,10 @@ export default [
       // },
       {
         type: 'doc',
+        id: 'guide/app-solutions/on-before-app-ready',
+      },
+      {
+        type: 'doc',
         id: 'guide/app-solutions/migrate-to-design-system-project',
         label: 'Migrate to Design System',
       },
