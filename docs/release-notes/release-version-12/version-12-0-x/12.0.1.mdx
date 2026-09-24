@@ -108,26 +108,6 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
         Fixed React Native preview builds intermittently failing with out-of-memory or `esbuild not found` errors, caused by dependencies being reinstalled on nearly every build.
 
-      - ### Internal compaction text in task output
-
-        Fixed a background task's visible output including internal compaction text, and its context-compaction indicator appearing on the main conversation instead of inside that task's own card.
-
-      - ### Draft restore after accept and Studio sync
-
-        Fixed restore failing, or restoring to the wrong point, after a draft had both accepted changes and Studio changes synced into it.
-
-      - ### Context compaction triggering too late
-
-        Fixed context compaction triggering later than intended, or not at all, for agents with a large system prompt or many tools, because neither was counted when measuring context usage.
-
-      - ### Context size misattributed to top-level run
-
-        Fixed context-size updates from a delegated sub-agent being recorded against the top-level run, so replaying that sub-agent's own history showed none of its updates.
-
-      - ### Misleading tool suggestion in write error
-
-        Removed alternate-tool suggestions from the agent's file-write error message, since those tools call the same unavailable service and fail the same way.
-
       - ### Merge Workspace reload loop after conflicts
 
         Fixed the reload dialog repeatedly appearing after resolving merge conflicts and clicking Reload Project, so the Merge Workspace now reloads correctly and opens the configured Home Page.
