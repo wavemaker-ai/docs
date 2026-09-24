@@ -2,9 +2,18 @@ import React, { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import './Accordian.css';
 
-// `badge`, when provided, renders next to the title (e.g. an item count).
-// Accordian has no opinion on what it means or how it's computed.
-export const Accordian = ({ title, children, defaultOpen = false, badge }) => {
+// `badge`, `className`, `headerClassName`, `contentClassName`: optional
+// extension points added alongside the built-in classes on the wrapper /
+// header / content respectively. Accordian has no opinion on any of them.
+export const Accordian = ({
+  title,
+  children,
+  defaultOpen = false,
+  badge,
+  className,
+  headerClassName,
+  contentClassName,
+}) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   if (!children) {
@@ -12,10 +21,12 @@ export const Accordian = ({ title, children, defaultOpen = false, badge }) => {
   }
 
   return (
-    <div className={`wm-accordian ${isOpen ? 'wm-accordian--open' : ''}`}>
+    <div
+      className={`wm-accordian ${isOpen ? 'wm-accordian--open' : ''} ${className || ''}`}
+    >
       <button
         type="button"
-        className="wm-accordian-header"
+        className={`wm-accordian-header ${headerClassName || ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
@@ -29,7 +40,11 @@ export const Accordian = ({ title, children, defaultOpen = false, badge }) => {
           <ChevronRight size={20} strokeWidth={2.5} />
         </span>
       </button>
-      {isOpen && <div className="wm-accordian-content">{children}</div>}
+      {isOpen && (
+        <div className={`wm-accordian-content ${contentClassName || ''}`}>
+          {children}
+        </div>
+      )}
     </div>
   );
 };

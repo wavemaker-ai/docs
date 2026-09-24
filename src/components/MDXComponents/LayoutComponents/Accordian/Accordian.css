@@ -104,7 +104,7 @@
 .wm-accordian-content > ul > li {
   padding-bottom: 24px;
   margin-bottom: 24px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--ifm-color-emphasis-100);
   list-style: none;
 }
 
@@ -184,10 +184,6 @@
 [data-theme='dark'] .wm-accordian-content {
   background-color: var(--ifm-background-color);
   color: var(--ifm-color-emphasis-800);
-}
-
-[data-theme='dark'] .wm-accordian-content > ul > li {
-  border-bottom-color: var(--ifm-color-emphasis-100);
 }
 
 [data-theme='dark'] .wm-accordian-content h3 {
