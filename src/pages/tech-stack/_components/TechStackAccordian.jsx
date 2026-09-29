@@ -6,7 +6,12 @@ import { Accordian } from '../../../components/MDXComponents/LayoutComponents/Ac
 // className/headerClassName/contentClassName props (never Accordian's
 // internal class names directly) — same idea as ReleaseNotesTabs wrapping
 // TabsWrapper/TabItem.
-export function TechStackAccordian({ name, hasChanges, children }) {
+export function TechStackAccordian({
+  name,
+  description,
+  hasChanges,
+  children,
+}) {
   return (
     <Accordian
       className={hasChanges ? styles.accordionHasChanges : undefined}
@@ -15,10 +20,15 @@ export function TechStackAccordian({ name, hasChanges, children }) {
       }
       contentClassName={styles.accordionContent}
       title={
-        <>
-          {name}
-          {hasChanges && <span className={styles.changeBadge}>Changes</span>}
-        </>
+        <span className={styles.accordionTitle}>
+          <span>
+            {name}
+            {hasChanges && <span className={styles.changeBadge}>Changes</span>}
+          </span>
+          {description && (
+            <span className={styles.accordionDesc}>{description}</span>
+          )}
+        </span>
       }
     >
       {children}

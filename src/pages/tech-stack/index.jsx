@@ -12,7 +12,11 @@ import {
   TabItem,
 } from '../../components/MDXComponents/LayoutComponents/Tabs/Tabs';
 import { TechStackSection } from './_components/TechStackSection';
-import { isNonEmpty, useTechStackDiff } from './_components/techStackDiff';
+import {
+  isNonEmpty,
+  parseNode,
+  useTechStackDiff,
+} from './_components/techStackDiff';
 
 function formatVersion(v) {
   return 'v' + v.replace(/-/g, '.');
@@ -154,6 +158,11 @@ export default function TechStackPage() {
                 count={diff.byCategory[category]}
               >
                 <div className={styles.section}>
+                  {parseNode(subCats).description && (
+                    <p className={styles.categoryDesc}>
+                      {parseNode(subCats).description}
+                    </p>
+                  )}
                   <TechStackSection
                     category={category}
                     data={subCats}

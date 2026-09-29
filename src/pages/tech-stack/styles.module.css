@@ -273,3 +273,20 @@ button.accordionHeaderHasChanges:hover {
 .accordionContent .list li:last-child {
   padding-bottom: 1rem !important;
 }
+
+.accordionTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.accordionDesc {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.categoryDesc {
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 1.5rem;
+}

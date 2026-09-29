@@ -2,13 +2,22 @@ import { useMemo } from 'react';
 
 const KEY_SEP = '::';
 
+// A node is either a bare array of libraries, or an object with optional
+// reserved keys `description` (string) and `libraries` (array); every other
+// key is a child node.
+export function parseNode(node) {
+  if (Array.isArray(node)) {
+    return { description: undefined, libraries: node, children: {} };
+  }
+  const { description, libraries, ...children } = node || {};
+  return { description, libraries, children };
+}
+
 export function isNonEmpty(content) {
   if (!content) return false;
-  if (Array.isArray(content)) return content.length > 0;
-  if (typeof content === 'object') {
-    return Object.values(content).some(isNonEmpty);
-  }
-  return false;
+  const { libraries, children } = parseNode(content);
+  if (libraries?.length > 0) return true;
+  return Object.values(children).some(isNonEmpty);
 }
 
 // fullPath includes every key from the category down to the array's own
@@ -39,8 +48,9 @@ function buildLibIndex(data) {
   const map = {};
   const groups = {};
   if (data) {
-    const traverse = (category, content, path = []) => {
-      if (Array.isArray(content)) {
+    const traverse = (category, node, path = []) => {
+      const { libraries: content, children } = parseNode(node);
+      if (content) {
         const groupKey = makeGroupKey(category, path);
         const seenNames = new Set();
 
@@ -66,12 +76,11 @@ function buildLibIndex(data) {
         content.forEach((item) => {
           map[makeItemKey(groupKey, item.name)] = item.version;
         });
-      } else if (content && typeof content === 'object') {
-        Object.entries(content).forEach(([key, value]) => {
-          assertNoKeySeparator(key, 'a category/subsection key');
-          traverse(category, value, [...path, key]);
-        });
       }
+      Object.entries(children).forEach(([key, value]) => {
+        assertNoKeySeparator(key, 'a category/subsection key');
+        traverse(category, value, [...path, key]);
+      });
     };
 
     Object.entries(data).forEach(([category, subCats]) => {
