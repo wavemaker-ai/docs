@@ -1,24 +1,51 @@
+/* Same width/gutter tokens the rest of the site uses (custom.css). */
+.page {
+  /* The site has no status palette, so these are local. Brand primary,
+     spacing and width still come from the global tokens. */
+  --ts-added: #15803d;
+  --ts-updated: #b45309;
+  --ts-removed: #b91c1c;
+  --ts-changes: #7c3aed;
+  --ts-added-bg: color-mix(in srgb, var(--ts-added) 12%, transparent);
+  --ts-updated-bg: color-mix(in srgb, var(--ts-updated) 14%, transparent);
+  --ts-removed-bg: color-mix(in srgb, var(--ts-removed) 10%, transparent);
+  --ts-changes-bg: color-mix(in srgb, var(--ts-changes) 12%, transparent);
+  --ts-open-tint: color-mix(in srgb, var(--ifm-color-primary) 10%, transparent);
+
+  max-width: var(--wm-max-content);
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem var(--ifm-spacing-horizontal) 2rem;
+}
+
+[data-theme='dark'] .page {
+  --ts-added: #4ade80;
+  --ts-updated: #fbbf24;
+  --ts-removed: #f87171;
+  --ts-changes: #a78bfa;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 3rem;
+  margin-bottom: 1.25rem;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
-  padding-bottom: 2rem;
+  padding-bottom: 1.25rem;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .title {
-  margin-bottom: 0.5rem;
-  font-size: 2.5rem;
+  margin-bottom: 0.25rem;
+  font-size: var(--wm-h1-font-size);
   font-weight: 700;
   color: var(--ifm-heading-color);
 }
 
 .subtitle {
   color: var(--ifm-color-emphasis-700);
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin-bottom: 0;
 }
 
@@ -59,7 +86,13 @@
 }
 
 .section {
-  margin-bottom: 4rem;
+  margin-bottom: 0;
+}
+
+/* Tabs' default outer margin/gap is sized for prose pages. */
+.content :global(.tabs-wrapper) {
+  margin: 0;
+  gap: 0.75rem;
 }
 
 .list {
@@ -69,28 +102,32 @@
 }
 
 .list li {
-  padding: 0.75rem 0.75rem;
+  padding: 0.65rem 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  margin: 0 -0.75rem;
-  border-radius: 4px;
+  margin: 0;
+  border-radius: 0;
+}
+
+.list li:hover:not(.itemAdded):not(.itemUpdated):not(.itemRemoved) {
+  background-color: var(--ifm-color-emphasis-100);
 }
 
 .itemAdded {
-  background-color: rgba(34, 197, 94, 0.08);
-  border-left: 3px solid #22c55e;
+  background-color: var(--ts-added-bg);
+  border-left: 3px solid var(--ts-added);
 }
 
 .itemUpdated {
-  background-color: rgba(255, 166, 0, 0.08);
-  border-left: 3px solid orange;
+  background-color: var(--ts-updated-bg);
+  border-left: 3px solid var(--ts-updated);
 }
 
 .itemRemoved {
-  background-color: rgba(239, 68, 68, 0.06);
-  border-left: 3px solid #ef4444;
+  background-color: var(--ts-removed-bg);
+  border-left: 3px solid var(--ts-removed);
 }
 
 .itemRemoved .libraryName {
@@ -113,8 +150,7 @@
 
 .badge {
   font-size: 0.65rem;
-  color: white;
-  padding: 0.1rem 0.4rem;
+  padding: 0.1rem 0.5rem;
   border-radius: 10px;
   vertical-align: middle;
   font-weight: 700;
@@ -122,16 +158,19 @@
 }
 
 .badgeAdded {
-  background: #22c55e;
+  background: var(--ts-added-bg);
+  color: var(--ts-added);
   text-transform: uppercase;
 }
 
 .badgeUpdated {
-  background: orange;
+  background: var(--ts-updated-bg);
+  color: var(--ts-updated);
 }
 
 .badgeRemoved {
-  background: #ef4444;
+  background: var(--ts-removed-bg);
+  color: var(--ts-removed);
   text-transform: uppercase;
 }
 
@@ -178,15 +217,27 @@
 
 .libraryVersion {
   font-family: var(--ifm-font-family-monospace);
-  background: var(--ifm-color-emphasis-100);
-  padding: 0.25rem 0.5rem;
+  background: var(--ts-open-tint);
+  padding: 0.25rem 0.55rem;
   border-radius: 4px;
   font-size: 0.85rem;
-  color: var(--ifm-color-emphasis-800);
+  font-weight: 600;
+  color: var(--ifm-color-primary);
   white-space: nowrap;
 }
 
 @media (max-width: 768px) {
+  .page {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .list li,
+  .accordionContent .list li {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   .header {
     flex-direction: column;
     align-items: flex-start;
@@ -196,15 +247,17 @@
 /* "Has changes" cue via Accordian's className/headerClassName props.
    Element-qualified (div/button) to beat Accordian.css at equal specificity. */
 div.accordionHasChanges {
-  border-color: rgba(139, 92, 246, 0.35);
+  border-color: var(--ts-changes);
 }
 
+/* Layered over an opaque base (see .accordionHeader) so the tint stays solid
+   while the header is stuck over scrolling content. */
 button.accordionHeaderHasChanges {
-  background-color: rgba(139, 92, 246, 0.07);
+  background-image: linear-gradient(var(--ts-changes-bg), var(--ts-changes-bg));
 }
 
 button.accordionHeaderHasChanges:hover {
-  background-color: rgba(139, 92, 246, 0.12);
+  background-image: linear-gradient(var(--ts-changes-bg), var(--ts-changes-bg));
 }
 
 .changeBadge {
@@ -215,8 +268,8 @@ button.accordionHeaderHasChanges:hover {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  color: #8b5cf6;
-  background: rgba(139, 92, 246, 0.15);
+  color: var(--ts-changes);
+  background: var(--ts-changes-bg);
   padding: 0.2rem 0.55rem 0.2rem 0.45rem;
   border-radius: 10px;
   margin-left: 0.6rem;
@@ -230,40 +283,20 @@ button.accordionHeaderHasChanges:hover {
   height: 6px;
   flex-shrink: 0;
   border-radius: 50%;
-  background-color: #8b5cf6;
+  background-color: var(--ts-changes);
 }
 
-.subsection {
-  margin-top: 1.5rem;
-  margin-bottom: 2.5rem;
+/* Rows run edge to edge, so the accordion body carries no padding of its own. */
+div.accordionContent {
+  padding: 0;
 }
 
-.subsectionTitle {
-  font-size: 1.4rem;
-  margin-bottom: 1.25rem;
-  color: var(--ifm-font-color-base); /* Vibrant premium blue */
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.subsectionTitle::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--ifm-color-emphasis-200);
-  opacity: 0.5;
-}
-
-/* Cancels Accordian's content padding so highlighted rows bleed to its edges;
-   rows restore the inset via their own padding. */
 .accordionContent .list {
-  margin: -24px;
+  margin: 0;
 }
 
 .accordionContent .list li {
-  padding: 1rem 1.5rem;
+  padding: 0.65rem 1.25rem;
   margin: 0;
   border-radius: 0;
 }
@@ -271,7 +304,7 @@ button.accordionHeaderHasChanges:hover {
 /* !important: Accordian's own last-child rule zeroes padding-bottom and
    outranks us on specificity. */
 .accordionContent .list li:last-child {
-  padding-bottom: 1rem !important;
+  padding-bottom: 0.65rem !important;
 }
 
 .accordionTitle {
@@ -288,5 +321,61 @@ button.accordionHeaderHasChanges:hover {
 
 .categoryDesc {
   color: var(--ifm-color-emphasis-700);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Keep an open accordion's title pinned under the navbars so the reader
+   always knows which section they are in. `overflow: clip` (unlike Accordian's
+   default `hidden`) still rounds the corners without becoming the sticky
+   header's scroll container. */
+div.accordion {
+  overflow: clip;
+  margin-bottom: 0.6rem;
+}
+
+button.accordionHeader {
+  padding: 0.6rem 0.75rem 0.6rem 1rem;
+  font-size: 1.05rem;
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + var(--ifm-top-nav-height));
+  z-index: 10;
+  background-color: var(--ifm-background-surface-color);
+}
+
+button.accordionHeader:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+/* The open accordion gets the brand accent so it is easy to spot among its
+   siblings, matching the sticky header. */
+div.accordion:global(.wm-accordian--open) {
+  border-color: var(--ifm-color-primary);
+}
+
+div.accordion:global(.wm-accordian--open) > button.accordionHeader {
+  background-image: linear-gradient(var(--ts-open-tint), var(--ts-open-tint));
+  box-shadow: inset 4px 0 0 var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.legend .changeBadge {
+  margin-left: 0;
+}
+
+/* Last in the file so it beats the equal-specificity row padding above. */
+@media (max-width: 768px) {
+  .accordionContent .list li {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

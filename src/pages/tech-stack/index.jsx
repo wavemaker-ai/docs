@@ -118,7 +118,7 @@ export default function TechStackPage() {
       title="Tech Stack"
       description="WaveMaker Tech Stack versions and libraries"
     >
-      <main className="container margin-vert--lg">
+      <main className={styles.page}>
         <div className={styles.header}>
           <div>
             <h1 className={styles.title}>Tech Stack</h1>
@@ -148,6 +148,20 @@ export default function TechStackPage() {
             )}
           </div>
         </div>
+
+        {previousVersion && (
+          <div className={styles.legend} aria-label="Legend">
+            <span>Since {formatVersion(previousVersion)}:</span>
+            <span className={`${styles.badge} ${styles.badgeAdded}`}>New</span>
+            <span className={`${styles.badge} ${styles.badgeUpdated}`}>
+              Updated version
+            </span>
+            <span className={`${styles.badge} ${styles.badgeRemoved}`}>
+              Removed
+            </span>
+            <span className={styles.changeBadge}>Section has changes</span>
+          </div>
+        )}
 
         <div className={styles.content}>
           <TabsWrapper>

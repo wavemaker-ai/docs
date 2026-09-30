@@ -14,10 +14,8 @@ export function TechStackAccordian({
 }) {
   return (
     <Accordian
-      className={hasChanges ? styles.accordionHasChanges : undefined}
-      headerClassName={
-        hasChanges ? styles.accordionHeaderHasChanges : undefined
-      }
+      className={`${styles.accordion} ${hasChanges ? styles.accordionHasChanges : ''}`}
+      headerClassName={`${styles.accordionHeader} ${hasChanges ? styles.accordionHeaderHasChanges : ''}`}
       contentClassName={styles.accordionContent}
       title={
         <span className={styles.accordionTitle}>
