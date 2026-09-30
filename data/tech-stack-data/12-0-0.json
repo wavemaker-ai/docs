@@ -1,120 +1,117 @@
 {
   "Web": {
     "description": "Technologies used by WaveMaker web applications.",
-    "Frontend/UI": {
-      "description": "Frameworks and libraries bundled into the generated web UI.",
-      "Angular": {
-        "description": "Libraries used by Angular based web applications.",
-        "libraries": [
-          {
-            "name": "Angular",
-            "description": "Platform for building mobile and desktop web applications",
-            "link": "https://angular.io/",
-            "version": "21.2.20"
-          },
-          {
-            "name": "jQuery",
-            "description": "Fast, small, and feature-rich JavaScript library.",
-            "link": "https://jquery.com/",
-            "version": "3.7.1"
-          },
-          {
-            "name": "jQuery UI",
-            "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
-            "link": "https://jqueryui.com/",
-            "version": "1.14.1"
-          },
-          {
-            "name": "ngx-bootstrap",
-            "description": "Native Angular directives for Bootstrap.",
-            "link": "https://valor-software.com/ngx-bootstrap/",
-            "version": "21.2.0"
-          },
-          {
-            "name": "Bootstrap",
-            "description": "The most popular HTML, CSS, and JS library for developing responsive, mobile-first projects.",
-            "link": "https://getbootstrap.com/docs/3.3/",
-            "version": "3.4.1"
-          },
-          {
-            "name": "D3.js",
-            "description": "JavaScript library for manipulating documents based on data.",
-            "link": "https://d3js.org/",
-            "version": "7.8.5"
-          },
-          {
-            "name": "NVD3",
-            "description": "Re-usable charts for D3.js.",
-            "link": "https://nvd3.org/",
-            "version": "1.8.16"
-          },
-          {
-            "name": "FullCalendar",
-            "description": "Full-sized drag & drop event calendar.",
-            "link": "https://fullcalendar.io/",
-            "version": "6.1.18"
-          },
-          {
-            "name": "Lodash (lodash-es)",
-            "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
-            "link": "https://lodash.com/",
-            "version": "4.18.1"
-          }
-        ]
-      },
-      "React": {
-        "description": "Libraries used by React based web applications.",
-        "libraries": [
-          {
-            "name": "React",
-            "version": "v19.2.3",
-            "description": "Platform for building desktop web applications",
-            "link": "https://react.dev/"
-          },
-          {
-            "name": "Next Js",
-            "version": "v16.1.1",
-            "description": "React framework that helps to build fast web apps",
-            "link": "https://nextjs.org/"
-          },
-          {
-            "name": "Material UI",
-            "version": "v6.3.1",
-            "description": "Ready to use Material Design components",
-            "link": "https://mui.com/material-ui/"
-          },
-          {
-            "name": "D3",
-            "version": "v7.8.5",
-            "description": "JavaScript library for manipulating documents based on data.",
-            "link": "https://d3js.org/"
-          },
-          {
-            "name": "NVD3",
-            "version": "v1.8.16",
-            "description": "Re-usable charts for D3.js.",
-            "link": "https://nvd3.org/"
-          },
-          {
-            "name": "Fullcalendar",
-            "version": "v6.1.15",
-            "description": "Full-sized drag & drop event calendar.",
-            "link": "https://fullcalendar.io/"
-          },
-          {
-            "name": "Lodash (lodash-es)",
-            "version": "v4.17.21",
-            "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
-            "link": "https://lodash.com/"
-          },
-          {
-            "name": "Moment",
-            "version": "v2.30.1",
-            "description": "Parse, validate, manipulate, and display dates and times in JavaScript",
-            "link": "https://momentjs.com/"
-          }
-        ]
-      }
+    "Frontend/UI - Angular": {
+      "description": "Libraries used by Angular based web applications.",
+      "libraries": [
+        {
+          "name": "Angular",
+          "description": "Platform for building mobile and desktop web applications",
+          "link": "https://angular.io/",
+          "version": "21.2.20"
+        },
+        {
+          "name": "jQuery",
+          "description": "Fast, small, and feature-rich JavaScript library.",
+          "link": "https://jquery.com/",
+          "version": "3.7.1"
+        },
+        {
+          "name": "jQuery UI",
+          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
+          "link": "https://jqueryui.com/",
+          "version": "1.14.1"
+        },
+        {
+          "name": "ngx-bootstrap",
+          "description": "Native Angular directives for Bootstrap.",
+          "link": "https://valor-software.com/ngx-bootstrap/",
+          "version": "21.2.0"
+        },
+        {
+          "name": "Bootstrap",
+          "description": "The most popular HTML, CSS, and JS library for developing responsive, mobile-first projects.",
+          "link": "https://getbootstrap.com/docs/3.3/",
+          "version": "3.4.1"
+        },
+        {
+          "name": "D3.js",
+          "description": "JavaScript library for manipulating documents based on data.",
+          "link": "https://d3js.org/",
+          "version": "7.8.5"
+        },
+        {
+          "name": "NVD3",
+          "description": "Re-usable charts for D3.js.",
+          "link": "https://nvd3.org/",
+          "version": "1.8.16"
+        },
+        {
+          "name": "FullCalendar",
+          "description": "Full-sized drag & drop event calendar.",
+          "link": "https://fullcalendar.io/",
+          "version": "6.1.18"
+        },
+        {
+          "name": "Lodash (lodash-es)",
+          "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
+          "link": "https://lodash.com/",
+          "version": "4.18.1"
+        }
+      ]
+    },
+    "Frontend/UI - React": {
+      "description": "Libraries used by React based web applications.",
+      "libraries": [
+        {
+          "name": "React",
+          "version": "v19.2.3",
+          "description": "Platform for building desktop web applications",
+          "link": "https://react.dev/"
+        },
+        {
+          "name": "Next Js",
+          "version": "v16.1.1",
+          "description": "React framework that helps to build fast web apps",
+          "link": "https://nextjs.org/"
+        },
+        {
+          "name": "Material UI",
+          "version": "v6.3.1",
+          "description": "Ready to use Material Design components",
+          "link": "https://mui.com/material-ui/"
+        },
+        {
+          "name": "D3",
+          "version": "v7.8.5",
+          "description": "JavaScript library for manipulating documents based on data.",
+          "link": "https://d3js.org/"
+        },
+        {
+          "name": "NVD3",
+          "version": "v1.8.16",
+          "description": "Re-usable charts for D3.js.",
+          "link": "https://nvd3.org/"
+        },
+        {
+          "name": "Fullcalendar",
+          "version": "v6.1.15",
+          "description": "Full-sized drag & drop event calendar.",
+          "link": "https://fullcalendar.io/"
+        },
+        {
+          "name": "Lodash (lodash-es)",
+          "version": "v4.17.21",
+          "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
+          "link": "https://lodash.com/"
+        },
+        {
+          "name": "Moment",
+          "version": "v2.30.1",
+          "description": "Parse, validate, manipulate, and display dates and times in JavaScript",
+          "link": "https://momentjs.com/"
+        }
+      ]
     },
     "Backend": {
       "description": "Java libraries that power the generated backend services.",
@@ -301,85 +298,44 @@
         }
       ]
     },
-    "Developer setup": {
-      "description": "Tools required to build and run web applications locally.",
-      "Angular": {
-        "libraries": [
-          {
-            "name": "Apache Maven",
-            "description": "Software project management and comprehension tool.",
-            "link": "https://maven.apache.org/",
-            "version": "3.9.16"
-          },
-          {
-            "name": "Apache Ant",
-            "description": "Java library and command-line tool for driving build processes.",
-            "link": "https://ant.apache.org/",
-            "version": "1.10.11"
-          },
-          {
-            "name": "npm",
-            "description": "Package manager for the JavaScript programming language.",
-            "link": "https://www.npmjs.com/",
-            "version": "10.9.3"
-          },
-          {
-            "name": "Java (JDK)",
-            "description": "Java Development Kit for running the backend and build tools.",
-            "link": "https://openjdk.org/",
-            "version": "21.0.6"
-          },
-          {
-            "name": "Node.js",
-            "description": "JavaScript runtime environment.",
-            "link": "https://nodejs.org/",
-            "version": "22.18.0"
-          }
-        ]
-      },
-      "React": {
-        "libraries": []
-      }
+    "Deployment - Angular": {
+      "description": "Runtimes and servers supported for deploying Angular web applications.",
+      "libraries": [
+        {
+          "name": "Java (JDK)",
+          "description": "Java Development Kit for running the backend and build tools.",
+          "link": "https://openjdk.org/",
+          "version": "21.0.6"
+        },
+        {
+          "name": "Node.js",
+          "description": "JavaScript runtime environment.",
+          "link": "https://nodejs.org/",
+          "version": "22.18.0"
+        },
+        {
+          "name": "Apache Tomcat",
+          "description": "Open source implementation of the Jakarta Servlet, Jakarta Server Pages, etc.",
+          "link": "https://tomcat.apache.org/",
+          "version": "10.1.39"
+        },
+        {
+          "name": "WebSphere Liberty",
+          "description": "Flexible and dynamic Java EE application server.",
+          "link": "https://www.ibm.com/products/websphere-liberty",
+          "version": "23.0.0.9+"
+        },
+        {
+          "name": "JBoss WildFly",
+          "description": "Flexible, lightweight, managed application runtime.",
+          "link": "https://www.wildfly.org/",
+          "version": "27+"
+        }
+      ]
     },
-    "Deployment": {
-      "description": "Runtimes and servers supported for deploying web applications.",
-      "Angular": {
-        "libraries": [
-          {
-            "name": "Java (JDK)",
-            "description": "Java Development Kit for running the backend and build tools.",
-            "link": "https://openjdk.org/",
-            "version": "21.0.6"
-          },
-          {
-            "name": "Node.js",
-            "description": "JavaScript runtime environment.",
-            "link": "https://nodejs.org/",
-            "version": "22.18.0"
-          },
-          {
-            "name": "Apache Tomcat",
-            "description": "Open source implementation of the Jakarta Servlet, Jakarta Server Pages, etc.",
-            "link": "https://tomcat.apache.org/",
-            "version": "10.1.39"
-          },
-          {
-            "name": "WebSphere Liberty",
-            "description": "Flexible and dynamic Java EE application server.",
-            "link": "https://www.ibm.com/products/websphere-liberty",
-            "version": "23.0.0.9+"
-          },
-          {
-            "name": "JBoss WildFly",
-            "description": "Flexible, lightweight, managed application runtime.",
-            "link": "https://www.wildfly.org/",
-            "version": "27+"
-          }
-        ]
-      },
-      "React": {
-        "libraries": []
-      }
+    "Deployment - React": {
+      "description": "Runtimes and servers supported for deploying React web applications.",
+      "libraries": []
     }
   },
   "Mobile": {
