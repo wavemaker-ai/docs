@@ -55,6 +55,12 @@
   gap: 0.5rem;
 }
 
+.selectors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
 .versionSelector label {
   font-size: 0.875rem;
   font-weight: 600;
@@ -133,13 +139,6 @@
 .itemRemoved .libraryName {
   text-decoration: line-through;
   color: var(--ifm-color-emphasis-500);
-}
-
-.compareNote {
-  font-size: 0.75rem;
-  color: var(--ifm-color-emphasis-500);
-  margin: 0.25rem 0 0 0.25rem;
-  font-style: italic;
 }
 
 .nameRow {
