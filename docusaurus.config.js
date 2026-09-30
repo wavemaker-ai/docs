@@ -198,7 +198,7 @@ const config = {
                   <div class="footer-main-section row">
                   <div class="col col--5">
                   <a href="/" target="_blank" class="logo-links"> <img src="/img/wm-logo.svg"/>Wavemaker</a>
-                  <p class="footer-desc">WaveMaker provided a flexible solution that allows us to model, design, and create web-based solutions that pass all security checks.</p>
+                  <p class="footer-desc">WaveMaker provides a flexible solution that allows us to model, design, and create web-based solutions that pass all security checks.</p>
                   </div>
                     <div class="col col--2">
                       <ul class="footer-nav-list">
