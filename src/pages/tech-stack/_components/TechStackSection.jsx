@@ -1,44 +1,36 @@
 import React from 'react';
+import Link from '@docusaurus/Link';
 import styles from '../styles.module.css';
 import { TechStackAccordian } from './TechStackAccordian';
 import { LibraryRow } from './LibraryRow';
-import { isNonEmpty, makeGroupKey, makeItemKey } from './techStackDiff';
+import {
+  isNonEmpty,
+  makeGroupKey,
+  makeItemKey,
+  parseNode,
+} from './techStackDiff';
 
-// Recursively renders subsections (as `<h3>`) down to arrays of libraries
-// (as a TechStackAccordian). `path` ties a rendered group back to its diff
-// data via makeGroupKey.
-export function TechStackSection({ category, data, path = [], diff }) {
-  const entries = Object.entries(data);
-  const hasSubsectionsAtThisLevel = entries.some(
-    ([, value]) => value && typeof value === 'object' && !Array.isArray(value),
-  );
-
-  return entries.map(([name, value]) => {
+// Renders each of a platform's nodes as an accordion of libraries, with the
+// node's optional `description` under its title. `diff` ties a rendered node
+// back to its diff data via makeGroupKey.
+export function TechStackSection({ category, data, diff }) {
+  return Object.entries(parseNode(data).children).map(([name, value]) => {
     if (!isNonEmpty(value)) return null;
+    const { description, libraries, link } = parseNode(value);
 
-    if (!Array.isArray(value)) {
-      return (
-        <div key={name} className={styles.subsection}>
-          <h3 className={styles.subsectionTitle}>{name}</h3>
-          <TechStackSection
-            category={category}
-            data={value}
-            path={[...path, name]}
-            diff={diff}
-          />
-        </div>
-      );
-    }
-
-    const groupKey = makeGroupKey(category, [...path, name]);
+    const groupKey = makeGroupKey(category, [name]);
     const group = diff.byGroup[groupKey];
-    const accordionChanged = Boolean(group?.hasChanges);
     const removedItems = group?.removed ?? [];
 
-    const accordion = (
-      <TechStackAccordian key={name} name={name} hasChanges={accordionChanged}>
+    return (
+      <TechStackAccordian
+        key={name}
+        name={name}
+        description={description}
+        hasChanges={Boolean(group?.hasChanges)}
+      >
         <ul className={styles.list}>
-          {value.map((item) => (
+          {libraries.map((item) => (
             <LibraryRow
               key={item.name}
               item={item}
@@ -53,18 +45,13 @@ export function TechStackSection({ category, data, path = [], diff }) {
             />
           ))}
         </ul>
+        {link && (
+          <div className={styles.accordionFooter}>
+            <Link to={link.url}>{link.label} &rarr;</Link>
+          </div>
+        )}
       </TechStackAccordian>
     );
-
-    if (hasSubsectionsAtThisLevel) {
-      return (
-        <div key={name} className={styles.subsection}>
-          <h3 className={styles.subsectionTitle}>{name}</h3>
-          {accordion}
-        </div>
-      );
-    }
-    return accordion;
   });
 }
 
