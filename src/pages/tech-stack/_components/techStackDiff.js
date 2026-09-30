@@ -4,15 +4,21 @@ const KEY_SEP = '::';
 
 // A node is either a bare array of libraries, or an object with optional
 // reserved keys `description` (string) and `libraries` (array); every other
-// key is a child node. `appliesTo` is reserved for top-level shared nodes and
+// key is a child node. `link` ({ label, url }) is an optional footer link.
+// `appliesTo` is reserved for top-level shared nodes and
 // is consumed by resolveSharedNodes.
 export function parseNode(node) {
   if (Array.isArray(node)) {
-    return { description: undefined, libraries: node, children: {} };
+    return {
+      description: undefined,
+      libraries: node,
+      link: undefined,
+      children: {},
+    };
   }
   // eslint-disable-next-line no-unused-vars
-  const { description, libraries, appliesTo, ...children } = node || {};
-  return { description, libraries, children };
+  const { description, libraries, link, appliesTo, ...children } = node || {};
+  return { description, libraries, link, children };
 }
 
 function insertNode(platformNode, key, node, after) {

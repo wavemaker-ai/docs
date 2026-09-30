@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from '@docusaurus/Link';
 import styles from '../styles.module.css';
 import { TechStackAccordian } from './TechStackAccordian';
 import { LibraryRow } from './LibraryRow';
@@ -15,7 +16,7 @@ import {
 export function TechStackSection({ category, data, diff }) {
   return Object.entries(parseNode(data).children).map(([name, value]) => {
     if (!isNonEmpty(value)) return null;
-    const { description, libraries } = parseNode(value);
+    const { description, libraries, link } = parseNode(value);
 
     const groupKey = makeGroupKey(category, [name]);
     const group = diff.byGroup[groupKey];
@@ -44,6 +45,11 @@ export function TechStackSection({ category, data, diff }) {
             />
           ))}
         </ul>
+        {link && (
+          <div className={styles.accordionFooter}>
+            <Link to={link.url}>{link.label} &rarr;</Link>
+          </div>
+        )}
       </TechStackAccordian>
     );
   });

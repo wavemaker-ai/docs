@@ -99,7 +99,7 @@ ai-skills/                          → agent skills for common workflows
 Platform (Web | Mobile) → Node (one accordion) → libraries
 ```
 
-Every node is an object with two optional reserved keys, `description` (string, shown under the node's title) and `libraries` (array of `{ name, description, link, version }`). Every other key inside a platform is a node.
+Every node is an object with optional reserved keys: `description` (string, shown under the node's title), `libraries` (array of `{ name, description, link, version }`) and `link` (`{ "label", "url" }`, a footer link under the libraries). Every other key inside a platform is a node.
 
 ```json
 {

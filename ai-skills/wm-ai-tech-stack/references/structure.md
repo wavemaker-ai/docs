@@ -12,10 +12,11 @@ Source of truth is `data/tech-stack.schema.json`; this file explains how to use 
 Platform (tab) → Node (accordion) → libraries
 ```
 
-Every node is an object with two optional reserved keys:
+Every node is an object with optional reserved keys:
 
 - `description` — one line shown under the node's title.
 - `libraries` — array of `{ name, description, link, version }`.
+- `link` — optional footer link `{ "label", "url" }` shown under the libraries (e.g. a full dependency list).
 
 Any other key inside a platform is a node. A node holds `libraries`; it does not contain other nodes.
 

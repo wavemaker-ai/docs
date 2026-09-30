@@ -59,7 +59,7 @@ List every change as `node → library → action (added / updated / removed) �
 
 ### Step 3 — Edit the file
 
-- Keep each library to the fields `name`, `description`, `link`, `version` (only `name` and `version` are required; other keys are rejected).
+- Keep each library to the fields `name`, `description`, `link`, `version` (only `name` and `version` are required; other keys are rejected). A node may also carry a footer `link` `{ label, url }`.
 - Keep the version string style used by neighbouring entries in that node (some carry a leading `v`).
 - Names must be unique within a node. The same tool may appear in more than one node when it is genuinely needed in both.
 - Data shared by several platforms (today: `Backend`) lives once in the top-level shared node with `appliesTo` — edit it there, not per platform.

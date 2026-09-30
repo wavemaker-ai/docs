@@ -69,6 +69,9 @@
           },
           "libraries": {
             "$ref": "#/definitions/libraries"
+          },
+          "link": {
+            "$ref": "#/definitions/link"
           }
         },
         "additionalProperties": false
@@ -112,6 +115,25 @@
             },
             "additionalProperties": false
           }
+        },
+        "link": {
+          "$ref": "#/definitions/link"
+        }
+      },
+      "additionalProperties": false
+    },
+    "link": {
+      "description": "Optional footer link shown under the libraries.",
+      "type": "object",
+      "required": ["label", "url"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "additionalProperties": false
