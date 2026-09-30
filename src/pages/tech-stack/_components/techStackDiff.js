@@ -47,6 +47,7 @@ export function resolveSharedNodes(data) {
   const result = {};
   const shared = [];
   Object.entries(data).forEach(([key, node]) => {
+    if (key === '$schema') return; // editor hint, validated by tech-stack.schema.json
     if (node && !Array.isArray(node) && node.appliesTo) {
       shared.push([key, node]);
     } else {

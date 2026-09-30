@@ -1,4 +1,5 @@
 {
+  "$schema": "../tech-stack.schema.json",
   "Web": {
     "description": "Technologies used by WaveMaker web applications.",
     "Frontend/UI - Angular": {

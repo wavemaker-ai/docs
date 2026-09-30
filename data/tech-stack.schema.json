@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "tech-stack.schema.json",
+  "title": "WaveMaker tech stack version",
+  "description": "Shape of data/tech-stack-data/<x-y-z>.json. Top level: platforms (Web, Mobile, ...) whose children are nodes, or shared nodes (appliesTo) that are copied into the listed platforms.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": {
+    "if": {
+      "type": "object",
+      "required": ["appliesTo"]
+    },
+    "then": {
+      "$ref": "#/definitions/sharedNode"
+    },
+    "else": {
+      "$ref": "#/definitions/platform"
+    }
+  },
+  "definitions": {
+    "library": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "::"
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "libraries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/library"
+      }
+    },
+    "node": {
+      "description": "One accordion. A bare array is shorthand for { libraries }.",
+      "if": {
+        "type": "array"
+      },
+      "then": {
+        "$ref": "#/definitions/libraries"
+      },
+      "else": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "libraries": {
+            "$ref": "#/definitions/libraries"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "platform": {
+      "description": "A tab. Every key except description is a node (accordion).",
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "libraries": false,
+        "appliesTo": false
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/node"
+      }
+    },
+    "sharedNode": {
+      "description": "Stored once, copied into each platform listed in appliesTo.",
+      "type": "object",
+      "required": ["appliesTo", "libraries"],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "libraries": {
+          "$ref": "#/definitions/libraries"
+        },
+        "appliesTo": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "after": {
+                "description": "Sibling node to insert behind. Omit to append.",
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
