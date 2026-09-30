@@ -4,13 +4,72 @@ const KEY_SEP = '::';
 
 // A node is either a bare array of libraries, or an object with optional
 // reserved keys `description` (string) and `libraries` (array); every other
-// key is a child node.
+// key is a child node. `appliesTo` is reserved for top-level shared nodes and
+// is consumed by resolveSharedNodes.
 export function parseNode(node) {
   if (Array.isArray(node)) {
     return { description: undefined, libraries: node, children: {} };
   }
-  const { description, libraries, ...children } = node || {};
+  // eslint-disable-next-line no-unused-vars
+  const { description, libraries, appliesTo, ...children } = node || {};
   return { description, libraries, children };
+}
+
+function insertNode(platformNode, key, node, after) {
+  const entries = Object.entries(platformNode);
+  if (entries.some(([k]) => k === key)) {
+    throw new Error(
+      `Tech stack data error: shared node "${key}" already exists in the target platform.`,
+    );
+  }
+  let index = entries.length;
+  if (after) {
+    const afterIndex = entries.findIndex(([k]) => k === after);
+    if (afterIndex === -1) {
+      throw new Error(
+        `Tech stack data error: shared node "${key}" wants to go after "${after}", which does not exist in the target platform.`,
+      );
+    }
+    index = afterIndex + 1;
+  }
+  entries.splice(index, 0, [key, node]);
+  return Object.fromEntries(entries);
+}
+
+// A top-level node with `appliesTo` is not a tab of its own: it is copied into
+// each listed platform, e.g.
+//   "Backend": { "appliesTo": { "Web": { "after": "Frontend/UI - React" },
+//                               "Mobile": {} }, "libraries": [...] }
+// `after` (optional) names the sibling to insert behind; the default is the
+// end. Top-level nodes without `appliesTo` render as normal tabs.
+export function resolveSharedNodes(data) {
+  if (!data) return data;
+  const result = {};
+  const shared = [];
+  Object.entries(data).forEach(([key, node]) => {
+    if (node && !Array.isArray(node) && node.appliesTo) {
+      shared.push([key, node]);
+    } else {
+      result[key] = node;
+    }
+  });
+
+  shared.forEach(([key, { appliesTo, ...node }]) => {
+    Object.entries(appliesTo).forEach(([platform, options]) => {
+      if (!result[platform]) {
+        throw new Error(
+          `Tech stack data error: shared node "${key}" applies to unknown platform "${platform}".`,
+        );
+      }
+      result[platform] = insertNode(
+        result[platform],
+        key,
+        node,
+        options?.after,
+      );
+    });
+  });
+  return result;
 }
 
 export function isNonEmpty(content) {

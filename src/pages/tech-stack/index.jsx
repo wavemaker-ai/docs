@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Layout from '@theme/Layout';
 import {
   versions,
@@ -15,6 +15,7 @@ import { TechStackSection } from './_components/TechStackSection';
 import {
   isNonEmpty,
   parseNode,
+  resolveSharedNodes,
   useTechStackDiff,
 } from './_components/techStackDiff';
 
@@ -45,8 +46,17 @@ export default function TechStackPage() {
     compareVersion = compareParam;
   }
 
-  const sections = versionDataMap[selectedVersion] ?? null;
-  const prevSections = compareVersion ? versionDataMap[compareVersion] : null;
+  const sections = useMemo(
+    () => resolveSharedNodes(versionDataMap[selectedVersion]) ?? null,
+    [selectedVersion],
+  );
+  const prevSections = useMemo(
+    () =>
+      compareVersion
+        ? resolveSharedNodes(versionDataMap[compareVersion])
+        : null,
+    [compareVersion],
+  );
 
   const updateQuery = (key, value) => {
     const params = new URLSearchParams(location.search);
