@@ -37,7 +37,7 @@ Before editing, confirm:
 
 1. **Which version** — default to the newest file in `data/tech-stack-data/`. Confirm with the user. If the version file does not exist yet, see Step 1.
 2. **What changes** — for each library: name, new version, and whether it is added, updated, or removed. Versions come from the user or the project's source of truth; do not infer them.
-3. **Which node** — see `references/structure.md`. Ask when the placement is ambiguous (e.g. a tool needed both to develop and to deploy belongs in both nodes).
+3. **Which node** — see `references/structure.md`. Ask when the placement is ambiguous (e.g. a tool needed in two nodes belongs in both).
 4. **Description and link** — for a new library, get a one-sentence description and the official URL from the user. Do not invent either.
 
 ## Procedure

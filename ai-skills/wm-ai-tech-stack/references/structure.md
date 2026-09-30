@@ -24,9 +24,9 @@ Any other key inside a platform is a node. A node holds `libraries`; it does not
 | Platform | Nodes (in order)                                                                                       |
 | -------- | ------------------------------------------------------------------------------------------------------ |
 | Web      | Frontend/UI - Angular, Frontend/UI - React, Backend (shared), Deployment - Angular, Deployment - React |
-| Mobile   | Frontend/UI, Backend (shared), Developer setup, Deployment                                             |
+| Mobile   | Frontend/UI, Backend (shared), Developer setup                                                         |
 
-There is no Web developer setup.
+There is no Web developer setup and no Mobile deployment.
 
 ## Shared nodes
 
@@ -68,6 +68,8 @@ The page copies it into each listed platform, after the sibling named in `after`
 | a UI framework or front-end library shipped in the generated app    | Frontend/UI (Angular or React node for Web) |
 | a Java library in the generated backend                             | Backend (shared)                            |
 | a tool the developer needs to build or run the app locally (mobile) | Mobile › Developer setup                    |
-| a runtime or server the app is deployed on                          | Deployment (per framework for Web)          |
+| a runtime or server the app is deployed on                          | Web › Deployment (per framework)            |
 
-A runtime needed both to build and to deploy (e.g. JDK, Node.js) is listed in both nodes.
+A library genuinely needed in more than one node is listed in each.
+
+Mobile › Developer setup is ordered by concern: base runtimes (Node.js, npm, JDK, Maven), the WaveMaker CLI, Android tooling (Android Studio, SDK Build Tools, Gradle plugin), then iOS (Xcode). Keep new entries in the matching group.

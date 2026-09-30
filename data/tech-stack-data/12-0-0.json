@@ -177,28 +177,10 @@
       "description": "Tools and SDKs required to build and run mobile applications.",
       "libraries": [
         {
-          "name": "Android Gradle Plugin (AGP)",
-          "description": "Build system for Android applications.",
-          "link": "https://developer.android.com/build",
-          "version": "8.14.3"
-        },
-        {
-          "name": "SDK Build Tools",
-          "description": "Tools required to build Android applications.",
-          "link": "https://developer.android.com/studio/releases/build-tools",
-          "version": "36.0.0"
-        },
-        {
-          "name": "@wavemaker-ai/wm-reactnative-cli",
-          "description": "WaveMaker CLI for React Native projects.",
-          "link": "https://www.npmjs.com/package/@wavemaker-ai/wm-reactnative-cli",
-          "version": "1.0.1"
-        },
-        {
-          "name": "Maven",
-          "description": "Used for managing Java dependencies in React Native builds.",
-          "link": "https://maven.apache.org/",
-          "version": "3.9.9"
+          "name": "Node.js",
+          "description": "JavaScript runtime for the Metro bundler.",
+          "link": "https://nodejs.org/",
+          "version": "22.11.0"
         },
         {
           "name": "npm",
@@ -213,10 +195,16 @@
           "version": "17"
         },
         {
-          "name": "Node.js",
-          "description": "JavaScript runtime for the Metro bundler.",
-          "link": "https://nodejs.org/",
-          "version": "22.11.0"
+          "name": "Maven",
+          "description": "Used for managing Java dependencies in React Native builds.",
+          "link": "https://maven.apache.org/",
+          "version": "3.9.9"
+        },
+        {
+          "name": "@wavemaker-ai/wm-reactnative-cli",
+          "description": "WaveMaker CLI for React Native projects.",
+          "link": "https://www.npmjs.com/package/@wavemaker-ai/wm-reactnative-cli",
+          "version": "1.0.1"
         },
         {
           "name": "Android Studio",
@@ -225,27 +213,22 @@
           "version": "Meerkat 2024.3.1 to Narwhal 4 Feature Drop 2025.1.4"
         },
         {
+          "name": "Android SDK Build Tools",
+          "description": "Tools required to build Android applications.",
+          "link": "https://developer.android.com/studio/releases/build-tools",
+          "version": "36.0.0"
+        },
+        {
+          "name": "Android Gradle Plugin (AGP)",
+          "description": "Build system for Android applications.",
+          "link": "https://developer.android.com/build",
+          "version": "8.14.3"
+        },
+        {
           "name": "Xcode",
           "description": "Integrated Development Environment (IDE) for macOS/iOS.",
           "link": "https://developer.apple.com/xcode/",
           "version": "26.2"
-        }
-      ]
-    },
-    "Deployment": {
-      "description": "Runtimes required to deploy the backend of mobile applications.",
-      "libraries": [
-        {
-          "name": "Java (JDK)",
-          "description": "Required for Android builds and runtime environment.",
-          "link": "https://openjdk.org/",
-          "version": "17"
-        },
-        {
-          "name": "Node.js",
-          "description": "JavaScript runtime for the Metro bundler.",
-          "link": "https://nodejs.org/",
-          "version": "22.11.0"
         }
       ]
     }
