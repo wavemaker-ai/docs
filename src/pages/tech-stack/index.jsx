@@ -66,6 +66,33 @@ export default function TechStackPage() {
 
   const diff = useTechStackDiff(sections, prevSections, compareVersion);
 
+  // Only legend entries that actually appear on the page; no line when
+  // nothing differs (or when not comparing).
+  const changeTypes = new Set(Object.values(diff.byItem).map((i) => i.type));
+  const groups = Object.values(diff.byGroup);
+  const legendItems = [
+    changeTypes.has('added') && (
+      <span key="added" className={`${styles.badge} ${styles.badgeAdded}`}>
+        New
+      </span>
+    ),
+    changeTypes.has('updated') && (
+      <span key="updated" className={`${styles.badge} ${styles.badgeUpdated}`}>
+        Updated version
+      </span>
+    ),
+    groups.some((g) => g.removed.length > 0) && (
+      <span key="removed" className={`${styles.badge} ${styles.badgeRemoved}`}>
+        Removed
+      </span>
+    ),
+    groups.some((g) => g.hasChanges) && (
+      <span key="changes" className={styles.changeBadge}>
+        Section has changes
+      </span>
+    ),
+  ].filter(Boolean);
+
   if (!sections) {
     return (
       <Layout title="Tech Stack">
@@ -136,17 +163,10 @@ export default function TechStackPage() {
           </div>
         </div>
 
-        {compareVersion && (
+        {legendItems.length > 0 && (
           <div className={styles.legend} aria-label="Legend">
             <span>Compared with {formatVersion(compareVersion)}:</span>
-            <span className={`${styles.badge} ${styles.badgeAdded}`}>New</span>
-            <span className={`${styles.badge} ${styles.badgeUpdated}`}>
-              Updated version
-            </span>
-            <span className={`${styles.badge} ${styles.badgeRemoved}`}>
-              Removed
-            </span>
-            <span className={styles.changeBadge}>Section has changes</span>
+            {legendItems}
           </div>
         )}
 
