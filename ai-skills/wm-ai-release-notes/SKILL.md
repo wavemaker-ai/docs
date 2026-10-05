@@ -4,8 +4,9 @@ description: >
   Use this skill when editing or filling in a WaveMaker AI release notes file.
   Activate when the user wants to add a feature, enhancement, or bug fix to a release notes .mdx file,
   asks how to write a release note entry, wants to categorise a shipped item, needs to verify or add a
-  doc link, or is reviewing a release notes draft for correctness. This is distinct from feature
-  announcements (public-facing posts) and blog posts.
+  doc link, or is reviewing a release notes draft for correctness. For drafting a whole release from a
+  source sheet or branch-compare report in bulk, use `wm-ai-release-notes-draft` instead. This is distinct
+  from feature announcements (public-facing posts) and blog posts.
 license: MIT
 metadata:
   version: 0.1.0
@@ -26,6 +27,7 @@ Use this skill to help a writer or developer fill in a versioned release notes f
 
 ## When NOT to use
 
+- User hands over a sheet, export, or branch-compare report and wants a whole release drafted in bulk → use the `wm-ai-release-notes-draft` skill.
 - User wants a public-facing post celebrating a feature → use the `wm-ai-feature-announcements` skill.
 - User wants a narrative blog post or engineering story → use the `wm-ai-blog` skill.
 - User wants a reference or how-to doc page → use the `wm-ai-create-guide` skill.

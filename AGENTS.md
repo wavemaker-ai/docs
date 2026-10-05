@@ -124,6 +124,7 @@ npm run gen-metrics   # regenerate scripts/metrics.json
 For specific workflows, load the matching skill under `ai-skills/` rather than improvising:
 
 - `wm-ai-release-notes` — add or edit entries in a versioned release notes file under `docs/release-notes/`.
+- `wm-ai-release-notes-draft` — draft a whole release notes file from a source sheet of shipped tickets (CSV/XLSX export, GitLab branch-compare report, or pasted developer notes).
 - `wm-feature-announcements` — new post under `blogs/feature-announcements/`.
 - `wm-ai-blog` — new narrative or thought-leadership post under `blogs/blog/`.
 - `wm-ai-create-guide` — create a how-to or tutorial page under `docs/guide/`.
