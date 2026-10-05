@@ -7,7 +7,7 @@ hide_title: true
 
 <Common.WaveMakerAIHeading scale={1.5} />
 
-WaveMaker announces the release of WaveMaker AI 12.0.2. Overview...
+WaveMaker announces the release of WaveMaker AI 12.0.2. This release improves how Screenshot-to-Code generates screens, adds React Native extensibility through custom app wrappers and Metro configuration, and fixes widget accessibility and a range of React app issues.
 
 For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack?v=12-0-2).
 
@@ -17,55 +17,146 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
 <ReleaseNotesTabs>
   <TabItem name="Features">
-    <Accordian title="User Interface">
-    {/* Content */}
-    </Accordian>
-
-    <Accordian title="Backend">
-    {/* Content */}
-    </Accordian>
-
     <Accordian title="Platform">
-     {/* Content */}
-    </Accordian>
+      - ### Custom wrapper around the app <Pill type="mobile" />
 
-    <Accordian title="Product Ecosystem">
-     {/* Content */}
+        You can now wrap a React Native app with your own providers, so libraries that require a provider at the app root can be used.
+
+      - ### Custom Metro configuration support <Pill type="mobile" />
+
+        React Native projects now support adding additional Metro bundler configuration.
+
+      - ### List pagination in generated screens
+
+        Screenshot-to-Code now generates pagination for list widgets, so long lists render in pages instead of all at once.
     </Accordian>
   </TabItem>
 
   <TabItem name="Enhancements">
-    <Accordian title="User Interface">
-    {/* Content */}
-    </Accordian>
-
-    <Accordian title="Backend">
-    {/* Content */}
-    </Accordian>
-
     <Accordian title="Platform">
-     {/* Content */}
-    </Accordian>
+      - ### Platform upgrade files excluded from changes list
 
-    <Accordian title="Product Ecosystem">
-     {/* Content */}
+        Files changed only by a platform upgrade no longer appear in the AI chat's list of changes alongside the session's own edits.
+
+      - ### Wizard fallback when no variant matches
+
+        When no matching wizard variant is available, Screenshot-to-Code now builds the wizard from containers and labels with one container per step, using a model variable to control which step is shown.
+
+      - ### Avatar detection in screenshots
+
+        Screenshot-to-Code detects and generates avatars from a screenshot more accurately.
+
+      - ### Tab headers sharing a row
+
+        Screenshot-to-Code now skips an extra widget that shares a row with a tab header, so the tabs generate cleanly.
+
+      - ### Page padding matches the screenshot
+
+        Screenshot-to-Code no longer adds default padding to page content, so spacing matches the screenshot more closely.
+
+      - ### Background color and gradient detection
+
+        Screenshot-to-Code detects background colors more carefully, including prominent gradients.
     </Accordian>
-    </TabItem>
+  </TabItem>
+
   <TabItem name="Bug Fixes">
     <Accordian title="User Interface">
-    {/* Content */}
+      - ### Select-all checkbox not selecting rows <Pill type="web" />
+
+        Fixed the select-all checkbox in a table header not selecting rows or updating the selection count in React apps, matching Angular's behavior.
+
+      - ### Toggle value not reflected in the UI <Pill type="web" />
+
+        Fixed a toggle's value change not updating the UI bound to it.
+
+      - ### Navigation between external application links <Pill type="web" />
+
+        Fixed navigation failing when moving directly from one external application link to another.
+
+      - ### Rows added from a dialog not displayed <Pill type="web" />
+
+        Fixed a table not displaying rows that were added through a dialog, leaving the table hidden.
+
+      - ### No-data message missing in deployed apps <Pill type="web" />
+
+        Fixed a widget's no-data message not appearing in deployed React apps when a search returns no records.
+
+      - ### Select options not loading and duplicate validation <Pill type="web" />
+
+        Fixed a Select widget's options not loading and its required-field validation message appearing twice.
+
+      - ### Row selection stops working after a dialog opens <Pill type="web" />
+
+        Fixed row selection not working and the page becoming unresponsive after a dialog is opened.
+
+      - ### Table column binding not passed for sorting <Pill type="web" />
+
+        Fixed the Table widget not passing its column binding, which left the sort fields missing.
+
+      - ### Required field errors when opening a tab <Pill type="web" />
+
+        Fixed `Required field(s) missing` console errors appearing when a dynamically added tab is opened.
+
+      - ### No-data image shown alongside data <Pill type="web" />
+
+        Fixed the no-data placeholder image appearing in a list view even when data was present.
+
+      - ### List item background image not loading <Pill type="web" />
+
+        Fixed a list item's background image not loading when bound to a dataset field.
+
+      - ### Conditional styles and Select widget class <Pill type="web" />
+
+        Fixed conditional styles not being applied, and a missing class on the Select widget.
+
+      - ### Submit stays disabled after making selections <Pill type="web" />
+
+        Fixed a form's Submit button remaining disabled after the required selections had been made.
+
+      - ### Multi-level component repeats root data <Pill type="web" />
+
+        Fixed a multi-level component inside a dialog showing the root level's data at every level.
+
+      - ### Script call to goToFirstPage fails <Pill type="web" />
+
+        Fixed a script call to `goToFirstPage` from a form submit handler failing in React apps with `Cannot read properties of undefined`.
+
+      - ### Validation persists after selecting a value <Pill type="web" />
+
+        Fixed a required-field validation error persisting after a value was selected, with the field alternating between two values and the page becoming unresponsive.
+
+      - ### Unwanted background on a dialog <Pill type="web" />
+
+        Fixed an unwanted background appearing on a dialog opened from within a wizard step.
+
+      - ### Widget accessibility fixes <Pill type="web" />
+        - Button, Progress Bar, Progress Circle, Audio, Video, and Picture: fixed accessibility not working correctly in some configurations.
+        - File Upload: fixed the missing `name` attribute.
+
+      - ### List variant padding overrides inline padding <Pill type="mobile" />
+
+        Fixed a List widget's variant padding taking priority over the padding set inline on the widget.
     </Accordian>
 
     <Accordian title="Backend">
-    {/* Content */}
+      - ### PATCH path parameter missing as an input
+
+        Fixed a path parameter not appearing as an input when importing a PATCH API that also has a JSON request body, leaving no way to supply it when invoking the API.
     </Accordian>
 
     <Accordian title="Platform">
-     {/* Content */}
-    </Accordian>
+      - ### Dependency installation blocked by flagged package <Pill type="mobile" />
 
-    <Accordian title="Product Ecosystem">
-     {/* Content */}
+        Fixed React Native dependency installation being blocked by a `postcss` version flagged for CVE-2026-41305.
+
+      - ### AI chat run stops during a multi-file replace
+
+        Fixed an AI chat run ending with no response when a find-and-replace was applied across a directory instead of across named files.
+
+      - ### Dialogs generated incorrectly from screenshots
+
+        Fixed Screenshot-to-Code generating dialogs incorrectly from a screenshot.
     </Accordian>
   </TabItem>
 </ReleaseNotesTabs>
