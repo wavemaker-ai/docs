@@ -59,6 +59,23 @@ docs/release-notes/release-version-1/version-1-0-x/1.0.0.mdx
 
 The top-level template used to generate a new file is `assets/release-notes-template.mdx`.
 
+## Release overview line
+
+Every release notes file opens with an announcement line that ends in a one-sentence overview of the release:
+
+```mdx
+WaveMaker announces the release of WaveMaker AI 12.0.2. This release adds React Native extensibility through custom app wrappers and Metro configuration, improves widget accessibility, and fixes a broad set of React app issues.
+```
+
+A new file generated from the template ships with a literal `Overview\...` placeholder. **Replace it before the file is done** — it is not optional, and it publishes verbatim if left alone.
+
+Rules:
+
+- One sentence. Name the two or three themes a reader should look forward to, drawn from the entries actually in the file.
+- Derive it from the content — after the entries are written, not before. If the release is mostly fixes, say so.
+- Same style rules as entry bodies: active voice, present tense, no marketing language.
+- Do not list every item, and do not give a count of entries — both go stale on the next edit.
+
 ## Procedure
 
 ### Step 0 — Resolve the target file
@@ -116,6 +133,7 @@ Edit the release notes file and insert the entry in the correct accordian, maint
 
 Ask if there are more items. When the user is done, run a final scan of the file and flag:
 
+- An unreplaced `Overview\...` placeholder in the opening announcement line.
 - Body copy longer than one sentence.
 - Relative links that include a `.md` or `.mdx` extension.
 - Relative links where the target file does not exist.
@@ -123,6 +141,7 @@ Ask if there are more items. When the user is done, run a final scan of the file
 
 ## Common mistakes to avoid
 
+- **Shipping the `Overview\...` placeholder** — the opening line's overview is required. Write it from the finished entries before calling the file done.
 - **Multi-sentence body** — the body is one sentence. Everything else goes in a linked doc.
 - **Placeholder links** — do not write `[Documentation](#)` or `[link to be added]`. Verify first, add only when confirmed.
 - **Link with file extension** — relative links must not include `.md` or `.mdx`. Strip the extension before writing.
@@ -134,6 +153,7 @@ Ask if there are more items. When the user is done, run a final scan of the file
 
 ## Validation checklist
 
+- [ ] The opening announcement line ends with a one-sentence overview, with no `Overview\...` placeholder left.
 - [ ] Entry is in the correct tab (Features / Enhancements / Bug Fixes).
 - [ ] Entry is in the correct accordian (User Interface / Backend / Platform / Product Ecosystem).
 - [ ] Title is a `###` heading, 4–7 words.
