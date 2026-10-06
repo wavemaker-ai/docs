@@ -105,15 +105,14 @@ Every node is an object with optional reserved keys: `description` (string, show
 {
   "Web": {
     "description": "Technologies used by web applications.",
-    "Frontend/UI - Angular": { "description": "...", "libraries": [] },
+    "Some node": { "description": "...", "libraries": [] },
     "Backend": { "libraries": [] }
   }
 }
 ```
 
-- Web nodes: `Frontend/UI - Angular`, `Frontend/UI - React`, `Backend`, `Deployment - Angular`, `Deployment - React`. There is no Web developer setup.
-- Mobile nodes: `Frontend/UI`, `Backend`, `Developer setup`. There is no Mobile deployment.
-- Data shared by several platforms (today: `Backend`) is stored once as a top-level node with `appliesTo`, e.g. `"appliesTo": { "Web": { "after": "Frontend/UI - React" }, "Mobile": { "after": "Frontend/UI" } }`. The page copies it into each listed platform, after the named sibling or at the end if `after` is omitted. A top-level node without `appliesTo` is a normal tab.
+- Node names are free-form labels, not enforced by the schema. The current Web and Mobile node lists are in `ai-skills/wm-ai-tech-stack/references/structure.md`; read the latest version file for the exact labels. Web has no developer setup; Mobile has no deployment.
+- Data shared by several platforms (today: `Backend`) is stored once as a top-level node with `appliesTo`, e.g. `"appliesTo": { "Web": { "after": "<existing Web node>" }, "Mobile": {} }`. The page copies it into each listed platform, after the named sibling or at the end if `after` is omitted. A top-level node without `appliesTo` is a normal tab.
 - Each node renders as one accordion. Do not nest nodes inside nodes.
 - A bare array is accepted as shorthand for `{ "libraries": [...] }`.
 - An item may appear in more than one node when it is genuinely needed in both. Names must be unique within a `libraries` array.

@@ -22,10 +22,10 @@ Any other key inside a platform is a node. A node holds `libraries`; it does not
 
 ## Current layout
 
-| Platform | Nodes (in order)                                                                                       |
-| -------- | ------------------------------------------------------------------------------------------------------ |
-| Web      | Frontend/UI - Angular, Frontend/UI - React, Backend (shared), Deployment - Angular, Deployment - React |
-| Mobile   | Frontend/UI, Backend (shared), Developer setup                                                         |
+| Platform | Nodes (in order)                                                                                 |
+| -------- | ------------------------------------------------------------------------------------------------ |
+| Web      | Frontend (Angular), Frontend (React), Backend (shared), Deployment (Angular), Deployment (React) |
+| Mobile   | Frontend, Backend (shared), Developer setup                                                      |
 
 There is no Web developer setup and no Mobile deployment.
 
@@ -37,8 +37,8 @@ Data used by more than one platform is stored once at the top level with `applie
 "Backend": {
   "description": "…",
   "appliesTo": {
-    "Web":    { "after": "Frontend/UI - React" },
-    "Mobile": { "after": "Frontend/UI" }
+    "Web":    { "after": "<existing Web node>" },
+    "Mobile": { "after": "<existing Mobile node>" }
   },
   "libraries": []
 }
@@ -64,12 +64,12 @@ The page copies it into each listed platform, after the sibling named in `after`
 
 ## Placement guide
 
-| Library is…                                                         | Goes in                                     |
-| ------------------------------------------------------------------- | ------------------------------------------- |
-| a UI framework or front-end library shipped in the generated app    | Frontend/UI (Angular or React node for Web) |
-| a Java library in the generated backend                             | Backend (shared)                            |
-| a tool the developer needs to build or run the app locally (mobile) | Mobile › Developer setup                    |
-| a runtime or server the app is deployed on                          | Web › Deployment (per framework)            |
+| Library is…                                                         | Goes in                                  |
+| ------------------------------------------------------------------- | ---------------------------------------- |
+| a UI framework or front-end library shipped in the generated app    | Frontend (Angular or React node for Web) |
+| a Java library in the generated backend                             | Backend (shared)                         |
+| a tool the developer needs to build or run the app locally (mobile) | Mobile › Developer setup                 |
+| a runtime or server the app is deployed on                          | Web › Deployment (per framework)         |
 
 A library genuinely needed in more than one node is listed in each.
 

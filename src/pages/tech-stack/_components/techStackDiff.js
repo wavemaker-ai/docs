@@ -44,7 +44,7 @@ function insertNode(platformNode, key, node, after) {
 
 // A top-level node with `appliesTo` is not a tab of its own: it is copied into
 // each listed platform, e.g.
-//   "Backend": { "appliesTo": { "Web": { "after": "Frontend/UI - React" },
+//   "Backend": { "appliesTo": { "Web": { "after": "Some node" },
 //                               "Mobile": {} }, "libraries": [...] }
 // `after` (optional) names the sibling to insert behind; the default is the
 // end. Top-level nodes without `appliesTo` render as normal tabs.

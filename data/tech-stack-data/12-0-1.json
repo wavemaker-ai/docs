@@ -2,7 +2,7 @@
   "$schema": "../tech-stack.schema.json",
   "Web": {
     "description": "Technologies used by WaveMaker web applications.",
-    "Frontend/UI - Angular": {
+    "Frontend (Angular)": {
       "description": "Libraries used by Angular based web applications.",
       "libraries": [
         {
@@ -61,7 +61,7 @@
         }
       ]
     },
-    "Frontend/UI - React": {
+    "Frontend (React)": {
       "description": "Libraries used by React based web applications.",
       "libraries": [
         {
@@ -114,7 +114,7 @@
         }
       ]
     },
-    "Deployment - Angular": {
+    "Deployment (Angular)": {
       "description": "Runtimes and servers supported for deploying Angular web applications.",
       "libraries": [
         {
@@ -137,7 +137,7 @@
         }
       ]
     },
-    "Deployment - React": {
+    "Deployment (React)": {
       "description": "Runtimes and servers supported for deploying React web applications.",
       "libraries": [
         {
@@ -157,7 +157,7 @@
   },
   "Mobile": {
     "description": "Technologies used by WaveMaker React Native mobile applications.",
-    "Frontend/UI": {
+    "Frontend": {
       "description": "Frameworks and libraries bundled into the generated mobile UI.",
       "libraries": [
         {
@@ -242,10 +242,10 @@
     },
     "appliesTo": {
       "Web": {
-        "after": "Frontend/UI - React"
+        "after": "Frontend (React)"
       },
       "Mobile": {
-        "after": "Frontend/UI"
+        "after": "Frontend"
       }
     },
     "libraries": [
