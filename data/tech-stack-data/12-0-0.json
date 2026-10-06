@@ -12,16 +12,10 @@
           "version": "21.2.20"
         },
         {
-          "name": "jQuery",
-          "description": "Fast, small, and feature-rich JavaScript library.",
-          "link": "https://jquery.com/",
-          "version": "3.7.1"
-        },
-        {
-          "name": "jQuery UI",
-          "description": "Set of user interface interactions, effects, widgets, and themes built on top of jQuery.",
-          "link": "https://jqueryui.com/",
-          "version": "1.14.1"
+          "name": "RxJS",
+          "description": "Reactive Extensions for JavaScript.",
+          "link": "https://rxjs.dev/",
+          "version": "7.8.2"
         },
         {
           "name": "ngx-bootstrap",
@@ -30,34 +24,10 @@
           "version": "21.2.0"
         },
         {
-          "name": "Bootstrap",
-          "description": "The most popular HTML, CSS, and JS library for developing responsive, mobile-first projects.",
-          "link": "https://getbootstrap.com/docs/3.3/",
-          "version": "3.4.1"
-        },
-        {
-          "name": "D3.js",
-          "description": "JavaScript library for manipulating documents based on data.",
-          "link": "https://d3js.org/",
-          "version": "7.8.5"
-        },
-        {
-          "name": "NVD3",
-          "description": "Re-usable charts for D3.js.",
-          "link": "https://nvd3.org/",
-          "version": "1.8.16"
-        },
-        {
           "name": "FullCalendar",
           "description": "Full-sized drag & drop event calendar.",
           "link": "https://fullcalendar.io/",
           "version": "6.1.18"
-        },
-        {
-          "name": "Lodash (lodash-es)",
-          "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
-          "link": "https://lodash.com/",
-          "version": "4.18.1"
         }
       ]
     },
