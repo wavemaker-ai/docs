@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import Layout from '@theme/Layout';
 import {
   versions,
@@ -12,83 +12,86 @@ import {
   TabItem,
 } from '../../components/MDXComponents/LayoutComponents/Tabs/Tabs';
 import { TechStackSection } from './_components/TechStackSection';
-import { isNonEmpty, useTechStackDiff } from './_components/techStackDiff';
+import {
+  isNonEmpty,
+  parseNode,
+  resolveSharedNodes,
+  useTechStackDiff,
+} from './_components/techStackDiff';
 
 function formatVersion(v) {
   return 'v' + v.replace(/-/g, '.');
 }
 
+const NO_COMPARE = 'none';
+
 export default function TechStackPage() {
   const location = useLocation();
   const history = useHistory();
   const query = new URLSearchParams(location.search);
-  const initialVersion = query.get('v') || versions[0];
+  const selectedVersion = query.get('v') || versions[0];
+  const compareParam = query.get('compare');
 
-  const [selectedVersion, setSelectedVersion] = useState(initialVersion);
-  const [sections, setSections] = useState(null);
-  const [prevSections, setPrevSections] = useState(null);
-  const [previousVersion, setPreviousVersion] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // Compare with the immediate predecessor unless the user picks another
+  // version (`?compare=<version>`) or turns comparison off (`?compare=none`).
+  const previousVersion = versions[versions.indexOf(selectedVersion) + 1];
+  let compareVersion = previousVersion ?? null;
+  if (compareParam === NO_COMPARE) {
+    compareVersion = null;
+  } else if (
+    compareParam &&
+    compareParam !== selectedVersion &&
+    versionDataMap[compareParam]
+  ) {
+    compareVersion = compareParam;
+  }
 
-  useEffect(() => {
-    const v = new URLSearchParams(location.search).get('v') || versions[0];
-    if (v !== selectedVersion) {
-      setSelectedVersion(v);
-    }
-  }, [location.search]);
+  const sections = useMemo(
+    () => resolveSharedNodes(versionDataMap[selectedVersion]) ?? null,
+    [selectedVersion],
+  );
+  const prevSections = useMemo(
+    () =>
+      compareVersion
+        ? resolveSharedNodes(versionDataMap[compareVersion])
+        : null,
+    [compareVersion],
+  );
 
-  useEffect(() => {
-    function loadData() {
-      setLoading(true);
-      try {
-        const currentData = versionDataMap[selectedVersion];
-        if (!currentData) {
-          throw new Error(`Version ${selectedVersion} not found`);
-        }
-        setSections(currentData);
-
-        const currentIndex = versions.indexOf(selectedVersion);
-        const prevV =
-          currentIndex < versions.length - 1
-            ? versions[currentIndex + 1]
-            : null;
-        setPreviousVersion(prevV);
-
-        if (prevV) {
-          const prevData = versionDataMap[prevV];
-          setPrevSections(prevData || null);
-        } else {
-          setPrevSections(null);
-        }
-      } catch (error) {
-        console.error('Error loading tech stack data:', error);
-        setSections(null);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, [selectedVersion]);
-
-  const handleVersionChange = (e) => {
-    const newV = e.target.value;
-    setSelectedVersion(newV);
-    const newParams = new URLSearchParams(location.search);
-    newParams.set('v', newV);
-    history.push({ search: newParams.toString() });
+  const updateQuery = (key, value) => {
+    const params = new URLSearchParams(location.search);
+    params.set(key, value);
+    history.push({ search: params.toString() });
   };
 
-  const diff = useTechStackDiff(sections, prevSections, previousVersion);
+  const diff = useTechStackDiff(sections, prevSections, compareVersion);
 
-  if (loading) {
-    return (
-      <Layout title="Tech Stack">
-        <div className="container margin-vert--lg">
-          <h1>Loading...</h1>
-        </div>
-      </Layout>
-    );
-  }
+  // Only legend entries that actually appear on the page; no line when
+  // nothing differs (or when not comparing).
+  const changeTypes = new Set(Object.values(diff.byItem).map((i) => i.type));
+  const groups = Object.values(diff.byGroup);
+  const legendItems = [
+    changeTypes.has('added') && (
+      <span key="added" className={`${styles.badge} ${styles.badgeAdded}`}>
+        New
+      </span>
+    ),
+    changeTypes.has('updated') && (
+      <span key="updated" className={`${styles.badge} ${styles.badgeUpdated}`}>
+        Updated version
+      </span>
+    ),
+    groups.some((g) => g.removed.length > 0) && (
+      <span key="removed" className={`${styles.badge} ${styles.badgeRemoved}`}>
+        Removed
+      </span>
+    ),
+    groups.some((g) => g.hasChanges) && (
+      <span key="changes" className={styles.changeBadge}>
+        Section has changes
+      </span>
+    ),
+  ].filter(Boolean);
 
   if (!sections) {
     return (
@@ -114,7 +117,7 @@ export default function TechStackPage() {
       title="Tech Stack"
       description="WaveMaker Tech Stack versions and libraries"
     >
-      <main className="container margin-vert--lg">
+      <main className={styles.page}>
         <div className={styles.header}>
           <div>
             <h1 className={styles.title}>Tech Stack</h1>
@@ -123,27 +126,49 @@ export default function TechStackPage() {
               WaveMaker.
             </p>
           </div>
-          <div className={styles.versionSelector}>
-            <label htmlFor="version-select">Select Version:</label>
-            <select
-              id="version-select"
-              value={selectedVersion}
-              onChange={handleVersionChange}
-              className={styles.select}
-            >
-              {versions.map((v) => (
-                <option key={v} value={v}>
-                  {formatVersion(v)}
-                </option>
-              ))}
-            </select>
-            {previousVersion && (
-              <p className={styles.compareNote}>
-                Comparing with <strong>{formatVersion(previousVersion)}</strong>
-              </p>
-            )}
+          <div className={styles.selectors}>
+            <div className={styles.versionSelector}>
+              <label htmlFor="version-select">Select Version:</label>
+              <select
+                id="version-select"
+                value={selectedVersion}
+                onChange={(e) => updateQuery('v', e.target.value)}
+                className={styles.select}
+              >
+                {versions.map((v) => (
+                  <option key={v} value={v}>
+                    {formatVersion(v)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.versionSelector}>
+              <label htmlFor="compare-select">Compare With:</label>
+              <select
+                id="compare-select"
+                value={compareVersion ?? NO_COMPARE}
+                onChange={(e) => updateQuery('compare', e.target.value)}
+                className={styles.select}
+              >
+                <option value={NO_COMPARE}>No comparison</option>
+                {versions
+                  .filter((v) => v !== selectedVersion)
+                  .map((v) => (
+                    <option key={v} value={v}>
+                      {formatVersion(v)}
+                    </option>
+                  ))}
+              </select>
+            </div>
           </div>
         </div>
+
+        {legendItems.length > 0 && (
+          <div className={styles.legend} aria-label="Legend">
+            <span>Compared with {formatVersion(compareVersion)}:</span>
+            {legendItems}
+          </div>
+        )}
 
         <div className={styles.content}>
           <TabsWrapper>
@@ -154,6 +179,11 @@ export default function TechStackPage() {
                 count={diff.byCategory[category]}
               >
                 <div className={styles.section}>
+                  {parseNode(subCats).description && (
+                    <p className={styles.categoryDesc}>
+                      {parseNode(subCats).description}
+                    </p>
+                  )}
                   <TechStackSection
                     category={category}
                     data={subCats}

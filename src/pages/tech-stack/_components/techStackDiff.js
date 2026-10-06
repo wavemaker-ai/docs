@@ -2,13 +2,88 @@ import { useMemo } from 'react';
 
 const KEY_SEP = '::';
 
+// A node is either a bare array of libraries, or an object with optional
+// reserved keys `description` (string) and `libraries` (array); every other
+// key is a child node. `link` ({ label, url }) is an optional footer link.
+// `appliesTo` is reserved for top-level shared nodes and
+// is consumed by resolveSharedNodes.
+export function parseNode(node) {
+  if (Array.isArray(node)) {
+    return {
+      description: undefined,
+      libraries: node,
+      link: undefined,
+      children: {},
+    };
+  }
+  // eslint-disable-next-line no-unused-vars
+  const { description, libraries, link, appliesTo, ...children } = node || {};
+  return { description, libraries, link, children };
+}
+
+function insertNode(platformNode, key, node, after) {
+  const entries = Object.entries(platformNode);
+  if (entries.some(([k]) => k === key)) {
+    throw new Error(
+      `Tech stack data error: shared node "${key}" already exists in the target platform.`,
+    );
+  }
+  let index = entries.length;
+  if (after) {
+    const afterIndex = entries.findIndex(([k]) => k === after);
+    if (afterIndex === -1) {
+      throw new Error(
+        `Tech stack data error: shared node "${key}" wants to go after "${after}", which does not exist in the target platform.`,
+      );
+    }
+    index = afterIndex + 1;
+  }
+  entries.splice(index, 0, [key, node]);
+  return Object.fromEntries(entries);
+}
+
+// A top-level node with `appliesTo` is not a tab of its own: it is copied into
+// each listed platform, e.g.
+//   "Backend": { "appliesTo": { "Web": { "after": "Some node" },
+//                               "Mobile": {} }, "libraries": [...] }
+// `after` (optional) names the sibling to insert behind; the default is the
+// end. Top-level nodes without `appliesTo` render as normal tabs.
+export function resolveSharedNodes(data) {
+  if (!data) return data;
+  const result = {};
+  const shared = [];
+  Object.entries(data).forEach(([key, node]) => {
+    if (key === '$schema') return; // editor hint, validated by tech-stack.schema.json
+    if (node && !Array.isArray(node) && node.appliesTo) {
+      shared.push([key, node]);
+    } else {
+      result[key] = node;
+    }
+  });
+
+  shared.forEach(([key, { appliesTo, ...node }]) => {
+    Object.entries(appliesTo).forEach(([platform, options]) => {
+      if (!result[platform]) {
+        throw new Error(
+          `Tech stack data error: shared node "${key}" applies to unknown platform "${platform}".`,
+        );
+      }
+      result[platform] = insertNode(
+        result[platform],
+        key,
+        node,
+        options?.after,
+      );
+    });
+  });
+  return result;
+}
+
 export function isNonEmpty(content) {
   if (!content) return false;
-  if (Array.isArray(content)) return content.length > 0;
-  if (typeof content === 'object') {
-    return Object.values(content).some(isNonEmpty);
-  }
-  return false;
+  const { libraries, children } = parseNode(content);
+  if (libraries?.length > 0) return true;
+  return Object.values(children).some(isNonEmpty);
 }
 
 // fullPath includes every key from the category down to the array's own
@@ -39,8 +114,9 @@ function buildLibIndex(data) {
   const map = {};
   const groups = {};
   if (data) {
-    const traverse = (category, content, path = []) => {
-      if (Array.isArray(content)) {
+    const traverse = (category, node, path = []) => {
+      const { libraries: content, children } = parseNode(node);
+      if (content) {
         const groupKey = makeGroupKey(category, path);
         const seenNames = new Set();
 
@@ -66,12 +142,11 @@ function buildLibIndex(data) {
         content.forEach((item) => {
           map[makeItemKey(groupKey, item.name)] = item.version;
         });
-      } else if (content && typeof content === 'object') {
-        Object.entries(content).forEach(([key, value]) => {
-          assertNoKeySeparator(key, 'a category/subsection key');
-          traverse(category, value, [...path, key]);
-        });
       }
+      Object.entries(children).forEach(([key, value]) => {
+        assertNoKeySeparator(key, 'a category/subsection key');
+        traverse(category, value, [...path, key]);
+      });
     };
 
     Object.entries(data).forEach(([category, subCats]) => {
