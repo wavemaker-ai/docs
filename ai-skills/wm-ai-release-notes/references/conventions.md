@@ -39,6 +39,20 @@ An accordian with no content for this release can be omitted entirely or left wi
 </Accordian>
 ```
 
+## Release overview line
+
+The announcement line at the top of the file ends with a one-sentence overview of the release. The template ships it as a literal `Overview\...` placeholder, which must be replaced before the file is done.
+
+```mdx
+WaveMaker announces the release of WaveMaker AI 12.0.2. This release adds React Native extensibility through custom app wrappers and Metro configuration, improves widget accessibility, and fixes a broad set of React app issues.
+```
+
+Write it last, from the entries actually in the file, naming the two or three themes a reader should look forward to.
+
+- Good: "This release focuses on React app stability, with fixes across tables, forms, and dialogs."
+- Bad: "This release is packed with exciting improvements across the board." (marketing, says nothing)
+- Bad: "This release includes 3 features, 1 enhancement, and 22 bug fixes." (goes stale on the next edit)
+
 ## Entry format
 
 ```mdx

@@ -34,6 +34,7 @@ const MobileIcon = ({ size = 14, color = 'currentColor' }) => (
 
 const pillConfig = {
   web: { icon: WebIcon, label: 'Web' },
+  angular: { icon: null, label: 'Angular' },
   mobile: { icon: MobileIcon, label: 'Mobile' },
   desktop: { icon: Monitor, label: 'Desktop' },
   android: { icon: MobileIcon, label: 'Android' },
