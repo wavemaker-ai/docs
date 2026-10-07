@@ -4,8 +4,9 @@ description: >
   Use this skill when editing or filling in a WaveMaker AI release notes file.
   Activate when the user wants to add a feature, enhancement, or bug fix to a release notes .mdx file,
   asks how to write a release note entry, wants to categorise a shipped item, needs to verify or add a
-  doc link, or is reviewing a release notes draft for correctness. This is distinct from feature
-  announcements (public-facing posts) and blog posts.
+  doc link, or is reviewing a release notes draft for correctness. For drafting a whole release from a
+  source sheet or branch-compare report in bulk, use `wm-ai-release-notes-draft` instead. This is distinct
+  from feature announcements (public-facing posts) and blog posts.
 license: MIT
 metadata:
   version: 0.1.0
@@ -26,6 +27,7 @@ Use this skill to help a writer or developer fill in a versioned release notes f
 
 ## When NOT to use
 
+- User hands over a sheet, export, or branch-compare report and wants a whole release drafted in bulk → use the `wm-ai-release-notes-draft` skill.
 - User wants a public-facing post celebrating a feature → use the `wm-ai-feature-announcements` skill.
 - User wants a narrative blog post or engineering story → use the `wm-ai-blog` skill.
 - User wants a reference or how-to doc page → use the `wm-ai-create-guide` skill.
@@ -58,6 +60,23 @@ docs/release-notes/release-version-1/version-1-0-x/1.0.0.mdx
 ```
 
 The top-level template used to generate a new file is `assets/release-notes-template.mdx`.
+
+## Release overview line
+
+Every release notes file opens with an announcement line that ends in a one-sentence overview of the release:
+
+```mdx
+WaveMaker announces the release of WaveMaker AI 12.0.2. This release adds React Native extensibility through custom app wrappers and Metro configuration, improves widget accessibility, and fixes a broad set of React app issues.
+```
+
+A new file generated from the template ships with a literal `Overview\...` placeholder. **Replace it before the file is done** — it is not optional, and it publishes verbatim if left alone.
+
+Rules:
+
+- One sentence. Name the two or three themes a reader should look forward to, drawn from the entries actually in the file.
+- Derive it from the content — after the entries are written, not before. If the release is mostly fixes, say so.
+- Same style rules as entry bodies: active voice, present tense, no marketing language.
+- Do not list every item, and do not give a count of entries — both go stale on the next edit.
 
 ## Procedure
 
@@ -116,6 +135,7 @@ Edit the release notes file and insert the entry in the correct accordian, maint
 
 Ask if there are more items. When the user is done, run a final scan of the file and flag:
 
+- An unreplaced `Overview\...` placeholder in the opening announcement line.
 - Body copy longer than one sentence.
 - Relative links that include a `.md` or `.mdx` extension.
 - Relative links where the target file does not exist.
@@ -123,6 +143,7 @@ Ask if there are more items. When the user is done, run a final scan of the file
 
 ## Common mistakes to avoid
 
+- **Shipping the `Overview\...` placeholder** — the opening line's overview is required. Write it from the finished entries before calling the file done.
 - **Multi-sentence body** — the body is one sentence. Everything else goes in a linked doc.
 - **Placeholder links** — do not write `[Documentation](#)` or `[link to be added]`. Verify first, add only when confirmed.
 - **Link with file extension** — relative links must not include `.md` or `.mdx`. Strip the extension before writing.
@@ -134,6 +155,7 @@ Ask if there are more items. When the user is done, run a final scan of the file
 
 ## Validation checklist
 
+- [ ] The opening announcement line ends with a one-sentence overview, with no `Overview\...` placeholder left.
 - [ ] Entry is in the correct tab (Features / Enhancements / Bug Fixes).
 - [ ] Entry is in the correct accordian (User Interface / Backend / Platform / Product Ecosystem).
 - [ ] Title is a `###` heading, 4–7 words.

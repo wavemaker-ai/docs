@@ -43,7 +43,8 @@
 }
 
 /* Base styling */
-.wm-pill-web {
+.wm-pill-web,
+.wm-pill-angular {
   background: rgba(23, 148, 239, 0.2);
   color: rgba(23, 148, 239);
   --wm-pill-icon-color: rgba(23, 148, 239);
