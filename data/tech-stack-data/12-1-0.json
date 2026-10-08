@@ -1,0 +1,260 @@
+{
+  "$schema": "../tech-stack.schema.json",
+  "Web": {
+    "description": "Technologies used by WaveMaker web applications.",
+    "Frontend (Angular)": {
+      "description": "Libraries used by Angular based web applications.",
+      "libraries": [
+        {
+          "name": "Angular",
+          "description": "Platform for building mobile and desktop web applications",
+          "link": "https://angular.io/",
+          "version": "22.x"
+        },
+        {
+          "name": "RxJS",
+          "description": "Reactive Extensions for JavaScript.",
+          "link": "https://rxjs.dev/",
+          "version": "7.8.2"
+        },
+        {
+          "name": "ngx-bootstrap",
+          "description": "Native Angular directives for Bootstrap.",
+          "link": "https://valor-software.com/ngx-bootstrap/",
+          "version": "21.2.0"
+        },
+        {
+          "name": "FullCalendar",
+          "description": "Full-sized drag & drop event calendar.",
+          "link": "https://fullcalendar.io/",
+          "version": "6.1.18"
+        }
+      ]
+    },
+    "Frontend (React)": {
+      "description": "Libraries used by React based web applications.",
+      "libraries": [
+        {
+          "name": "React",
+          "version": "v19.2.3",
+          "description": "Platform for building desktop web applications",
+          "link": "https://react.dev/"
+        },
+        {
+          "name": "Next Js",
+          "version": "v16.1.1",
+          "description": "React framework that helps to build fast web apps",
+          "link": "https://nextjs.org/"
+        },
+        {
+          "name": "Material UI",
+          "version": "v6.3.1",
+          "description": "Ready to use Material Design components",
+          "link": "https://mui.com/material-ui/"
+        },
+        {
+          "name": "D3",
+          "version": "v7.8.5",
+          "description": "JavaScript library for manipulating documents based on data.",
+          "link": "https://d3js.org/"
+        },
+        {
+          "name": "NVD3",
+          "version": "v1.8.16",
+          "description": "Re-usable charts for D3.js.",
+          "link": "https://nvd3.org/"
+        },
+        {
+          "name": "Fullcalendar",
+          "version": "v6.1.15",
+          "description": "Full-sized drag & drop event calendar.",
+          "link": "https://fullcalendar.io/"
+        },
+        {
+          "name": "Lodash (lodash-es)",
+          "version": "v4.17.21",
+          "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
+          "link": "https://lodash.com/"
+        },
+        {
+          "name": "moment-timezone",
+          "version": "v0.6.0",
+          "description": "Extend Moment.js with time-zone definitions",
+          "link": "https://momentjs.com/timezone/"
+        }
+      ]
+    },
+    "Deployment (Angular)": {
+      "description": "Runtimes and servers supported for deploying Angular web applications.",
+      "libraries": [
+        {
+          "name": "Node.js",
+          "description": "JavaScript runtime environment.",
+          "link": "https://nodejs.org/",
+          "version": "22.18.0"
+        },
+        {
+          "name": "Java (JDK)",
+          "description": "Java Development Kit for running the backend and build tools.",
+          "link": "https://openjdk.org/",
+          "version": "21.0.6"
+        },
+        {
+          "name": "Apache Tomcat",
+          "description": "Open source implementation of the Jakarta Servlet, Jakarta Server Pages, etc.",
+          "link": "https://tomcat.apache.org/",
+          "version": "10.1.39"
+        }
+      ]
+    },
+    "Deployment (React)": {
+      "description": "Runtimes and servers supported for deploying React web applications.",
+      "libraries": [
+        {
+          "name": "Node.js",
+          "description": "[Mock] JavaScript runtime for serving Next.js apps.",
+          "link": "https://nodejs.org/",
+          "version": "22.18.0"
+        },
+        {
+          "name": "Nginx",
+          "description": "[Mock] Web server and reverse proxy.",
+          "link": "https://nginx.org/",
+          "version": "1.27.0"
+        }
+      ]
+    }
+  },
+  "Mobile": {
+    "description": "Technologies used by WaveMaker React Native mobile applications.",
+    "Frontend": {
+      "description": "Frameworks and libraries bundled into the generated mobile UI.",
+      "libraries": [
+        {
+          "name": "React Native",
+          "description": "Framework for building native apps using React.",
+          "link": "https://reactnative.dev/",
+          "version": "0.81.4"
+        },
+        {
+          "name": "Expo",
+          "description": "Platform for universal React applications.",
+          "link": "https://expo.dev/",
+          "version": "54.0.12"
+        }
+      ]
+    },
+    "Developer setup": {
+      "description": "Tools and SDKs required to build and run mobile applications.",
+      "libraries": [
+        {
+          "name": "Node.js",
+          "description": "JavaScript runtime for the Metro bundler.",
+          "link": "https://nodejs.org/",
+          "version": "22.11.0"
+        },
+        {
+          "name": "npm",
+          "description": "Package manager used for React Native dependencies.",
+          "link": "https://www.npmjs.com/",
+          "version": "10.9.0"
+        },
+        {
+          "name": "Java (JDK)",
+          "description": "Required for Android builds and runtime environment.",
+          "link": "https://openjdk.org/",
+          "version": "17"
+        },
+        {
+          "name": "Maven",
+          "description": "Used for managing Java dependencies in React Native builds.",
+          "link": "https://maven.apache.org/",
+          "version": "3.9.9"
+        },
+        {
+          "name": "@wavemaker-ai/wm-reactnative-cli",
+          "description": "WaveMaker CLI for React Native projects.",
+          "link": "https://www.npmjs.com/package/@wavemaker-ai/wm-reactnative-cli",
+          "version": "1.0.1"
+        },
+        {
+          "name": "Android Studio",
+          "description": "Integrated Development Environment (IDE) for Android app development.",
+          "link": "https://developer.android.com/studio",
+          "version": "Meerkat 2024.3.1 to Narwhal 4 Feature Drop 2025.1.4"
+        },
+        {
+          "name": "Android SDK Build Tools",
+          "description": "Tools required to build Android applications.",
+          "link": "https://developer.android.com/studio/releases/build-tools",
+          "version": "36.0.0"
+        },
+        {
+          "name": "Android Gradle Plugin (AGP)",
+          "description": "Build system for Android applications.",
+          "link": "https://developer.android.com/build",
+          "version": "8.14.3"
+        },
+        {
+          "name": "Xcode",
+          "description": "Integrated Development Environment (IDE) for macOS/iOS.",
+          "link": "https://developer.apple.com/xcode/",
+          "version": "26.2"
+        }
+      ]
+    }
+  },
+  "Backend": {
+    "description": "Java libraries that power the generated backend services.",
+    "link": {
+      "label": "View full dependency list by release",
+      "url": "https://mvnrepository.com/artifact/ai.wavemaker.app/wavemaker-app-parent"
+    },
+    "appliesTo": {
+      "Web": {
+        "after": "Frontend (React)"
+      },
+      "Mobile": {
+        "after": "Frontend"
+      }
+    },
+    "libraries": [
+      {
+        "name": "Spring Framework",
+        "description": "Comprehensive programming and configuration model for modern Java-based enterprise applications.",
+        "link": "https://spring.io/projects/spring-framework",
+        "version": "6.2+"
+      },
+      {
+        "name": "Spring Security",
+        "description": "Authentication and access-control framework.",
+        "link": "https://spring.io/projects/spring-security",
+        "version": "6.5+"
+      },
+      {
+        "name": "Hibernate (Jakarta)",
+        "description": "Object/Relational Mapping (ORM) library for Java.",
+        "link": "https://hibernate.org/",
+        "version": "5.6+"
+      },
+      {
+        "name": "Jakarta Servlet (Servlet Spec API)",
+        "description": "Server-side API for handling HTTP requests.",
+        "link": "https://jakarta.ee/specifications/servlet/",
+        "version": "6.0+"
+      },
+      {
+        "name": "SLF4J",
+        "description": "Simple Logging Facade for Java.",
+        "link": "https://www.slf4j.org/",
+        "version": "2.0+"
+      },
+      {
+        "name": "Log4j2",
+        "description": "Java-based logging utility.",
+        "link": "https://logging.apache.org/log4j/2.x/",
+        "version": "2.26+"
+      }
+    ]
+  }
+}
