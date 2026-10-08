@@ -53,34 +53,16 @@
           "link": "https://mui.com/material-ui/"
         },
         {
-          "name": "D3",
-          "version": "v7.8.5",
-          "description": "JavaScript library for manipulating documents based on data.",
-          "link": "https://d3js.org/"
+          "name": "@tanstack/react-table",
+          "version": "v8.21.3",
+          "description": "Headless library for building powerful tables and datagrids.",
+          "link": "https://tanstack.com/table"
         },
         {
-          "name": "NVD3",
-          "version": "v1.8.16",
-          "description": "Re-usable charts for D3.js.",
-          "link": "https://nvd3.org/"
-        },
-        {
-          "name": "Fullcalendar",
-          "version": "v6.1.15",
-          "description": "Full-sized drag & drop event calendar.",
-          "link": "https://fullcalendar.io/"
-        },
-        {
-          "name": "Lodash (lodash-es)",
-          "version": "v4.17.21",
-          "description": "A modern JavaScript utility library delivering modularity, performance, & extras.",
-          "link": "https://lodash.com/"
-        },
-        {
-          "name": "moment-timezone",
-          "version": "v0.6.0",
-          "description": "Extend Moment.js with time-zone definitions",
-          "link": "https://momentjs.com/timezone/"
+          "name": "Axios",
+          "version": "v1.15.1",
+          "description": "Promise-based HTTP client for the browser and Node.js.",
+          "link": "https://axios-http.com/"
         }
       ]
     },
@@ -112,13 +94,13 @@
       "libraries": [
         {
           "name": "Node.js",
-          "description": "[Mock] JavaScript runtime for serving Next.js apps.",
+          "description": "JavaScript runtime for serving Next.js apps.",
           "link": "https://nodejs.org/",
           "version": "22.18.0"
         },
         {
           "name": "Nginx",
-          "description": "[Mock] Web server and reverse proxy.",
+          "description": "Web server and reverse proxy.",
           "link": "https://nginx.org/",
           "version": "1.27.0"
         }
