@@ -61,6 +61,16 @@ docs/release-notes/release-version-1/version-1-0-x/1.0.0.mdx
 
 The top-level template used to generate a new file is `assets/release-notes-template.mdx`.
 
+## Creating a new release
+
+When you create a new release notes file from `assets/release-notes-template.mdx`, create its tech stack data in the same change. The release notes file links to it with `/tech-stack?v=<version-slug>` (for example `?v=12-1-0`), and that link renders nothing without the data file.
+
+1. Find the most recent predecessor in `data/tech-stack-data/`. Versions are `<major>-<minor>-<patch>.json`; compare numerically, not alphabetically.
+2. Copy it to `data/tech-stack-data/<version-slug>.json`, for example `cp data/tech-stack-data/12-0-2.json data/tech-stack-data/12-1-0.json`.
+3. Tell the user the new file is an unedited copy, so any upgraded versions in this release still need to be updated in it.
+4. Do not edit `data/tech-stack-data/versionDataMap.js`. It is gitignored and regenerated from the JSON files by `scripts/gen-tech-stack-versions.js` as part of the build.
+5. Add the new version to the sidebar (`sidebar/sidebars/releaseNotesSidebar.js`).
+
 ## Release overview line
 
 Every release notes file opens with an announcement line that ends in a one-sentence overview of the release:
