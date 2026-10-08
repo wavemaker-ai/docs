@@ -9,7 +9,7 @@
           "name": "Angular",
           "description": "Platform for building mobile and desktop web applications",
           "link": "https://angular.io/",
-          "version": "21.2.20"
+          "version": "21.2.21"
         },
         {
           "name": "RxJS",
