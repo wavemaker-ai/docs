@@ -109,7 +109,7 @@
   },
   "Mobile": {
     "description": "Technologies used by WaveMaker React Native mobile applications.",
-    "Frontend": {
+    "Frontend (React Native)": {
       "description": "Frameworks and libraries bundled into the generated mobile UI.",
       "libraries": [
         {
@@ -197,7 +197,7 @@
         "after": "Frontend (React)"
       },
       "Mobile": {
-        "after": "Frontend"
+        "after": "Frontend (React Native)"
       }
     },
     "libraries": [
