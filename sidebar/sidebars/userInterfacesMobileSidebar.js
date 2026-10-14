@@ -112,6 +112,11 @@ export default [
             id: 'user-interfaces/mobile/develop/working-with-layouts/responsive-design-with-layouts',
             label: 'Responsive Design with Layouts',
           },
+          {
+            type: 'doc',
+            id: 'user-interfaces/mobile/develop/working-with-layouts/adaptive-layout-with-media-queries',
+            label: 'Adaptive Layout',
+          },
         ],
       },
       {
