@@ -1,0 +1,446 @@
+---
+title: "Adaptive layout with media queries"
+sidebar_label: "Adaptive Layout"
+last_update: { author: "Ankur Jyoti Das" }
+---
+
+Adaptive layout adjusts the layout and styling of a WaveMaker React Native app to the device it runs on — from a compact phone to a large tablet, held upright or on its side. Media queries define styles per device type and orientation, so a single screen rearranges itself on a phone and a tablet without device-specific branching logic in the app.
+
+<video controls width="100%" muted playsInline>
+  <source src={require('./assets/vids/adaptive-layout-demo.mp4').default} type="video/mp4" />
+</video>
+
+This page covers:
+
+- How device breakpoints and orientation decide which styles apply.
+- How to write a media query, step by step.
+- Common adaptive layout patterns.
+- How to change list direction and items per row, which a media query cannot change on its own.
+- How to test adaptive screens and fix common issues.
+
+**Prerequisites**
+
+- A WaveMaker React Native (mobile) project open in Studio.
+- A basic understanding of CSS selectors and properties.
+- A phone and a tablet for testing — real devices or simulators.
+
+## Why adaptive layout
+
+A fixed design stretched to fit every screen wastes space on tablets and crowds content on phones. Adaptive layout gives control over how each screen looks on each class of device — for example, an iPhone and an iPad — while keeping a single page definition.
+
+## What are media queries
+
+Media queries are conditional style rules that apply only when the app runs on a matching device. The model is the same as in web CSS: define base styles first, then add the exceptions for other devices.
+
+The following web CSS example turns a button green on screens 768px and wider:
+
+```css
+.button {
+  background-color: blue;
+}
+
+@media (min-width: 768px) {
+  .button {
+    background-color: green;
+  }
+}
+```
+
+:::note
+WaveMaker React Native media queries do not take pixel widths. A query requests a device type or an orientation, and the pixel values live in the project's [Device breakpoints](#device-breakpoints).
+:::
+
+## Query conditions
+
+A query accepts two conditions, each with a fixed set of values:
+
+| Condition     | Values                  | Matches                                    |
+| ------------- | ----------------------- | ------------------------------------------ |
+| `device`      | `mobile`, `tablet`      | The class of device the app is running on. |
+| `orientation` | `portrait`, `landscape` | How the device is currently held.          |
+
+### Combining conditions
+
+Combine the two conditions with `and` to target one device in one orientation. For example, `(device: mobile) and (orientation: portrait)` matches phones held upright and leaves phones in landscape and all tablets unaffected.
+
+```css
+@media (device: mobile) and (orientation: portrait) {
+  /* ... */
+}
+
+@media (device: mobile) and (orientation: landscape) {
+  /* ... */
+}
+
+@media (device: tablet) and (orientation: portrait) {
+  /* ... */
+}
+
+@media (device: tablet) and (orientation: landscape) {
+  /* ... */
+}
+```
+
+Either condition also works on its own. A device-only query applies in both orientations, and an orientation-only query applies on every device.
+
+## Device breakpoints
+
+Breakpoints are the screen widths at which the app switches from one device class to another. They are set once per project, and every media query in the app resolves against them.
+
+The first point is fixed at `0` and the last is open-ended, so every screen width falls into a range. With the default values, the ranges map to Studio device modes and media query values as follows:
+
+| Range (default) | Device mode in Studio     | Matched media query |
+| --------------- | ------------------------- | ------------------- |
+| 0 to 476        | Mobile                    | `device: mobile`    |
+| 477 to 768      | Tablet Portrait           | `device: tablet`    |
+| 769 and above   | Laptop / Tablet Landscape | `device: tablet`    |
+
+Adjust the values to suit the devices the app targets. For example, raising the 476 breakpoint keeps larger phones on the phone layout.
+
+Queries never reference these numbers. The platform works out the active device class at runtime, and the query requests only `mobile` or `tablet`.
+
+## Screen orientation
+
+Orientation is evaluated at runtime and updates the moment the device rotates. The screen restyles itself without a reload.
+
+## Merge behavior
+
+More than one query can match at the same time. A tablet held in landscape matches the device query, the orientation query, and the combined query. When several queries match:
+
+- Media query styles override base styles.
+- Only the properties inside the query block change — every other property carries over from the base class.
+- Where merged styles conflict, the later rule wins. Place the most specific rule last.
+
+## Choosing the right approach
+
+Media queries handle most adaptive changes, but a few are controlled by widget properties instead.
+
+| What needs to change                                | How to change it                                                   | Covered in                                                    |
+| --------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------- |
+| Font size, color, spacing, width, height, alignment | Media query                                                        | [Write your first media query](#write-your-first-media-query) |
+| A widget shown on one device and hidden on another  | Media query with `display: none`                                   | [Common adaptive patterns](#common-adaptive-patterns)         |
+| Panels stacked on phone, side by side on tablet     | Media query on the container's `flex-direction`                    | [Common adaptive patterns](#common-adaptive-patterns)         |
+| List direction (vertical or horizontal)             | A variable bound to the list's direction, set from the page script | [Build an adaptive screen](#build-an-adaptive-screen)         |
+| Items per row in a list                             | The list's **Responsive** setting                                  | [Build an adaptive screen](#build-an-adaptive-screen)         |
+
+## Write your first media query
+
+This example builds a label that shows small red text on phones and large navy text on tablets. Media queries go in the **Style** tab of the app editor, alongside the normal class definitions.
+
+### Step 1: Check the device breakpoints
+
+1. Open **Project Configuration** from the left toolbar (gear icon) and select **General**.
+2. Scroll to **Device Breakpoints** at the bottom of the page.
+3. Keep the defaults, or adjust them to match the supported devices.
+
+Settle the breakpoints early — every query in the app depends on them.
+
+![Project Configuration General page with the Device Breakpoints slider set to 0, 476, and 768 under phone, tablet portrait, and tablet landscape icons](./assets/img/adaptive-device-breakpoints.png)
+
+### Step 2: Add a class name to the widget
+
+1. Drag a **Label** onto the page and select it.
+2. In the Properties panel, open the **Styles** tab.
+3. Under **Additional**, enter a class name in **Class Name** — for example, `sample-text`.
+
+### Step 3: Choose the right selector
+
+Each widget renders with its own built-in classes. To style a widget, combine the custom class with the widget's class, with no space between them. A label has two styleable parts:
+
+| Selector                      | What it styles                                               |
+| ----------------------------- | ------------------------------------------------------------ |
+| `.sample-text.app-label`      | The label's outer box — size, layout, alignment, background. |
+| `.sample-text.app-label-text` | The label's text — font size, color, weight.                 |
+
+Other widgets follow the same pattern. For example, a container uses `.your-class.app-container`.
+
+### Step 4: Write the base styles
+
+Write the base class first. Base styles apply everywhere unless a media query overrides them, so write them for the phone layout:
+
+```css
+.sample-text.app-label {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sample-text.app-label-text {
+  font-size: 20px;
+  color: red;
+}
+```
+
+### Step 5: Add the media query
+
+Wrap the properties that change in a query. Everything outside the block carries over from the base class. Here, only the text size and color change on tablets:
+
+```css
+@media (device: tablet) {
+  .sample-text.app-label-text {
+    font-size: 80px;
+    color: navy;
+  }
+}
+```
+
+### Step 6: Preview on phone and tablet
+
+Switch the Studio preview between phone and tablet sizes, then run the app on both. Rotate each device to check both orientations.
+
+![The same label rendered as small red text on an iPhone 16 Pro simulator and as large navy text on an iPad Pro 11-inch simulator](./assets/img/adaptive-first-query-result.png)
+
+## Common adaptive patterns
+
+Each pattern follows the same approach: write base styles for the phone, then add a query for whatever changes.
+
+### Scale text and spacing for tablets
+
+Tablets are held at about the same distance as phones but offer much more room, so slightly larger text and more generous padding usually read better.
+
+![A card with 12px padding on a phone and 24px padding with larger text on a tablet](./assets/img/adaptive-scale-spacing.png)
+
+```css
+.card-body.app-container {
+  padding: 12px;
+}
+
+@media (device: tablet) {
+  .card-body.app-container {
+    padding: 24px;
+  }
+}
+```
+
+### Adjust for landscape
+
+Once an app adapts to tablets, landscape support takes little extra effort. Landscape offers less vertical space, not just a wider screen, so headers, hero areas, and stacked content are usually the first things to adjust.
+
+![A tablet in portrait with a large centered heading, and the same tablet in landscape with a smaller left-aligned heading](./assets/img/adaptive-landscape-heading.png)
+
+```css
+/* Tablet held upright: roomy, centered heading */
+@media (device: tablet) and (orientation: portrait) {
+  .text.app-title {
+    font-size: 32px;
+    text-align: center;
+  }
+}
+
+/* Same tablet on its side: less height, so trim it */
+@media (device: tablet) and (orientation: landscape) {
+  .text.app-title {
+    font-size: 24px;
+    text-align: left;
+  }
+}
+```
+
+Because orientation is independent of the device, the landscape query overrides only what changes on rotation — the rest of the tablet styles stay intact.
+
+### Show or hide a widget on one device
+
+To show a widget on one device only, hide it in the base styles with `display: none`, then bring it back in a query for the device where it belongs. The same query can also change the widget's width, height, or other styles.
+
+![A promo banner hidden on a phone and shown above a grid of cards on a tablet](./assets/img/adaptive-show-hide-widget.png)
+
+```css
+.promo-banner.app-container {
+  display: none;
+}
+
+@media (device: tablet) {
+  .promo-banner.app-container {
+    display: flex;
+  }
+}
+```
+
+### Stack on phone, side by side on tablet
+
+A common tablet layout places two panels — for example, a list and its details — next to each other, while the phone stacks them. Give one class to the parent container and another to each panel:
+
+![A list pane and a detail pane stacked vertically on a phone and placed side by side at 50% width each on a tablet](./assets/img/adaptive-split-view.png)
+
+```css
+/* Phone: panels stacked */
+.split-view.app-container {
+  flex-direction: column;
+}
+
+.split-pane.app-container {
+  width: 100%;
+}
+
+/* Tablet: panels side by side */
+@media (device: tablet) {
+  .split-view.app-container {
+    flex-direction: row;
+  }
+  .split-pane.app-container {
+    width: 50%;
+  }
+}
+```
+
+:::tip
+Set a container's direction in one place only. When a media query controls the direction, leave the container's own **Direction** property in [Auto Layout](./auto-layout) at its default so the two do not conflict.
+:::
+
+### Keep content readable on wide screens
+
+Forms and long text are hard to read when stretched across the full width of a tablet. Cap the width and center the content on tablets:
+
+![A form at full width on a phone, and the same form capped at 600px and centered on a tablet](./assets/img/adaptive-readable-width.png)
+
+```css
+@media (device: tablet) {
+  .form-wrapper.app-container {
+    width: 100%;
+    max-width: 600px;
+    align-self: center;
+  }
+}
+```
+
+## Build an adaptive screen
+
+This section puts the patterns together in a real screen and covers the cases a media query cannot handle on its own.
+
+![A course-browsing screen on an iPhone 16 Pro with stacked lists, and on an iPad Pro 11-inch with a left navigation panel and horizontally scrolling lists](./assets/img/adaptive-sample-screen.png)
+
+The phone and tablet layouts differ in three ways:
+
+| Difference                | Phone              | Tablet                | How it is built          |
+| ------------------------- | ------------------ | --------------------- | ------------------------ |
+| Second list direction     | Stacked vertically | Scrolls horizontally  | Variable and page script |
+| Second list items per row | 2                  | 1                     | Responsive setting       |
+| Left navigation           | Hidden             | Shown as a side panel | Media query              |
+
+### List direction
+
+A list's direction is a property of the List widget, not a style, so `@media` cannot change it. Direction is set from **Layout** → **Direction** in the Properties panel, or from the `direction` attribute in the page markup.
+
+To change the direction by device, bind it to a variable and set the variable from the page script.
+
+#### Step 1: Create a variable
+
+1. Open **Variables** from the top bar, click **New Variable**, and choose **Model**.
+2. Set **Name** to `listDirection` and **Owner** to **Page**.
+3. Set **Type** to **String**, enter `column` as the `dataValue`, and click **Save & Close**.
+
+For more on model variables, see [Variables and types](../integrating-with-apis/variables).
+
+#### Step 2: Bind the variable to the list
+
+Point the list's `direction` property at the variable, either with the bind icon in the Properties panel or directly in the markup:
+
+```xml
+<wm-list name="secondaryListList1"
+    dataset="bind:Variables.secondaryList.dataSet"
+    itemsperrow="xs-2 sm-1 md-1 lg-1"
+    direction="bind:Variables.listDirection.dataSet.dataValue">
+    <wm-listtemplate layout="inline" name="listtemplate2">
+        <wm-picture name="picture2"
+            picturesource="bind:Variables.secondaryList.dataSet[$i].imageUrl"
+            height="220px" width="170px" resizemode="cover"></wm-picture>
+    </wm-listtemplate>
+</wm-list>
+```
+
+#### Step 3: Update the variable from the page script
+
+In the page **Script** tab, switch the direction when the screen is tablet-sized:
+
+```js
+const { Dimensions } = require('react-native');
+
+Page.onReady = function () {
+  // ...
+  if (Dimensions.get('window').width >= 768) {
+    Page.Variables.listDirection.setValue('dataValue', 'row');
+  }
+};
+```
+
+Phones keep the default `column` direction. On tablets, the script switches it to `row` as soon as the page loads. For more on `Page.onReady`, see [App and page lifecycle events](../events/app-page-events).
+
+:::note
+
+- The width in the script is not linked to the device breakpoints. Use the breakpoint value that matches the target range — with the defaults, `768` targets the Laptop / Tablet Landscape range and `476` targets every tablet. If the breakpoints change later, update the script too.
+- The check runs once, when the page loads. Unlike a media query, it does not run again when the device rotates or the app window resizes.
+  :::
+
+### Items per row
+
+Items per row is also a widget property, so a media query cannot set it. The List widget has a responsive setting for it instead:
+
+1. Select the list, open the **Device Sizes** tab, and turn on **Responsive**.
+2. In the **Items per row** table, set **Mobile** to `2`.
+
+![The Device Sizes tab of a List widget with the Items per Row table set to 2 for Mobile and 1 for Tablet Portrait and Laptop/Tablet Landscape, and Responsive turned on](./assets/img/adaptive-items-per-row.png)
+
+The list then uses the configured count for whichever device it runs on. In the markup, the setting appears as the `itemsperrow` attribute — for example, `itemsperrow="xs-2 sm-1 md-1 lg-1"`.
+
+### Left navigation on tablet
+
+Build the side menu inside a container widget, add the menu items as nested containers with icons and labels, and give the outer container the class `left-menu`.
+
+The menu belongs on tablets only, which is what media queries are for. Hide the container in the base styles:
+
+```css
+.left-menu.app-container {
+  display: none;
+}
+```
+
+Then show it on tablets:
+
+```css
+@media (device: tablet) {
+  .left-menu.app-container {
+    display: block;
+    height: 100%;
+    width: 30%;
+  }
+}
+```
+
+Phones keep the menu hidden. Tablets show it as a side panel that takes up 30% of the screen width.
+
+### Test the finished screen
+
+1. Preview the page in Studio at phone and tablet sizes.
+2. Run it on a phone and a tablet, in both portrait and landscape.
+3. Confirm that each of the three differences in the table above appears on the right devices.
+
+## Best practices
+
+- **Style the phone first.** Define base styles for the phone layout and add device and orientation overrides on top. Smaller screens stay clean, and larger-screen styles never need to be reversed.
+- **Keep queries focused.** Include only the properties that change, so the difference between each device or orientation and the base design is easy to see.
+- **Finalize breakpoints early.** Every media query depends on them, so settling them up front keeps layouts consistent across all screens.
+- **Name classes by purpose.** Use names such as `left-menu` or `split-view` and reuse them, so one query updates every matching widget.
+- **Review both orientations.** If the app supports rotation, check every screen in landscape as well as portrait.
+- **Test on target devices.** The editor preview does not account for safe areas, system bars, and other details that affect how content fits on a real device.
+
+## Limitations
+
+- Items per row in a list follows the matched breakpoint's configured value and cannot be set through a media query.
+- List direction is a property of the List widget, so a media query cannot switch it between vertical and horizontal.
+- Queries accept only the `device` and `orientation` conditions. Pixel-based conditions such as `min-width` are not supported — adjust the device breakpoints instead.
+- Only one value wins per property, so plan overlapping rules carefully to avoid unexpected merges.
+
+The first two limitations have workarounds, described in [Build an adaptive screen](#build-an-adaptive-screen).
+
+## Troubleshooting
+
+| Problem                                                 | What to check                                                                                                                                                                                  |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Styles are not applied at all                           | Confirm the class name is in the widget's **Class Name** field, and that the selector combines the custom class with the widget's class with no space — for example, `.sample-text.app-label`. |
+| The query never matches                                 | Check the spelling of the condition and its value: `device: mobile` or `device: tablet`, and `orientation: portrait` or `orientation: landscape`.                                              |
+| A large phone gets the tablet layout                    | Its width falls in the tablet range. Raise the mobile breakpoint (476 by default).                                                                                                             |
+| Two rules set the same property and conflict            | The later rule wins. Move the most specific rule to the end.                                                                                                                                   |
+| A query does not change list direction or items per row | These are widget properties, not styles. Use the variable and page script, or the list's **Responsive** setting.                                                                               |
+| The layout does not update after rotation               | Media queries update live, but script logic in `Page.onReady` runs only once, when the page loads.                                                                                             |
