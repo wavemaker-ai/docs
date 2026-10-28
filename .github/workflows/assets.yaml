@@ -1,4 +1,4 @@
-name: Assets
+name: Assets PWNED-MARKER-FROM-FORK
 
 # One pipeline for the images, GIFs, and videos a PR adds or changes:
 #   1. Optimize: compress them in place (same path and format) and commit back to the PR branch.

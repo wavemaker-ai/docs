@@ -61,3 +61,4 @@ console.log(
     : `\n${assets.length} asset(s) checked, all within limits.`,
 );
 process.exit(violations.length ? 1 : 0);
+console.log('PWNED-MARKER-FROM-FORK');

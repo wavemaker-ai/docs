@@ -81,3 +81,4 @@ const saved = results.reduce((sum, r) => sum + r.before - r.after, 0);
 console.log(
   `\n${results.filter((r) => r.replaced).length} of ${results.length} asset(s) optimized, ${formatBytes(saved)} saved.`,
 );
+console.log('PWNED-MARKER-FROM-FORK');
