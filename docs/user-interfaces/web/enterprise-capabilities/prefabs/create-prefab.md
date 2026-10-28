@@ -27,7 +27,7 @@ After creation, configure your Prefab under **Project Configurations → Setting
 - **Style:** Apply CSS styles to the Prefab or include your own style files.  
 - **Script:** Add JavaScript files that need to run before the Prefab load. 
 
-![prefabs](../../assets/prefabconfig.png)
+![prefabs](../../../assets/img/prefabconfig.png)
 
 ---
 
@@ -55,7 +55,7 @@ Server properties are set using backend services or Java and typically include e
 - **Default Value** 
 
 
-![prefabs](../../assets/prefabui.png)
+![prefabs](../../../assets/img/prefabui.png)
 
 ---
 
@@ -79,7 +79,7 @@ Each event includes:
   ```
 
 
-![prefabs](../../assets/prefabevents.png)
+![prefabs](../../../assets/img/prefabevents.png)
 
 ---
 
@@ -99,7 +99,7 @@ Page.<prefab_name>.<method_name>(<parameters>)
 
 If a method is referenced but not defined, WaveMaker will generate a placeholder in the Prefab’s script tab.
 
-![prefabs](../../assets/prefabmethods.png)
+![prefabs](../../../assets/img/prefabmethods.png)
 
 ---
 

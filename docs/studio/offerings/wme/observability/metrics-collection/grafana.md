@@ -12,7 +12,7 @@ This is very useful because you do not need to type in Prometheus queries every 
 
 1) After the WaveMaker login, open the Launchpad and click the Troubleshoot located on the bottom left as shown below.
 
-[![Launchpad Dial Click](./assets/images/launchpad-dial-open.png)](./assets/images/launchpad-dial-open.png)
+[![Launchpad Dial Click](../assets/img/launchpad-dial-open.png)](../assets/img/launchpad-dial-open.png)
 
 2) In the dial menu, click the "**grafana**" button as shown below
 

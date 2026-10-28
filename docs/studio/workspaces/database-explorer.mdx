@@ -3,8 +3,8 @@ last_update: { author: "Shahnawaz Ahmed" }
 ---
 
 # Database Explorer
-Welcome to WaveMaker's Database Explorer—a guided walkthrough of the Database Workspace where you learn how to connect databases, explore schemas, visualize relationships, and test queries and procedures with ease.
 
+Welcome to WaveMaker's Database Explorer—a guided walkthrough of the Database Workspace where you learn how to connect databases, explore schemas, visualize relationships, and test queries and procedures with ease.
 
 - Navigate to the DB Workspace and add database to your project
 
@@ -18,187 +18,80 @@ Welcome to WaveMaker's Database Explorer—a guided walkthrough of the Database 
 
 - Understand how databases map to endpoints for effective API testing
 
-<AcademyCard
-  title="Database Explorer"
-  
-  academyLink="https://academy.wavemaker.ai/Walkthrough?wm=CD67842BA1"
->
-
-
+<AcademyCard title="Database Explorer" academyLink="https://academy.wavemaker.ai/Walkthrough?wm=CD67842BA1">
   <>
-  <div style={{ position: "relative", paddingBottom: "56.25%" }}>
-    <iframe
-      style={{
-        width: "100%",
-        height: "100%",
-        position: "absolute",
-        left: 0,
-        top: 0,
-        borderRadius: 10
-      }}
-      src="https://embed.app.guidde.com/playbooks/6v4ArweDm2b1LwCxr4N5Yu?mode=videoOnly"
-      title="Database Explorer"
-      frameBorder={0}
-      referrerPolicy="unsafe-url"
-      allowFullScreen="true"
-      allow="clipboard-write"
-      sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-forms allow-same-origin allow-presentation"
-    />
-  </div>
-  <div style={{ display: "none" }}>
-    <p>
-      00:00: Hi, Welcome to the database Explorer, This video explores
-      WaveMaker's database workspace. Let's get started.
-    </p>
-    <p>
-      00:08: To set the context, I’ve created a project called database
-      Explorer.
-    </p>
-    <p>00:12: Let’s now move to the DB Workspace in WaveMaker.</p>
-    <p>01:19: this option lets you import your own DB driver.</p>
-    <p>01:23: For this you'll have to upload your db driver jar.</p>
-    <p>
-      01:26: The selected database requires the JDBC driver for connecting to
-      the database.
-    </p>
-    <p>
-      01:32: So here to demonstrate addition of a database to my project I am
-      going with the Sample database called "Sample Sales database".
-    </p>
-    <p>
-      01:39: So here you can see the import is almost done, we can see the
-      tables of database.
-    </p>
-    <p>
-      01:44: We can choose to include or exclude any entity from the database.
-    </p>
-    <p>01:49: I am selecting all of them,</p>
-    <p>01:54: So, I am hitting Next,</p>
-    <p>01:56: and</p>
-    <p>01:58: we can see it says,</p>
-    <p>
-      02:00: Your database is ready for use, I am going ahead and clicking
-      proceed.
-    </p>
-    <p>
-      02:04: So the import is over, in the left hand side you can see, salesDB
-      being added. and on the main section of the UI, you can see all the
-      details of the database, that you just added. your username, your db
-      password,
-    </p>
-    <p>
-      02:19: since, there is no password, it is empty. The name of the file,
-      used in the import, default schema name, in this case, it is Public.
-    </p>
-    <p>02:30: It also shows, that the import, of the schema, is readOnly.</p>
-    <p>
-      02:35: There's also an advanced settings section. It shows the connection
-      URL used the Java package name.
-    </p>
-    <p>
-      02:42: By default the project name and DB names are appended to it the
-      driver class.
-    </p>
-    <p>02:48: and dialect</p>
-    <p>
-      02:50: there is also a button to test whether the connection is working or
-      not.
-    </p>
-    <p>
-      02:54: so let's test it out. I am hitting the Test Connection button here.
-      And you can see this green prompt, assures that it's working
-    </p>
-    <p>03:03: Let us open the sales DB and check out its tables.</p>
-    <p>03:06: We see that there are 10 tables.</p>
-    <p>
-      03:14: And in the main section, in the top bar, there are 4 tabs,
-      Settings, which is displaying the database info here, then, Design, then
-      Query, followed by procedure.
-    </p>
-    <p>
-      03:27: Let us check one of the table. I am selecting the follow-up table
-      here the design TAB gets selected automatically and it shows the details
-      of the table.
-    </p>
-    <p>
-      03:36: Like the name of the table and that it has one primary key one
-      foreign key three columns.
-    </p>
-    <p>
-      03:44: The name of the columns are shown along with their types
-      respectively.
-    </p>
-    <p>03:48: On the top right corner there is a relationship button.</p>
-    <p>
-      03:52: Now on the right hand side of the screen is the properties panel.
-    </p>
-    <p>03:55: And here, we can see the details of the table.</p>
-    <p>
-      03:59: Since the db is imported in it's read only mode, these table
-      details cannot be edited now, otherwise, we can edit the details here.
-    </p>
-    <p>
-      04:07: Some of the details provided here are, Name, type, primary key
-      properties, Unique constraints, if any.
-    </p>
-    <p>04:16: etc</p>
-    <p>
-      04:18: Let's check out the show relation button the table that has
-      relationship with this table show up.
-    </p>
-    <p>04:23: And the relationship are also well displayed.</p>
-    <p>
-      04:26: So we see that our table follow-ups is a child table of quotes
-      table and quotes table in return has two foreign, keys and five columns.
-    </p>
-    <p>
-      04:36: Follow ups table references quotes table via the quote I'd foreign
-      key.
-    </p>
-    <p>
-      04:42: Each follow-up record is linked to a quote through the quote I'd
-      field.
-    </p>
-    <p>
-      04:46: We can click on the relationship arrow here and see the properties
-      of a particular relationship.
-    </p>
-    <p>
-      04:51: These properties are shown on the right-hand side properties panel
-      like the name of the relationship.
-    </p>
-    <p>04:57: field name child table parent table cardinality</p>
-    <p>05:03: source column and Target column</p>
-    <p>
-      05:06: Now let us explore the Query tab. You can write queries and check
-      the data in the tables of your DB.
-    </p>
-    <p>05:19: Like select star from some table name. Then hit execute.</p>
-    <p>05:27: The response gets tabulated below.</p>
-    <p>
-      05:29: Some points to note are you can chose between your query types,
-      like HQL or Native SQL.
-    </p>
-    <p>
-      05:36: Also you can choose between multiple records or single record to be
-      printed.
-    </p>
-    <p>
-      05:40: Now let us go to the procedure tab. In this tab you can call and
-      try out procedure that are be stored in your DB. And likewise the response
-      will be printed below.
-    </p>
-    <p>
-      05:49: After completing this training, you will be able to navigate the
-      database Explorer, understand how databases and endpoints are connected,
-      and test API endpoints effectively.
-    </p>
-    <p>
-      06:01: Practice using the API section to reinforce your skills in managing
-      database interactions within the application.
-    </p>
-  </div>
-</>
+    <div style={{ position: "relative", paddingBottom: "56.25%" }}>
+      <iframe
+        style={{
+      width: "100%",
+      height: "100%",
+      position: "absolute",
+      left: 0,
+      top: 0,
+      borderRadius: 10
+    }}
+        src="https://embed.app.guidde.com/playbooks/6v4ArweDm2b1LwCxr4N5Yu?mode=videoOnly"
+        title="Database Explorer"
+        frameBorder={0}
+        referrerPolicy="unsafe-url"
+        allowFullScreen="true"
+        allow="clipboard-write"
+        sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-forms allow-same-origin allow-presentation"
+      />
+    </div>
 
-
-  </AcademyCard>
+    <div style={{ display: "none" }}>
+      <p>00:00: Hi, Welcome to the database Explorer, This video explores WaveMaker's database workspace. Let's get started.</p>
+      <p>00:08: To set the context, I’ve created a project called database Explorer.</p>
+      <p>00:12: Let’s now move to the DB Workspace in WaveMaker.</p>
+      <p>01:19: this option lets you import your own DB driver.</p>
+      <p>01:23: For this you'll have to upload your db driver jar.</p>
+      <p>01:26: The selected database requires the JDBC driver for connecting to the database.</p>
+      <p>01:32: So here to demonstrate addition of a database to my project I am going with the Sample database called "Sample Sales database".</p>
+      <p>01:39: So here you can see the import is almost done, we can see the tables of database.</p>
+      <p>01:44: We can choose to include or exclude any entity from the database.</p>
+      <p>01:49: I am selecting all of them,</p>
+      <p>01:54: So, I am hitting Next,</p>
+      <p>01:56: and</p>
+      <p>01:58: we can see it says,</p>
+      <p>02:00: Your database is ready for use, I am going ahead and clicking proceed.</p>
+      <p>02:04: So the import is over, in the left hand side you can see, salesDB being added. and on the main section of the UI, you can see all the details of the database, that you just added. your username, your db password,</p>
+      <p>02:19: since, there is no password, it is empty. The name of the file, used in the import, default schema name, in this case, it is Public.</p>
+      <p>02:30: It also shows, that the import, of the schema, is readOnly.</p>
+      <p>02:35: There's also an advanced settings section. It shows the connection URL used the Java package name.</p>
+      <p>02:42: By default the project name and DB names are appended to it the driver class.</p>
+      <p>02:48: and dialect</p>
+      <p>02:50: there is also a button to test whether the connection is working or not.</p>
+      <p>02:54: so let's test it out. I am hitting the Test Connection button here. And you can see this green prompt, assures that it's working</p>
+      <p>03:03: Let us open the sales DB and check out its tables.</p>
+      <p>03:06: We see that there are 10 tables.</p>
+      <p>03:14: And in the main section, in the top bar, there are 4 tabs, Settings, which is displaying the database info here, then, Design, then Query, followed by procedure.</p>
+      <p>03:27: Let us check one of the table. I am selecting the follow-up table here the design TAB gets selected automatically and it shows the details of the table.</p>
+      <p>03:36: Like the name of the table and that it has one primary key one foreign key three columns.</p>
+      <p>03:44: The name of the columns are shown along with their types respectively.</p>
+      <p>03:48: On the top right corner there is a relationship button.</p>
+      <p>03:52: Now on the right hand side of the screen is the properties panel.</p>
+      <p>03:55: And here, we can see the details of the table.</p>
+      <p>03:59: Since the db is imported in it's read only mode, these table details cannot be edited now, otherwise, we can edit the details here.</p>
+      <p>04:07: Some of the details provided here are, Name, type, primary key properties, Unique constraints, if any.</p>
+      <p>04:16: etc</p>
+      <p>04:18: Let's check out the show relation button the table that has relationship with this table show up.</p>
+      <p>04:23: And the relationship are also well displayed.</p>
+      <p>04:26: So we see that our table follow-ups is a child table of quotes table and quotes table in return has two foreign, keys and five columns.</p>
+      <p>04:36: Follow ups table references quotes table via the quote I'd foreign key.</p>
+      <p>04:42: Each follow-up record is linked to a quote through the quote I'd field.</p>
+      <p>04:46: We can click on the relationship arrow here and see the properties of a particular relationship.</p>
+      <p>04:51: These properties are shown on the right-hand side properties panel like the name of the relationship.</p>
+      <p>04:57: field name child table parent table cardinality</p>
+      <p>05:03: source column and Target column</p>
+      <p>05:06: Now let us explore the Query tab. You can write queries and check the data in the tables of your DB.</p>
+      <p>05:19: Like select star from some table name. Then hit execute.</p>
+      <p>05:27: The response gets tabulated below.</p>
+      <p>05:29: Some points to note are you can chose between your query types, like HQL or Native SQL.</p>
+      <p>05:36: Also you can choose between multiple records or single record to be printed.</p>
+      <p>05:40: Now let us go to the procedure tab. In this tab you can call and try out procedure that are be stored in your DB. And likewise the response will be printed below.</p>
+      <p>05:49: After completing this training, you will be able to navigate the database Explorer, understand how databases and endpoints are connected, and test API endpoints effectively.</p>
+      <p>06:01: Practice using the API section to reinforce your skills in managing database interactions within the application.</p>
+    </div>
+  </>
+</AcademyCard>

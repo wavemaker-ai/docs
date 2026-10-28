@@ -30,7 +30,7 @@ Before pushing the application to the next phase, you have to configure the phas
 
 After configuring the phase, you push the application from one phase to another and configure each stage with profiles for deploying the application. For more information, see [Configuration Profiles](../configuration-profiles).
 
-[![manage live app](./assets/img/manage_apps_live.png)](./assets/img/manage_apps_live.png)
+[![manage live app](../assets/img/manage_apps_live.png)](../assets/img/manage_apps_live.png)
 
 Selecting *Provider* will initiate Live Pipeline setup and will auto-configure the phase and you can push the app to the Live phase.
 
@@ -38,4 +38,4 @@ Selecting *Provider* will initiate Live Pipeline setup and will auto-configure t
 
 Once the app is tested and the live phase has been configured, you can push the app from QA to Stage to Live.
 
-![WME phases](./assets/img/ptl_cloud_done.png)
+![WME phases](../assets/img/ptl_cloud_done.png)

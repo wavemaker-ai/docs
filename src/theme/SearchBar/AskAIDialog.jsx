@@ -302,7 +302,7 @@ export default function AskAIDialog({ apiUrl, onClose, initialQuery = '' }) {
               <div className={styles.header}>
                 <div className={styles.brand}>
                   <img
-                    src="/img/icon/wm-logo.svg"
+                    src="/img/wm-logo.svg"
                     alt="WaveMaker"
                     className={styles.brandLogo}
                     onError={(e) => {

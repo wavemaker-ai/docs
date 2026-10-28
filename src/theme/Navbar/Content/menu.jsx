@@ -45,7 +45,7 @@ const MenuSection = () => {
     },
     {
       label: "Platform",
-      icon: "/img/icon/wm-logo.svg",
+      icon: "/img/wm-logo.svg",
       link: "https://www.wavemakeronline.com/",
       subMenu: [],
     },

@@ -44,7 +44,7 @@ This allows Prefab developers to verify functionality, data flow, and event hand
 
 WaveMaker allows Prefabs to be published at different scopes, making it easy to control how and where a Prefab is shared. You can publish a Prefab at the **Project**, or **Team** level based on usage, validation, and approval requirements.
 
-![prefabs](../../assets/publishingprefabs.png)
+![prefabs](../../../assets/img/publishingprefabs.png)
 
 
 
@@ -83,7 +83,7 @@ Once a Prefab is published and imported into a project, it behaves like any stan
 
 This seamless integration allows Prefabs to be reused consistently while maintaining flexibility and control.
 
-![prefabs](../../assets/studio.png)
+![prefabs](../../../assets/img/studio.png)
 
 
 ---

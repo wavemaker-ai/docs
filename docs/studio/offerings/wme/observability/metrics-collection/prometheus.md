@@ -12,7 +12,7 @@ Using Prometheus UI, we can not only see the current metric value but also visua
 
 1) After the WaveMaker login, open the Launchpad and click the Troubleshoot located on the bottom left as shown below.
 
-[![Launchpad Dial Click](./assets/images/launchpad-dial-open.png)](./assets/images/launchpad-dial-open.png)
+[![Launchpad Dial Click](../assets/img/launchpad-dial-open.png)](../assets/img/launchpad-dial-open.png)
 
 
 2) In the dial menu, click the **Prometheus** button as shown below

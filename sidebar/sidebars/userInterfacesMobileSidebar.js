@@ -198,6 +198,11 @@ export default [
             id: 'user-interfaces/mobile/develop/app-configuration/pull-to-refresh',
             label: 'Pull to refresh',
           },
+          {
+            type: 'doc',
+            id: 'user-interfaces/mobile/develop/app-configuration/browser-sso-login',
+            label: 'Browser and SSO login',
+          },
         ],
       },
       // {

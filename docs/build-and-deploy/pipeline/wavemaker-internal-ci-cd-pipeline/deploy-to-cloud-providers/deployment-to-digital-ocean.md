@@ -33,7 +33,7 @@ This document covers the Live Phase configuration for your DigitalOcean account 
 2. Click Configure on the Live Phase option.
 3. While configuring the Live phase choose to host your app on the DigitalOcean cloud provider.
 
-    [![](./assets/img/manage_apps_live.png)](./assets/img/manage_apps_live.png)
+    [![](../assets/img/manage_apps_live.png)](../assets/img/manage_apps_live.png)
 
  After choosing the DigitalOcean cloud provider, you observe a configuration dialog comprising of multiple steps. Let's talk in detail about each step below.
 

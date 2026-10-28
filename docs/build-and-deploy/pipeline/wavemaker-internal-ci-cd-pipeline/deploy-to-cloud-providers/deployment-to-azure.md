@@ -4,6 +4,7 @@ id: deployment-to-azure
 sidebar_label: Azure
 last_update: { author: "WaveMaker" }
 ---
+
 Learn how to deploy your app to Azure server.
 
 ---
@@ -19,43 +20,44 @@ This document covers the Live Phase configuration for your AWS account and is a 
 ## Prerequisites
 
 - You are expected to have an [Azure account](https://azure.microsoft.com/en-in/free/).
-- You must set up an Active Directory application and assign the required permissions to it. The permissions include access to _Microsoft.compute_, _Microsoft.network_ and _Microsoft.storage_. [See here to create AD app](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal).
+- You must set up an Active Directory application and assign the required permissions to it. The permissions include access to *Microsoft.compute*, *Microsoft.network* and *Microsoft.storage*. [See here to create AD app](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal).
 - Once the application is created, get the authentication details.
 
-    1. Click on the Configure tab to configure your application's password.
-    2. Copy the CLIENT ID.
-    3. If the application will run under its own credentials, scroll down to the Keys section and select how long you would like your password to be valid.
-    4. The saved key is displayed and you can copy it. You will not be able to retrieve the key later so you will want to copy it now.
+  1. Click on the Configure tab to configure your application's password.
+  2. Copy the CLIENT ID.
+  3. If the application will run under its own credentials, scroll down to the Keys section and select how long you would like your password to be valid.
+  4. The saved key is displayed and you can copy it. You will not be able to retrieve the key later so you will want to copy it now.
 
 :::important
 WME users need to request the copying of the deployment vhd ([Virtual Hard Disk](https://docs.microsoft.com/en-us/azure/storage/storage-about-disks-and-vhds-linux)) to their Azure account.  
 
-For this, you need to write to [support@wavemaker.com](mailto:support@wavemaker.com) with the storage account name and sas ([shared access signature](https://docs.microsoft.com/en-us/azure/storage/storage-dotnet-shared-access-signature-part-1)) token. To obtain Shared Access Signature, you need to:
+For this, you need to write to [support@WaveMaker.com](mailto:support@wavemaker.com) with the storage account name and sas ([shared access signature](https://docs.microsoft.com/en-us/azure/storage/storage-dotnet-shared-access-signature-part-1)) token. To obtain Shared Access Signature, you need to:
 
 1. [Create a Storage Account](https://docs.microsoft.com/en-us/azure/storage/storage-create-storage-account),
-2. From the Storage Account access Blob and create a Container named **_vhds_**
+2. From the Storage Account access Blob and create a Container named ***vhds***
 3. Obtain the [shared access signature token](https://docs.microsoft.com/en-us/azure/storage/storage-dotnet-shared-access-signature-part-1).
-:::
+   :::
 
 **Steps in Azure Configuration**:
 
 - From Apps Portal, select the project.
 - Click Configure on the Live Phase option.
 - While configuring the Live phase choose to host your app on your Azure account.
-- Enter your Azure account credentials to proceed with the configuration. You need to enter: 
+- Enter your Azure account credentials to proceed with the configuration. You need to enter:
 
-    [![](./assets/img/deploy_azure_account.png)](./assets/img/deploy_azure_account.png)
+  [![](./assets/img/deploy_azure_account.png)](./assets/img/deploy_azure_account.png)
 
-    - Subscription ID ([see here for details](https://blogs.msdn.microsoft.com/mschray/2016/03/18/getting-your-azure-subscription-guid-new-portal/))
-    - Tenant ID, Client ID, and Client Secret ([see here on how to obtain it](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal#get-tenant-id))
-    - Resource Group Name ([see here for details](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal))
-    - Azure region where the app needs to be deployed
-    - A new storage account at Azure will be created with the name you provide. Make sure you enter a unique name.
-    - If you already have a storage account ([see here on how to create the same](https://docs.microsoft.com/en-us/azure/storage/storage-create-storage-account)) you can give the details, test the connection before proceeding to the next step.
-- Select the appropriate instance based on your app requirements. You can choose from the three options provided ([see here for size comparisons](https://docs.microsoft.com/en-in/azure/virtual-machines/windows/sizes-general#a-series)) and enter the [Username and Password](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/classic/tutorial#1-basics-blade) details. [See here](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/faq) for more information regarding setting up of Azure VM like username, password, etc.. 
-[![](./assets/img/deploy_azure_instance.png)](./assets/img/deploy_azure_instance.png)
+  - Subscription ID ([see here for details](https://blogs.msdn.microsoft.com/mschray/2016/03/18/getting-your-azure-subscription-guid-new-portal/))
+  - Tenant ID, Client ID, and Client Secret ([see here on how to obtain it](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal#get-tenant-id))
+  - Resource Group Name ([see here for details](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal))
+  - Azure region where the app needs to be deployed
+  - A new storage account at Azure will be created with the name you provide. Make sure you enter a unique name.
+  - If you already have a storage account ([see here on how to create the same](https://docs.microsoft.com/en-us/azure/storage/storage-create-storage-account)) you can give the details, test the connection before proceeding to the next step.
+- Select the appropriate instance based on your app requirements. You can choose from the three options provided ([see here for size comparisons](https://docs.microsoft.com/en-in/azure/virtual-machines/windows/sizes-general#a-series)) and enter the [Username and Password](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/classic/tutorial#1-basics-blade) details. [See here](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/faq) for more information regarding setting up of Azure VM like username, password, etc..
+  [![](./assets/img/deploy_azure_instance.png)](./assets/img/deploy_azure_instance.png)
 
 :::note
-Please make sure your Azure subscription should allow launching an instance with Standard_A1, Standard_A2, and Standard_A3
+Please make sure your Azure subscription should allow launching an instance with Standard\_A1, Standard\_A2, and Standard\_A3
 :::
-- Once the setup is done (this could take **upto 30 minutes** in case the storage account has to be created), you can push the app from Demo to Live ([Continue from here](../manage-deployed-apps/#push-to-live)).
+
+- Once the setup is done (this could take **upto 30 minutes** in case the storage account has to be created), you can push the app from Demo to Live ([Continue from here](../manage-deployed-apps/)).

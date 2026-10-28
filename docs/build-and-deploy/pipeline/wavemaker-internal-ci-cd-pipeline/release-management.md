@@ -8,7 +8,7 @@ last_update: { author: "WaveMaker" }
 
 **Release management** is a software engineering process for managing the application development, testing, deployment, and support of the application version release. Release Management helps you to plan, schedule, and control the movement of releases to test and live environments. It ensures the delivery of the new enhanced app services while also protecting the integrity of the existing services.
 
-[![release_pipeline](./assets/img/release_pipeline.png)](./assets/img/release_pipeline.png)
+[![release_pipeline](../../../assets/img/release-pipeline.png)](../../../assets/img/release-pipeline.png)
 
 A typical app life cycle involves various phases including development, testing, and deployment before the App is live. A **Deployment** or **Release Pipeline** requires setting up these phases to the respective teams to prepare the app for the delivery process.
 

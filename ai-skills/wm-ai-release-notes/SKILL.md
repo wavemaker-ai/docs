@@ -61,6 +61,14 @@ docs/release-notes/release-version-1/version-1-0-x/1.0.0.mdx
 
 The top-level template used to generate a new file is `assets/release-notes-template.mdx`.
 
+## Branch
+
+All release notes work happens on the single long-lived `release` branch. Do not create a branch per release (for example `release-12-1-1`).
+
+1. Check out `release` and pull the latest: `git checkout release && git pull origin release`. If the current branch is not `release`, tell the user and ask before switching.
+2. Make the release notes, tech stack data, and sidebar changes on `release`.
+3. Push to `release` and open the pull request from it. Do not commit or push to `main` or `prod` directly.
+
 ## Creating a new release
 
 When you create a new release notes file from `assets/release-notes-template.mdx`, create its tech stack data in the same change. The release notes file links to it with `/tech-stack?v=<version-slug>` (for example `?v=12-1-0`), and that link renders nothing without the data file.
@@ -70,6 +78,10 @@ When you create a new release notes file from `assets/release-notes-template.mdx
 3. Tell the user the new file is an unedited copy, so any upgraded versions in this release still need to be updated in it.
 4. Do not edit `data/tech-stack-data/versionDataMap.js`. It is gitignored and regenerated from the JSON files by `scripts/gen-tech-stack-versions.js` as part of the build.
 5. Add the new version to the sidebar (`sidebar/sidebars/releaseNotesSidebar.js`).
+
+## Release date
+
+Write the release date in `DD Month YYYY` format, for example `*Release date: 02 November 2026*`. See `references/conventions.md` for the full rule. If the user gives a date in another format, convert it.
 
 ## Release overview line
 

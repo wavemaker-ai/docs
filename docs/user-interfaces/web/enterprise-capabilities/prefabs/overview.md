@@ -28,7 +28,7 @@ Prefabs accelerate application development by:
 - Allowing integration of REST APIs without writing repetitive code.
 - Supporting reusable backend services through Java libraries within prefab logic.
 
-![prefabs](../../assets/prefabs.png)
+![prefabs](../../../assets/img/prefabs.png)
 
 ---
 

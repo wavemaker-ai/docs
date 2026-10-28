@@ -54,6 +54,18 @@ Write it last, from the entries actually in the file, naming the two or three th
 - Bad: "This release is packed with exciting improvements across the board." (marketing, says nothing)
 - Bad: "This release includes 3 features, 1 enhancement, and 22 bug fixes." (goes stale on the next edit)
 
+## Release date
+
+The release date line sits under the version heading, in italics, written as `DD Month YYYY` with a zero-padded day and the full month name.
+
+```mdx
+*Release date: 02 November 2026*
+```
+
+- Good: `07 September 2026`, `21 September 2026`
+- Bad: `November 2, 2026` (month-first, no zero padding)
+- Bad: `2026-11-02` or `02/11/2026` (numeric formats)
+
 ## Entry format
 
 ```mdx

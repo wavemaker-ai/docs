@@ -35,7 +35,7 @@ sidebar_label: Setup Using ConfigPortal
 - To access the Platform with the secure connection via https, 
     - It is required to upload the ssl certificates by uploading the bundle certificate and pemfile.
 
-    [![ssl for platform](./assets/images/ssl-for-platform.png)](./assets/images/ssl-for-platform.png)
+    [![ssl for platform](../../assets/img/ssl-for-platform.png)](../../assets/img/ssl-for-platform.png)
 
     
 - To trust internal CA certified SSL certificates for establishing a secure connection,

@@ -3,6 +3,7 @@ title: Manage Deployed Apps
 id: manage-deployed-apps
 last_update: { author: "WaveMaker" }
 ---
+
 ---
 
 WaveMaker **Apps Portal** is a place for you as the project owner to manage the deployed apps. The one-click deployment from Studio hosts the app on WaveMaker Demo Cloud using the [Deployment Profile](./configuration-profiles/). Apps Portal will enable the project owner to configure phases and push the apps from one phase to the next. From this portal you can:
@@ -26,13 +27,13 @@ By selecting **Manage Deployed Apps** button from the Project Dashboard, you wi
 [![](./assets/img/apps_portal.png)](./assets/img/apps_portal.png)
 
 - one the right side you can find
-    - the total number of apps owned by you that can be deployed;
-    - number of apps deployed in Demo and Live Phases;
-    - recent deployment activity
+  - the total number of apps owned by you that can be deployed;
+  - number of apps deployed in Demo and Live Phases;
+  - recent deployment activity
 - you will also find cards for the deployed apps,
-    - the last deployment activity for that app,
-    - if live, the version that is live and the date it was deployed to live
-- you can select any app from the listing for management for more details.[know more](#manage-deployed-app).
+  - the last deployment activity for that app,
+  - if live, the version that is live and the date it was deployed to live
+- you can select any app from the listing for management for more details.[know more](#deployed-apps-management).
 
 ### SSL Enabled Demo Cloud
 
@@ -40,17 +41,17 @@ By selecting **Manage Deployed Apps** button from the Project Dashboard, you wi
 From [10.14.0 release](#), WaveMaker introduced SSL for Deployed Apps to [Demo Cloud](./pipelines-phases#deployment-environment).
 :::
 
-Demo and QA deployments in WaveMaker use secure protocol HTTPS, which is SSL enabled, and therefore, the app is accessible with a URL pattern as follows. 
+Demo and QA deployments in WaveMaker use secure protocol HTTPS, which is SSL enabled, and therefore, the app is accessible with a URL pattern as follows.
 
 ### SILO workspace (WMO Personal workspace)
 
-**URL**: `http://cloud.wavemakeronline.com/pk8888888n45/TestApp`  
+**URL**: `http://cloud.wavemakeronline.com/pk8888888n45/TestApp`
 
 **Updated to**: In the URL, `pk8888888n45` is a Project key.
 
 ### Teams and Enterprise (WMO/WME)
 
-**URL**: `http://cloud.wavemakeronline.com/wmshowcase/TestApp`  
+**URL**: `http://cloud.wavemakeronline.com/wmshowcase/TestApp`
 
 **Updated to**: `wmshowcase` is the WaveMaker Online team's name and WaveMaker Enterprise's name in the URL.
 
@@ -78,9 +79,9 @@ At DB shell user can perform database operations.
 [![](./assets/img/DB-shell.png)](./assets/img/DB-shell.png)
 
 1. From the header you can
-    - **open** the deployed app URL
-    - **stop** the deployed app, this will disable the deploy URL
-    - **restart services** like Tomcat etc..
+   - **open** the deployed app URL
+   - **stop** the deployed app, this will disable the deploy URL
+   - **restart services** like Tomcat etc..
 2. view the **logs** with an option to view the entire log or download it.
 3. connect to **DB shell** and export/import database.
 4. view the app configuration **profile**, you will be able to view the configurations of all the services used within the app like the database, web services, security etc.
@@ -95,14 +96,15 @@ Once application is deployed, you can view the current release along with releas
 [![](./assets/img/ptl_cloud_done.png)](./assets/img/ptl_cloud_done.png)
 
 Hover over the Live card to visit the Details page or launch the app. Selecting the **Details** page allows you to:
+
 - view the app details. Here, you can further:
-    - **open** the deployed app URL
-    - **stop** the deployed app, this will disable the deploy URL
-    - **restart services** like Tomcat etc..
-    - **delete** your apps association with the provider
-    - **CPU** and **Memory Usage**of the app
-    - **view a brief history** with the option to view complete history
-    - view the app configuration profile, you will be able to view the configurations of all the services used within the app like the database, web services, security etc.
+  - **open** the deployed app URL
+  - **stop** the deployed app, this will disable the deploy URL
+  - **restart services** like Tomcat etc..
+  - **delete** your apps association with the provider
+  - **CPU** and **Memory Usage**of the app
+  - **view a brief history** with the option to view complete history
+  - view the app configuration profile, you will be able to view the configurations of all the services used within the app like the database, web services, security etc.
 - view the logs with an option to view the entire log or download it.
 - view the provider details. For AWS/Azure/Google Cloud provider you can download the key pair .pem file. You can also edit the key pair by uploading a new .pem file. **Note:** this option is available for phases configured on AWS or Azure Cloud or Google Cloud.
 - connect to DB shell and export/import database.
@@ -110,7 +112,6 @@ Hover over the Live card to visit the Details page or launch the app. Selecting 
 
 ## App Versioning
 
-Once you have deployed and pushed the app to Stage and Live Phase, for various reasons like enhancements or due to requirement changes, your app can undergo changes. You can deploy the app with a change in version number. **Note** this will overwrite the previous version in Stage phase. 
+Once you have deployed and pushed the app to Stage and Live Phase, for various reasons like enhancements or due to requirement changes, your app can undergo changes. You can deploy the app with a change in version number. **Note** this will overwrite the previous version in Stage phase.
 [![](./assets/img/apver_update.png)](./assets/img/apver_update.png)
- [![](./assets/img/apver_portal.png)](./assets/img/apver_portal.png)
-
+[![](./assets/img/apver_portal.png)](./assets/img/apver_portal.png)

@@ -1,0 +1,195 @@
+---
+title: Browser and SSO login
+sidebar_label: Browser and SSO login
+last_update: { author: "Praneeth Reddy" }
+---
+
+Organizations often provide their users with multiple mobile apps that authenticate against the same identity provider. When each app handles SSO login on its own, users must enter their credentials separately in every app, and again whenever a link opens a web page protected by the same identity provider.
+
+Browser and SSO login settings address this by letting your app authenticate users through the device browser. A user signs in once, and other apps on the same device that use the same identity provider can sign the user in without prompting for credentials again. You can also configure how the login screen is presented and where links open, so that users keep their authenticated session wherever they need it.
+
+<video controls width="100%" playsInline poster={require('./assets/vids/browser-sso-login-poster.jpg').default}>
+  <source src={require('./assets/vids/browser-sso-login.mp4').default} type="video/mp4" />
+</video>
+
+## Signing in once across apps
+
+When an app uses the device browser for login, the login is kept in the device browser, not inside the app:
+
+1. The first app opens the sign-in page of your identity provider in the device browser.
+2. The user enters their password and taps **Continue to App**. The browser returns them to the first app, signed in.
+3. Later, a second app on the same device opens its login in the same browser.
+4. The identity provider already knows the user, so the password page is skipped. The user taps **Continue to App**, and the second app is signed in too.
+
+Each app still gets its own app session. For this to work, apps must use the device browser login (`auth_session`) and the same identity provider.
+
+## When to use it
+
+Use these settings when you want to:
+
+- Let users sign in once and use that login across your apps on the same device.
+- Show a fresh, private login every time a user signs in.
+- Choose where links open when users tap them.
+- Let links reuse the user's login so that users are not asked to sign in again.
+
+## How the settings work
+
+The login screen and links have separate settings:
+
+- `authMode` controls the SSO login screen only.
+- `targetMapping` and `defaultLinkMode` control links only.
+
+To get the same experience for both, set both.
+
+<div style={{ maxWidth: '640px', margin: '2rem auto' }}>
+  ```mermaid
+  %%{init: {'themeVariables': {'fontSize': '18px'}, 'flowchart': {'nodeSpacing': 30, 'rankSpacing': 40, 'wrappingWidth': 340}}}%%
+  flowchart TD
+      A["User starts SSO login or taps a link"] --> B{"Login or link?"}
+      B -->|SSO login| C["authMode sets the login screen"]
+      B -->|Link| D{"Has a Target?"}
+      D -->|Yes| E["targetMapping sets where it opens"]
+      D -->|No| F["defaultLinkMode sets where it opens"]
+  ```
+</div>
+
+## Adding browserConfig
+
+Add the `browserConfig` object to `wm_rn_config.json`. These are the default values:
+
+```json
+"browserConfig": {
+  "authMode": "in_app_webview_private",
+  "defaultLinkMode": "external",
+  "targetMapping": {
+    "newWindow": "custom_tabs",
+    "sameWindow": "external",
+    "topWindow": "external",
+    "parentWindow": "external"
+  },
+  "shareAuthSessionWithLinks": false,
+  "authTimeoutMs": 120000
+}
+```
+
+All properties are optional. Add only the ones you want to change.
+
+| Property                    | Description                                                                                                                                                                     |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `authMode`                  | How the SSO login screen opens.                                                                                                                                                 |
+| `defaultLinkMode`           | Where links that have no Target open.                                                                                                                                           |
+| `targetMapping`             | Where links open, based on their Target.                                                                                                                                        |
+| `shareAuthSessionWithLinks` | Lets links reuse the device browser login. Used only with `auth_session`.                                                                                                       |
+| `authTimeoutMs`             | How long, in milliseconds, the app waits before it ends a login that the user left unfinished. Used only when `authMode` is `auth_session` and `defaultLinkMode` is `external`. |
+
+## Setting up the login screen
+
+Set `authMode` to one of these values:
+
+| Value                       | What the user gets                                                                                       |
+| --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `in_app_webview_private`    | Login inside the app. Nothing is remembered, so the user signs in fresh every time. This is the default. |
+| `in_app_webview_persistent` | Login inside the app. The login is remembered for the next time.                                         |
+| `auth_session`              | Login in the device browser. The user can stay signed in across apps on the same device.                 |
+
+### Using auth\_session
+
+With `auth_session`, the browser needs to return the user to your app after login. To make this work, set `customUrlScheme` in `config.json`. Use the same value as `id` in `wm_rn_config.json`:
+
+```json
+"customUrlScheme": "com.example.myapp"
+```
+
+After signing in, the user sees a **Continue to App** button that takes them back to your app.
+
+:::warning
+If `customUrlScheme` does not match the `id` of your app, the user is not returned to the app and the login fails.
+:::
+
+You do not need `customUrlScheme` for the two in-app login modes.
+
+## Setting up links
+
+In the Studio, each link has a **Target** property. Use `targetMapping` to choose where links open for each Target:
+
+| Target    | Key in targetMapping | Default       |
+| --------- | -------------------- | ------------- |
+| `_blank`  | `newWindow`          | `custom_tabs` |
+| `_self`   | `sameWindow`         | `external`    |
+| `_top`    | `topWindow`          | `external`    |
+| `_parent` | `parentWindow`       | `external`    |
+
+Each key accepts one of these values:
+
+| Value            | Where the link opens                                                          |
+| ---------------- | ----------------------------------------------------------------------------- |
+| `custom_tabs`    | A browser window over your app, with an address bar and a close button.       |
+| `in_app_webview` | A page inside your app.                                                       |
+| `external`       | The device's browser app, such as Chrome or Safari. The user leaves your app. |
+
+To change one Target, add only that key. The other Targets keep their defaults. In this example, links with Target `_blank` open inside the app:
+
+```json
+"browserConfig": {
+  "targetMapping": {
+    "newWindow": "in_app_webview"
+  }
+}
+```
+
+Links that have no Target, such as links in Label text and Tabbar items, follow `defaultLinkMode` instead.
+
+:::note
+Pages opened with `in_app_webview` remember logins. If a user signs in on one of these pages, they stay signed in on the next link that also opens with `in_app_webview`.
+:::
+
+## Sharing the login with links
+
+When users sign in with `auth_session`, links that open inside the app do not know about that login, so users may be asked to sign in again. To avoid this, set `shareAuthSessionWithLinks` to `true`:
+
+```json
+"authMode": "auth_session",
+"shareAuthSessionWithLinks": true
+```
+
+Links set to `in_app_webview` then open in a browser window over your app instead, where the login is available.
+
+This setting is `true` by default when `authMode` is `auth_session`. It has no effect with other login modes.
+
+## Setting the login timeout
+
+`authTimeoutMs` handles logins that the user does not finish. For example, the user enters their email in the browser, then goes back to the app without signing in. After the timeout, the app shows a timeout error so the user can try again. The default is `120000` (2 minutes).
+
+```json
+"authMode": "auth_session",
+"defaultLinkMode": "external",
+"authTimeoutMs": 180000
+```
+
+The timeout applies only when `authMode` is `auth_session` and `defaultLinkMode` is `external`. In other cases, it is not used.
+
+The timer runs only while the user is in the app. Time spent signing in through the browser does not count, so a login that the user completes always succeeds, however long it takes.
+
+## Example configurations
+
+| Scenario                                 | Login mode (`authMode`)  | Link mode        | Additional settings                  |
+| ---------------------------------------- | ------------------------ | ---------------- | ------------------------------------ |
+| Private login, default link behavior     | `in_app_webview_private` | Defaults         | Nothing else                         |
+| Everything stays inside the app          | `in_app_webview_private` | `in_app_webview` | Nothing else                         |
+| Browser login, links in a browser window | `auth_session`           | `custom_tabs`    | `"shareAuthSessionWithLinks": true`  |
+| Login and links in the device browser    | `auth_session`           | `external`       | `"authTimeoutMs": 180000` (optional) |
+
+To make every link open the same way, set `defaultLinkMode` and all four `targetMapping` keys to the value in the **Link mode** column. For example, for login and links in the device browser:
+
+```json
+"browserConfig": {
+  "authMode": "auth_session",
+  "defaultLinkMode": "external",
+  "targetMapping": { "newWindow": "external", "sameWindow": "external", "topWindow": "external", "parentWindow": "external" }
+}
+```
+
+## Things to know
+
+- Changes to `browserConfig` apply only after you build the app again.
+- If the device closes your app while the user is signing in through the device's browser app, the user has to start the login again.

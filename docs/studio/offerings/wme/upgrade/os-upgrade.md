@@ -70,11 +70,11 @@ Below is the guide for upgrading the Operating system in the WME running Instanc
 
     - Login into the CW portal, after login in home page you can see settings icon on the top right as marked below.
 
-    [![cw\_stop](./assets/images/cw-stop-settings.png)](./assets/images/cw-stop-settings.png)
+    [![cw\_stop](../assets/img/cw-stop-settings.png)](../assets/img/cw-stop-settings.png)
 
     - Click on Stop Installation button as shown in the image below, hit to stop the WME setup.
 
-    [![cw\_stop](./assets/images/cw-stop.png)](./assets/images/cw-stop.png)
+    [![cw\_stop](../assets/img/cw-stop.png)](../assets/img/cw-stop.png)
 
     - From here also,  you can start the CW process, can be perform Sync and Cleanup Operations.
 
@@ -188,7 +188,7 @@ UUID=</wm-data block-device-UUID>  /wm-data   ext4   defaults ,nofail  0  2
 bash wme-installer.sh --data-untar
 ```
 
-[![data\_untar](./assets/images/data-un-tar.png)](./assets/images/data-un-tar.png)
+[![data\_untar](../assets/img/data-un-tar.png)](../assets/img/data-un-tar.png)
 
 #### Launch WME StudioWorkspace Instance/AppDeployment Instances
 

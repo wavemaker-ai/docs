@@ -1,13 +1,16 @@
 ---
 last_update: { author: "Priyanka Bhadri" }
 ---
+
 # XSS Prevention
+
 ---
+
 [Cross Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/) is a type of security attack, which injects malicious scripts into web applications to execute, generally in the form of a browser side script to an end-user.
 
 Typically, WaveMaker handles all XSS attacks using [Angular Sanitization](https://angular.io/api/platform-browser/DomSanitizer). Therefore, the apps are not vulnerable to XSS attacks by default. Sanitization handles untrusted values turning them into a safe value to insert into the generated code. However, in some cases, developers may want to include executable code, such as HTML (Hypertext Markup Language) content, giving developers the flexibility to bypass the code.
 
-In this document, you will learn how to configure UI (User Interface) to render data in HTML, or plain text while understanding the risk of XSS. 
+In this document, you will learn how to configure UI (User Interface) to render data in HTML, or plain text while understanding the risk of XSS.
 
 - Rendering HTML in Datatable
 - Using Formatters, such as trustAs in widgets
@@ -18,7 +21,7 @@ In this document, you will learn how to configure UI (User Interface) to render 
 From [WaveMaker 10.13.0](#), Datatable columns render plain text to prevent XSS attacks. Before this change, the content was rendering HTML format.
 :::
 
-In the following example, Datatable contains employee details and their current status. The **status** column uses HTML with inline styles, posing a potential XSS attack threat. 
+In the following example, Datatable contains employee details and their current status. The **status** column uses HTML with inline styles, posing a potential XSS attack threat.
 
 WaveMaker sanitizes the Datatable widget, and when HTML is found in any column, it renders plain text as a result (see the image below).
 
@@ -34,12 +37,9 @@ To render HTML content in Datatable, we recommend configuring the **status** col
 2. Select the **Status** column.
 3. Go to **View Mode** and select **Label** from the **Widget** dropdown. (see the image below)
 
-
-
-The **status** column renders HTML without displaying inline styles to the column data; this is because WaveMaker applies sanitization to the Label widget. 
+The **status** column renders HTML without displaying inline styles to the column data; this is because WaveMaker applies sanitization to the Label widget.
 
 ![Rendering HTML in table](../assets/preview.png)
-
 
 ## Using Formatters
 
@@ -47,7 +47,7 @@ The default behavior of WaveMaker UI widgets is to sanitize the content rendered
 
 ### trustAs
 
-**trustAs** flag disables built-in sanitization for the values that pass through the widget, given the [security context](https://angular.io/guide/security#sanitization-and-security-contexts). 
+**trustAs** flag disables built-in sanitization for the values that pass through the widget, given the [security context](https://angular.io/guide/security#sanitization-and-security-contexts).
 
 You can access **trustAs** Formatters from:
 
@@ -56,24 +56,24 @@ You can access **trustAs** Formatters from:
 
 #### Use Expression
 
-Configure the **trustAs** flag from the **Use Expression** tab of the Variable binding dialog. 
+Configure the **trustAs** flag from the **Use Expression** tab of the Variable binding dialog.
 
 ![Rendering HTML in table](../assets/formatters.png)
 
 #### Value Expression
 
-Configure the **trustAs** flag from the **Value Expression** dailog of the Datatable's **Advanced Settings**. 
+Configure the **trustAs** flag from the **Value Expression** dailog of the Datatable's **Advanced Settings**.
 
 ### Supported Widgets
 
 **trustAs** formatter with `html` context can be applied to the following widget properties.
 
-| Widget Properties | Widgets | 
-|---|---|
-|**Caption** of | Label   Anchor   Button Message   Checkbox   File upload   Spinner |
-| **Title** of | Form-field |
-|**Title** and **Sub Heading** of | Panel   Charts   Datatable   Form   Accordion-pane   List |
-| **Content** of | HTML |
+| Widget Properties                | Widgets                                                            |
+| -------------------------------- | ------------------------------------------------------------------ |
+| **Caption** of                   | Label   Anchor   Button Message   Checkbox   File upload   Spinner |
+| **Title** of                     | Form-field                                                         |
+| **Title** and **Sub Heading** of | Panel   Charts   Datatable   Form   Accordion-pane   List          |
+| **Content** of                   | HTML                                                               |
 
 :::caution
 This action can be malicious and introduce security risks to your app. Use this flag with caution and understand the risks of XSS attacks. [Read more.](https://angular.io/guide/security#sanitization-and-security-contexts)
@@ -81,11 +81,11 @@ This action can be malicious and introduce security risks to your app. Use this 
 
 ### How-to Steps
 
-In the following example, we are looking at the same example used for Datatable to render HTML, which is [employee's current **status**](#sanitization-in-data-table-widget). 
+In the following example, we are looking at the same example used for Datatable to render HTML, which is [employee's current **status**](#sanitization-in-datatable-widget).
 
 1. Go to **Advanced Settings** of the Datatable -> **Columns** tab.
 2. Select the **Status** column.
-3. Go to the **Basic** tab and navigate to the **Value Expression** field. 
+3. Go to the **Basic** tab and navigate to the **Value Expression** field.
 4. Add the **trustAs** formatter with `html` context to bypass sanitization.
 
 Following example shows the **Value Expression** field configuring `trustAs` formatter for the **status** column.

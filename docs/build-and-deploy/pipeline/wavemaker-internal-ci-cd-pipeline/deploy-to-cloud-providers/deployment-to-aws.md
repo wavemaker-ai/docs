@@ -4,9 +4,10 @@ id: deployment-to-aws
 sidebar_label: AWS
 last_update: { author: "WaveMaker" }
 ---
+
 ---
 
-WaveMaker allows you to deploy your app to your AWS cloud account for Live (and Stage for WME users) phase. 
+WaveMaker allows you to deploy your app to your AWS cloud account for Live (and Stage for WME users) phase.
 For more information, see [Release Management](../release-management/).
 
 To deploy your app to AWS account, you need to configure the Live (Stage) phase.
@@ -23,8 +24,8 @@ This document covers the Live Phase configuration for your AWS account and is a 
 - Click Configure on the Live Phase option.
 - While configuring the Live phase choose to host your app on AWS
 - Enter your AWS account credentials to proceed with the configuration. You need to enter [![](./assets/img/deploy_aws_account.png)](./assets/img/deploy_aws_account.png)
-    - access key and secret key ([see here for details](https://aws.amazon.com/developers/access-keys/))
-    - AWS Account id ([see here on how to obtain it](http://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html)), and
-    - the region hosting your AWS account
+  - access key and secret key ([see here for details](https://aws.amazon.com/developers/access-keys/))
+  - AWS Account id ([see here on how to obtain it](http://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html)), and
+  - the region hosting your AWS account
 - Select the appropriate instance size based upon the resources and database utilized by your app and enter the [key-value instance tags](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html) ([see here for best practices for instance tagging](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-resource-tags/)) [![](./assets/img/deploy_aws_instance.png)](./assets/img/deploy_aws_instance.png)
-- Once the setup is done, you can push the app from Demo to Live. ([Continue from here](../manage-deployed-apps/#push-to-live))
+- Once the setup is done, you can push the app from Demo to Live. ([Continue from here](../manage-deployed-apps/))

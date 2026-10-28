@@ -51,7 +51,7 @@ The Dynamic Form expects metadata in the following structure:
 3. Set the variable to call **on page load** so the metadata is available when the form renders.
 
 :::tip
-If your service returns data in a different structure, you do not need to change the service. Transform the data in the form's `on-beforerender` event — see [Step 3](#step-3--optional-transform-metadata-with-on-beforerender).
+If your service returns data in a different structure, you do not need to change the service. Transform the data in the form's `on-beforerender` event — see [Step 3](#step-3-optional--transform-metadata-with-on-beforerender).
 :::
 
 ---

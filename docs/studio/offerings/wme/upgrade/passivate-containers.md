@@ -14,7 +14,7 @@ sidebar_label: Passivate Containers
 
   - Select the containers that are running, hibernate those containers one after the other by hitting the stop button as shown in the image below.
   
-  [![stop_conainers](./assets/images/hibernate.png)](./assets/images/hibernate.png)
+  [![stop_conainers](../assets/img/hibernate.png)](../assets/img/hibernate.png)
 
   - Select **confirm** to hibernate the container.
 
@@ -32,7 +32,7 @@ sidebar_label: Passivate Containers
    
     - After **hibernate** all the containers, go to **Developer Capacity** and hit the **Passivate** button shown in the below image. This will passivate all the Hibernated containers in the Instance.
 
-    [![instance_passivate](./assets/images/instance-passivate.png)](./assets/images/instance-passivate.png) 
+    [![instance_passivate](../assets/img/instance-passivate.png)](../assets/img/instance-passivate.png) 
 
     - Check the container status and wait till their state changes to **Passivated**.
 
