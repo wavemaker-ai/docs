@@ -68,7 +68,7 @@ Work flows through two collection branches into `main`:
 3. Collection branches are merged into `main` with a **normal merge commit**, never a squash. A squash would lose the link to the collection branch, and a later revert or follow-up there would not reach `main`.
 4. `main` is merged into `prod` the same way.
 
-Maintainers: when squash-merging, set the commit message to the PR title (the repository's default squash message setting does this), so the `Assets-*` lines described below don't end up in the shared history.
+Maintainers: set the repository's default squash commit message to "Pull request title" (Settings → General → Pull Requests), so the `Assets-*` lines described below don't end up in the shared history.
 
 ## Content Guidelines
 
