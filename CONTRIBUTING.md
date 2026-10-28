@@ -31,13 +31,14 @@ Thank you for your interest in contributing to WaveMaker Documentation! This gui
    # Option 1: Clone directly (for WaveMaker organization members)
    git clone https://github.com/wavemaker/docs.git
    cd docs
-   
+
    # Option 2: Fork and clone (for external contributors)
    # Go to https://github.com/wavemaker/docs and click "Fork"
    # Then clone your fork:
    # git clone https://github.com/YOUR_USERNAME/docs.git
    # cd docs
    ```
+
 2. **Install dependencies**
    ```bash
    npm install
@@ -52,6 +53,22 @@ Thank you for your interest in contributing to WaveMaker Documentation! This gui
    ```bash
    git checkout -b feature/your-feature-name
    ```
+
+### Branches and pull requests
+
+Work flows through two collection branches into `main`:
+
+| Branch         | Receives                                                |
+| -------------- | ------------------------------------------------------- |
+| `release`      | Content for an upcoming release, such as release notes  |
+| `docs-staging` | All other documentation, blog, and announcement changes |
+
+1. Branch from the collection branch you are targeting, and open your PR against it. Do not open PRs against `main` or `prod`.
+2. PRs into a collection branch are **squash-merged**: one commit per PR, so intermediate commits and uncompressed originals stay out of the shared history.
+3. Collection branches are merged into `main` with a **normal merge commit**, never a squash. A squash would lose the link to the collection branch, and a later revert or follow-up there would not reach `main`.
+4. `main` is merged into `prod` the same way.
+
+Maintainers: when squash-merging, set the commit message to the PR title (the repository's default squash message setting does this), so the `Assets-*` lines described below don't end up in the shared history.
 
 ## Content Guidelines
 
@@ -140,6 +157,38 @@ static/
 └── learn/
     └── assets/            # Documentation assets
 ```
+
+### Asset size limits
+
+Every PR into `release` or `docs-staging` runs the `Assets` workflow on the images, GIFs, and videos it adds or changes. It first compresses them in place and commits the result back to the PR branch, keeping each file's name and format. It then checks the final sizes against these limits:
+
+| Type  | Extensions                                        | Limit |
+| ----- | ------------------------------------------------- | ----- |
+| Image | `.png`, `.jpg`, `.jpeg`, `.webp`, `.avif`, `.svg` | 2 MB  |
+| GIF   | `.gif`                                            | 10 MB |
+| Video | `.mp4`, `.webm`, `.mov`                           | 50 MB |
+
+Limits live in `scripts/assets/config.mjs`. Run `npm run check-assets` to check your branch locally.
+
+#### Optimizing before you commit
+
+When you commit staged images, GIFs, or videos from a terminal, the pre-commit hook optimizes them and lets you review the results:
+
+1. It writes each optimized file to your working tree. Your commit still has the original until you decide.
+2. For each file it shows the before and after size. Press Enter to keep the optimized version, `d` to discard it and keep the original, `o` to open both versions side by side, `a` to keep all the remaining ones, or `q` to abort the commit.
+3. Kept files are staged and the commit continues. Press Ctrl-C at any time to put the originals back.
+
+Look at each result before you keep it. Compression is lossy for screenshots with small text, GIFs, and videos.
+
+The hook records what it did as `Assets-Optimized`, `Assets-Reviewed`, or `Assets-Failed` lines at the end of the commit message. Each line names the file's content hash, so CI skips only files that still match. Leave those lines in place. A file you discard is recorded as reviewed, so CI won't re-compress it behind your back.
+
+The hook does nothing, and CI optimizes the files instead, when there is no terminal (IDE commit buttons, scripts, agents), when you run `git commit -a` or `git commit <paths>`, when concluding a merge, or when you set `ASSETS_PRECOMMIT=skip`. A staged asset that also has unstaged edits is skipped until you stage it fully.
+
+To optimize without committing, run `npm run optimize-assets` from the folder that holds your assets. Add `-- -r` to include subfolders (`npm run optimize-assets -- -r`). It skips anything in `.gitignore`. It also skips files this clone has already optimized or reviewed, which it tracks in `.husky/.asset-cache` (local only, not committed); add `-- --force` to process them again. It needs nothing beyond `npm install`.
+
+#### In CI
+
+Optimization runs automatically on PRs from branches in this repo. On PRs from forks, every push is only size-checked; a maintainer comments `/optimize-assets` to optimize it. The workflow posts a before/after table on the PR and sets the `asset-size-check` status, which blocks merging while any asset is over its limit. After the bot commits, pull before you push again. Because PRs are squash-merged, the original uncompressed files never reach the collection branches or `main`.
 
 ## Writing Guidelines
 
@@ -274,9 +323,9 @@ npm run manage-docs
    ---
    title: "New Component"
    ---
-   
+
    # New Component
-   
+
    Component description and usage.
    ```
 
@@ -305,11 +354,11 @@ npm run manage-docs
    authors: [author-key]
    tags: [feature, announcement]
    ---
-   
+
    Brief summary of the post...
-   
+
    <!--truncate-->
-   
+
    Full blog content here...
    ```
 
@@ -358,7 +407,7 @@ npm run manage-docs
    ```javascript
    // sidebar/sidebars.js
    import newSidebar from './sidebars/newSidebar';
-   
+
    const sidebars = {
      // ... existing sidebars
      newSidebar,

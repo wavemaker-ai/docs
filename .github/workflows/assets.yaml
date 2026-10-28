@@ -1,0 +1,339 @@
+name: Assets
+
+# One pipeline for the images, GIFs, and videos a PR adds or changes:
+#   1. Optimize: compress them in place (same path and format) and commit back to the PR branch.
+#   2. Validate: check the resulting sizes against scripts/assets/config.mjs.
+#   3. Report: comment on the PR and set the `asset-size-check` commit status on the PR head.
+#      Make `asset-size-check` a required status check on the collection branches; that status is
+#      what blocks merging.
+#
+# Contributions are squash-merged into the collection branches (`release`, `docs-staging`), which are
+# then merged into `main` with a normal merge. The pipeline runs on PRs into the collection branches
+# only. PRs into any other branch, including `main`, are ignored. To add a collection branch, list it
+# in `on.branches` below and in `COLLECTION_BRANCHES` in the "Resolve PR" step, and make sure the
+# branch itself contains this workflow and scripts/assets/ (they are read from the PR's base branch).
+#
+# When it runs:
+#   - PRs from branches in this repo: every push → optimize + validate.
+#   - PRs from forks: every push → validate only. Someone with write access comments
+#     `/optimize-assets` → optimize + validate. The fork must allow edits by maintainers.
+#
+# Assets the contributor already handled with the pre-commit hook (scripts/assets/precommit.mjs) are
+# not optimized again. The hook records optimized, reviewed (kept as is), and failed assets as
+# `Assets-*` trailers in the commit message, tied to each file's blob id. Only files whose current
+# content matches an optimized or reviewed trailer are skipped. Size validation covers every asset.
+#
+# It uses pull_request_target so it can comment and set statuses on fork PRs. Scripts come from the
+# base branch and nothing from the PR is executed. Fork media is only decoded after a maintainer
+# opts in with the comment.
+#
+# Requires the repo secret ASSET_BOT_TOKEN: a classic PAT (`public_repo` scope) from a bot or
+# maintainer account with write access. It pushes the optimized commit. GITHUB_TOKEN can't push to
+# forks, and its pushes wouldn't start a run for the new commit.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [release, docs-staging]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  statuses: write
+
+concurrency:
+  group: assets-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  assets:
+    if: >-
+      github.event_name == 'pull_request_target' ||
+      (github.event.issue.pull_request &&
+       startsWith(github.event.comment.body, '/optimize-assets'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve PR
+        id: pr
+        uses: actions/github-script@v7
+        env:
+          HAS_BOT_TOKEN: ${{ secrets.ASSET_BOT_TOKEN != '' }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            // Keep in sync with `on.pull_request_target.branches`; also gates /optimize-assets comments.
+            const COLLECTION_BRANCHES = ['release', 'docs-staging'];
+            const number = context.payload.pull_request?.number ?? context.payload.issue.number;
+            const commented = context.eventName === 'issue_comment';
+
+            if (commented) {
+              const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner, repo, username: context.payload.comment.user.login,
+              });
+              if (!['admin', 'write'].includes(data.permission)) {
+                return core.notice(`${context.payload.comment.user.login} lacks write access; ignoring.`);
+              }
+              await github.rest.reactions.createForIssueComment({
+                owner, repo, comment_id: context.payload.comment.id, content: 'eyes',
+              });
+            }
+
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: number });
+            if (pr.state !== 'open' || !pr.head.repo || !COLLECTION_BRANCHES.includes(pr.base.ref)) return;
+
+            const isFork = pr.head.repo.full_name !== `${owner}/${repo}`;
+            let optimize = commented || !isFork;
+            let note = '';
+            if (optimize && process.env.HAS_BOT_TOKEN !== 'true') {
+              optimize = false;
+              note = 'Optimization skipped: the repo secret `ASSET_BOT_TOKEN` is not set.';
+            } else if (optimize && isFork && !pr.maintainer_can_modify) {
+              optimize = false;
+              note = `Optimization skipped: @${pr.user.login}, please enable **Allow edits by maintainers** on this PR, then a maintainer can comment \`/optimize-assets\` again.`;
+            }
+
+            core.setOutput('number', number);
+            core.setOutput('commented', String(commented));
+            core.setOutput('fork', String(isFork));
+            core.setOutput('optimize', String(optimize));
+            core.setOutput('note', note);
+            core.setOutput('head_repo', pr.head.repo.full_name);
+            core.setOutput('head_ref', pr.head.ref);
+            core.setOutput('head_sha', pr.head.sha);
+            core.setOutput('base_ref', pr.base.ref);
+
+      - name: Check out base-branch scripts
+        if: steps.pr.outputs.number
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.base_ref }}
+          path: trusted
+          sparse-checkout: scripts/assets
+          persist-credentials: false
+
+      - name: Check out PR branch
+        if: steps.pr.outputs.number
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.pr.outputs.head_repo }}
+          ref: ${{ steps.pr.outputs.head_ref }}
+          token: ${{ steps.pr.outputs.optimize == 'true' && secrets.ASSET_BOT_TOKEN || github.token }}
+          persist-credentials: ${{ steps.pr.outputs.optimize == 'true' }}
+          path: pr
+          fetch-depth: 0
+          filter: blob:none
+
+      - uses: actions/setup-node@v4
+        if: steps.pr.outputs.number
+        with:
+          node-version: 20
+
+      - name: Find changed assets
+        id: scan
+        if: steps.pr.outputs.number
+        working-directory: pr
+        env:
+          BASE_REF: ${{ steps.pr.outputs.base_ref }}
+          OPTIMIZE: ${{ steps.pr.outputs.optimize }}
+        run: |
+          git fetch --no-tags --filter=blob:none "https://github.com/${GITHUB_REPOSITORY}.git" \
+            "+refs/heads/${BASE_REF}:refs/remotes/upstream/${BASE_REF}"
+          # Only optimize changes since the bot's last optimization commit, so already-optimized
+          # files aren't re-encoded on every push (this also makes the bot's own push a no-op).
+          BOT_COMMIT=$(git log -1 --format=%H -F --grep='[asset-bot]' "upstream/${BASE_REF}..HEAD")
+          OPT_BASE="${BOT_COMMIT:-upstream/${BASE_REF}}"
+          echo "opt_base=${OPT_BASE}" >> "$GITHUB_OUTPUT"
+          # Skip assets the contributor's pre-commit hook already optimized or reviewed. The hook
+          # records that in commit-message trailers, each tied to the file's exact content (blob id),
+          # so a changed or unlisted file is still optimized. The trailers are untrusted PR input:
+          # they are parsed in Node by the base branch's script and only yield numbers here.
+          # If the scan itself fails, assume there is work: the optimizer then runs, and its own
+          # failure shows up in the PR comment instead of optimization silently turning off.
+          PENDING=1
+          if node ../trusted/scripts/assets/pending.mjs --base "$OPT_BASE" \
+              --trailers-from "upstream/${BASE_REF}" --report "$RUNNER_TEMP/pending.json"; then
+            PENDING=$(node -p "require(process.argv[1]).pending" "$RUNNER_TEMP/pending.json")
+          fi
+          if [ "$OPTIMIZE" = "true" ] && [ "$PENDING" -gt 0 ]; then
+            echo "optimize=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "optimize=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install optimizers
+        id: install
+        if: steps.scan.outputs.optimize == 'true'
+        continue-on-error: true
+        run: |
+          # Same optimizer packages and versions as the base branch's devDependencies, installed
+          # on their own instead of the full site dependency tree.
+          DEPS=$(node -p "const d = require('./trusted/package.json').devDependencies;
+            ['sharp', 'svgo', '@ffmpeg-installer/ffmpeg'].map((n) => n + '@' + d[n]).join(' ')")
+          mkdir -p "$RUNNER_TEMP/optimizer"
+          cp trusted/scripts/assets/*.mjs "$RUNNER_TEMP/optimizer/"
+          cd "$RUNNER_TEMP/optimizer"
+          echo '{"private":true}' > package.json
+          npm install --no-audit --no-fund $DEPS
+
+      - name: Optimize
+        id: optimize
+        if: steps.scan.outputs.optimize == 'true' && steps.install.outcome == 'success'
+        continue-on-error: true
+        working-directory: pr
+        env:
+          OPT_BASE: ${{ steps.scan.outputs.opt_base }}
+          BASE_REF: ${{ steps.pr.outputs.base_ref }}
+        run: |
+          node "$RUNNER_TEMP/optimizer/optimize.mjs" --base "$OPT_BASE" \
+            --trailers-from "upstream/${BASE_REF}" --report "$RUNNER_TEMP/optimize.json"
+
+      - name: Commit and push
+        id: push
+        if: steps.scan.outputs.optimize == 'true'
+        working-directory: pr
+        env:
+          HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+        run: |
+          if git diff --quiet; then
+            echo "result=none" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "original_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          git add -u
+          git commit -q -m "chore: optimize assets [asset-bot]"
+          if git push origin "HEAD:refs/heads/${HEAD_REF}"; then
+            echo "result=pushed" >> "$GITHUB_OUTPUT"
+            echo "bot_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          else
+            # Branch moved during the run; validate what's actually on the PR instead.
+            git reset -q --hard HEAD~1
+            echo "result=failed" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate sizes
+        id: validate
+        if: always() && steps.scan.outcome == 'success'
+        working-directory: pr
+        env:
+          BASE_REF: ${{ steps.pr.outputs.base_ref }}
+        run: |
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          node ../trusted/scripts/assets/check-sizes.mjs --base "upstream/${BASE_REF}" \
+            --report "$RUNNER_TEMP/check.json" || true
+
+      - name: Report
+        if: always() && steps.pr.outputs.number
+        uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          COMMENTED: ${{ steps.pr.outputs.commented }}
+          FORK: ${{ steps.pr.outputs.fork }}
+          NOTE: ${{ steps.pr.outputs.note }}
+          COVERED: ${{ steps.scan.outputs.covered }}
+          RETRIED: ${{ steps.scan.outputs.retried }}
+          OPTIMIZE: ${{ steps.scan.outputs.optimize }}
+          OPTIMIZE_OUTCOME: ${{ steps.optimize.outcome }}
+          PUSH_RESULT: ${{ steps.push.outputs.result }}
+          ORIGINAL_SHA: ${{ steps.push.outputs.original_sha }}
+          BOT_SHA: ${{ steps.push.outputs.bot_sha }}
+          SHA: ${{ steps.validate.outputs.sha || steps.pr.outputs.head_sha }}
+        with:
+          script: |
+            const fs = require('fs');
+            const env = process.env;
+            const readJson = (name) => {
+              const file = `${env.RUNNER_TEMP}/${name}`;
+              return fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
+            };
+            const fmt = (b) => (b >= 1048576 ? `${(b / 1048576).toFixed(2)} MB` : `${Math.round(b / 1024)} KB`);
+            const cell = (text) =>
+              text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/\|/g, '&#124;').replace(/\n/g, '<br>');
+            const repoUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}`;
+            const runUrl = `${repoUrl}/actions/runs/${context.runId}`;
+            // Originals stay reachable through this PR's ref (refs/pull/N/head) as the parent of the
+            // bot commit. Links point at the base repo so they keep working if a fork is deleted.
+            const pushed = env.PUSH_RESULT === 'pushed';
+            const originalUrl = (file) =>
+              `${repoUrl}/blob/${env.ORIGINAL_SHA}/${file.split('/').map(encodeURIComponent).join('/')}`;
+
+            const optimized = readJson('optimize.json');
+            const check = readJson('check.json');
+            const violations = check ? check.assets.filter((a) => !a.ok) : [];
+
+            // Commit status on the PR head; this is the required check that blocks merging.
+            const state = !check ? 'error' : violations.length ? 'failure' : 'success';
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha: env.SHA,
+              state,
+              context: 'asset-size-check',
+              target_url: runUrl,
+              description: !check
+                ? 'Size validation did not run'
+                : violations.length
+                  ? `${violations.length} asset(s) over the size limit`
+                  : `${check.assets.length} changed asset(s) within limits`,
+            });
+
+            const optimizeFailed = env.OPTIMIZE === 'true' && !optimized;
+            const hasTable = optimized?.length > 0;
+            if (!hasTable && !optimizeFailed && state === 'success' && !env.NOTE && env.COMMENTED !== 'true') return;
+
+            let body = '### Asset pipeline\n\n';
+            if (env.NOTE) body += `> ${env.NOTE}\n\n`;
+            const covered = Number(env.COVERED) || 0;
+            const retried = Number(env.RETRIED) || 0;
+            if (covered)
+              body += `> ${covered} changed asset(s) were already optimized or reviewed locally by the pre-commit hook (recorded in the commit messages), so they were left as is.\n\n`;
+            if (retried && env.OPTIMIZE === 'true')
+              body += `> Local optimization failed for ${retried} asset(s), so they were optimized here instead.\n\n`;
+
+            if (hasTable) {
+              body += '#### Optimization\n\n| File | Before | After |\n|---|---:|---|\n';
+              for (const r of optimized) {
+                const after = r.error
+                  ? `⚠️ failed<br><code>${cell(r.error)}</code>`
+                  : r.replaced
+                    ? `${fmt(r.after)} (−${Math.round((1 - r.after / r.before) * 100)}%)`
+                    : `${fmt(r.after)} (already optimized)`;
+                const before = pushed && r.replaced ? `[${fmt(r.before)}](${originalUrl(r.file)})` : fmt(r.before);
+                body += `| \`${r.file}\` | ${before} | ${after} |\n`;
+              }
+              if (pushed) {
+                const short = (sha) => sha.slice(0, 7);
+                body +=
+                  `\nCommitted as [\`${short(env.BOT_SHA)}\`](${repoUrl}/commit/${env.BOT_SHA}). ` +
+                  'Pull before pushing again, and give the optimized media a quick visual check.\n' +
+                  `\nOriginals: [\`${short(env.ORIGINAL_SHA)}\`](${repoUrl}/tree/${env.ORIGINAL_SHA}) ` +
+                  '(click a "Before" size to open that file). They live only in this PR\'s history, not in the branch it merges into, ' +
+                  'and stay available as long as nobody force-pushes over the bot commit.\n';
+              } else if (env.PUSH_RESULT === 'failed') {
+                body += '\n⚠️ Could not push: the branch changed during the run. The next push re-runs the pipeline.\n';
+              }
+              body += '\n';
+            } else if (optimizeFailed) {
+              body += `#### Optimization\n\n⚠️ The optimizer could not run. [View logs](${runUrl})\n\n`;
+            } else if (env.COMMENTED === 'true' && env.OPTIMIZE !== 'true' && !env.NOTE) {
+              body += '#### Optimization\n\nNo new or changed assets to optimize.\n\n';
+            }
+
+            body += '#### Size validation\n\n';
+            if (!check) {
+              body += `⚠️ Validation did not run. [View logs](${runUrl})\n`;
+            } else if (!violations.length) {
+              body += `✅ ${check.assets.length} changed asset(s) within limits.\n`;
+            } else {
+              body += `❌ ${violations.length} asset(s) over the limit. Limits: ${check.limits}\n\n`;
+              body += '| File | Size | Limit |\n|---|---:|---:|\n';
+              for (const v of violations) body += `| \`${v.file}\` | ${fmt(v.size)} | ${fmt(v.limit)} |\n`;
+              body += env.FORK === 'true' && env.COMMENTED !== 'true'
+                ? '\nA maintainer can comment `/optimize-assets` to compress these. Anything still over the limit after that must be trimmed (shorter clip, smaller crop, MP4 instead of GIF).\n'
+                : '\nThese are still over the limit after optimization. Trim them (shorter clip, smaller crop, MP4 instead of GIF) and push again.\n';
+            }
+
+            await github.rest.issues.createComment({ ...context.repo, issue_number: Number(env.PR_NUMBER), body });

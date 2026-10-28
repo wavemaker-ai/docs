@@ -163,6 +163,8 @@ For specific workflows, load the matching skill under `ai-skills/` rather than i
 ## Commits & PRs
 
 - Branches: `feature/<short-desc>` or `docs/<short-desc>`.
+- Open PRs against a collection branch (`release` for release content, `docs-staging` for everything else), never `main` or `prod`. See **Branches and pull requests** in `CONTRIBUTING.md`.
 - Do not commit `build/`, `.docusaurus/`, or regenerated `scripts/metrics.json`.
 - Husky runs `lint-staged` on commit. If it fails, fix the underlying issue — do not skip the hook.
+- The pre-commit hook also offers to optimize staged assets, which needs a human at a terminal. Without one it skips and CI optimizes instead, so agents do not need to do anything. Do not set `ASSETS_PRECOMMIT`, and do not edit the `Assets-*` lines the commit-msg hook adds to commit messages.
 - PR titles are descriptive ("Add authentication guide for REST APIs"), not generic ("Update docs").

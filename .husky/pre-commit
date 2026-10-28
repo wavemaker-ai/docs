@@ -1,2 +1,3 @@
 #!/bin/sh
+node scripts/assets/precommit.mjs || exit 1
 npx lint-staged
