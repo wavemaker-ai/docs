@@ -38,7 +38,7 @@ name: Assets
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
-    branches: [release, docs]
+    branches: [release, docs, pt-base]
   issue_comment:
     types: [created]
 
@@ -69,7 +69,7 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             // Keep in sync with `on.pull_request_target.branches`.
-            const COLLECTION_BRANCHES = ['release', 'docs'];
+            const COLLECTION_BRANCHES = ['release', 'docs', 'pt-base'];
             const PROTECTED_BRANCHES = ['main', 'prod', ...COLLECTION_BRANCHES];
             const number = context.payload.pull_request?.number ?? context.payload.issue.number;
             const commented = context.eventName === 'issue_comment';
