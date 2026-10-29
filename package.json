@@ -5,7 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "npm run pre-build-scripts && docusaurus start",
-    "build": "npm run pre-build-scripts && docusaurus build",
+    "build": "npm run pre-build-scripts && docusaurus build && node scripts/check-pointer-leaks.js",
+    "test:pointer-assets": "node --test plugins/pointer-assets/pointer-assets.test.cjs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
