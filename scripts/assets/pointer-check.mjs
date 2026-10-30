@@ -237,7 +237,7 @@ function summaryMarkdown(report) {
   return text;
 }
 
-function parseCli(argv) {
+export function parseCli(argv) {
   const args = {};
   for (let i = 0; i < argv.length; i += 2) {
     if (!argv[i].startsWith('--') || argv[i + 1] === undefined) throw new Error(`bad argument ${argv[i]}`);
