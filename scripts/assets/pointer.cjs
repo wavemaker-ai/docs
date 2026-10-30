@@ -1,5 +1,5 @@
 // Everything that defines a pointer file, in one place. The webpack rule, the loader, the remark
-// plugin, the pointer check in CI and (later) the upload code all use these definitions, so a rule
+// plugin, the pointer check in CI, the upload and replace flows and the restore script all use these definitions, so a rule
 // can never be stricter in one place than in another.
 //
 // A pointer is a small text file that stands in for a binary asset stored in object storage:

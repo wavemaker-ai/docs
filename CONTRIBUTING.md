@@ -195,6 +195,22 @@ Optimization runs automatically on PRs from branches in this repo into `release`
 
 Large assets can live in the asset bucket instead of the repository. In their place the repository holds a short text file at the asset's own path, whose first line is `s3-asset v1`. Pages reference the asset exactly as before (`![alt](./assets/img/a.png)`), and the site build turns the file into the bucket URL. Do not create or edit these files by hand: the `asset-pointer-check` status fails when a pointer is invalid or its object is missing from the bucket. Use inline markdown images or `require()`/`import` for assets; reference-style images (`![alt][ref]`) are not supported. The format and the checks are described in `plugins/pointer-assets/README.md`.
 
+#### How assets get into the bucket
+
+The `Assets` workflow runs three flows. Each has its own repository variable (Settings, Secrets and variables, Variables) and its own commit status, and any of them can be off:
+
+| Flow     | Variable         | On when            | Status                | What it does                                                                                                        |
+| -------- | ---------------- | ------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Optimize | `ASSET_OPTIMIZE` | not set to `false` | `asset-size-check`    | Compresses assets in place. Size limits are checked even when this flow is off.                                     |
+| Upload   | `ASSET_UPLOAD`   | set to `true`      | `asset-upload-check`  | Stores each new or changed asset in the bucket under a key that contains its hash. Never changes the PR.            |
+| Replace  | `ASSET_REPLACE`  | set to `true`      | `asset-replace-check` | Swaps a stored asset for a pointer file, only on PRs into `release` and `docs`, and only once the object is public. |
+
+A flow that is off, or does not apply, reports success, so it never blocks a merge. All three need permission to act: a branch in this repo, a trusted author, or a maintainer's `/optimize-assets` comment. The bucket, region and folder come from the variables `ASSET_S3_BUCKET`, `ASSET_S3_REGION` and `ASSET_S3_PREFIX`, and the credentials from the secrets `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. The replace flow refuses to run when those variables do not describe the base URL in `docusaurus.config.js`.
+
+An object is never overwritten or deleted by the pipeline: the key contains the hash of the bytes, so a changed file is a new object, and an upload that finds an object with the same key but other content fails. A failed upload blocks the merge; after a re-run, a maintainer can comment `/allow-upload-failure` to let the current head commit through. The bot stops pushing after three bot commits in a row with no commit from a person in between.
+
+To edit an asset that is now a pointer, run `npm run fetch-assets -- <pointer file or folder>`. It downloads the real file, checks its size and hash, and replaces the pointer with it. Commit the changed file like any other asset.
+
 ## Writing Guidelines
 
 ### Tone and Style
