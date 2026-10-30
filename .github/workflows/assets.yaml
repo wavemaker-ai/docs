@@ -74,8 +74,9 @@ name: Assets
 # requests into the collection branches. A flow that is off, or does not apply, reports success so it
 # never blocks a merge. All three need permission to act (a branch in this repo, a trusted author, or a
 # maintainer's `/optimize-assets`). Size limits are checked whatever the switches say.
-# A maintainer can comment `/allow-upload-failure` to let the current head commit through when an upload
-# failed; it sets asset-upload-check on that commit only.
+# A maintainer (write access) can comment `/allow-upload-failure` or `/allow-size-failure` to let the
+# current head commit through when the upload check or the size check failed; each sets only its own
+# status, on that commit only, so a later push needs a fresh decision.
 # Actions are pinned to a commit SHA; keep them that way and use only official ones. Do not add
 # caches to any job: a cache written here could be restored by a job that has secrets.
 #
@@ -97,7 +98,7 @@ concurrency:
   # One run per PR, except that a comment which is not an /optimize-assets command gets its own group.
   # Otherwise a plain "LGTM" could replace the run a push is waiting for, and the new head would never
   # get its status.
-  group: assets-${{ github.event.pull_request.number || github.event.issue.number }}-${{ (github.event_name == 'issue_comment' && !(startsWith(github.event.comment.body, '/optimize-assets') || startsWith(github.event.comment.body, '/allow-upload-failure'))) && github.run_id || 'pr' }}
+  group: assets-${{ github.event.pull_request.number || github.event.issue.number }}-${{ (github.event_name == 'issue_comment' && !(startsWith(github.event.comment.body, '/optimize-assets') || startsWith(github.event.comment.body, '/allow-upload-failure') || startsWith(github.event.comment.body, '/allow-size-failure'))) && github.run_id || 'pr' }}
   cancel-in-progress: false
 
 jobs:
@@ -106,7 +107,8 @@ jobs:
       github.event_name == 'pull_request_target' ||
       (github.event.issue.pull_request &&
        (startsWith(github.event.comment.body, '/optimize-assets') ||
-        startsWith(github.event.comment.body, '/allow-upload-failure')))
+        startsWith(github.event.comment.body, '/allow-upload-failure') ||
+        startsWith(github.event.comment.body, '/allow-size-failure')))
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -124,6 +126,8 @@ jobs:
       optimize: ${{ steps.pr.outputs.optimize }}
       override: ${{ steps.pr.outputs.override }}
       override_by: ${{ steps.pr.outputs.override_by }}
+      override_context: ${{ steps.pr.outputs.override_context }}
+      override_label: ${{ steps.pr.outputs.override_label }}
       on_optimize: ${{ steps.flows.outputs.on_optimize }}
       run_optimize: ${{ steps.flows.outputs.run_optimize }}
       run_upload: ${{ steps.flows.outputs.run_upload }}
@@ -171,13 +175,21 @@ jobs:
 
             const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: number });
             if (pr.state !== 'open' || !pr.head.repo) return;
-            // "/allow-upload-failure" (write access, checked above) lets this commit through when an
-            // upload failed. It only sets one status on the current head; nothing else runs.
-            if (commented && context.payload.comment.body.trim().split(/\s+/)[0].toLowerCase() === '/allow-upload-failure') {
+            // "/allow-upload-failure" and "/allow-size-failure" (write access, checked above) let this
+            // commit through when that check failed. Each sets only its own status on the current
+            // head; nothing else runs.
+            const OVERRIDES = {
+              '/allow-upload-failure': { context: 'asset-upload-check', label: 'Upload failure' },
+              '/allow-size-failure': { context: 'asset-size-check', label: 'Size limit' },
+            };
+            const override = commented ? OVERRIDES[context.payload.comment.body.trim().split(/\s+/)[0].toLowerCase()] : undefined;
+            if (override) {
               core.setOutput('number', number);
               core.setOutput('head_sha', pr.head.sha);
               core.setOutput('override', 'true');
               core.setOutput('override_by', context.payload.comment.user.login);
+              core.setOutput('override_context', override.context);
+              core.setOutput('override_label', override.label);
               return;
             }
             // Automatic runs are for the collection branches; any other base needs a comment.
@@ -276,8 +288,9 @@ jobs:
           BASE_REF: ${{ steps.pr.outputs.base_ref }}
         run: node trusted/scripts/assets/flows.mjs
 
-  # A maintainer's /allow-upload-failure comment: the one way past a failed upload check. It sets the
-  # status on the head commit as it is now, so a later push needs a fresh decision. Nothing else runs.
+  # A maintainer's /allow-upload-failure or /allow-size-failure comment: the one way past a failed upload
+  # or size check. It sets that status on the head commit as it is now, so a later push needs a fresh
+  # decision. Nothing else runs.
   override:
     needs: resolve
     if: needs.resolve.outputs.override == 'true'
@@ -291,15 +304,20 @@ jobs:
         env:
           SHA: ${{ needs.resolve.outputs.head_sha }}
           BY: ${{ needs.resolve.outputs.override_by }}
+          CONTEXT: ${{ needs.resolve.outputs.override_context }}
+          LABEL: ${{ needs.resolve.outputs.override_label }}
         with:
           script: |
+            // Only the two statuses the resolve job names; anything else would be a bug there.
+            if (!['asset-upload-check', 'asset-size-check'].includes(process.env.CONTEXT))
+              throw new Error(`unknown override status: ${process.env.CONTEXT}`);
             await github.rest.repos.createCommitStatus({
               ...context.repo,
               sha: process.env.SHA,
               state: 'success',
-              context: 'asset-upload-check',
+              context: process.env.CONTEXT,
               target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-              description: `Upload failure overridden by @${process.env.BY}`.slice(0, 140),
+              description: `${process.env.LABEL} overridden by @${process.env.BY}`.slice(0, 140),
             });
 
   # Checks the pointer files a PR adds or changes, and every pointer when the config or the plugin
@@ -1076,6 +1094,7 @@ jobs:
                 : env.OPTIMIZE === 'true' || hasTable
                   ? '\nThese are still over the limit after optimization. Trim them (shorter clip, smaller crop, MP4 instead of GIF) and push again.\n'
                   : '\nTrim them (shorter clip, smaller crop, MP4 instead of GIF) and push again.\n';
+              body += '\nIf the file has to stay as it is, a maintainer can comment `/allow-size-failure` to let this commit through. It applies to this commit only.\n';
             }
             body += `\n<sub>Checked commit ${env.SHA.slice(0, 7)}</sub>\n`;
 

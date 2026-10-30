@@ -142,3 +142,15 @@ test('the AWS credentials are referenced in the upload step only, and the push t
   assert.equal(uses('AWS_SECRET_ACCESS_KEY'), 1);
   assert.equal(uses('ASSET_BOT_TOKEN'), 1);
 });
+
+test('each override command is wired to its own status, in the trigger, the concurrency key and the resolve step', () => {
+  const text = fs.readFileSync(workflowFile, 'utf8');
+  for (const command of ['/allow-upload-failure', '/allow-size-failure']) {
+    // the job trigger and the concurrency group, plus the resolve map
+    assert.ok(text.split(`'${command}'`).length >= 4, `${command} in the trigger, the concurrency key and the map`);
+  }
+  assert.match(text, /'\/allow-upload-failure': \{ context: 'asset-upload-check'/);
+  assert.match(text, /'\/allow-size-failure': \{ context: 'asset-size-check'/);
+  // The override job may set these two statuses and nothing else.
+  assert.match(text, /\['asset-upload-check', 'asset-size-check'\]\.includes\(process\.env\.CONTEXT\)/);
+});
