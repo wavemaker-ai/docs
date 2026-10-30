@@ -143,6 +143,7 @@ module.exports = {
   keyError,
   looksLikePointer,
   parsePointer,
+  readHead,
   readPointer,
   urlFor,
 };
