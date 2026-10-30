@@ -133,13 +133,13 @@
           "name": "Node.js",
           "description": "JavaScript runtime for the Metro bundler.",
           "link": "https://nodejs.org/",
-          "version": "22.11.0"
+          "version": "22.22.3"
         },
         {
           "name": "npm",
           "description": "Package manager used for React Native dependencies.",
           "link": "https://www.npmjs.com/",
-          "version": "10.9.0"
+          "version": "10.9.8"
         },
         {
           "name": "Java (JDK)",
@@ -163,7 +163,7 @@
           "name": "Android Studio",
           "description": "Integrated Development Environment (IDE) for Android app development.",
           "link": "https://developer.android.com/studio",
-          "version": "Meerkat 2024.3.1 to Narwhal 4 Feature Drop 2025.1.4"
+          "version": "Narwhal Feature Drop 2025.1.2 to Rabbit 2 2026.2.2"
         },
         {
           "name": "Android SDK Build Tools",
@@ -181,7 +181,7 @@
           "name": "Xcode",
           "description": "Integrated Development Environment (IDE) for macOS/iOS.",
           "link": "https://developer.apple.com/xcode/",
-          "version": "26.2"
+          "version": "26.4"
         }
       ]
     }
