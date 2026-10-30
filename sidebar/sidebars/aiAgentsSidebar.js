@@ -93,6 +93,10 @@ export default [
       },
       {
         type: 'doc',
+        id: 'developing-with-agents/control-and-collaborate/verify-in-browser',
+      },
+      {
+        type: 'doc',
         id: 'developing-with-agents/control-and-collaborate/project-instructions',
       },
       {
