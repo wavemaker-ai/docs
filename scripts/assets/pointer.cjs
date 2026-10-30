@@ -54,6 +54,18 @@ function keyError(key, sha256) {
   return null;
 }
 
+// The key for a repository file with this sha256: the path with the first 12 hex characters of the
+// hash before the extension. Returns { key } or { error } (a file name with a space, a folder that
+// cannot hold pointers, and an unsupported extension all give an error).
+function keyFor(repoPath, sha256) {
+  const slash = repoPath.lastIndexOf('/');
+  const dot = repoPath.lastIndexOf('.');
+  if (dot <= slash + 1) return { error: 'the file has no extension' };
+  const key = `${repoPath.slice(0, dot)}.${sha256.slice(0, HASH_LENGTH)}${repoPath.slice(dot)}`;
+  const problem = keyError(key, sha256);
+  return problem ? { error: problem } : { key };
+}
+
 // The public URL of an object. Segments are encoded one by one; a validated key needs no encoding,
 // but this never trusts that.
 function urlFor(baseUrl, key) {
@@ -141,6 +153,7 @@ module.exports = {
   KEY_FOLDERS,
   extractBaseUrl,
   keyError,
+  keyFor,
   looksLikePointer,
   parsePointer,
   readHead,
