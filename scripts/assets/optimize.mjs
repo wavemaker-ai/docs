@@ -14,7 +14,12 @@
 import fs from 'node:fs';
 import { formatBytes } from './config.mjs';
 import { changedAssets, localAssets, parseArgs } from './changed-assets.mjs';
-import { cleanup, optimizeFile, worthReplacing } from './encode.mjs';
+import {
+  cleanup,
+  optimizeFile,
+  unsupportedReason,
+  worthReplacing,
+} from './encode.mjs';
 import { blobId } from './git.mjs';
 import { readLedger, recordLedger } from './ledger.mjs';
 
@@ -46,11 +51,13 @@ for (const asset of assets) {
     const output = await optimizeFile(asset);
     const replaced = worthReplacing(output, before);
     if (replaced) fs.writeFileSync(asset.file, output);
+    const note = replaced ? null : unsupportedReason(asset.file);
     results.push({
       file: asset.file,
       before,
       after: replaced ? output.length : before,
       replaced,
+      ...(note && { note }),
     });
     if (args.local)
       handled.push({
@@ -68,7 +75,7 @@ for (const asset of assets) {
   }
   const r = results.at(-1);
   console.log(
-    `${r.error ? 'ERR ' : r.replaced ? 'opt ' : 'keep'}  ${formatBytes(r.before).padStart(10)} -> ${formatBytes(r.after).padEnd(10)} ${r.file}${r.error ? `  (${r.error})` : ''}`,
+    `${r.error ? 'ERR ' : r.replaced ? 'opt ' : 'keep'}  ${formatBytes(r.before).padStart(10)} -> ${formatBytes(r.after).padEnd(10)} ${r.file}${r.error ? `  (${r.error})` : r.note ? `  (${r.note})` : ''}`,
   );
 }
 

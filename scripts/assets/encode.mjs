@@ -12,6 +12,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 import { optimize as svgo } from 'svgo';
 import { OPTIMIZE } from './config.mjs';
+import { isAnimatedPng } from './png.mjs';
 
 let tmpDir;
 let tmpCounter = 0;
@@ -49,6 +50,8 @@ function run(cmd, cmdArgs) {
 async function optimizeRaster(file) {
   const ext = path.extname(file).toLowerCase();
   if (ext === '.png') {
+    // sharp keeps only the first frame of an APNG, so re-encoding would flatten the animation.
+    if (isAnimatedPng(file)) return null;
     // Re-quantizing an already-palette PNG loses quality on every pass; leave it alone.
     const { isPalette, width } = await sharp(file).metadata();
     if (isPalette && width <= OPTIMIZE.maxImageWidth) return null;
@@ -180,6 +183,13 @@ function optimizeVideo(file) {
   } finally {
     fs.rmSync(out, { force: true });
   }
+}
+
+// Why a file is left unchanged on purpose, for the result rows; null when it is not such a case.
+export function unsupportedReason(file) {
+  return file.toLowerCase().endsWith('.png') && isAnimatedPng(file)
+    ? 'animated PNG, left unchanged'
+    : null;
 }
 
 // Returns the optimized bytes, or null when the format has nothing to do. The caller decides

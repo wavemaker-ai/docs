@@ -1,5 +1,6 @@
 // Asset size policy and optimization settings shared by check-sizes.mjs and optimize.mjs.
-// CI always runs these from the base branch, so edits here take effect only after they merge.
+// CI runs these from the default branch (see the TEMPORARY note in .github/workflows/assets.yaml), so
+// edits here take effect only after they merge into it.
 
 const KB = 1024;
 const MB = 1024 * KB;

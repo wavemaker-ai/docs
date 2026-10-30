@@ -2,7 +2,8 @@
 // Fails when an asset added or changed on this branch exceeds its size limit.
 //
 // Usage: node scripts/assets/check-sizes.mjs [--base <ref>] [--head <ref>] [--report <out.json>] [files...]
-// With no files, checks assets changed between the merge base of --base (default origin/main) and --head.
+// With no files, checks assets changed between the merge base of --base and --head. Without --base it
+// uses the nearest of origin/release, origin/docs and origin/main (see defaultBase).
 
 import fs from 'node:fs';
 import { LIMITS, formatBytes } from './config.mjs';

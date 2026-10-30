@@ -3,8 +3,25 @@ import { categoryFor } from './config.mjs';
 import { git, treeBlobs } from './git.mjs';
 import { processedBlobs } from './trailers.mjs';
 
+// The branch the current branch most likely forks from, for `npm run check-assets` without --base:
+// among the remote `release`, `docs` and `main`, the one with the fewest commits that HEAD does not
+// share with it (ties go in that order). CI always passes --base, so this is for local runs only.
+export function defaultBase() {
+  let best = null;
+  for (const ref of ['origin/release', 'origin/docs', 'origin/main']) {
+    try {
+      git('rev-parse', '--verify', '--quiet', `${ref}^{commit}`);
+      const ahead = Number(git('rev-list', '--count', `${ref}..HEAD`).trim());
+      if (best === null || ahead < best.ahead) best = { ref, ahead };
+    } catch {
+      // That remote branch does not exist here.
+    }
+  }
+  return best?.ref ?? 'origin/main';
+}
+
 export function parseArgs(argv) {
-  const args = { base: 'origin/main', head: 'HEAD', files: [] };
+  const args = { base: undefined, head: 'HEAD', files: [] };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === '-r' || arg === '--recursive') args.recursive = true;
@@ -16,6 +33,7 @@ export function parseArgs(argv) {
     else if (arg.startsWith('--')) args[arg.slice(2)] = argv[++i];
     else args.files.push(arg);
   }
+  args.base ??= defaultBase();
   return args;
 }
 

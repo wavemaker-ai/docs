@@ -18,6 +18,7 @@
     "gen-metrics": "node scripts/gen-metrics.js",
     "check-assets": "node scripts/assets/check-sizes.mjs",
     "test:assets-history": "node --test scripts/assets/history.test.mjs",
+    "test:assets": "node --test scripts/assets/history.test.mjs scripts/assets/apply-artifact.test.mjs scripts/assets/png.test.mjs",
     "optimize-assets": "node scripts/assets/optimize.mjs --local",
     "prepare": "husky",
     "lint": "eslint . && mdxlint . --frail && node scripts/validate-tech-stack.js"
