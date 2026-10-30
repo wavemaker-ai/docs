@@ -7,7 +7,7 @@ import { createRequire } from 'node:module';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { expectedBaseUrl, pointerText, replaceFiles, validDimensions } from './replace.mjs';
+import { expectedBaseUrl, heldBack, pointerText, replaceFiles, validDimensions } from './replace.mjs';
 import { startS3Stub } from './s3-stub.mjs';
 
 const { parsePointer, keyFor } = createRequire(import.meta.url)('./pointer.cjs');
@@ -179,4 +179,31 @@ test('pointerText round-trips through the strict parser', () => {
   const { key } = keyFor('docs/a/assets/img/rt.png', sha(content));
   const text = pointerText({ sha256: sha(content), size: content.length, key, dimensions: { width: 3, height: 4 } });
   assert.deepEqual(parsePointer(text, 'rt.png'), { sha256: sha(content), size: content.length, key, width: 3, height: 4 });
+});
+
+test('heldBack: a pending file without a clean optimizer result, or rejected on apply, stays real', () => {
+  const pendingFiles = ['a.png', 'b.png', 'c.png', 'd.png', 'e.png'];
+  const results = [
+    { file: 'a.png', replaced: true },
+    { file: 'b.png', error: 'ffmpeg failed' },
+    { file: 'c.png', note: 'already optimized' },
+    { file: 'e.png', replaced: true },
+  ];
+  const held = heldBack({ pendingFiles, results, rejected: [{ path: 'e.png', reason: 'not smaller' }] });
+  assert.deepEqual([...held].sort(), ['b.png', 'd.png', 'e.png']);
+  // No results at all (the optimizer never ran) holds everything that was pending.
+  assert.equal(heldBack({ pendingFiles, results: [], rejected: [] }).size, 5);
+  // Files that were not pending (covered by the hook, or not assets of this run) are never held.
+  assert.equal(heldBack({ pendingFiles: [], results: [], rejected: [] }).size, 0);
+});
+
+test('a held-back file is not swapped even though its object is in the bucket', async (t) => {
+  const { add, run } = await setup(t);
+  const { name } = add('docs/a/assets/img/held.png', png(20));
+  const { name: free } = add('docs/a/assets/img/free.png', png(21));
+  const report = await run([name, free], { hold: new Set([name]) });
+  assert.equal(report.counts.replaced, 1);
+  assert.deepEqual(fs.readFileSync(name), png(20));
+  assert.match(report.results.find((r) => r.file === name).problem, /not optimized/);
+  assert.ok(fs.readFileSync(free, 'utf8').startsWith('s3-asset v1'));
 });

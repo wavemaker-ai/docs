@@ -113,3 +113,32 @@ test('the collection branches match the ones the workflow triggers on', () => {
   const declared = /const COLLECTION_BRANCHES = \[([^\]]*)\]/.exec(text)[1].split(',').map((s) => s.trim().replace(/'/g, ''));
   assert.deepEqual(declared.sort(), [...COLLECTION_BRANCHES].sort());
 });
+
+// A step's `if:` condition, read as text from the workflow.
+function stepCondition(name) {
+  const text = fs.readFileSync(workflowFile, 'utf8');
+  const start = text.indexOf(`      - name: ${name}\n`);
+  assert.notEqual(start, -1, `step ${name} exists`);
+  const block = text.slice(start, text.indexOf('\n      - ', start + 10));
+  return /^ {8}if: (.+)$/m.exec(block)?.[1];
+}
+
+test('upload and replace never run when optimization was expected but its output was not applied', () => {
+  for (const name of ['Upload to the bucket', 'Replace assets with pointer files']) {
+    const condition = stepCondition(name);
+    assert.match(condition, /steps\.scan\.outputs\.optimize != 'true' \|\| steps\.apply\.outputs\.state == 'ok'/, name);
+  }
+});
+
+test('the replace step hands the optimizer and apply reports over when optimization was expected', () => {
+  const text = fs.readFileSync(workflowFile, 'utf8');
+  assert.match(text, /--pending "\$RUNNER_TEMP\/pending\.json" --optimize-report "\$RUNNER_TEMP\/optimize\.json" --apply-report "\$RUNNER_TEMP\/apply\.json"/);
+});
+
+test('the AWS credentials are referenced in the upload step only, and the push token in the push step only', () => {
+  const text = fs.readFileSync(workflowFile, 'utf8');
+  const uses = (secret) => [...text.matchAll(new RegExp(`secrets\\.${secret}`, 'g'))].length;
+  assert.equal(uses('AWS_ACCESS_KEY_ID'), 1);
+  assert.equal(uses('AWS_SECRET_ACCESS_KEY'), 1);
+  assert.equal(uses('ASSET_BOT_TOKEN'), 1);
+});

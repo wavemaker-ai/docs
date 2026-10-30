@@ -13,6 +13,10 @@
 // warning: the real file keeps working, and the next run tries again. Nothing is deleted from the
 // bucket, and the real file stays in the PR's earlier commits.
 //
+// A file that was due to be optimized in this run, and was not, is never swapped: the pointer would
+// hide the unoptimized original from every later run (a pointer is not an asset, so it is never
+// optimized again). See `heldBack` below.
+//
 // Without an upload report (the upload flow is off) every asset the PR changed is a candidate, and the
 // public URL check alone decides: an object stored by an earlier run is found, anything else is left.
 //
@@ -22,7 +26,8 @@
 //
 // Usage (inside the PR checkout, after upload.mjs):
 //   node replace.mjs (--upload-report <json> | --base <ref>) [--config docusaurus.config.js] [--dimensions <json>]
-//     [--report <json>] [--replaced <txt>]
+//     [--report <json>] [--replaced <txt>] [--pending <json> --optimize-report <json> --apply-report <json>]
+// The last three are given when optimization was expected in this run (see `heldBack`).
 // Environment: ASSET_S3_BUCKET, ASSET_S3_REGION, ASSET_S3_PREFIX.
 // Writes `state` (success | error), `description` and counts to $GITHUB_OUTPUT. `--replaced` lists the
 // swapped paths, NUL-separated, for `git add --`.
@@ -56,6 +61,16 @@ export function validDimensions(entry) {
   const { width, height } = entry;
   const ok = (n) => Number.isInteger(n) && n >= 1 && n <= 99999;
   return ok(width) && ok(height) ? { width, height } : null;
+}
+
+// The files that must stay real because optimization was due for them and did not complete: every
+// file in `pendingFiles` (what the run had to optimize) that has no result from the optimizer, has a
+// result with an error, or was rejected by the safety checks when the artifact was applied. A file
+// the optimizer looked at and left alone (already optimized, no gain) is fine.
+export function heldBack({ pendingFiles = [], results = [], rejected = [] }) {
+  const done = new Set(results.filter((r) => r && !r.error).map((r) => r.file));
+  const refused = new Set(rejected.map((r) => r.path));
+  return new Set(pendingFiles.filter((file) => !done.has(file) || refused.has(file)));
 }
 
 export function pointerText({ sha256, size, key, dimensions }) {
@@ -139,7 +154,7 @@ async function mapLimit(items, limit, fn) {
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 // `files` are the paths the upload step reported as stored. `env` is { bucket, region, prefix }.
-export async function replaceFiles(files, { configText, env, dimensions = {}, ...options }) {
+export async function replaceFiles(files, { configText, env, dimensions = {}, hold = new Set(), ...options }) {
   const settings = { ...DEFAULTS, fetchImpl: fetch, ...options };
   const none = (state, description) => ({ state, description, results: [], counts: { replaced: 0, kept: 0 } });
   let baseUrl;
@@ -153,7 +168,11 @@ export async function replaceFiles(files, { configText, env, dimensions = {}, ..
     return none('error', `The repository variables (bucket, region, prefix) give ${expected}, but docusaurus.config.js has ${baseUrl}`);
   if (!files.length) return none('success', 'No stored assets to replace');
 
-  const results = await mapLimit(files, settings.concurrency, (file) => swapOne(file, baseUrl, dimensions, settings));
+  const results = await mapLimit(files, settings.concurrency, (file) =>
+    hold.has(file)
+      ? { file, state: 'kept', problem: 'it was not optimized in this run, so it stays a real file until it is' }
+      : swapOne(file, baseUrl, dimensions, settings),
+  );
   const count = (state) => results.filter((r) => r.state === state).length;
   const counts = { replaced: count('replaced'), kept: count('kept') + count('unreachable') };
   const unreachable = count('unreachable');
@@ -191,10 +210,21 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           .map((r) => r.file)
       : classifyAssets({ base: args.base, head: 'HEAD', files: [] }).pending.map((a) => a.file);
     const dimensions = args.dimensions ? JSON.parse(fs.readFileSync(args.dimensions, 'utf8')) : {};
+    // Optimization was expected: anything it did not finish stays as it is. If these reports cannot be
+    // read, the whole run stops with an error rather than swapping unchecked files.
+    const readJson = (name) => JSON.parse(fs.readFileSync(args[name], 'utf8'));
+    const hold = args.pending
+      ? heldBack({
+          pendingFiles: readJson('pending').pendingFiles,
+          results: readJson('optimize-report'),
+          rejected: readJson('apply-report').rejected,
+        })
+      : new Set();
     report = await replaceFiles(files, {
       configText: fs.readFileSync(args.config ?? 'docusaurus.config.js', 'utf8'),
       env: { bucket: e.ASSET_S3_BUCKET, region: e.ASSET_S3_REGION, prefix: e.ASSET_S3_PREFIX },
       dimensions,
+      hold,
     });
   } catch (error) {
     report = { state: 'error', description: `The replace flow could not start (${error.message})`, results: [], counts: { replaced: 0, kept: 0 } };

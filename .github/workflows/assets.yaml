@@ -605,7 +605,9 @@ jobs:
       # asset-upload-check status.
       - name: Upload to the bucket
         id: upload
-        if: needs.resolve.outputs.run_upload == 'true'
+        # When optimization was expected, nothing is stored unless its output was applied: otherwise the
+        # unoptimized originals would be stored and, with the replace flow, never optimized.
+        if: needs.resolve.outputs.run_upload == 'true' && (steps.scan.outputs.optimize != 'true' || steps.apply.outputs.state == 'ok')
         continue-on-error: true
         working-directory: pr
         env:
@@ -620,6 +622,7 @@ jobs:
           GIT_CONFIG_NOSYSTEM: '1'
           GIT_CONFIG_GLOBAL: /dev/null
         run: |
+          aws --version
           node ../trusted/scripts/assets/upload.mjs --base "upstream/${BASE_REF}" \
             --report "$RUNNER_TEMP/upload.json"
 
@@ -628,7 +631,7 @@ jobs:
       # works on what that step stored; otherwise on every changed asset whose object is already there.
       - name: Replace assets with pointer files
         id: replace
-        if: needs.resolve.outputs.run_replace == 'true' && (needs.resolve.outputs.run_upload != 'true' || steps.upload.outputs.state == 'success' || steps.upload.outputs.state == 'failure')
+        if: needs.resolve.outputs.run_replace == 'true' && (steps.scan.outputs.optimize != 'true' || steps.apply.outputs.state == 'ok') && (needs.resolve.outputs.run_upload != 'true' || steps.upload.outputs.state == 'success' || steps.upload.outputs.state == 'failure')
         continue-on-error: true
         working-directory: pr
         env:
@@ -636,6 +639,7 @@ jobs:
           ASSET_S3_REGION: ${{ vars.ASSET_S3_REGION }}
           ASSET_S3_PREFIX: ${{ vars.ASSET_S3_PREFIX }}
           RUN_UPLOAD: ${{ needs.resolve.outputs.run_upload }}
+          OPTIMIZE_EXPECTED: ${{ steps.scan.outputs.optimize }}
           BASE_REF: ${{ needs.resolve.outputs.base_ref }}
           GIT_CONFIG_NOSYSTEM: '1'
           GIT_CONFIG_GLOBAL: /dev/null
@@ -647,6 +651,11 @@ jobs:
             ARGS+=(--base "upstream/${BASE_REF}")
           fi
           if [ -f "$RUNNER_TEMP/dimensions.json" ]; then ARGS+=(--dimensions "$RUNNER_TEMP/dimensions.json"); fi
+          # Files that were due to be optimized and were not (an optimizer error, or rejected by the
+          # safety checks) stay real: a pointer would hide them from every later optimization.
+          if [ "$OPTIMIZE_EXPECTED" = "true" ]; then
+            ARGS+=(--pending "$RUNNER_TEMP/pending.json" --optimize-report "$RUNNER_TEMP/optimize.json" --apply-report "$RUNNER_TEMP/apply.json")
+          fi
           node ../trusted/scripts/assets/replace.mjs "${ARGS[@]}"
 
       # Loop guard: every bot push starts a new run, so after three bot commits in a row with no
@@ -779,6 +788,7 @@ jobs:
           UPLOAD_DESCRIPTION: ${{ steps.upload.outputs.description }}
           REPLACE_STATE: ${{ steps.replace.outputs.state }}
           REPLACE_DESCRIPTION: ${{ steps.replace.outputs.description }}
+          REPLACED: ${{ steps.replace.outputs.replaced }}
           STREAK_BLOCKED: ${{ steps.streak.outputs.blocked }}
           PUSH_RESULT: ${{ steps.push.outputs.result }}
           SHA: ${{ steps.validate.outputs.sha || needs.resolve.outputs.head_sha }}
@@ -887,13 +897,18 @@ jobs:
                 uploadState,
                 env.UPLOAD_STATE ? env.UPLOAD_DESCRIPTION : 'Upload did not run',
               );
+            // Swapped in the working tree is not swapped on the branch: say so when the push did not happen
+            // (no token, the guard, a moved branch, a refused push).
+            const unpushed = Number(env.REPLACED) > 0 && env.PUSH_RESULT !== 'pushed';
             if (env.RUN_REPLACE === 'true')
               await setStatus(
                 'asset-replace-check',
-                replaceState,
-                replaceSkipped
-                  ? 'Replace: skipped, the upload did not complete'
-                  : env.REPLACE_STATE ? env.REPLACE_DESCRIPTION : 'Replace did not run',
+                unpushed ? 'error' : replaceState,
+                unpushed
+                  ? `Replace: ${env.REPLACED} file(s) ready but not pushed (${env.PUSH_RESULT || (env.STREAK_BLOCKED === 'true' ? 'bot push limit' : 'push did not run')})`
+                  : replaceSkipped
+                    ? 'Replace: skipped, the upload did not complete'
+                    : env.REPLACE_STATE ? env.REPLACE_DESCRIPTION : 'Replace did not run',
               );
             const reportStatusError = () => {
               if (!statusErrors.length) return;
@@ -1042,7 +1057,7 @@ jobs:
             if (apply?.rejected?.length)
               body += `> ⚠️ ${apply.rejected.length} optimized file(s) were rejected by the safety checks and left as they were. [View logs](${runUrl})\n\n`;
             if (streakBlocked)
-              body += '> ⚠️ The bot has pushed three times in a row without a commit from a person, so it did not push this time. Push a commit, or comment `/optimize-assets`, to let it continue.\n\n';
+              body += '> ⚠️ The bot has pushed three times in a row without a commit from a person, so it did not push this time. Push a commit to let it continue.\n\n';
             if (opt) body += `${OPT_START}\n${opt}${OPT_END}\n\n`;
             if (uploadSection) body += `${uploadSection}\n`;
             if (replaceSection) body += `${replaceSection}\n`;
