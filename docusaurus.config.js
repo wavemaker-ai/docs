@@ -8,11 +8,14 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import pointerImages from './plugins/pointer-assets/remark.cjs';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
-// Public base URL that pointer files resolve against (see plugins/pointer-assets). Keep it a literal
-// in this file, not an environment variable: Rspack's persistent cache is only evicted when this
-// file changes, so an env var would leave stale URLs in cached modules. Set it before the first
-// pointer file is committed; until then a pointer fails the build.
-const POINTER_ASSETS_BASE_URL = '';
+// Public base URL that pointer files resolve against (see plugins/pointer-assets): the asset bucket
+// plus the repository-name prefix, so a pointer's key is just the repo path with a hash. Keep it a
+// single string literal, not an environment variable: Rspack's persistent cache is only evicted when
+// this file changes, so an env var would leave stale URLs in cached modules, and CI reads this
+// declaration as text. Changing the host also means changing ALLOWED_HOSTS in
+// scripts/assets/pointer-check.mjs.
+const POINTER_ASSETS_BASE_URL =
+  'https://wm-docs-flow.s3.us-east-1.amazonaws.com/docs';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
