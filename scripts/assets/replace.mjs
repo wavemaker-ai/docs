@@ -13,12 +13,15 @@
 // warning: the real file keeps working, and the next run tries again. Nothing is deleted from the
 // bucket, and the real file stays in the PR's earlier commits.
 //
+// Without an upload report (the upload flow is off) every asset the PR changed is a candidate, and the
+// public URL check alone decides: an object stored by an earlier run is found, anything else is left.
+//
 // Before anything is swapped, the bucket, region and prefix from the repository variables must agree
 // with the base URL in docusaurus.config.js (read as text): otherwise the pointers would resolve to a
 // place the files were not uploaded to.
 //
 // Usage (inside the PR checkout, after upload.mjs):
-//   node replace.mjs --upload-report <json> [--config docusaurus.config.js] [--dimensions <json>]
+//   node replace.mjs (--upload-report <json> | --base <ref>) [--config docusaurus.config.js] [--dimensions <json>]
 //     [--report <json>] [--replaced <txt>]
 // Environment: ASSET_S3_BUCKET, ASSET_S3_REGION, ASSET_S3_PREFIX.
 // Writes `state` (success | error), `description` and counts to $GITHUB_OUTPUT. `--replaced` lists the
@@ -32,6 +35,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import { classifyAssets } from './changed-assets.mjs';
 import { parseCli } from './pointer-check.mjs';
 import { displayName, escapeData, escapeProperty } from './workflow-commands.mjs';
 
@@ -179,8 +183,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const e = process.env;
   let report;
   try {
-    const uploaded = JSON.parse(fs.readFileSync(args['upload-report'], 'utf8'));
-    const files = uploaded.results.filter((r) => r.state === 'uploaded' || r.state === 'exists').map((r) => r.file);
+    // With an upload report, only what that step stored. Without one (the upload flow is off), every
+    // changed asset is a candidate: the public URL check decides whether its object is already there.
+    const files = args['upload-report']
+      ? JSON.parse(fs.readFileSync(args['upload-report'], 'utf8'))
+          .results.filter((r) => r.state === 'uploaded' || r.state === 'exists')
+          .map((r) => r.file)
+      : classifyAssets({ base: args.base, head: 'HEAD', files: [] }).pending.map((a) => a.file);
     const dimensions = args.dimensions ? JSON.parse(fs.readFileSync(args.dimensions, 'utf8')) : {};
     report = await replaceFiles(files, {
       configText: fs.readFileSync(args.config ?? 'docusaurus.config.js', 'utf8'),

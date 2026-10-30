@@ -13,6 +13,7 @@ import {
   MAX_FILES,
   MAX_MANIFEST_BYTES,
   applyArtifact,
+  sanitizeDimensions,
   sniff,
 } from './apply-artifact.mjs';
 
@@ -332,4 +333,39 @@ test('pack and apply agree end to end', () => {
   const result = applyArtifact({ artifactDir: out, cwd: dir, headSha: HEAD, allowed: ['docs/a.png'] });
   assert.deepEqual(result.applied, ['docs/a.png']);
   assert.deepEqual(fs.readFileSync(path.join(dir, 'docs/a.png')), png(100));
+});
+
+test('measured dimensions: only well-formed entries survive', () => {
+  const good = sha(Buffer.from('a'));
+  const out = sanitizeDimensions({
+    [good]: { width: 640, height: 480, extra: '<script>' },
+    [sha(Buffer.from('b'))]: { width: 0, height: 5 },
+    [sha(Buffer.from('c'))]: { width: 5.5, height: 5 },
+    [sha(Buffer.from('d'))]: { width: '5', height: 5 },
+    [sha(Buffer.from('e'))]: { width: 100000, height: 5 },
+    [sha(Buffer.from('f'))]: null,
+    'not-a-hash': { width: 5, height: 5 },
+    [sha(Buffer.from('g')).toUpperCase()]: { width: 5, height: 5 },
+  });
+  assert.deepEqual(out, { [good]: { width: 640, height: 480 } });
+  for (const bad of [null, undefined, [], 'x', 5]) assert.deepEqual(sanitizeDimensions(bad), {});
+});
+
+test('dimensions travel through the manifest and come back sanitized', () => {
+  const content = png(200);
+  const optimized = png(100);
+  const s = scenario({
+    repo: { 'docs/a.png': content },
+    artifact: { 'docs/a.png': optimized },
+    manifest: { dimensions: { [sha(optimized)]: { width: 10, height: 20 }, junk: { width: 1, height: 1 } } },
+  });
+  const result = s.run();
+  assert.equal(result.state, 'ok');
+  assert.deepEqual(result.dimensions, { [sha(optimized)]: { width: 10, height: 20 } });
+});
+
+test('an artifact without dimensions gives none, and a bad manifest gives none', () => {
+  assert.deepEqual(scenario({}).run().dimensions, {});
+  const s = scenario({ manifest: { version: 2 } });
+  assert.deepEqual(s.run().dimensions, {});
 });

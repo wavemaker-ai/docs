@@ -148,6 +148,16 @@ export function plan(file, { prefix = '' } = {}) {
   if (ext === '.svg') return { skip: 'SVG stays in the repository' };
   const type = CONTENT_TYPES[ext];
   if (!type) return { skip: 'not a type that is stored in the bucket' };
+  // The checkout is a pull request's: a symlink (or a symlinked folder) could point at a file outside
+  // it, and this step holds credentials. Only regular files that really live inside the checkout go.
+  try {
+    if (!fs.lstatSync(file).isFile()) return { skip: 'not a regular file' };
+    const root = fs.realpathSync('.');
+    const real = fs.realpathSync(file);
+    if (real !== root && !real.startsWith(root + path.sep)) return { skip: 'the path leaves the checkout through a symlink' };
+  } catch {
+    return { skip: 'the file is not readable' };
+  }
   const category = Object.entries(LIMITS).find(([, rule]) => rule.extensions.includes(ext))?.[0];
   const size = fs.statSync(file).size;
   if (category && size > LIMITS[category].maxBytes)

@@ -68,6 +68,19 @@ test('plan skips what is not stored and builds the key and headers for the rest'
   assert.equal(ok.type, 'image/png');
 });
 
+test('a symlink, or a file reached through a symlinked folder, is never read', async (t) => {
+  const { file } = await setup(t);
+  const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'outside-'));
+  t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(outside, 'secret.png'), png(50));
+  file('docs/a/assets/img/real.png', png(51));
+  fs.symlinkSync(path.join(outside, 'secret.png'), 'docs/a/assets/img/link.png');
+  fs.symlinkSync(outside, 'docs/b');
+  assert.match(plan('docs/a/assets/img/link.png').skip, /regular file/);
+  assert.match(plan('docs/b/secret.png').skip, /symlink/);
+  assert.ok(plan('docs/a/assets/img/real.png').s3Key);
+});
+
 test('a new file is uploaded with checksum, conditional write, content type and metadata', opts, async (t) => {
   const { stub, file, config } = await setup(t);
   const content = png(3);
