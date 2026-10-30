@@ -18,9 +18,12 @@
 //     describes a file that has changed since.
 
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import { categoryFor } from './config.mjs';
 import { git } from './git.mjs';
 import { parseArgs } from './changed-assets.mjs';
+
+const { looksLikePointer, parsePointer } = createRequire(import.meta.url)('./pointer.cjs');
 
 const MARKER = '[asset-bot]';
 const REGULAR_MODES = new Set(['100644', '100755']);
@@ -55,7 +58,21 @@ function botChanges(parent, commit) {
   return changes.length ? changes : null;
 }
 
-const blobSize = (blob) => Number(git('cat-file', '-s', blob).trim());
+// A file's size. For a pointer file it is the size of the object it stands for, so the comment shows
+// what the optimized asset weighs, not the few lines of text that replaced it in the repository.
+function blobSize(blob) {
+  const size = Number(git('cat-file', '-s', blob).trim());
+  if (size > 1024) return size;
+  const text = git('cat-file', 'blob', blob);
+  if (looksLikePointer(text)) {
+    try {
+      return parsePointer(text, blob).size;
+    } catch {
+      // A malformed pointer counts by its own size; the pointer check reports it.
+    }
+  }
+  return size;
+}
 
 function blobAt(rev, file) {
   try {

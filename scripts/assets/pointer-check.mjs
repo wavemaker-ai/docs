@@ -24,6 +24,7 @@ import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { git } from './git.mjs';
+import { escapeData, escapeProperty } from './workflow-commands.mjs';
 
 const require = createRequire(import.meta.url);
 const {
@@ -220,12 +221,7 @@ export async function run({
   };
 }
 
-// Workflow commands: a file name comes from the PR, so it is escaped as GitHub requires; a newline or
-// a colon in a name must not be able to start another command.
-export const escapeData = (text) =>
-  String(text).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
-export const escapeProperty = (text) =>
-  escapeData(text).replace(/:/g, '%3A').replace(/,/g, '%2C');
+export { escapeData, escapeProperty };
 
 const html = (text) =>
   String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\|/g, '&#124;').replace(/\n/g, '<br>');
