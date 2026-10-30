@@ -23,7 +23,7 @@ import fs from 'node:fs';
 
 // Keep in sync with `on.pull_request_target.branches` and COLLECTION_BRANCHES in the workflow's
 // "Resolve PR" step (a test compares them).
-export const COLLECTION_BRANCHES = ['release', 'docs'];
+export const COLLECTION_BRANCHES = ['release', 'docs', 'asset-offload-test'];
 
 const normalize = (value) => String(value ?? '').trim().toLowerCase();
 

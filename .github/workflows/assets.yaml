@@ -1,5 +1,10 @@
 name: Assets
 
+# TEST BRANCH ONLY (asset-offload-test, never merge this into main): the scripts are read from the PR's
+# base branch instead of the default branch, `asset-offload-test` counts as a collection branch, and
+# docusaurus.config.js points the base URL at the `docs-test` folder of the bucket. Delete the branch
+# when the testing is done.
+
 # One pipeline for the images, GIFs, and videos a PR adds or changes:
 #   1. Optimize: compress them in place (same path and format) and commit back to the PR branch.
 #   2. Validate: check the resulting sizes against scripts/assets/config.mjs.
@@ -87,7 +92,7 @@ name: Assets
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
-    branches: [release, docs]
+    branches: [release, docs, asset-offload-test]
   issue_comment:
     types: [created]
 
@@ -149,7 +154,7 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             // Keep in sync with `on.pull_request_target.branches`.
-            const COLLECTION_BRANCHES = ['release', 'docs'];
+            const COLLECTION_BRANCHES = ['release', 'docs', 'asset-offload-test'];
             const PROTECTED_BRANCHES = ['main', 'prod', ...COLLECTION_BRANCHES];
             const TRUSTED_USERS_FILE = '.github/asset-trusted-users.json';
             const number = context.payload.pull_request?.number ?? context.payload.issue.number;
@@ -272,7 +277,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ steps.pr.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -338,7 +343,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -419,7 +424,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -541,7 +546,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false

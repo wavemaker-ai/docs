@@ -15,7 +15,7 @@ import pointerImages from './plugins/pointer-assets/remark.cjs';
 // declaration as text. Changing the host also means changing ALLOWED_HOSTS in
 // scripts/assets/pointer-check.mjs.
 const POINTER_ASSETS_BASE_URL =
-  'https://wm-docs-flow.s3.us-east-1.amazonaws.com/docs';
+  'https://wm-docs-flow.s3.us-east-1.amazonaws.com/docs-test';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
