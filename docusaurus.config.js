@@ -7,6 +7,11 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+// Diagram text size, in px. Mermaid measures labels while it renders, so it is set here
+// rather than in CSS.
+const MERMAID_FONT_SIZE = 16;
+const MERMAID_TITLE_SCALE = 1.25;
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'WaveMaker Docs',
@@ -111,6 +116,25 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       image: 'img/wavemaker-docs-social-card.png',
+      mermaid: {
+        options: {
+          // Sequence diagrams read the top-level fontSize; the other types read the theme variable.
+          fontSize: MERMAID_FONT_SIZE,
+          themeVariables: { fontSize: `${MERMAID_FONT_SIZE}px` },
+          // Parent box titles are bigger and bolder than the other labels.
+          themeCSS: `.cluster-label :is(.nodeLabel, text) { font-size: ${MERMAID_FONT_SIZE * MERMAID_TITLE_SCALE}px; font-weight: var(--wm-font-weight-semibold); }`,
+          flowchart: {
+            // Keep diagrams narrow so they fit the page column without being shrunk much:
+            // labels wrap early and boxes sit close together. Sizes are in px.
+            wrappingWidth: 160,
+            nodeSpacing: 30,
+            // Space above and below the title inside a parent box, in px.
+            subGraphTitleMargin: { top: 16, bottom: 32 },
+            // Vertical space between layers, wide enough to leave a gap between parent boxes.
+            rankSpacing: 70,
+          },
+        },
+      },
       algolia: {
         appId: 'QCVP2DTGFE',
         apiKey: '5c6569989dc17486081c8ab5cd736d10',

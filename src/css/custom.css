@@ -1652,3 +1652,57 @@ button.clean-btn.menu__caret::before {
     margin: 1.5rem auto;
   }
 }
+
+/* Mermaid diagrams: restyle the default boxes from the site tokens, which already switch
+   with the color mode. Mermaid scopes its own rules to the diagram id, so a class selector
+   cannot outrank them without !important. A diagram's own classDef/style rules are also
+   !important and more specific, so authors can still override a single node. */
+.docusaurus-mermaid-container {
+  --wm-mermaid-radius: var(--ifm-card-border-radius);
+  --wm-mermaid-node-fill: var(--ifm-color-primary-lightest);
+  --wm-mermaid-node-stroke: var(--ifm-color-primary);
+  --wm-mermaid-node-stroke-width: 1px;
+  --wm-mermaid-group-stroke: var(--ifm-color-warning);
+  --wm-mermaid-group-stroke-width: 3px;
+  --wm-mermaid-group-tint: 8%;
+  --wm-mermaid-group-fill: color-mix(
+    in srgb,
+    var(--wm-mermaid-group-stroke) var(--wm-mermaid-group-tint),
+    transparent
+  );
+  --wm-mermaid-text: var(--ifm-font-color-base);
+}
+.docusaurus-mermaid-container
+  svg
+  :is(.node, .actor, .note)
+  :is(rect, circle, ellipse, polygon, path),
+.docusaurus-mermaid-container svg :is(rect.actor, rect.note) {
+  fill: var(--wm-mermaid-node-fill) !important;
+  stroke: var(--wm-mermaid-node-stroke) !important;
+  stroke-width: var(--wm-mermaid-node-stroke-width) !important;
+}
+/* Hand-drawn shapes (rounded, pill, hexagon, ...) are a fill path plus an outline path.
+   Keep each to its own job, or the outline is stroked twice and looks bolder. */
+.docusaurus-mermaid-container svg .node path[stroke='none'] {
+  stroke: none !important;
+}
+.docusaurus-mermaid-container svg .node path[fill='none'] {
+  fill: none !important;
+}
+.docusaurus-mermaid-container svg .cluster rect {
+  fill: var(--wm-mermaid-group-fill) !important;
+  stroke: var(--wm-mermaid-group-stroke) !important;
+  stroke-width: var(--wm-mermaid-group-stroke-width) !important;
+}
+.docusaurus-mermaid-container svg :is(.node, .cluster, .actor, .note) rect,
+.docusaurus-mermaid-container svg :is(rect.actor, rect.note) {
+  rx: var(--wm-mermaid-radius);
+  ry: var(--wm-mermaid-radius);
+}
+.docusaurus-mermaid-container
+  svg
+  :is(.node, .cluster)
+  :is(.nodeLabel, .cluster-label, p, span, text) {
+  color: var(--wm-mermaid-text) !important;
+  fill: var(--wm-mermaid-text) !important;
+}
