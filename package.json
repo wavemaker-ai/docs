@@ -5,7 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "npm run pre-build-scripts && docusaurus start",
-    "build": "npm run pre-build-scripts && docusaurus build && node scripts/check-pointer-leaks.js",
+    "build": "npm run pre-build-scripts && npm run test:pointer-assets && docusaurus build && node scripts/check-pointer-leaks.js",
     "test:pointer-assets": "node --test plugins/pointer-assets/pointer-assets.test.cjs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -19,7 +19,8 @@
     "gen-metrics": "node scripts/gen-metrics.js",
     "check-assets": "node scripts/assets/check-sizes.mjs",
     "test:assets-history": "node --test scripts/assets/history.test.mjs",
-    "test:assets": "node --test scripts/assets/history.test.mjs scripts/assets/apply-artifact.test.mjs scripts/assets/png.test.mjs",
+    "test": "npm run test:assets && npm run test:pointer-assets",
+    "test:assets": "node --test scripts/assets/history.test.mjs scripts/assets/apply-artifact.test.mjs scripts/assets/png.test.mjs scripts/assets/pointer-check.test.mjs",
     "optimize-assets": "node scripts/assets/optimize.mjs --local",
     "prepare": "husky",
     "lint": "eslint . && mdxlint . --frail && node scripts/validate-tech-stack.js"

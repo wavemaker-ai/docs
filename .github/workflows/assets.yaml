@@ -48,7 +48,7 @@ name: Assets
 # default branch (see TEMPORARY above) and nothing from the PR is executed. Fork media is only decoded after a maintainer
 # opts in with the comment.
 #
-# Three jobs, so the code that decodes untrusted media never shares a job with a secret:
+# Four jobs, so the code that decodes untrusted media never shares a job with a secret:
 #   resolve  Looks up the PR and decides who is trusted. It processes no PR content, and it is the
 #            only source of the head SHA, the base branch and the trust decisions: never take those
 #            from a job that handles PR files.
@@ -59,6 +59,10 @@ name: Assets
 #            path, hash, size and file signature), commits those paths, pushes with a plain
 #            non-force push, validates sizes and writes the PR comment and the status. A push that
 #            fails because the branch moved is final for this run: the new push starts its own run.
+#   pointer-check  Checks the pointer files a PR adds or changes (text files that stand in for assets
+#            stored in the asset bucket, see plugins/pointer-assets): each must be valid and its
+#            object must exist with the size it claims. It handles pointer text only, sets its own
+#            status, asset-pointer-check, and never shares a job with a decoder.
 # Actions are pinned to a commit SHA; keep them that way and use only official ones. Do not add
 # caches to any job: a cache written here could be restored by a job that has secrets.
 #
@@ -215,6 +219,95 @@ jobs:
             core.setOutput('base_ref', pr.base.ref);
             // Set last: a run that returned early above leaves this empty, and every later job skips.
             core.setOutput('proceed', 'true');
+
+  # Checks the pointer files a PR adds or changes, and every pointer when the config or the plugin
+  # changes (see plugins/pointer-assets and scripts/assets/pointer-check.mjs). It handles pointer TEXT
+  # only, never media, and it never shares a job with a decoder: a compromised decoder could otherwise
+  # report every pointer as fine. It sets its own status, asset-pointer-check, and writes nothing to
+  # the PR comment, which belongs to the publish job.
+  pointer-check:
+    needs: resolve
+    if: needs.resolve.outputs.proceed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - name: Check out trusted scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # TEMPORARY: the default branch, not the PR's base branch (see the header). The plugin folder
+          # comes along because the check shares the pointer rules with the build.
+          ref: ${{ github.event.repository.default_branch }}
+          path: trusted
+          sparse-checkout: |
+            scripts/assets
+            plugins/pointer-assets
+          persist-credentials: false
+
+      - name: Check out the PR at its head commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # See the decode job: nothing from this checkout is executed, and no secret is in this job.
+          allow-unsafe-pr-checkout: true
+          repository: ${{ needs.resolve.outputs.head_repo }}
+          ref: ${{ needs.resolve.outputs.head_sha }}
+          token: ${{ github.token }}
+          persist-credentials: false
+          path: pr
+          fetch-depth: 0
+          filter: blob:none
+
+      - name: Check that the checkout is the commit that was resolved
+        working-directory: pr
+        env:
+          HEAD_SHA: ${{ needs.resolve.outputs.head_sha }}
+        run: test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      - name: Fetch the base branch
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+        run: |
+          git fetch --no-tags --filter=blob:none "https://github.com/${GITHUB_REPOSITORY}.git" \
+            "+refs/heads/${BASE_REF}:refs/remotes/upstream/${BASE_REF}"
+
+      - name: Check the pointer files
+        id: check
+        timeout-minutes: 8
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+        run: |
+          node ../trusted/scripts/assets/pointer-check.mjs --base "upstream/${BASE_REF}" \
+            --report "$RUNNER_TEMP/pointer-check.json"
+
+      # If the check crashed, the status says so instead of being missing.
+      - name: Set the status
+        if: always()
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          SHA: ${{ needs.resolve.outputs.head_sha }}
+          STATE: ${{ steps.check.outputs.state }}
+          DESCRIPTION: ${{ steps.check.outputs.description }}
+        with:
+          script: |
+            const env = process.env;
+            const known = ['success', 'failure', 'error'].includes(env.STATE);
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha: env.SHA,
+              state: known ? env.STATE : 'error',
+              context: 'asset-pointer-check',
+              target_url: runUrl,
+              description: (known ? env.DESCRIPTION : 'The pointer check did not run').slice(0, 140),
+            });
 
   decode:
     needs: resolve
