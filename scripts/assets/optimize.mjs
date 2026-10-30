@@ -21,6 +21,7 @@ import {
   worthReplacing,
 } from './encode.mjs';
 import { blobId } from './git.mjs';
+import { displayName } from './workflow-commands.mjs';
 import { readLedger, recordLedger } from './ledger.mjs';
 
 const args = parseArgs(process.argv.slice(2));
@@ -43,7 +44,7 @@ for (const asset of assets) {
   const before = fs.statSync(asset.file).size;
   if (args.local && ledger.has(blobId(asset.file))) {
     console.log(
-      `seen  ${formatBytes(before).padStart(10)}              ${asset.file}`,
+      `seen  ${formatBytes(before).padStart(10)}              ${displayName(asset.file)}`,
     );
     continue;
   }
@@ -75,7 +76,7 @@ for (const asset of assets) {
   }
   const r = results.at(-1);
   console.log(
-    `${r.error ? 'ERR ' : r.replaced ? 'opt ' : 'keep'}  ${formatBytes(r.before).padStart(10)} -> ${formatBytes(r.after).padEnd(10)} ${r.file}${r.error ? `  (${r.error})` : r.note ? `  (${r.note})` : ''}`,
+    `${r.error ? 'ERR ' : r.replaced ? 'opt ' : 'keep'}  ${formatBytes(r.before).padStart(10)} -> ${formatBytes(r.after).padEnd(10)} ${displayName(r.file)}${r.error ? `  (${r.error})` : r.note ? `  (${r.note})` : ''}`,
   );
 }
 

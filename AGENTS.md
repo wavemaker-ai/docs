@@ -14,6 +14,7 @@ WaveMaker public documentation. Docusaurus 3.9.2, MDX-first, Node ≥ 20. Deploy
 - Never invent entries in `data/author/authors.yml` or any `tags.yml`. If a referenced key is missing, stop and ask the user.
 - Never add an `<h1>` to a doc, blog, or announcement body. Titles come from frontmatter.
 - Never place doc-, announcement-, or post-specific assets under `static/img/`. Co-locate them next to their content (see **Asset co-location** in File conventions).
+- Never create or edit a pointer file by hand. A pointer is a small text file whose first line is `s3-asset v1`; it stands in for an asset stored in the asset bucket, and the asset pipeline writes it. Reference assets with inline markdown images (`![alt](./assets/img/a.png)`) or `require()`/`import`; reference-style images (`![alt][ref]`) are not supported.
 
 ## Validation gate
 
