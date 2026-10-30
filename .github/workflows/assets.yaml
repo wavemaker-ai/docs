@@ -63,6 +63,19 @@ name: Assets
 #            stored in the asset bucket, see plugins/pointer-assets): each must be valid and its
 #            object must exist with the size it claims. It handles pointer text only, sets its own
 #            status, asset-pointer-check, and never shares a job with a decoder.
+# Three flows run through those jobs, each behind its own repository variable (Settings, Secrets and
+# variables, Variables) and with its own commit status. Any subset can be off and everything still works.
+# The decisions are in scripts/assets/flows.mjs, which has a test for every combination.
+#   optimize  ASSET_OPTIMIZE, on unless it says `false`.          asset-size-check
+#   upload    ASSET_UPLOAD, on only when it says `true`.          asset-upload-check
+#   replace   ASSET_REPLACE, on only when it says `true`.         asset-replace-check
+# Upload stores each real asset in the bucket under its hash and never edits the repository. Replace
+# swaps an asset for a pointer file once its object is verified in the bucket, and only on pull
+# requests into the collection branches. A flow that is off, or does not apply, reports success so it
+# never blocks a merge. All three need permission to act (a branch in this repo, a trusted author, or a
+# maintainer's `/optimize-assets`). Size limits are checked whatever the switches say.
+# A maintainer can comment `/allow-upload-failure` to let the current head commit through when an upload
+# failed; it sets asset-upload-check on that commit only.
 # Actions are pinned to a commit SHA; keep them that way and use only official ones. Do not add
 # caches to any job: a cache written here could be restored by a job that has secrets.
 #
@@ -84,7 +97,7 @@ concurrency:
   # One run per PR, except that a comment which is not an /optimize-assets command gets its own group.
   # Otherwise a plain "LGTM" could replace the run a push is waiting for, and the new head would never
   # get its status.
-  group: assets-${{ github.event.pull_request.number || github.event.issue.number }}-${{ (github.event_name == 'issue_comment' && !startsWith(github.event.comment.body, '/optimize-assets')) && github.run_id || 'pr' }}
+  group: assets-${{ github.event.pull_request.number || github.event.issue.number }}-${{ (github.event_name == 'issue_comment' && !(startsWith(github.event.comment.body, '/optimize-assets') || startsWith(github.event.comment.body, '/allow-upload-failure'))) && github.run_id || 'pr' }}
   cancel-in-progress: false
 
 jobs:
@@ -92,7 +105,8 @@ jobs:
     if: >-
       github.event_name == 'pull_request_target' ||
       (github.event.issue.pull_request &&
-       startsWith(github.event.comment.body, '/optimize-assets'))
+       (startsWith(github.event.comment.body, '/optimize-assets') ||
+        startsWith(github.event.comment.body, '/allow-upload-failure')))
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -108,6 +122,16 @@ jobs:
       force_only: ${{ steps.pr.outputs.force_only }}
       fork: ${{ steps.pr.outputs.fork }}
       optimize: ${{ steps.pr.outputs.optimize }}
+      override: ${{ steps.pr.outputs.override }}
+      override_by: ${{ steps.pr.outputs.override_by }}
+      on_optimize: ${{ steps.flows.outputs.on_optimize }}
+      run_optimize: ${{ steps.flows.outputs.run_optimize }}
+      run_upload: ${{ steps.flows.outputs.run_upload }}
+      run_replace: ${{ steps.flows.outputs.run_replace }}
+      decode: ${{ steps.flows.outputs.decode }}
+      status_upload: ${{ steps.flows.outputs.status_upload }}
+      status_replace: ${{ steps.flows.outputs.status_replace }}
+      warnings: ${{ steps.flows.outputs.warnings }}
       note: ${{ steps.pr.outputs.note }}
       head_repo: ${{ steps.pr.outputs.head_repo }}
       head_ref: ${{ steps.pr.outputs.head_ref }}
@@ -147,6 +171,15 @@ jobs:
 
             const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: number });
             if (pr.state !== 'open' || !pr.head.repo) return;
+            // "/allow-upload-failure" (write access, checked above) lets this commit through when an
+            // upload failed. It only sets one status on the current head; nothing else runs.
+            if (commented && context.payload.comment.body.trim().split(/\s+/)[0].toLowerCase() === '/allow-upload-failure') {
+              core.setOutput('number', number);
+              core.setOutput('head_sha', pr.head.sha);
+              core.setOutput('override', 'true');
+              core.setOutput('override_by', context.payload.comment.user.login);
+              return;
+            }
             // Automatic runs are for the collection branches; any other base needs a comment.
             if (!commented && !COLLECTION_BRANCHES.includes(pr.base.ref)) return;
 
@@ -219,6 +252,55 @@ jobs:
             core.setOutput('base_ref', pr.base.ref);
             // Set last: a run that returned early above leaves this empty, and every later job skips.
             core.setOutput('proceed', 'true');
+
+      # No PR content is read here: the switches are repository variables and the permission to act
+      # was decided above. The decision logic is a script so one test covers every combination.
+      - name: Check out trusted scripts
+        if: steps.pr.outputs.proceed == 'true'
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # TEMPORARY: the default branch, not the PR's base branch (see the header).
+          ref: ${{ github.event.repository.default_branch }}
+          path: trusted
+          sparse-checkout: scripts/assets
+          persist-credentials: false
+
+      - name: Decide which flows run
+        id: flows
+        if: steps.pr.outputs.proceed == 'true'
+        env:
+          ASSET_OPTIMIZE: ${{ vars.ASSET_OPTIMIZE }}
+          ASSET_UPLOAD: ${{ vars.ASSET_UPLOAD }}
+          ASSET_REPLACE: ${{ vars.ASSET_REPLACE }}
+          MAY_ACT: ${{ steps.pr.outputs.optimize }}
+          BASE_REF: ${{ steps.pr.outputs.base_ref }}
+        run: node trusted/scripts/assets/flows.mjs
+
+  # A maintainer's /allow-upload-failure comment: the one way past a failed upload check. It sets the
+  # status on the head commit as it is now, so a later push needs a fresh decision. Nothing else runs.
+  override:
+    needs: resolve
+    if: needs.resolve.outputs.override == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      statuses: write
+    steps:
+      - name: Set the status
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          SHA: ${{ needs.resolve.outputs.head_sha }}
+          BY: ${{ needs.resolve.outputs.override_by }}
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha: process.env.SHA,
+              state: 'success',
+              context: 'asset-upload-check',
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              description: `Upload failure overridden by @${process.env.BY}`.slice(0, 140),
+            });
 
   # Checks the pointer files a PR adds or changes, and every pointer when the config or the plugin
   # changes (see plugins/pointer-assets and scripts/assets/pointer-check.mjs). It handles pointer TEXT
@@ -308,7 +390,7 @@ jobs:
 
   decode:
     needs: resolve
-    if: needs.resolve.outputs.proceed == 'true' && needs.resolve.outputs.optimize == 'true'
+    if: needs.resolve.outputs.proceed == 'true' && needs.resolve.outputs.decode == 'true'
     runs-on: ubuntu-latest
     # Videos are encoded at x264 preset slow; the limit only stops a hung encode.
     timeout-minutes: 30
@@ -355,7 +437,7 @@ jobs:
         working-directory: pr
         env:
           BASE_REF: ${{ needs.resolve.outputs.base_ref }}
-          OPTIMIZE: ${{ needs.resolve.outputs.optimize }}
+          OPTIMIZE: ${{ needs.resolve.outputs.run_optimize }}
           FORCE: ${{ needs.resolve.outputs.force }}
           FORCE_ONLY: ${{ needs.resolve.outputs.force_only }}
         run: bash ../trusted/scripts/assets/scan.sh
@@ -461,7 +543,7 @@ jobs:
         working-directory: pr
         env:
           BASE_REF: ${{ needs.resolve.outputs.base_ref }}
-          OPTIMIZE: ${{ needs.resolve.outputs.optimize }}
+          OPTIMIZE: ${{ needs.resolve.outputs.run_optimize }}
           FORCE: ${{ needs.resolve.outputs.force }}
           FORCE_ONLY: ${{ needs.resolve.outputs.force_only }}
         run: bash ../trusted/scripts/assets/scan.sh
@@ -594,6 +676,12 @@ jobs:
           FORCE_ONLY: ${{ needs.resolve.outputs.force_only }}
           RETRIED: ${{ steps.scan.outputs.retried }}
           OPTIMIZE: ${{ steps.scan.outputs.optimize }}
+          ON_OPTIMIZE: ${{ needs.resolve.outputs.on_optimize }}
+          RUN_UPLOAD: ${{ needs.resolve.outputs.run_upload }}
+          RUN_REPLACE: ${{ needs.resolve.outputs.run_replace }}
+          STATUS_UPLOAD: ${{ needs.resolve.outputs.status_upload }}
+          STATUS_REPLACE: ${{ needs.resolve.outputs.status_replace }}
+          WARNINGS: ${{ needs.resolve.outputs.warnings }}
           DECODE_RESULT: ${{ needs.decode.result }}
           APPLY_STATE: ${{ steps.apply.outputs.state }}
           PUSH_RESULT: ${{ steps.push.outputs.result }}
@@ -637,39 +725,64 @@ jobs:
             // A commit the bot just pushed to a fork isn't visible from this repo for a few seconds
             // (422 "No commit found"), so retry. If it still fails, the comment is posted anyway and
             // the run that the bot's push starts sets the status on the new head.
-            const state = optimizeFailed || pushFailed || !check ? 'error' : violations.length ? 'failure' : 'success';
-            let statusError = null;
-            for (let attempt = 1; attempt <= 6; attempt++) {
-              try {
-                await github.rest.repos.createCommitStatus({
-                  ...context.repo,
-                  sha: env.SHA,
-                  state,
-                  context: 'asset-size-check',
-                  target_url: runUrl,
-                  description: optimizeFailed
-                    ? 'Optimization did not run'
-                    : pushFailed
-                    ? 'Optimized files could not be pushed'
-                    : !check
-                    ? 'Size validation did not run'
-                    : violations.length
-                      ? `${violations.length} asset(s) over the size limit`
-                      : `${check.assets.length} changed asset(s) within limits`,
-                });
-                statusError = null;
-                break;
-              } catch (error) {
-                statusError = error;
-                if (error.status !== 422 || attempt === 6) break;
-                await new Promise((resolve) => setTimeout(resolve, 5000));
+            const statusErrors = [];
+            async function setStatus(name, state, description) {
+              for (let attempt = 1; attempt <= 6; attempt++) {
+                try {
+                  await github.rest.repos.createCommitStatus({
+                    ...context.repo,
+                    sha: env.SHA,
+                    state,
+                    context: name,
+                    target_url: runUrl,
+                    description: description.slice(0, 140),
+                  });
+                  return;
+                } catch (error) {
+                  if (error.status !== 422 || attempt === 6) {
+                    statusErrors.push(error);
+                    return;
+                  }
+                  await new Promise((resolve) => setTimeout(resolve, 5000));
+                }
               }
             }
+            const state = optimizeFailed || pushFailed || !check ? 'error' : violations.length ? 'failure' : 'success';
+            await setStatus(
+              'asset-size-check',
+              state,
+              optimizeFailed
+                ? 'Optimization did not run'
+                : pushFailed
+                ? 'Optimized files could not be pushed'
+                : !check
+                ? 'Size validation did not run'
+                : violations.length
+                  ? `${violations.length} asset(s) over the size limit`
+                  : `${check.assets.length} changed asset(s) within limits`,
+            );
+            // A flow that is off, or does not apply here, says so and never blocks the merge. The
+            // decision comes from scripts/assets/flows.mjs through the resolve job.
+            const preset = (raw) => {
+              try {
+                return raw ? JSON.parse(raw) : null;
+              } catch {
+                return null;
+              }
+            };
+            for (const [name, raw] of [
+              ['asset-upload-check', env.STATUS_UPLOAD],
+              ['asset-replace-check', env.STATUS_REPLACE],
+            ]) {
+              const fixed = preset(raw);
+              if (fixed?.state) await setStatus(name, fixed.state, fixed.description);
+            }
             const reportStatusError = () => {
-              if (!statusError) return;
-              if (env.FORK === 'true' && statusError.status === 422)
+              if (!statusErrors.length) return;
+              const first = statusErrors[0];
+              if (env.FORK === 'true' && first.status === 422)
                 return core.warning(`Could not set the status on ${env.SHA}; the run for the bot commit will set it.`);
-              throw statusError;
+              throw first;
             };
 
             const hasTable = optimized?.length > 0;
@@ -770,6 +883,13 @@ jobs:
               body += `> Forced run: ${forceOnly.length ? forceOnly.map((n) => `\`${cell(n)}\``).join(', ') : 'every changed asset'} optimized even if reviewed locally. An asset is replaced only when the result is at least 10% smaller.\n\n`;
             if (retried && env.OPTIMIZE === 'true')
               body += `> Local optimization failed for ${retried} asset(s), so they were optimized here instead.\n\n`;
+            if (env.ON_OPTIMIZE === 'false')
+              body += '> Optimization is turned off for this repository (`ASSET_OPTIMIZE` is `false`). The size limits still apply.\n\n';
+            try {
+              for (const warning of JSON.parse(env.WARNINGS || '[]')) body += `> ⚠️ ${warning}\n\n`;
+            } catch {
+              // The warnings are optional.
+            }
             if (env.PUSH_RESULT === 'no-token')
               body += '> The optimized files could not be committed: the repo secret `ASSET_BOT_TOKEN` is not set.\n\n';
             if (apply?.rejected?.length)
