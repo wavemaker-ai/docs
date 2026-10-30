@@ -443,7 +443,7 @@ jobs:
         run: bash ../trusted/scripts/assets/scan.sh
 
       - name: Install optimizers
-        if: steps.scan.outputs.optimize == 'true'
+        if: steps.scan.outputs.optimize == 'true' || needs.resolve.outputs.run_replace == 'true'
         run: |
           # Same optimizer packages and versions as the trusted devDependencies, installed on their
           # own instead of the full site dependency tree. No install scripts run.
@@ -469,6 +469,19 @@ jobs:
           node "$RUNNER_TEMP/optimizer/optimize.mjs" --base "$OPT_BASE" \
             "${SCAN_ARGS[@]}" --report "$RUNNER_TEMP/optimize.json"
 
+      # Image sizes for the pointer files the replace flow writes. Decoding untrusted images belongs
+      # here, in the job without secrets; the publish job validates the numbers before using them.
+      # Measuring is best effort: a pointer without sizes works, so a failure here never stops the run.
+      - name: Measure image sizes
+        if: needs.resolve.outputs.run_replace == 'true'
+        continue-on-error: true
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+        run: |
+          node "$RUNNER_TEMP/optimizer/measure-dimensions.mjs" --base "upstream/${BASE_REF}" \
+            --out "$RUNNER_TEMP/dimensions.json"
+
       # Always packs, even when nothing changed: an empty manifest tells the publish job "nothing to
       # apply", a missing artifact tells it the hand-over failed.
       - name: Pack what the optimizer changed
@@ -477,7 +490,8 @@ jobs:
           HEAD_SHA: ${{ needs.resolve.outputs.head_sha }}
         run: |
           node ../trusted/scripts/assets/pack-artifact.mjs --out "$RUNNER_TEMP/asset-artifact" \
-            --head-sha "$HEAD_SHA" --report "$RUNNER_TEMP/optimize.json"
+            --head-sha "$HEAD_SHA" --report "$RUNNER_TEMP/optimize.json" \
+            --dimensions "$RUNNER_TEMP/dimensions.json"
 
       # Named by run only, not by attempt: "Re-run failed jobs" re-runs publish alone, as a new attempt,
       # and it must still find the artifact this run's decode job made. A full re-run uploads again,
@@ -497,7 +511,8 @@ jobs:
     # the push token. The decode job's own result is read below (success or skipped is fine).
     if: ${{ !cancelled() && needs.resolve.result == 'success' && needs.resolve.outputs.proceed == 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Uploads of large videos and the retries around them can take a while.
+    timeout-minutes: 30
     permissions:
       contents: read
       pull-requests: write
@@ -550,7 +565,7 @@ jobs:
 
       - name: Download the optimizer's output
         id: download
-        if: needs.decode.result == 'success' && steps.scan.outputs.optimize == 'true'
+        if: needs.decode.result == 'success' && (steps.scan.outputs.optimize == 'true' || needs.resolve.outputs.run_replace == 'true')
         continue-on-error: true
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
@@ -581,17 +596,82 @@ jobs:
           node ../trusted/scripts/assets/apply-artifact.mjs --artifact "$RUNNER_TEMP/asset-artifact" \
             --head-sha "$HEAD_SHA" --pending "$RUNNER_TEMP/pending.json" \
             --report "$RUNNER_TEMP/apply.json" --applied "$RUNNER_TEMP/applied.txt" \
-            --optimize-report "$RUNNER_TEMP/optimize.json"
+            --optimize-report "$RUNNER_TEMP/optimize.json" --dimensions "$RUNNER_TEMP/dimensions.json"
+
+      # Upload flow: stores every asset the PR adds or changes in the bucket, under its hash, and never
+      # overwrites an object (scripts/assets/upload.mjs). The AWS credentials are available to this step
+      # and no other, and it does not install anything: it uses the AWS CLI of the runner image. It
+      # reports in its outputs and never fails the step itself; the Report step turns them into the
+      # asset-upload-check status.
+      - name: Upload to the bucket
+        id: upload
+        if: needs.resolve.outputs.run_upload == 'true'
+        continue-on-error: true
+        working-directory: pr
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ASSET_S3_BUCKET: ${{ vars.ASSET_S3_BUCKET }}
+          ASSET_S3_REGION: ${{ vars.ASSET_S3_REGION }}
+          ASSET_S3_PREFIX: ${{ vars.ASSET_S3_PREFIX }}
+          PR_NUMBER: ${{ needs.resolve.outputs.number }}
+          COMMIT: ${{ needs.resolve.outputs.head_sha }}
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: |
+          node ../trusted/scripts/assets/upload.mjs --base "upstream/${BASE_REF}" \
+            --report "$RUNNER_TEMP/upload.json"
+
+      # Replace flow: swaps a stored asset for a pointer file once its public URL answers with the
+      # right size (scripts/assets/replace.mjs). It needs no credentials. With the upload flow on it
+      # works on what that step stored; otherwise on every changed asset whose object is already there.
+      - name: Replace assets with pointer files
+        id: replace
+        if: needs.resolve.outputs.run_replace == 'true' && (needs.resolve.outputs.run_upload != 'true' || steps.upload.outputs.state == 'success' || steps.upload.outputs.state == 'failure')
+        continue-on-error: true
+        working-directory: pr
+        env:
+          ASSET_S3_BUCKET: ${{ vars.ASSET_S3_BUCKET }}
+          ASSET_S3_REGION: ${{ vars.ASSET_S3_REGION }}
+          ASSET_S3_PREFIX: ${{ vars.ASSET_S3_PREFIX }}
+          RUN_UPLOAD: ${{ needs.resolve.outputs.run_upload }}
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: |
+          ARGS=(--config docusaurus.config.js --report "$RUNNER_TEMP/replace.json" --replaced "$RUNNER_TEMP/replaced.txt")
+          if [ "$RUN_UPLOAD" = "true" ]; then
+            ARGS+=(--upload-report "$RUNNER_TEMP/upload.json")
+          else
+            ARGS+=(--base "upstream/${BASE_REF}")
+          fi
+          if [ -f "$RUNNER_TEMP/dimensions.json" ]; then ARGS+=(--dimensions "$RUNNER_TEMP/dimensions.json"); fi
+          node ../trusted/scripts/assets/replace.mjs "${ARGS[@]}"
+
+      # Loop guard: every bot push starts a new run, so after three bot commits in a row with no
+      # commit from a person in between, the bot stops pushing (scripts/assets/bot-streak.mjs).
+      - name: Check the bot's push streak
+        id: streak
+        if: (steps.apply.outputs.applied != '' && steps.apply.outputs.applied != '0') || (steps.replace.outputs.replaced != '' && steps.replace.outputs.replaced != '0')
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: node ../trusted/scripts/assets/bot-streak.mjs --base "upstream/${BASE_REF}" --limit 3
 
       # The push token is available to this step and no other. Plain non-force push: if the branch
       # moved since the head SHA was resolved, the push is rejected and this run ends there.
       - name: Commit and push
         id: push
-        if: steps.apply.outputs.applied != '' && steps.apply.outputs.applied != '0'
+        if: steps.streak.outputs.blocked == 'false'
         working-directory: pr
         env:
           ASSET_BOT_TOKEN: ${{ secrets.ASSET_BOT_TOKEN }}
           HEAD_REF: ${{ needs.resolve.outputs.head_ref }}
+          APPLIED: ${{ steps.apply.outputs.applied }}
+          REPLACED: ${{ steps.replace.outputs.replaced }}
           GIT_CONFIG_NOSYSTEM: '1'
           GIT_CONFIG_GLOBAL: /dev/null
         run: |
@@ -599,7 +679,18 @@ jobs:
           if [ -z "$ASSET_BOT_TOKEN" ]; then
             echo "result=no-token" >> "$GITHUB_OUTPUT"; exit 0
           fi
-          xargs -0 -r git add -- < "$RUNNER_TEMP/applied.txt"
+          # Only the files the two steps reported, one NUL-separated list each.
+          if [ -n "$APPLIED" ] && [ "$APPLIED" != "0" ]; then xargs -0 -r git add -- < "$RUNNER_TEMP/applied.txt"; fi
+          if [ -n "$REPLACED" ] && [ "$REPLACED" != "0" ]; then xargs -0 -r git add -- < "$RUNNER_TEMP/replaced.txt"; fi
+          if [ -n "$REPLACED" ] && [ "$REPLACED" != "0" ]; then
+            if [ -n "$APPLIED" ] && [ "$APPLIED" != "0" ]; then
+              MESSAGE="chore: optimize assets and store them in the bucket [asset-bot]"
+            else
+              MESSAGE="chore: store assets in the bucket [asset-bot]"
+            fi
+          else
+            MESSAGE="chore: optimize assets [asset-bot]"
+          fi
           if git diff --cached --quiet; then
             echo "result=none" >> "$GITHUB_OUTPUT"; exit 0
           fi
@@ -607,7 +698,7 @@ jobs:
             -c user.name="github-actions[bot]" \
             -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
             -c core.hooksPath=/dev/null \
-            commit -q -m "chore: optimize assets [asset-bot]"
+            commit -q -m "$MESSAGE"
           # The token goes in through the environment as an extra header, never on a command line,
           # and the encoded form is masked as well (GitHub masks only the raw secret).
           AUTH=$(printf 'x-access-token:%s' "$ASSET_BOT_TOKEN" | base64 | tr -d '\n')
@@ -684,6 +775,11 @@ jobs:
           WARNINGS: ${{ needs.resolve.outputs.warnings }}
           DECODE_RESULT: ${{ needs.decode.result }}
           APPLY_STATE: ${{ steps.apply.outputs.state }}
+          UPLOAD_STATE: ${{ steps.upload.outputs.state }}
+          UPLOAD_DESCRIPTION: ${{ steps.upload.outputs.description }}
+          REPLACE_STATE: ${{ steps.replace.outputs.state }}
+          REPLACE_DESCRIPTION: ${{ steps.replace.outputs.description }}
+          STREAK_BLOCKED: ${{ steps.streak.outputs.blocked }}
           PUSH_RESULT: ${{ steps.push.outputs.result }}
           SHA: ${{ steps.validate.outputs.sha || needs.resolve.outputs.head_sha }}
         with:
@@ -777,6 +873,28 @@ jobs:
               const fixed = preset(raw);
               if (fixed?.state) await setStatus(name, fixed.state, fixed.description);
             }
+            // The upload and replace flows that ran. Their scripts write the state and a short
+            // description to their step outputs and a detailed report next to them. A step that
+            // produced no state crashed (or was skipped because the one before it failed).
+            const upload = env.RUN_UPLOAD === 'true' ? readJson('upload.json') : null;
+            const replace = env.RUN_REPLACE === 'true' ? readJson('replace.json') : null;
+            const uploadState = ['success', 'failure', 'error'].includes(env.UPLOAD_STATE) ? env.UPLOAD_STATE : 'error';
+            const replaceSkipped = env.RUN_REPLACE === 'true' && env.RUN_UPLOAD === 'true' && !['success', 'failure'].includes(env.UPLOAD_STATE);
+            const replaceState = ['success', 'error'].includes(env.REPLACE_STATE) ? env.REPLACE_STATE : replaceSkipped ? 'success' : 'error';
+            if (env.RUN_UPLOAD === 'true')
+              await setStatus(
+                'asset-upload-check',
+                uploadState,
+                env.UPLOAD_STATE ? env.UPLOAD_DESCRIPTION : 'Upload did not run',
+              );
+            if (env.RUN_REPLACE === 'true')
+              await setStatus(
+                'asset-replace-check',
+                replaceState,
+                replaceSkipped
+                  ? 'Replace: skipped, the upload did not complete'
+                  : env.REPLACE_STATE ? env.REPLACE_DESCRIPTION : 'Replace did not run',
+              );
             const reportStatusError = () => {
               if (!statusErrors.length) return;
               const first = statusErrors[0];
@@ -802,7 +920,36 @@ jobs:
             // say so instead of leaving the contributor with a green check and unoptimized files.
             const unoptimized = env.FORK === 'true' && env.COMMENTED !== 'true' && env.PR_OPTIMIZE !== 'true'
               ? Number(env.PENDING) || 0 : 0;
-            if (!existing && !hasTable && !history?.rows.length && !optimizeFailed && state === 'success' && !env.NOTE && !unoptimized && env.COMMENTED !== 'true') return reportStatusError();
+            // Upload and replace say something only when they did, or failed to do, something.
+            const rows = (list, text) => list.slice(0, 20).map((r) => `| ${fileCell(r.file)} | ${text(r)} |`);
+            let uploadSection = '';
+            if (env.RUN_UPLOAD === 'true') {
+              const counts = upload?.counts;
+              const interesting = counts && (counts.uploaded || counts.failed || counts.skipped);
+              if (!env.UPLOAD_STATE || uploadState !== 'success' || interesting) {
+                uploadSection = `#### Upload\n\n${uploadState === 'success' ? '✅' : uploadState === 'failure' ? '❌' : '⚠️'} ${cell(env.UPLOAD_STATE ? env.UPLOAD_DESCRIPTION : 'The upload did not run.')}\n`;
+                const notable = (upload?.results ?? []).filter((r) => r.state === 'failed' || r.state === 'skipped');
+                if (notable.length)
+                  uploadSection += '\n| File | Result |\n|---|---|\n' +
+                    rows(notable, (r) => (r.state === 'failed' ? `❌ ${cell(String(r.error).slice(0, 200))}` : `skipped: ${cell(String(r.reason).slice(0, 100))}`)).join('\n') + '\n';
+                if (uploadState === 'failure')
+                  uploadSection += `\nThe upload check blocks the merge. After a re-run, if the failure stays, a maintainer can comment \`/allow-upload-failure\` to let this commit through. [View logs](${runUrl})\n`;
+                else if (uploadState === 'error')
+                  uploadSection += `\nThe upload could not run. [View logs](${runUrl})\n`;
+              }
+            }
+            let replaceSection = '';
+            if (env.RUN_REPLACE === 'true' && !replaceSkipped) {
+              const counts = replace?.counts;
+              if (!env.REPLACE_STATE || replaceState !== 'success' || (counts && (counts.replaced || counts.kept))) {
+                replaceSection = `#### Pointer files\n\n${replaceState === 'success' ? '✅' : '⚠️'} ${cell(env.REPLACE_STATE ? env.REPLACE_DESCRIPTION : 'The replace flow did not run.')}\n`;
+                const kept = (replace?.results ?? []).filter((r) => r.state !== 'replaced');
+                if (kept.length)
+                  replaceSection += '\n| File | Left as it is because |\n|---|---|\n' + rows(kept, (r) => cell(String(r.problem).slice(0, 200))).join('\n') + '\n';
+              }
+            }
+            const streakBlocked = env.STREAK_BLOCKED === 'true';
+            if (!existing && !hasTable && !history?.rows.length && !optimizeFailed && state === 'success' && !env.NOTE && !unoptimized && env.COMMENTED !== 'true' && !uploadSection && !replaceSection && !streakBlocked) return reportStatusError();
 
             // The optimization section lists what the PR's bot commits did, read from git by the
             // "Optimization history" step: for each file, the copy the author last added against the
@@ -894,7 +1041,11 @@ jobs:
               body += '> The optimized files could not be committed: the repo secret `ASSET_BOT_TOKEN` is not set.\n\n';
             if (apply?.rejected?.length)
               body += `> ⚠️ ${apply.rejected.length} optimized file(s) were rejected by the safety checks and left as they were. [View logs](${runUrl})\n\n`;
+            if (streakBlocked)
+              body += '> ⚠️ The bot has pushed three times in a row without a commit from a person, so it did not push this time. Push a commit, or comment `/optimize-assets`, to let it continue.\n\n';
             if (opt) body += `${OPT_START}\n${opt}${OPT_END}\n\n`;
+            if (uploadSection) body += `${uploadSection}\n`;
+            if (replaceSection) body += `${replaceSection}\n`;
 
             body += '#### Size validation\n\n';
             if (!check) {
