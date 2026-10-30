@@ -1,6 +1,9 @@
 name: Assets
 
-# TEST BRANCH ONLY (asset-offload-test, never merge this into main): the scripts are read from the PR's
+# TEST BRANCH ONLY (asset-offload-test, never merge this into main): the trigger is `pull_request`
+# instead of `pull_request_target` (GitHub reads a pull_request_target workflow from the default
+# branch, a pull_request one from the PR itself, which is what lets a test branch carry its own copy;
+# it works for PRs from branches in this repo only), the scripts are read from the PR's
 # base branch instead of the default branch, `asset-offload-test` counts as a collection branch, and
 # docusaurus.config.js points the base URL at the `docs-test` folder of the bucket. Delete the branch
 # when the testing is done.
@@ -90,7 +93,7 @@ name: Assets
 # forks, and its pushes wouldn't start a run for the new commit.
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, reopened]
     branches: [release, docs, asset-offload-test]
   issue_comment:
@@ -109,7 +112,7 @@ concurrency:
 jobs:
   resolve:
     if: >-
-      github.event_name == 'pull_request_target' ||
+      github.event_name == 'pull_request' ||
       (github.event.issue.pull_request &&
        (startsWith(github.event.comment.body, '/optimize-assets') ||
         startsWith(github.event.comment.body, '/allow-upload-failure') ||

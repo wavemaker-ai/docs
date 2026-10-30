@@ -108,7 +108,7 @@ test('the command line reads the environment and writes the outputs', () => {
 test('the collection branches match the ones the workflow triggers on', () => {
   const text = fs.readFileSync(workflowFile, 'utf8');
   const list = (match) => match[1].split(',').map((s) => s.trim().replace(/'/g, ''));
-  const trigger = list(/pull_request_target:[\s\S]*?branches: \[([^\]]*)\]/.exec(text));
+  const trigger = list(/pull_request(?:_target)?:[\s\S]*?branches: \[([^\]]*)\]/.exec(text));
   assert.deepEqual([...COLLECTION_BRANCHES].sort(), trigger.sort());
   const declared = /const COLLECTION_BRANCHES = \[([^\]]*)\]/.exec(text)[1].split(',').map((s) => s.trim().replace(/'/g, ''));
   assert.deepEqual(declared.sort(), [...COLLECTION_BRANCHES].sort());
