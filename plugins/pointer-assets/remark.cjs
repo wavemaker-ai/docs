@@ -5,7 +5,7 @@
 // `beforeDefaultRemarkPlugins`, so it runs before Docusaurus's own image transform.
 const fs = require('node:fs');
 const path = require('node:path');
-const { readPointer } = require('./pointer.cjs');
+const { readPointer } = require('../../scripts/assets/pointer.cjs');
 
 // Same escaping as Docusaurus applies to the alt and title of a markdown image.
 function escapeHtml(text) {

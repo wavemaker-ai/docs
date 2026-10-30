@@ -237,13 +237,10 @@ jobs:
       - name: Check out trusted scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header). The plugin folder
-          # comes along because the check shares the pointer rules with the build.
+          # TEMPORARY: the default branch, not the PR's base branch (see the header).
           ref: ${{ github.event.repository.default_branch }}
           path: trusted
-          sparse-checkout: |
-            scripts/assets
-            plugins/pointer-assets
+          sparse-checkout: scripts/assets
           persist-credentials: false
 
       - name: Check out the PR at its head commit
@@ -371,7 +368,7 @@ jobs:
           DEPS=$(node -p "const d = require('./trusted/package.json').devDependencies;
             ['sharp', 'svgo', '@ffmpeg-installer/ffmpeg'].map((n) => n + '@' + d[n]).join(' ')")
           mkdir -p "$RUNNER_TEMP/optimizer"
-          cp trusted/scripts/assets/*.mjs "$RUNNER_TEMP/optimizer/"
+          cp trusted/scripts/assets/*.mjs trusted/scripts/assets/*.cjs "$RUNNER_TEMP/optimizer/"
           cd "$RUNNER_TEMP/optimizer"
           echo '{"private":true}' > package.json
           npm install --ignore-scripts --no-audit --no-fund $DEPS

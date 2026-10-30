@@ -30,7 +30,7 @@ height 720
 The key must start with `docs`, `blogs`, `assets` or `src` (never `static`, whose files are copied
 as they are), every segment may use only letters, digits, `.`, `_` and `-` (no `.` or `..` segments),
 the hash must equal the start of `sha256`, and the extension must be a supported asset type except
-SVG. One definition of these rules, in `pointer.cjs`, serves the build, the remark plugin, the CI
+SVG. One definition of these rules, in `scripts/assets/pointer.cjs`, serves the build, the remark plugin, the CI
 check and the upload code, and a test keeps its extension list equal to `scripts/assets/config.mjs`.
 
 The hash makes every version of a file a separate, immutable object: replacing an image never
@@ -44,7 +44,7 @@ the repository keeps its original key, which records where it was first stored.
 | `index.cjs`                              | Docusaurus plugin. Adds one `enforce: 'post'` rule for the pointer types through `configureWebpack`.                                                                                                                         |
 | `loader.cjs`                             | Pitching loader. Returns `export default "<url>"` for a pointer and skips every other loader. It registers the pointer as a dependency, so editing it rebuilds.                                                              |
 | `remark.cjs`                             | Markdown images. Docusaurus reads image sizes from disk, which fails on a pointer; this builds the `<img>` from the pointer instead. Registered under `beforeDefaultRemarkPlugins` for docs, blog and feature announcements. |
-| `pointer.cjs`                            | The pointer rules: parser, key rule, URL composer and the base URL extractor.                                                                                                                                                |
+| `../../scripts/assets/pointer.cjs`       | The pointer rules: parser, key rule, URL composer and the base URL extractor. It lives with the pipeline scripts because they, the plugin and the CI check all use it, and the CI jobs only check out `scripts/assets`.      |
 | `../../scripts/assets/pointer-check.mjs` | CI check, run by the `pointer-check` job of the Assets workflow.                                                                                                                                                             |
 | `../../scripts/check-pointer-leaks.js`   | Runs at the end of `npm run build` and fails if any pointer file ended up in `build/`.                                                                                                                                       |
 

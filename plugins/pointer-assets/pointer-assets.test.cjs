@@ -12,12 +12,12 @@ const {
   looksLikePointer,
   parsePointer,
   urlFor,
-} = require('./pointer.cjs');
+} = require('../../scripts/assets/pointer.cjs');
 const loader = require('./loader.cjs');
 const pointerImages = require('./remark.cjs');
 const pluginFactory = require('./index.cjs');
 
-const REPO_ROOT = path.resolve(path.dirname(require.resolve('./pointer.cjs')), '..', '..');
+const REPO_ROOT = path.resolve(path.dirname(require.resolve('../../scripts/assets/pointer.cjs')), '..', '..');
 const SHA = 'ab12'.repeat(16);
 const HASH12 = SHA.slice(0, 12);
 const KEY = `docs/guide/assets/img/a.${HASH12}.png`;

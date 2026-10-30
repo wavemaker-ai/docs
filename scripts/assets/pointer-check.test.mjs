@@ -319,7 +319,7 @@ test('a hand-written pointer is a failure; real binaries and symlinks that look 
 
 // --- the allowlist, and workflow-command escaping --------------------------------------------------
 test('the real config literal points at an allowed host, so a typo in either place fails here', async () => {
-  const { extractBaseUrl } = (await import('node:module')).createRequire(import.meta.url)('../../plugins/pointer-assets/pointer.cjs');
+  const { extractBaseUrl } = (await import('node:module')).createRequire(import.meta.url)('./pointer.cjs');
   const baseUrl = extractBaseUrl(fs.readFileSync(path.join(repoRoot, 'docusaurus.config.js'), 'utf8'));
   const url = new URL(baseUrl);
   assert.equal(url.protocol, 'https:');

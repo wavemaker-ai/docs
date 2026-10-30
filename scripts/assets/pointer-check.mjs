@@ -33,7 +33,7 @@ const {
   readHead,
   readPointer,
   urlFor,
-} = require('../../plugins/pointer-assets/pointer.cjs');
+} = require('./pointer.cjs');
 
 // The only hosts a pointer may resolve to. Changing the base URL host in docusaurus.config.js means
 // changing this too; a test keeps the two in step.

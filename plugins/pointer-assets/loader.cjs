@@ -1,6 +1,6 @@
 // Pitching loader: when the requested file is a pointer, skip every other loader and return the
 // file's remote URL as the module's default export. Real files fall through untouched.
-const { readPointer, urlFor } = require('./pointer.cjs');
+const { readPointer, urlFor } = require('../../scripts/assets/pointer.cjs');
 
 // A post loader's normal phase runs last, so it must hand the other loaders' output through as is.
 module.exports = function (source) {

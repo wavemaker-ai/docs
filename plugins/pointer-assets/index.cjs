@@ -1,6 +1,6 @@
 // Docusaurus plugin: resolves pointer files (text files standing in for a binary asset that lives in
 // object storage) to their remote URL. Uses only the public `configureWebpack` hook.
-const { EXTENSIONS } = require('./pointer.cjs');
+const { EXTENSIONS } = require('../../scripts/assets/pointer.cjs');
 
 // Built from the shared extension list, so the rule matches exactly the types a pointer may have.
 // SVG is left out on purpose: it is imported as a React component and stays in the repo.
