@@ -1,0 +1,119 @@
+---
+title: "New Preview: See Your React Native Changes in Seconds"
+authors: [raajvamsy]
+---
+
+<PillGroup>
+  <Pill type="react-native" text="React Native" />
+
+  <Pill type="preview" text="Preview" />
+
+  <Pill type="studio" text="WaveMaker Studio" />
+</PillGroup>
+
+---
+
+Change something in your React Native app and see it in the preview almost right away. New Preview is now the default way WaveMaker Studio previews React Native apps on the web. There's nothing to set up: open your preview and you're already using it.
+
+{/* truncate */}
+
+<video controls width="100%" muted playsInline poster={require('./assets/videos/new-preview/poster.jpg').default}>
+  <source src={require('./assets/videos/new-preview/new-preview.mp4').default} type="video/mp4" />
+</video>
+
+---
+
+## What's new
+
+Until now, every change you made meant rebuilding your whole app before the preview could update. New Preview changes that:
+
+- **Build only what's yours.** The libraries WaveMaker ships are the same for every app, so they're prepared once and shared. Your app is split into layers by how often they change, and editing a page rebuilds only the top layers.
+- **Download only what changed.** Your browser keeps the pieces it already has and fetches only the ones that changed.
+- **Updates in place.** Keep your preview open while you work. A few seconds after a change, it updates itself without reloading the page, and it tells you when it's ready.
+
+## Why it matters
+
+A faster preview means less waiting and more building. Try a color, move a widget or fix a label, and see the result in the preview you already have open.
+
+Large apps benefit too. New Preview can build only the pages you're working on and build the rest when you open them, so you don't wait for pages you haven't touched.
+
+## Do I need to do anything?
+
+No. New Preview is on by default for React Native apps. If you had already turned it on with `"profile": "new-preview"`, that setting still works, and you can keep it or remove it.
+
+## Configuration options
+
+All preview settings live in your project's `src/main/webapp/wm_rn_config.json` file. Keep any keys that are already in the file and add these next to them.
+
+| Setting                  | What it does                                                                                                                                                                 | Default                    |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `profile`                | Set to `"legacy-web-preview"` to switch back to the classic preview.                                                                                                         | New Preview                |
+| `preview.allPages`       | Set to `false` to build only the pages you're working on. Other pages build the first time you open them in the preview.                                                     | `true` (builds every page) |
+| `preview.pages`          | A list of page names that are always built, even when `allPages` is `false`.                                                                                                 | None                       |
+| `preview.liveReload`     | Set to `false` to stop the open preview from updating itself. Refresh the preview when you want to see your changes.                                                         | `true`                     |
+| `preview.pollIntervalMs` | How often, in milliseconds, the open preview checks on a running build. Use a larger number to check less often. The preview stops checking while its browser tab is hidden. | `2000` (every 2 seconds)   |
+
+### Build only the pages you're working on
+
+For large apps, set `allPages` to `false`. New Preview then always builds your home page, your login page, the pages you edit, the pages you open in the preview, and any pages listed in `pages`. Partials used by those pages are built with them.
+
+```json
+{
+  "preview": {
+    "allPages": false,
+    "pages": ["Dashboard", "Orders"]
+  }
+}
+```
+
+:::note
+Building only the pages you're working on applies when you preview in WaveMaker Studio. It doesn't apply when you preview with the local command-line tools.
+:::
+
+### Control live updates
+
+By default, the open preview updates itself when a build finishes. To refresh it yourself instead, or to have it check for builds less often, add these settings:
+
+```json
+{
+  "preview": {
+    "liveReload": false
+  }
+}
+```
+
+```json
+{
+  "preview": {
+    "pollIntervalMs": 5000
+  }
+}
+```
+
+### Putting it together
+
+You can combine settings in one `preview` block:
+
+```json
+{
+  "preview": {
+    "allPages": false,
+    "pages": ["Dashboard", "Orders"],
+    "pollIntervalMs": 5000
+  }
+}
+```
+
+## Switching back to the classic preview
+
+If you need the classic preview, add one line to `wm_rn_config.json`:
+
+```json
+{
+  "profile": "legacy-web-preview"
+}
+```
+
+Save the file and preview your app again. To return to New Preview, remove the line.
+
+If something doesn't look right in New Preview, switch back to the classic preview and let us know, with your project name and the steps to reproduce the issue.
