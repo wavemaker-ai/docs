@@ -23,8 +23,9 @@ yarn.lock
 /data/tech-stack-data/versionDataMap.js
 /scripts/domain-metrics/domain-usage.json
 
-# Husky build tracking (local only)
+# Husky local state (build and asset-optimization records)
 .husky/.build-cache
+.husky/.asset-cache
 
 # Editors / IDEs
 .idea/

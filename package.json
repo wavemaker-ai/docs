@@ -5,7 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "npm run pre-build-scripts && docusaurus start",
-    "build": "npm run pre-build-scripts && docusaurus build",
+    "build": "npm run pre-build-scripts && npm run test:pointer-assets && docusaurus build && node scripts/check-pointer-leaks.js",
+    "test:pointer-assets": "node --test plugins/pointer-assets/pointer-assets.test.cjs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -16,6 +17,12 @@
     "pre-build-scripts": "node scripts/gen-metrics.js && node scripts/domain-metrics/gen-domain-usage.js && node scripts/validate-tech-stack.js && node scripts/gen-tech-stack-versions.js",
     "validate-tech-stack": "node scripts/validate-tech-stack.js",
     "gen-metrics": "node scripts/gen-metrics.js",
+    "check-assets": "node scripts/assets/check-sizes.mjs",
+    "test:assets-history": "node --test scripts/assets/history.test.mjs",
+    "test": "npm run test:assets && npm run test:pointer-assets",
+    "test:assets": "node --test scripts/assets/history.test.mjs scripts/assets/apply-artifact.test.mjs scripts/assets/png.test.mjs scripts/assets/pointer-check.test.mjs scripts/assets/pointer-aware.test.mjs scripts/assets/flows.test.mjs scripts/assets/upload.test.mjs scripts/assets/replace.test.mjs scripts/assets/measure-dimensions.test.mjs scripts/assets/bot-streak.test.mjs scripts/assets/flow-matrix.test.mjs scripts/assets/fetch-assets.test.mjs",
+    "optimize-assets": "node scripts/assets/optimize.mjs --local",
+    "fetch-assets": "node scripts/assets/fetch-assets.mjs",
     "prepare": "husky",
     "lint": "eslint . && mdxlint . --frail && node scripts/validate-tech-stack.js"
   },
@@ -39,6 +46,7 @@
     "@docusaurus/faster": "^3.9.2",
     "@docusaurus/module-type-aliases": "3.9.2",
     "@eslint/js": "^10.0.1",
+    "@ffmpeg-installer/ffmpeg": "1.1.0",
     "ajv": "^6.15.0",
     "chalk": "^5.6.2",
     "eslint": "^10.0.0",
@@ -50,6 +58,8 @@
     "lint-staged": "^16.2.7",
     "mdxlint": "^1.0.0",
     "prettier": "^3.8.1",
+    "sharp": "0.34.4",
+    "svgo": "3.3.2",
     "unist-util-visit": "^5.1.0"
   },
   "browserslist": {

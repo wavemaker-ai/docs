@@ -31,13 +31,14 @@ Thank you for your interest in contributing to WaveMaker Documentation! This gui
    # Option 1: Clone directly (for WaveMaker organization members)
    git clone https://github.com/wavemaker/docs.git
    cd docs
-   
+
    # Option 2: Fork and clone (for external contributors)
    # Go to https://github.com/wavemaker/docs and click "Fork"
    # Then clone your fork:
    # git clone https://github.com/YOUR_USERNAME/docs.git
    # cd docs
    ```
+
 2. **Install dependencies**
    ```bash
    npm install
@@ -52,6 +53,23 @@ Thank you for your interest in contributing to WaveMaker Documentation! This gui
    ```bash
    git checkout -b feature/your-feature-name
    ```
+
+### Branches and pull requests
+
+Work flows through two collection branches into `main`:
+
+| Branch    | Receives                                                                                                         |
+| --------- | ---------------------------------------------------------------------------------------------------------------- |
+| `release` | Everything that ships with a release: release notes, tech stack, feature announcements, feature docs, blog posts |
+| `docs`    | Anything we publish outside the release cycle                                                                    |
+
+1. Branch from the collection branch you are targeting, and open your PR against it. Do not open PRs against `main` or `prod`.
+2. PRs into a collection branch are **squash-merged**: one commit per PR, so intermediate commits and uncompressed originals stay out of the shared history.
+3. Collection branches are merged into `main` with a **normal merge commit**, never a squash. A squash would lose the link to the collection branch, and a later revert or follow-up there would not reach `main`.
+4. `main` is merged into `prod` the same way.
+5. Work that needs its own branch for a while uses a temporary `feature/<name>` branch. It is merged into `main` with a normal merge commit, so its full history is kept, and then deleted. The `Assets` workflow doesn't run on these PRs by itself: the pre-commit hook covers contributors, and a maintainer can comment `/optimize-assets` on the PR into `main` to optimize and size-check it.
+
+Maintainers: set the repository's default squash commit message to "Pull request title" (Settings → General → Pull Requests), so the `Assets-*` lines described below don't end up in the shared history.
 
 ## Content Guidelines
 
@@ -140,6 +158,58 @@ static/
 └── learn/
     └── assets/            # Documentation assets
 ```
+
+### Asset size limits
+
+Every PR into `release` or `docs` runs the `Assets` workflow on the images, GIFs, and videos it adds or changes. It first compresses them in place and commits the result back to the PR branch, keeping each file's name and format. It then checks the final sizes against these limits:
+
+| Type  | Extensions                                        | Limit |
+| ----- | ------------------------------------------------- | ----- |
+| Image | `.png`, `.jpg`, `.jpeg`, `.webp`, `.avif`, `.svg` | 2 MB  |
+| GIF   | `.gif`                                            | 10 MB |
+| Video | `.mp4`, `.webm`, `.mov`                           | 50 MB |
+
+Limits live in `scripts/assets/config.mjs`. Run `npm run check-assets` to check your branch locally.
+
+#### Optimizing before you commit
+
+When you commit staged images, GIFs, or videos from a terminal, the pre-commit hook optimizes them and lets you review the results:
+
+1. It writes each optimized file to your working tree. Your commit still has the original until you decide.
+2. For each file it shows the before and after size. Press Enter to keep the optimized version, `d` to discard it and keep the original, `o` to open both versions side by side, `a` to keep all the remaining ones, or `q` to abort the commit.
+3. Kept files are staged and the commit continues. Press Ctrl-C at any time to put the originals back.
+
+Look at each result before you keep it. Compression is lossy for screenshots with small text, GIFs, and videos.
+
+The hook records what it did as `Assets-Optimized`, `Assets-Reviewed`, or `Assets-Failed` lines at the end of the commit message. Each line names the file's content hash, so CI skips only files that still match. Leave those lines in place. A file you discard is recorded as reviewed, so CI won't re-compress it behind your back.
+
+The hook does nothing, and CI optimizes the files instead, when there is no terminal (IDE commit buttons, scripts, agents), when you run `git commit -a` or `git commit <paths>`, when concluding a merge, or when you set `ASSETS_PRECOMMIT=skip`. A staged asset that also has unstaged edits is skipped until you stage it fully.
+
+To optimize without committing, run `npm run optimize-assets` from the folder that holds your assets. Add `-- -r` to include subfolders (`npm run optimize-assets -- -r`). It skips anything in `.gitignore`. It also skips files this clone has already optimized or reviewed, which it tracks in `.husky/.asset-cache` (local only, not committed); add `-- --force` to process them again. It needs nothing beyond `npm install`.
+
+#### In CI
+
+Optimization runs automatically on PRs from branches in this repo into `release` or `docs`. On a PR into any other branch, a maintainer comments `/optimize-assets` to run it. PRs from the author's own fork are optimized the same way when the author has write access to this repo or is listed in `.github/asset-trusted-users.json` (a JSON array of `{ "id", "login" }` objects; maintainers add people there, only the numeric id is compared because usernames can be reused, and the workflow reads the file from the default branch). GitHub decides this, not commit emails. On PRs from any other fork, every push is only size-checked and the bot warns on the PR if assets are not optimized; a maintainer comments `/optimize-assets` to optimize them, and the fork must allow edits by maintainers. The workflow keeps one comment on the PR up to date with a before/after table and the size check, and sets the `asset-size-check` status, which blocks merging while any asset is over its limit. After the bot commits, pull before you push again. Assets you kept as is in the pre-commit hook are left alone; to have CI optimize one anyway, a maintainer comments `/optimize-assets force <file name>` (for example `/optimize-assets force demo.mp4`; list several names separated by spaces, match by the end of the path, or give no name to redo every changed asset of the PR). A file is replaced only when the result is at least 10% smaller. Because PRs are squash-merged, the original uncompressed files never reach the collection branches or `main`.
+
+### Pointer files
+
+Large assets can live in the asset bucket instead of the repository. In their place the repository holds a short text file at the asset's own path, whose first line is `s3-asset v1`. Pages reference the asset exactly as before (`![alt](./assets/img/a.png)`), and the site build turns the file into the bucket URL. Do not create or edit these files by hand: the `asset-pointer-check` status fails when a pointer is invalid or its object is missing from the bucket. Use inline markdown images or `require()`/`import` for assets; reference-style images (`![alt][ref]`) are not supported. The format and the checks are described in `plugins/pointer-assets/README.md`.
+
+#### How assets get into the bucket
+
+The `Assets` workflow runs three flows. Each has its own repository variable (Settings, Secrets and variables, Variables) and its own commit status, and any of them can be off:
+
+| Flow     | Variable         | On when            | Status                | What it does                                                                                                        |
+| -------- | ---------------- | ------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Optimize | `ASSET_OPTIMIZE` | not set to `false` | `asset-size-check`    | Compresses assets in place. Size limits are checked even when this flow is off.                                     |
+| Upload   | `ASSET_UPLOAD`   | set to `true`      | `asset-upload-check`  | Stores each new or changed asset in the bucket under a key that contains its hash. Never changes the PR.            |
+| Replace  | `ASSET_REPLACE`  | set to `true`      | `asset-replace-check` | Swaps a stored asset for a pointer file, only on PRs into `release` and `docs`, and only once the object is public. |
+
+A flow that is off, or does not apply, reports success, so it never blocks a merge. All three need permission to act: a branch in this repo, a trusted author, or a maintainer's `/optimize-assets` comment. The bucket, region and folder come from the variables `ASSET_S3_BUCKET`, `ASSET_S3_REGION` and `ASSET_S3_PREFIX`, and the credentials from the secrets `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. The replace flow refuses to run when those variables do not describe the base URL in `docusaurus.config.js`.
+
+An object is never overwritten or deleted by the pipeline: the key contains the hash of the bytes, so a changed file is a new object, and an upload that finds an object with the same key but other content fails. A failed upload blocks the merge; after a re-run, a maintainer can comment `/allow-upload-failure` to let the current head commit through. In the same way, a maintainer can comment `/allow-size-failure` to let a commit through whose assets are over the size limits (the limits apply whether or not optimization is on). Each command sets only its own status, on the current head commit only, so a later push needs a new decision. The bot stops pushing after three bot commits in a row with no commit from a person in between.
+
+To edit an asset that is now a pointer, run `npm run fetch-assets -- <pointer file or folder>`. It downloads the real file, checks its size and hash, and replaces the pointer with it. Commit the changed file like any other asset.
 
 ## Writing Guidelines
 
@@ -274,9 +344,9 @@ npm run manage-docs
    ---
    title: "New Component"
    ---
-   
+
    # New Component
-   
+
    Component description and usage.
    ```
 
@@ -305,11 +375,11 @@ npm run manage-docs
    authors: [author-key]
    tags: [feature, announcement]
    ---
-   
+
    Brief summary of the post...
-   
+
    <!--truncate-->
-   
+
    Full blog content here...
    ```
 
@@ -358,7 +428,7 @@ npm run manage-docs
    ```javascript
    // sidebar/sidebars.js
    import newSidebar from './sidebars/newSidebar';
-   
+
    const sidebars = {
      // ... existing sidebars
      newSidebar,

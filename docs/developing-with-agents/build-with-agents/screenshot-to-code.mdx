@@ -1,6 +1,6 @@
 ---
 title: "Build from screenshots and designs"
-last_update: { author: "Vivek Raj" }
+last_update: { author: "Sandeep Chezhian A" }
 ---
 
 WaveMaker provides platform-specific agents for turning visual references into WaveMaker pages. Choose the agent that matches the project and source material.
@@ -9,9 +9,48 @@ WaveMaker provides platform-specific agents for turning visual references into W
 
 **Screenshot to Code** converts an attached screenshot or image into a WaveMaker Web page. Its workflow covers layout planning, page and partial markup, variables for the visual, design-token overrides, page styling, and visual comparison.
 
-The Web workflow creates the visual structure only. It does not add service calls, data bindings, events, application navigation, or page-to-page behavior. Use WaveMaker UI Expert for those changes after reviewing the generated page.
+The Web workflow creates the visual structure only. It does not add service calls, data bindings, events, application navigation, or page-to-page behavior, apart from the page links in a generated left nav (see [Left navigation](#left-navigation)). Use WaveMaker UI Expert for those changes after reviewing the generated page.
 
 If the requested page name already exists, the workflow avoids silently overwriting it and may create a suffixed page name. State explicitly when the screenshot should update an existing page.
+
+## Left navigation
+
+When a Web screenshot includes a sidebar, Screenshot to Code builds it as a left nav partial inside a `wm-left-panel` and styles it to match the design.
+
+### What the agent matches
+
+The agent treats five values as must-match and checks each one in the rendered page, on a regular row and on the current row:
+
+- Panel background, including gradients.
+- Row height.
+- Borders, corner radius, the current-item indicator, and shadows.
+- Row background, at rest, on hover, and on the current item.
+- Label and icon colour.
+
+WaveMaker's default left nav styling adds a divider down the right edge of the panel, an indicator bar on hovered and current rows, and a translucent overlay on hovered and current rows. The agent removes each of these unless the screenshot shows it, so the sidebar reads as the design rather than as the default theme with new colours.
+
+### Where the styles go
+
+The agent writes the sidebar's styles to the left nav partial, not to the page, so every page that uses the nav looks the same:
+
+- Design-token overrides go on the partial's `aside-left` token, which styles both the panel and its rows.
+- Styling that tokens cannot express, such as a border around a row or a bolder current row, goes in the partial's own stylesheet, `src/main/webapp/pages/<partialName>/<partialName>.css`.
+
+The agent does not add left nav styles to `app.css` or to a page stylesheet.
+
+### Nav items and the current page
+
+The variable that holds the nav items is created on the left nav partial. A partial cannot read its host page's variables, so a nav whose items variable is on the page renders with no items.
+
+Each nav item links to its page as `#/<PageName>`, and the item the screenshot highlights links to the page being generated. WaveMaker marks a nav item as current when its link matches the open page, so the correct item is highlighted on every page that uses the nav.
+
+:::note
+Nav item links can point to pages that do not exist yet. Create those pages, or update the links, before you publish the app.
+:::
+
+### Rows pinned to the bottom
+
+When the design places rows such as Logout, Settings, or a user block at the bottom of the sidebar, the agent adds a spacer between the nav and those rows, and CSS in the partial's stylesheet that lets the partial fill the panel's full height. Bottom rows that look like nav items get the same height and colour as the nav items.
 
 ## Native Mobile screenshot and Figma input
 
@@ -33,5 +72,13 @@ Include:
 ## Review the output
 
 Compare the generated page with the source at representative viewport sizes. Check hierarchy, spacing, text, images, variants, tokens, responsive behavior, and any partials created for shared regions.
+
+For a generated left nav, also check that:
+
+- The nav shows the same number of items, with the same labels, as the screenshot. A nav that shows only the brand and the bottom rows has its items variable on the wrong page or partial.
+- The highlighted item matches the screenshot, and hover is visible but weaker than the current item.
+- No right-hand divider or indicator bar appears unless the screenshot shows one.
+- Bottom-pinned rows sit at the bottom of the panel.
+- Another page that uses the same nav looks the same and highlights its own item.
 
 Treat a screenshot as a visual source, not a complete functional specification. Confirm bindings, navigation, validation, accessibility, and runtime behavior in separate review steps.

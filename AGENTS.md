@@ -14,6 +14,7 @@ WaveMaker public documentation. Docusaurus 3.9.2, MDX-first, Node ≥ 20. Deploy
 - Never invent entries in `data/author/authors.yml` or any `tags.yml`. If a referenced key is missing, stop and ask the user.
 - Never add an `<h1>` to a doc, blog, or announcement body. Titles come from frontmatter.
 - Never place doc-, announcement-, or post-specific assets under `static/img/`. Co-locate them next to their content (see **Asset co-location** in File conventions).
+- Never create or edit a pointer file by hand. A pointer is a small text file whose first line is `s3-asset v1`; it stands in for an asset stored in the asset bucket, and the asset pipeline writes it. Reference assets with inline markdown images (`![alt](./assets/img/a.png)`) or `require()`/`import`; reference-style images (`![alt][ref]`) are not supported.
 
 ## Validation gate
 
@@ -162,7 +163,9 @@ For specific workflows, load the matching skill under `ai-skills/` rather than i
 
 ## Commits & PRs
 
-- Branches: `feature/<short-desc>` or `docs/<short-desc>`.
+- Branches: `feature/<short-desc>`. Don't create `docs/<short-desc>` branches: `docs` is a collection branch, and git can't hold both.
+- Open PRs against a collection branch (`release` for anything that ships with a release, `docs` for out-of-cycle content), never `main` or `prod`. See **Branches and pull requests** in `CONTRIBUTING.md`.
 - Do not commit `build/`, `.docusaurus/`, or regenerated `scripts/metrics.json`.
 - Husky runs `lint-staged` on commit. If it fails, fix the underlying issue — do not skip the hook.
+- The pre-commit hook also offers to optimize staged assets, which needs a human at a terminal. Without one it skips and CI optimizes instead, so agents do not need to do anything. Do not set `ASSETS_PRECOMMIT`, and do not edit the `Assets-*` lines the commit-msg hook adds to commit messages.
 - PR titles are descriptive ("Add authentication guide for REST APIs"), not generic ("Update docs").

@@ -1,0 +1,1115 @@
+name: Assets
+
+# One pipeline for the images, GIFs, and videos a PR adds or changes:
+#   1. Optimize: compress them in place (same path and format) and commit back to the PR branch.
+#   2. Validate: check the resulting sizes against scripts/assets/config.mjs.
+#   3. Report: keep one comment on the PR up to date and set the `asset-size-check` commit status on
+#      the PR head.
+#      Make `asset-size-check` a required status check on the collection branches; that status is
+#      what blocks merging.
+#
+# Contributions are squash-merged into the collection branches (`release`, `docs`), which are then
+# merged into `main` with a normal merge. The pipeline runs automatically on PRs into the collection
+# branches. A PR into any other branch, including `main`, runs only when someone with write access
+# comments `/optimize-assets` on it. To add a collection branch, list it in `on.branches` below and in
+# `COLLECTION_BRANCHES` in the "Resolve PR" step. GitHub reads this file from the default branch, so
+# that change has to land on `main`.
+#
+# TEMPORARY: the scripts (scripts/assets/ and package.json) are also read from the default branch,
+# so a collection branch doesn't need to contain them while the pipeline is being tested. To go back
+# to reading them from the PR's base branch, set `ref` in the "Check out trusted scripts" steps of
+# the decode and publish jobs to `needs.resolve.outputs.base_ref` again. Merge `main` into every
+# collection branch first, or PRs into a branch without scripts/assets/ fail with "Validation did
+# not run".
+#
+# When it runs on a PR into a collection branch:
+#   - PRs from branches in this repo: every push → optimize + validate.
+#   - PRs from the author's own fork, when the author has write access to this repo or is listed in
+#     .github/asset-trusted-users.json (read from the default branch; add `{ "id": <numeric GitHub
+#     user id>, "login": "<name>" }` to trust someone, find the id with `gh api users/<login> --jq .id`;
+#     only the id is compared, because usernames can be released and reused): same as above. The fork
+#     must allow edits by maintainers. Trust comes from GitHub, never from commit emails.
+#   - PRs from any other fork: every push → validate only, plus a warning on the PR if assets are
+#     not optimized. Someone with write access comments `/optimize-assets` → optimize + validate.
+#     The fork must allow edits by maintainers.
+# The bot never pushes to `main`, `prod`, or a collection branch, so a comment on a PR whose head is
+# one of those (such as a collection branch merging into `main`) does nothing.
+#
+# `/optimize-assets force [name-or-path ...]` (write access) optimizes assets the hook's trailers
+# say were kept as is: with names (for example `force demo.mp4`, matched against the end of each
+# changed file's path) only those files, with none every changed asset of the PR.
+#
+# Assets the contributor already handled with the pre-commit hook (scripts/assets/precommit.mjs) are
+# not optimized again. The hook records optimized, reviewed (kept as is), and failed assets as
+# `Assets-*` trailers in the commit message, tied to each file's blob id. Only files whose current
+# content matches an optimized or reviewed trailer are skipped. Size validation covers every asset.
+#
+# It uses pull_request_target so it can comment and set statuses on fork PRs. Scripts come from the
+# default branch (see TEMPORARY above) and nothing from the PR is executed. Fork media is only decoded after a maintainer
+# opts in with the comment.
+#
+# Four jobs, so the code that decodes untrusted media never shares a job with a secret:
+#   resolve  Looks up the PR and decides who is trusted. It processes no PR content, and it is the
+#            only source of the head SHA, the base branch and the trust decisions: never take those
+#            from a job that handles PR files.
+#   decode   No secrets and a read-only token. Checks out the PR at the exact head SHA, runs the
+#            optimizer (sharp, ffmpeg, svgo) and hands what changed over as an artifact.
+#   publish  The only job that can push. It decodes nothing. It recomputes which files may change,
+#            treats the artifact as untrusted data (scripts/assets/apply-artifact.mjs checks every
+#            path, hash, size and file signature), commits those paths, pushes with a plain
+#            non-force push, validates sizes and writes the PR comment and the status. A push that
+#            fails because the branch moved is final for this run: the new push starts its own run.
+#   pointer-check  Checks the pointer files a PR adds or changes (text files that stand in for assets
+#            stored in the asset bucket, see plugins/pointer-assets): each must be valid and its
+#            object must exist with the size it claims. It handles pointer text only, sets its own
+#            status, asset-pointer-check, and never shares a job with a decoder.
+# Three flows run through those jobs, each behind its own repository variable (Settings, Secrets and
+# variables, Variables) and with its own commit status. Any subset can be off and everything still works.
+# The decisions are in scripts/assets/flows.mjs, which has a test for every combination.
+#   optimize  ASSET_OPTIMIZE, on unless it says `false`.          asset-size-check
+#   upload    ASSET_UPLOAD, on only when it says `true`.          asset-upload-check
+#   replace   ASSET_REPLACE, on only when it says `true`.         asset-replace-check
+# Upload stores each real asset in the bucket under its hash and never edits the repository. Replace
+# swaps an asset for a pointer file once its object is verified in the bucket, and only on pull
+# requests into the collection branches. A flow that is off, or does not apply, reports success so it
+# never blocks a merge. All three need permission to act (a branch in this repo, a trusted author, or a
+# maintainer's `/optimize-assets`). Size limits are checked whatever the switches say.
+# A maintainer (write access) can comment `/allow-upload-failure` or `/allow-size-failure` to let the
+# current head commit through when the upload check or the size check failed; each sets only its own
+# status, on that commit only, so a later push needs a fresh decision.
+# Actions are pinned to a commit SHA; keep them that way and use only official ones. Do not add
+# caches to any job: a cache written here could be restored by a job that has secrets.
+#
+# Requires the repo secret ASSET_BOT_TOKEN: a classic PAT (`public_repo` scope) from a bot or
+# maintainer account with write access. It pushes the optimized commit. GITHUB_TOKEN can't push to
+# forks, and its pushes wouldn't start a run for the new commit.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [release, docs]
+  issue_comment:
+    types: [created]
+
+# Nothing by default: every job lists exactly what it needs.
+permissions: {}
+
+concurrency:
+  # One run per PR, except that a comment which is not an /optimize-assets command gets its own group.
+  # Otherwise a plain "LGTM" could replace the run a push is waiting for, and the new head would never
+  # get its status.
+  group: assets-${{ github.event.pull_request.number || github.event.issue.number }}-${{ (github.event_name == 'issue_comment' && !(startsWith(github.event.comment.body, '/optimize-assets') || startsWith(github.event.comment.body, '/allow-upload-failure') || startsWith(github.event.comment.body, '/allow-size-failure'))) && github.run_id || 'pr' }}
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    if: >-
+      github.event_name == 'pull_request_target' ||
+      (github.event.issue.pull_request &&
+       (startsWith(github.event.comment.body, '/optimize-assets') ||
+        startsWith(github.event.comment.body, '/allow-upload-failure') ||
+        startsWith(github.event.comment.body, '/allow-size-failure')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      # Write, not read: the "eyes" reaction on a command comment on a PR needs it (a run with only
+      # `pull-requests: read` and `issues: write` was rejected with 403).
+      pull-requests: write
+    outputs:
+      proceed: ${{ steps.pr.outputs.proceed }}
+      number: ${{ steps.pr.outputs.number }}
+      commented: ${{ steps.pr.outputs.commented }}
+      force: ${{ steps.pr.outputs.force }}
+      force_only: ${{ steps.pr.outputs.force_only }}
+      fork: ${{ steps.pr.outputs.fork }}
+      optimize: ${{ steps.pr.outputs.optimize }}
+      override: ${{ steps.pr.outputs.override }}
+      override_by: ${{ steps.pr.outputs.override_by }}
+      override_context: ${{ steps.pr.outputs.override_context }}
+      override_label: ${{ steps.pr.outputs.override_label }}
+      on_optimize: ${{ steps.flows.outputs.on_optimize }}
+      run_optimize: ${{ steps.flows.outputs.run_optimize }}
+      run_upload: ${{ steps.flows.outputs.run_upload }}
+      run_replace: ${{ steps.flows.outputs.run_replace }}
+      decode: ${{ steps.flows.outputs.decode }}
+      status_upload: ${{ steps.flows.outputs.status_upload }}
+      status_replace: ${{ steps.flows.outputs.status_replace }}
+      warnings: ${{ steps.flows.outputs.warnings }}
+      note: ${{ steps.pr.outputs.note }}
+      head_repo: ${{ steps.pr.outputs.head_repo }}
+      head_ref: ${{ steps.pr.outputs.head_ref }}
+      head_sha: ${{ steps.pr.outputs.head_sha }}
+      base_ref: ${{ steps.pr.outputs.base_ref }}
+    steps:
+      - name: Resolve PR
+        id: pr
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            // Keep in sync with `on.pull_request_target.branches`.
+            const COLLECTION_BRANCHES = ['release', 'docs'];
+            const PROTECTED_BRANCHES = ['main', 'prod', ...COLLECTION_BRANCHES];
+            const TRUSTED_USERS_FILE = '.github/asset-trusted-users.json';
+            const number = context.payload.pull_request?.number ?? context.payload.issue.number;
+            const commented = context.eventName === 'issue_comment';
+
+            if (commented) {
+              const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner, repo, username: context.payload.comment.user.login,
+              });
+              if (!['admin', 'write'].includes(data.permission)) {
+                return core.notice(`${context.payload.comment.user.login} lacks write access; ignoring.`);
+              }
+              // The reaction only tells the commenter the command was seen; failing to add it must not
+              // stop the command itself.
+              try {
+                await github.rest.reactions.createForIssueComment({
+                  owner, repo, comment_id: context.payload.comment.id, content: 'eyes',
+                });
+              } catch (error) {
+                core.warning(`Could not add the reaction: ${error.message}`);
+              }
+            }
+
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: number });
+            if (pr.state !== 'open' || !pr.head.repo) return;
+            // "/allow-upload-failure" and "/allow-size-failure" (write access, checked above) let this
+            // commit through when that check failed. Each sets only its own status on the current
+            // head; nothing else runs.
+            const OVERRIDES = {
+              '/allow-upload-failure': { context: 'asset-upload-check', label: 'Upload failure' },
+              '/allow-size-failure': { context: 'asset-size-check', label: 'Size limit' },
+            };
+            const override = commented ? OVERRIDES[context.payload.comment.body.trim().split(/\s+/)[0].toLowerCase()] : undefined;
+            if (override) {
+              core.setOutput('number', number);
+              core.setOutput('head_sha', pr.head.sha);
+              core.setOutput('override', 'true');
+              core.setOutput('override_by', context.payload.comment.user.login);
+              core.setOutput('override_context', override.context);
+              core.setOutput('override_label', override.label);
+              return;
+            }
+            // Automatic runs are for the collection branches; any other base needs a comment.
+            if (!commented && !COLLECTION_BRANCHES.includes(pr.base.ref)) return;
+
+            const isFork = pr.head.repo.full_name !== `${owner}/${repo}`;
+            if (!isFork && PROTECTED_BRANCHES.includes(pr.head.ref)) {
+              return core.notice(`The bot does not push to ${pr.head.ref}; ignoring.`);
+            }
+            // A fork PR from a trusted author (and from their own fork) is as trusted as a branch in
+            // this repo, so it is optimized without a comment. Trusted means: listed in
+            // .github/asset-trusted-users.json on the default branch (matched by numeric user id), or
+            // has write access to this repo. Both come from GitHub; commit emails are free text and
+            // prove nothing. The list is read from the default branch through the API, never from the PR.
+            let trusted = false;
+            if (isFork && !commented && pr.head.repo.owner.id === pr.user.id) {
+              const login = pr.user.login;
+              try {
+                const { data: file } = await github.rest.repos.getContent({
+                  owner, repo, path: TRUSTED_USERS_FILE, ref: context.payload.repository.default_branch,
+                });
+                const listed = JSON.parse(Buffer.from(file.content, 'base64').toString('utf8'));
+                if (!Array.isArray(listed)) throw new Error('expected a JSON array of { "id", "login" } objects');
+                // The numeric id is what is compared: a username can be released and registered by
+                // someone else. A plain username entry is ignored, loudly, so nobody is de-trusted by
+                // accident without a trace in the log.
+                for (const entry of listed) {
+                  if (typeof entry === 'string')
+                    core.warning(`${TRUSTED_USERS_FILE}: "${entry}" is a username and is ignored. Replace it with { "id": <numeric GitHub user id>, "login": "${entry}" }.`);
+                }
+                trusted = listed.some((u) => u && typeof u === 'object' && u.id === pr.user.id);
+              } catch (error) {
+                if (error.status !== 404) core.warning(`Could not read ${TRUSTED_USERS_FILE}: ${error.message}`);
+              }
+              if (!trusted) {
+                try {
+                  const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+                    owner, repo, username: login,
+                  });
+                  trusted = ['admin', 'write'].includes(data.permission);
+                } catch (error) {
+                  core.warning(`Could not check the permission of ${login}: ${error.message}`);
+                }
+              }
+            }
+            let optimize = commented || !isFork || trusted;
+            let note = '';
+            if (optimize && isFork && !pr.maintainer_can_modify) {
+              optimize = false;
+              note = `Optimization skipped: @${pr.user.login}, please enable **Allow edits by maintainers** on this PR, then a maintainer can comment \`/optimize-assets\` again.`;
+            }
+
+            // "/optimize-assets force [name-or-path ...]" optimizes even assets the contributor kept as
+            // is (the pre-commit hook's trailers). Names select by the end of the path, so
+            // "demo.mp4" is enough; with none, every changed asset of the PR is optimized again.
+            // Only the first line is read, and the text is only ever matched against file paths in Node,
+            // never run in a shell.
+            const words = commented ? context.payload.comment.body.trim().split('\n')[0].trim().split(/\s+/) : [];
+            const force = optimize && words[0] === '/optimize-assets' && words[1]?.toLowerCase() === 'force';
+            const forceOnly = force ? words.slice(2).filter((w) => w.length <= 300).slice(0, 50) : [];
+
+            core.setOutput('number', number);
+            core.setOutput('commented', String(commented));
+            core.setOutput('force', String(force));
+            core.setOutput('force_only', JSON.stringify(forceOnly));
+            core.setOutput('fork', String(isFork));
+            core.setOutput('optimize', String(optimize));
+            core.setOutput('note', note);
+            core.setOutput('head_repo', pr.head.repo.full_name);
+            core.setOutput('head_ref', pr.head.ref);
+            core.setOutput('head_sha', pr.head.sha);
+            core.setOutput('base_ref', pr.base.ref);
+            // Set last: a run that returned early above leaves this empty, and every later job skips.
+            core.setOutput('proceed', 'true');
+
+      # No PR content is read here: the switches are repository variables and the permission to act
+      # was decided above. The decision logic is a script so one test covers every combination.
+      - name: Check out trusted scripts
+        if: steps.pr.outputs.proceed == 'true'
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # TEMPORARY: the default branch, not the PR's base branch (see the header).
+          ref: ${{ github.event.repository.default_branch }}
+          path: trusted
+          sparse-checkout: scripts/assets
+          persist-credentials: false
+
+      - name: Decide which flows run
+        id: flows
+        if: steps.pr.outputs.proceed == 'true'
+        env:
+          ASSET_OPTIMIZE: ${{ vars.ASSET_OPTIMIZE }}
+          ASSET_UPLOAD: ${{ vars.ASSET_UPLOAD }}
+          ASSET_REPLACE: ${{ vars.ASSET_REPLACE }}
+          MAY_ACT: ${{ steps.pr.outputs.optimize }}
+          BASE_REF: ${{ steps.pr.outputs.base_ref }}
+        run: node trusted/scripts/assets/flows.mjs
+
+  # A maintainer's /allow-upload-failure or /allow-size-failure comment: the one way past a failed upload
+  # or size check. It sets that status on the head commit as it is now, so a later push needs a fresh
+  # decision. Nothing else runs.
+  override:
+    needs: resolve
+    if: needs.resolve.outputs.override == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      statuses: write
+    steps:
+      - name: Set the status
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          SHA: ${{ needs.resolve.outputs.head_sha }}
+          BY: ${{ needs.resolve.outputs.override_by }}
+          CONTEXT: ${{ needs.resolve.outputs.override_context }}
+          LABEL: ${{ needs.resolve.outputs.override_label }}
+        with:
+          script: |
+            // Only the two statuses the resolve job names; anything else would be a bug there.
+            if (!['asset-upload-check', 'asset-size-check'].includes(process.env.CONTEXT))
+              throw new Error(`unknown override status: ${process.env.CONTEXT}`);
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha: process.env.SHA,
+              state: 'success',
+              context: process.env.CONTEXT,
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              description: `${process.env.LABEL} overridden by @${process.env.BY}`.slice(0, 140),
+            });
+
+  # Checks the pointer files a PR adds or changes, and every pointer when the config or the plugin
+  # changes (see plugins/pointer-assets and scripts/assets/pointer-check.mjs). It handles pointer TEXT
+  # only, never media, and it never shares a job with a decoder: a compromised decoder could otherwise
+  # report every pointer as fine. It sets its own status, asset-pointer-check, and writes nothing to
+  # the PR comment, which belongs to the publish job.
+  pointer-check:
+    needs: resolve
+    if: needs.resolve.outputs.proceed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - name: Check out trusted scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # TEMPORARY: the default branch, not the PR's base branch (see the header).
+          ref: ${{ github.event.repository.default_branch }}
+          path: trusted
+          sparse-checkout: scripts/assets
+          persist-credentials: false
+
+      - name: Check out the PR at its head commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # See the decode job: nothing from this checkout is executed, and no secret is in this job.
+          allow-unsafe-pr-checkout: true
+          repository: ${{ needs.resolve.outputs.head_repo }}
+          ref: ${{ needs.resolve.outputs.head_sha }}
+          token: ${{ github.token }}
+          persist-credentials: false
+          path: pr
+          fetch-depth: 0
+          filter: blob:none
+
+      - name: Check that the checkout is the commit that was resolved
+        working-directory: pr
+        env:
+          HEAD_SHA: ${{ needs.resolve.outputs.head_sha }}
+        run: test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      - name: Fetch the base branch
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+        run: |
+          git fetch --no-tags --filter=blob:none "https://github.com/${GITHUB_REPOSITORY}.git" \
+            "+refs/heads/${BASE_REF}:refs/remotes/upstream/${BASE_REF}"
+
+      - name: Check the pointer files
+        id: check
+        timeout-minutes: 8
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+        run: |
+          node ../trusted/scripts/assets/pointer-check.mjs --base "upstream/${BASE_REF}" \
+            --report "$RUNNER_TEMP/pointer-check.json"
+
+      # If the check crashed, the status says so instead of being missing.
+      - name: Set the status
+        if: always()
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          SHA: ${{ needs.resolve.outputs.head_sha }}
+          STATE: ${{ steps.check.outputs.state }}
+          DESCRIPTION: ${{ steps.check.outputs.description }}
+        with:
+          script: |
+            const env = process.env;
+            const known = ['success', 'failure', 'error'].includes(env.STATE);
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha: env.SHA,
+              state: known ? env.STATE : 'error',
+              context: 'asset-pointer-check',
+              target_url: runUrl,
+              description: (known ? env.DESCRIPTION : 'The pointer check did not run').slice(0, 140),
+            });
+
+  decode:
+    needs: resolve
+    if: needs.resolve.outputs.proceed == 'true' && needs.resolve.outputs.decode == 'true'
+    runs-on: ubuntu-latest
+    # Videos are encoded at x264 preset slow; the limit only stops a hung encode.
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Check out trusted scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # TEMPORARY: the default branch, not the PR's base branch (see the header).
+          ref: ${{ github.event.repository.default_branch }}
+          path: trusted
+          sparse-checkout: scripts/assets
+          persist-credentials: false
+
+      - name: Check out the PR at its head commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # actions/checkout refuses fork code in a pull_request_target job unless told otherwise.
+          # This is safe here: nothing from this checkout is executed, every script runs from the
+          # trusted copy, the PR's files are only decoded as media, and this job holds no secret.
+          # Keep it that way: never run a script, install, or build from `pr/`.
+          allow-unsafe-pr-checkout: true
+          repository: ${{ needs.resolve.outputs.head_repo }}
+          ref: ${{ needs.resolve.outputs.head_sha }}
+          token: ${{ github.token }}
+          persist-credentials: false
+          path: pr
+          fetch-depth: 0
+          filter: blob:none
+
+      - name: Check that the checkout is the commit that was resolved
+        working-directory: pr
+        env:
+          HEAD_SHA: ${{ needs.resolve.outputs.head_sha }}
+        run: test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      - name: Find changed assets
+        id: scan
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          OPTIMIZE: ${{ needs.resolve.outputs.run_optimize }}
+          FORCE: ${{ needs.resolve.outputs.force }}
+          FORCE_ONLY: ${{ needs.resolve.outputs.force_only }}
+        run: bash ../trusted/scripts/assets/scan.sh
+
+      - name: Install optimizers
+        if: steps.scan.outputs.optimize == 'true' || needs.resolve.outputs.run_replace == 'true'
+        run: |
+          # Same optimizer packages and versions as the trusted devDependencies, installed on their
+          # own instead of the full site dependency tree. No install scripts run.
+          DEPS=$(node -p "const d = require('./trusted/package.json').devDependencies;
+            ['sharp', 'svgo', '@ffmpeg-installer/ffmpeg'].map((n) => n + '@' + d[n]).join(' ')")
+          mkdir -p "$RUNNER_TEMP/optimizer"
+          cp trusted/scripts/assets/*.mjs trusted/scripts/assets/*.cjs "$RUNNER_TEMP/optimizer/"
+          cd "$RUNNER_TEMP/optimizer"
+          echo '{"private":true}' > package.json
+          npm install --ignore-scripts --no-audit --no-fund $DEPS
+
+      - name: Optimize
+        if: steps.scan.outputs.optimize == 'true'
+        working-directory: pr
+        env:
+          OPT_BASE: ${{ steps.scan.outputs.opt_base }}
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          FORCE: ${{ needs.resolve.outputs.force }}
+          FORCE_ONLY: ${{ needs.resolve.outputs.force_only }}
+        run: |
+          SCAN_ARGS=(--trailers-from "upstream/${BASE_REF}")
+          if [ "$FORCE" = "true" ]; then SCAN_ARGS=(--force --only-json "$FORCE_ONLY"); fi
+          node "$RUNNER_TEMP/optimizer/optimize.mjs" --base "$OPT_BASE" \
+            "${SCAN_ARGS[@]}" --report "$RUNNER_TEMP/optimize.json"
+
+      # Image sizes for the pointer files the replace flow writes. Decoding untrusted images belongs
+      # here, in the job without secrets; the publish job validates the numbers before using them.
+      # Measuring is best effort: a pointer without sizes works, so a failure here never stops the run.
+      - name: Measure image sizes
+        if: needs.resolve.outputs.run_replace == 'true'
+        continue-on-error: true
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+        run: |
+          node "$RUNNER_TEMP/optimizer/measure-dimensions.mjs" --base "upstream/${BASE_REF}" \
+            --out "$RUNNER_TEMP/dimensions.json"
+
+      # Always packs, even when nothing changed: an empty manifest tells the publish job "nothing to
+      # apply", a missing artifact tells it the hand-over failed.
+      - name: Pack what the optimizer changed
+        working-directory: pr
+        env:
+          HEAD_SHA: ${{ needs.resolve.outputs.head_sha }}
+        run: |
+          node ../trusted/scripts/assets/pack-artifact.mjs --out "$RUNNER_TEMP/asset-artifact" \
+            --head-sha "$HEAD_SHA" --report "$RUNNER_TEMP/optimize.json" \
+            --dimensions "$RUNNER_TEMP/dimensions.json"
+
+      # Named by run only, not by attempt: "Re-run failed jobs" re-runs publish alone, as a new attempt,
+      # and it must still find the artifact this run's decode job made. A full re-run uploads again,
+      # hence overwrite.
+      - name: Upload the artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: asset-optimized-${{ github.run_id }}
+          path: ${{ runner.temp }}/asset-artifact
+          retention-days: 1
+          if-no-files-found: error
+          overwrite: true
+
+  publish:
+    needs: [resolve, decode]
+    # Not `always()`: a resolve that failed or returned early has empty outputs, and this job holds
+    # the push token. The decode job's own result is read below (success or skipped is fine).
+    if: ${{ !cancelled() && needs.resolve.result == 'success' && needs.resolve.outputs.proceed == 'true' }}
+    runs-on: ubuntu-latest
+    # Uploads of large videos and the retries around them can take a while.
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      statuses: write
+    steps:
+      - name: Check out trusted scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # TEMPORARY: the default branch, not the PR's base branch (see the header).
+          ref: ${{ github.event.repository.default_branch }}
+          path: trusted
+          sparse-checkout: scripts/assets
+          persist-credentials: false
+
+      - name: Check out the PR at its head commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # See the decode job. No credentials are stored: the token is given to the push step only.
+          allow-unsafe-pr-checkout: true
+          repository: ${{ needs.resolve.outputs.head_repo }}
+          ref: ${{ needs.resolve.outputs.head_sha }}
+          token: ${{ github.token }}
+          persist-credentials: false
+          path: pr
+          fetch-depth: 0
+          filter: blob:none
+
+      - name: Check that the checkout is the commit that was resolved
+        working-directory: pr
+        env:
+          HEAD_SHA: ${{ needs.resolve.outputs.head_sha }}
+        run: test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+
+      # The same scan the decode job ran. Its pending list is the only set of files an artifact may
+      # change, and whether optimization was expected comes from here, never from the decode job.
+      - name: Find changed assets
+        id: scan
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          OPTIMIZE: ${{ needs.resolve.outputs.run_optimize }}
+          FORCE: ${{ needs.resolve.outputs.force }}
+          FORCE_ONLY: ${{ needs.resolve.outputs.force_only }}
+        run: bash ../trusted/scripts/assets/scan.sh
+
+      - name: Download the optimizer's output
+        id: download
+        if: needs.decode.result == 'success' && (steps.scan.outputs.optimize == 'true' || needs.resolve.outputs.run_replace == 'true')
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: asset-optimized-${{ github.run_id }}
+          path: ${{ runner.temp }}/asset-artifact
+
+      # The action retries internally, but a blob-storage outage can outlast that (seen once in the
+      # fork tests). One more attempt costs nothing when the first worked, because it is skipped.
+      - name: Download the optimizer's output (second attempt)
+        id: download_retry
+        if: steps.download.outcome == 'failure'
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: asset-optimized-${{ github.run_id }}
+          path: ${{ runner.temp }}/asset-artifact
+
+      # Untrusted data in, checked files out. See scripts/assets/apply-artifact.mjs.
+      - name: Check and apply the optimized files
+        id: apply
+        if: steps.download.outcome == 'success' || steps.download_retry.outcome == 'success'
+        working-directory: pr
+        env:
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+          HEAD_SHA: ${{ needs.resolve.outputs.head_sha }}
+        run: |
+          node ../trusted/scripts/assets/apply-artifact.mjs --artifact "$RUNNER_TEMP/asset-artifact" \
+            --head-sha "$HEAD_SHA" --pending "$RUNNER_TEMP/pending.json" \
+            --report "$RUNNER_TEMP/apply.json" --applied "$RUNNER_TEMP/applied.txt" \
+            --optimize-report "$RUNNER_TEMP/optimize.json" --dimensions "$RUNNER_TEMP/dimensions.json"
+
+      # Upload flow: stores every asset the PR adds or changes in the bucket, under its hash, and never
+      # overwrites an object (scripts/assets/upload.mjs). The AWS credentials are available to this step
+      # and no other, and it does not install anything: it uses the AWS CLI of the runner image. It
+      # reports in its outputs and never fails the step itself; the Report step turns them into the
+      # asset-upload-check status.
+      - name: Upload to the bucket
+        id: upload
+        # When optimization was expected, nothing is stored unless its output was applied: otherwise the
+        # unoptimized originals would be stored and, with the replace flow, never optimized.
+        if: needs.resolve.outputs.run_upload == 'true' && (steps.scan.outputs.optimize != 'true' || steps.apply.outputs.state == 'ok')
+        continue-on-error: true
+        working-directory: pr
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ASSET_S3_BUCKET: ${{ vars.ASSET_S3_BUCKET }}
+          ASSET_S3_REGION: ${{ vars.ASSET_S3_REGION }}
+          ASSET_S3_PREFIX: ${{ vars.ASSET_S3_PREFIX }}
+          PR_NUMBER: ${{ needs.resolve.outputs.number }}
+          COMMIT: ${{ needs.resolve.outputs.head_sha }}
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: |
+          aws --version
+          node ../trusted/scripts/assets/upload.mjs --base "upstream/${BASE_REF}" \
+            --report "$RUNNER_TEMP/upload.json"
+
+      # Replace flow: swaps a stored asset for a pointer file once its public URL answers with the
+      # right size (scripts/assets/replace.mjs). It needs no credentials. With the upload flow on it
+      # works on what that step stored; otherwise on every changed asset whose object is already there.
+      - name: Replace assets with pointer files
+        id: replace
+        if: needs.resolve.outputs.run_replace == 'true' && (steps.scan.outputs.optimize != 'true' || steps.apply.outputs.state == 'ok') && (needs.resolve.outputs.run_upload != 'true' || steps.upload.outputs.state == 'success' || steps.upload.outputs.state == 'failure')
+        continue-on-error: true
+        working-directory: pr
+        env:
+          ASSET_S3_BUCKET: ${{ vars.ASSET_S3_BUCKET }}
+          ASSET_S3_REGION: ${{ vars.ASSET_S3_REGION }}
+          ASSET_S3_PREFIX: ${{ vars.ASSET_S3_PREFIX }}
+          RUN_UPLOAD: ${{ needs.resolve.outputs.run_upload }}
+          OPTIMIZE_EXPECTED: ${{ steps.scan.outputs.optimize }}
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: |
+          ARGS=(--config docusaurus.config.js --report "$RUNNER_TEMP/replace.json" --replaced "$RUNNER_TEMP/replaced.txt")
+          if [ "$RUN_UPLOAD" = "true" ]; then
+            ARGS+=(--upload-report "$RUNNER_TEMP/upload.json")
+          else
+            ARGS+=(--base "upstream/${BASE_REF}")
+          fi
+          if [ -f "$RUNNER_TEMP/dimensions.json" ]; then ARGS+=(--dimensions "$RUNNER_TEMP/dimensions.json"); fi
+          # Files that were due to be optimized and were not (an optimizer error, or rejected by the
+          # safety checks) stay real: a pointer would hide them from every later optimization.
+          if [ "$OPTIMIZE_EXPECTED" = "true" ]; then
+            ARGS+=(--pending "$RUNNER_TEMP/pending.json" --optimize-report "$RUNNER_TEMP/optimize.json" --apply-report "$RUNNER_TEMP/apply.json")
+          fi
+          node ../trusted/scripts/assets/replace.mjs "${ARGS[@]}"
+
+      # Loop guard: every bot push starts a new run, so after three bot commits in a row with no
+      # commit from a person in between, the bot stops pushing (scripts/assets/bot-streak.mjs).
+      - name: Check the bot's push streak
+        id: streak
+        if: (steps.apply.outputs.applied != '' && steps.apply.outputs.applied != '0') || (steps.replace.outputs.replaced != '' && steps.replace.outputs.replaced != '0')
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: node ../trusted/scripts/assets/bot-streak.mjs --base "upstream/${BASE_REF}" --limit 3
+
+      # The push token is available to this step and no other. Plain non-force push: if the branch
+      # moved since the head SHA was resolved, the push is rejected and this run ends there.
+      - name: Commit and push
+        id: push
+        if: steps.streak.outputs.blocked == 'false'
+        working-directory: pr
+        env:
+          ASSET_BOT_TOKEN: ${{ secrets.ASSET_BOT_TOKEN }}
+          HEAD_REF: ${{ needs.resolve.outputs.head_ref }}
+          APPLIED: ${{ steps.apply.outputs.applied }}
+          REPLACED: ${{ steps.replace.outputs.replaced }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: |
+          set -euo pipefail
+          if [ -z "$ASSET_BOT_TOKEN" ]; then
+            echo "result=no-token" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          # Only the files the two steps reported, one NUL-separated list each.
+          if [ -n "$APPLIED" ] && [ "$APPLIED" != "0" ]; then xargs -0 -r git add -- < "$RUNNER_TEMP/applied.txt"; fi
+          if [ -n "$REPLACED" ] && [ "$REPLACED" != "0" ]; then xargs -0 -r git add -- < "$RUNNER_TEMP/replaced.txt"; fi
+          if [ -n "$REPLACED" ] && [ "$REPLACED" != "0" ]; then
+            if [ -n "$APPLIED" ] && [ "$APPLIED" != "0" ]; then
+              MESSAGE="chore: optimize assets and store them in the bucket [asset-bot]"
+            else
+              MESSAGE="chore: store assets in the bucket [asset-bot]"
+            fi
+          else
+            MESSAGE="chore: optimize assets [asset-bot]"
+          fi
+          if git diff --cached --quiet; then
+            echo "result=none" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          git \
+            -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            -c core.hooksPath=/dev/null \
+            commit -q -m "$MESSAGE"
+          # The token goes in through the environment as an extra header, never on a command line,
+          # and the encoded form is masked as well (GitHub masks only the raw secret).
+          AUTH=$(printf 'x-access-token:%s' "$ASSET_BOT_TOKEN" | base64 | tr -d '\n')
+          echo "::add-mask::$AUTH"
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic ${AUTH}"
+          # A push rejected because the branch moved is final for this run (result=failed): validate
+          # what the PR holds now; the author's next push starts a new run. Any other failure is
+          # retried twice (GitHub itself answered "fatal error in commit_refs" once in the fork
+          # tests) and then reported as result=error, so the status cannot pass silently.
+          result=error
+          for attempt in 1 2 3; do
+            if out=$(git -c core.hooksPath=/dev/null push origin "HEAD:refs/heads/${HEAD_REF}" 2>&1); then
+              result=pushed; break
+            fi
+            echo "$out"
+            if printf '%s' "$out" | grep -qE 'non-fast-forward|fetch first|stale info'; then
+              result=failed; break
+            fi
+            [ "$attempt" -lt 3 ] && sleep "${PUSH_RETRY_DELAY:-10}"
+          done
+          if [ "$result" != "pushed" ]; then git reset -q --hard HEAD~1; fi
+          echo "result=${result}" >> "$GITHUB_OUTPUT"
+
+      # Whatever was applied but not pushed (the push token is missing, the bot hit its push limit, the
+      # push failed or there was nothing to commit) must not be measured: the size check reads the
+      # files on disk, so leftover optimized files would make an oversized PR pass. Back to the commit
+      # the PR really has.
+      - name: Discard what was not pushed
+        if: always() && steps.scan.outcome == 'success' && steps.push.outputs.result != 'pushed'
+        working-directory: pr
+        env:
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: git reset -q --hard HEAD
+
+      # The optimization table in the comment is rebuilt from the PR's bot commits on every run (see
+      # scripts/assets/history.mjs), so it never depends on what an earlier comment said. If this step
+      # fails, the Report step keeps the comment's existing table.
+      - name: Optimization history
+        id: history
+        if: always() && steps.scan.outcome == 'success'
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: |
+          node ../trusted/scripts/assets/history.mjs --base "upstream/${BASE_REF}" \
+            --report "$RUNNER_TEMP/history.json" || echo "::warning::Could not read the optimization history; the comment keeps its existing table."
+
+      - name: Validate sizes
+        id: validate
+        if: always() && steps.scan.outcome == 'success'
+        working-directory: pr
+        env:
+          BASE_REF: ${{ needs.resolve.outputs.base_ref }}
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: |
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          node ../trusted/scripts/assets/check-sizes.mjs --base "upstream/${BASE_REF}" \
+            --report "$RUNNER_TEMP/check.json" || true
+
+      - name: Report
+        if: always()
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          PR_NUMBER: ${{ needs.resolve.outputs.number }}
+          COMMENTED: ${{ needs.resolve.outputs.commented }}
+          FORK: ${{ needs.resolve.outputs.fork }}
+          NOTE: ${{ needs.resolve.outputs.note }}
+          PR_OPTIMIZE: ${{ needs.resolve.outputs.optimize }}
+          PENDING: ${{ steps.scan.outputs.pending }}
+          COVERED: ${{ steps.scan.outputs.covered }}
+          FORCE: ${{ needs.resolve.outputs.force }}
+          FORCE_ONLY: ${{ needs.resolve.outputs.force_only }}
+          RETRIED: ${{ steps.scan.outputs.retried }}
+          OPTIMIZE: ${{ steps.scan.outputs.optimize }}
+          ON_OPTIMIZE: ${{ needs.resolve.outputs.on_optimize }}
+          RUN_UPLOAD: ${{ needs.resolve.outputs.run_upload }}
+          RUN_REPLACE: ${{ needs.resolve.outputs.run_replace }}
+          STATUS_UPLOAD: ${{ needs.resolve.outputs.status_upload }}
+          STATUS_REPLACE: ${{ needs.resolve.outputs.status_replace }}
+          WARNINGS: ${{ needs.resolve.outputs.warnings }}
+          DECODE_RESULT: ${{ needs.decode.result }}
+          APPLY_STATE: ${{ steps.apply.outputs.state }}
+          UPLOAD_STATE: ${{ steps.upload.outputs.state }}
+          UPLOAD_DESCRIPTION: ${{ steps.upload.outputs.description }}
+          REPLACE_STATE: ${{ steps.replace.outputs.state }}
+          REPLACE_DESCRIPTION: ${{ steps.replace.outputs.description }}
+          REPLACED: ${{ steps.replace.outputs.replaced }}
+          STREAK_BLOCKED: ${{ steps.streak.outputs.blocked }}
+          PUSH_RESULT: ${{ steps.push.outputs.result }}
+          SHA: ${{ steps.validate.outputs.sha || needs.resolve.outputs.head_sha }}
+        with:
+          script: |
+            const fs = require('fs');
+            const env = process.env;
+            const readJson = (name) => {
+              const file = `${env.RUNNER_TEMP}/${name}`;
+              return fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
+            };
+            const fmt = (b) => (b >= 1048576 ? `${(b / 1048576).toFixed(2)} MB` : `${Math.round(b / 1024)} KB`);
+            const cell = (text) =>
+              text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/\|/g, '&#124;').replace(/\n/g, '<br>');
+            // File names come from the PR. A backtick, pipe or angle bracket in one would break out
+            // of the table cell or the code span, so those are written as escaped <code> instead.
+            const fileCell = (file) => (/[`|<>&\n]/.test(file) ? `<code>${cell(file)}</code>` : `\`${file}\``);
+            const repoUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}`;
+            const runUrl = `${repoUrl}/actions/runs/${context.runId}`;
+            // Originals stay reachable through this PR's ref (refs/pull/N/head) as the parent of the
+            // bot commit. Links point at the base repo so they keep working if a fork is deleted.
+
+            // optimize.json is the artifact's result list after apply-artifact.mjs sanitized it. The
+            // artifact is untrusted data: only what that script accepted is shown here.
+            const optimized = readJson('optimize.json');
+            const history = readJson('history.json');
+            const check = readJson('check.json');
+            const apply = readJson('apply.json');
+            const violations = check ? check.assets.filter((a) => !a.ok) : [];
+            // The publish job decides for itself whether optimization was expected (its own scan), then
+            // asks whether the decode job delivered. A failed, cancelled or rejected delivery is an
+            // error, never a silent pass.
+            const optimizeFailed =
+              env.OPTIMIZE === 'true' && (env.DECODE_RESULT !== 'success' || env.APPLY_STATE !== 'ok');
+            // The files were optimized but GitHub refused them three times (not a branch race).
+            const pushFailed = env.PUSH_RESULT === 'error';
+
+            // Commit status on the PR head; this is the required check that blocks merging.
+            // A commit the bot just pushed to a fork isn't visible from this repo for a few seconds
+            // (422 "No commit found"), so retry. If it still fails, the comment is posted anyway and
+            // the run that the bot's push starts sets the status on the new head.
+            const statusErrors = [];
+            async function setStatus(name, state, description) {
+              for (let attempt = 1; attempt <= 6; attempt++) {
+                try {
+                  await github.rest.repos.createCommitStatus({
+                    ...context.repo,
+                    sha: env.SHA,
+                    state,
+                    context: name,
+                    target_url: runUrl,
+                    description: description.slice(0, 140),
+                  });
+                  return;
+                } catch (error) {
+                  if (error.status !== 422 || attempt === 6) {
+                    statusErrors.push(error);
+                    return;
+                  }
+                  await new Promise((resolve) => setTimeout(resolve, 5000));
+                }
+              }
+            }
+            const state = optimizeFailed || pushFailed || !check ? 'error' : violations.length ? 'failure' : 'success';
+            await setStatus(
+              'asset-size-check',
+              state,
+              optimizeFailed
+                ? 'Optimization did not run'
+                : pushFailed
+                ? 'Optimized files could not be pushed'
+                : !check
+                ? 'Size validation did not run'
+                : violations.length
+                  ? `${violations.length} asset(s) over the size limit`
+                  : `${check.assets.length} changed asset(s) within limits`,
+            );
+            // A flow that is off, or does not apply here, says so and never blocks the merge. The
+            // decision comes from scripts/assets/flows.mjs through the resolve job.
+            const preset = (raw) => {
+              try {
+                return raw ? JSON.parse(raw) : null;
+              } catch {
+                return null;
+              }
+            };
+            for (const [name, raw] of [
+              ['asset-upload-check', env.STATUS_UPLOAD],
+              ['asset-replace-check', env.STATUS_REPLACE],
+            ]) {
+              const fixed = preset(raw);
+              if (fixed?.state) await setStatus(name, fixed.state, fixed.description);
+            }
+            // The upload and replace flows that ran. Their scripts write the state and a short
+            // description to their step outputs and a detailed report next to them. A step that
+            // produced no state crashed (or was skipped because the one before it failed).
+            const upload = env.RUN_UPLOAD === 'true' ? readJson('upload.json') : null;
+            const replace = env.RUN_REPLACE === 'true' ? readJson('replace.json') : null;
+            const uploadState = ['success', 'failure', 'error'].includes(env.UPLOAD_STATE) ? env.UPLOAD_STATE : 'error';
+            const replaceSkipped = env.RUN_REPLACE === 'true' && env.RUN_UPLOAD === 'true' && !['success', 'failure'].includes(env.UPLOAD_STATE);
+            const replaceState = ['success', 'error'].includes(env.REPLACE_STATE) ? env.REPLACE_STATE : replaceSkipped ? 'success' : 'error';
+            if (env.RUN_UPLOAD === 'true')
+              await setStatus(
+                'asset-upload-check',
+                uploadState,
+                env.UPLOAD_STATE ? env.UPLOAD_DESCRIPTION : 'Upload did not run',
+              );
+            // Swapped in the working tree is not swapped on the branch: say so when the push did not happen
+            // (no token, the guard, a moved branch, a refused push).
+            const unpushed = Number(env.REPLACED) > 0 && env.PUSH_RESULT !== 'pushed';
+            if (env.RUN_REPLACE === 'true')
+              await setStatus(
+                'asset-replace-check',
+                unpushed ? 'error' : replaceState,
+                unpushed
+                  ? `Replace: ${env.REPLACED} file(s) ready but not pushed (${env.PUSH_RESULT || (env.STREAK_BLOCKED === 'true' ? 'bot push limit' : 'push did not run')})`
+                  : replaceSkipped
+                    ? 'Replace: skipped, the upload did not complete'
+                    : env.REPLACE_STATE ? env.REPLACE_DESCRIPTION : 'Replace did not run',
+              );
+            const reportStatusError = () => {
+              if (!statusErrors.length) return;
+              const first = statusErrors[0];
+              if (env.FORK === 'true' && first.status === 422)
+                return core.warning(`Could not set the status on ${env.SHA}; the run for the bot commit will set it.`);
+              throw first;
+            };
+
+            const hasTable = optimized?.length > 0;
+
+            // One comment per PR, edited on every run. Only comments the bot itself wrote are reused.
+            const MARKER = '<!-- asset-pipeline-report -->';
+            const OPT_START = '<!-- asset-pipeline-optimization -->';
+            const OPT_END = '<!-- /asset-pipeline-optimization -->';
+            const issue_number = Number(env.PR_NUMBER);
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              ...context.repo, issue_number, per_page: 100,
+            });
+            const existing = comments.find(
+              (c) => c.user?.login === 'github-actions[bot]' && c.body?.includes(MARKER),
+            );
+            // Fork PRs from people without write access aren't optimized until a maintainer comments;
+            // say so instead of leaving the contributor with a green check and unoptimized files.
+            const unoptimized = env.FORK === 'true' && env.COMMENTED !== 'true' && env.PR_OPTIMIZE !== 'true'
+              ? Number(env.PENDING) || 0 : 0;
+            // Upload and replace say something only when they did, or failed to do, something.
+            const rows = (list, text) => list.slice(0, 20).map((r) => `| ${fileCell(r.file)} | ${text(r)} |`);
+            let uploadSection = '';
+            if (env.RUN_UPLOAD === 'true') {
+              const counts = upload?.counts;
+              const interesting = counts && (counts.uploaded || counts.failed || counts.skipped);
+              if (!env.UPLOAD_STATE || uploadState !== 'success' || interesting) {
+                uploadSection = `#### Upload\n\n${uploadState === 'success' ? '✅' : uploadState === 'failure' ? '❌' : '⚠️'} ${cell(env.UPLOAD_STATE ? env.UPLOAD_DESCRIPTION : 'The upload did not run.')}\n`;
+                const notable = (upload?.results ?? []).filter((r) => r.state === 'failed' || r.state === 'skipped');
+                if (notable.length)
+                  uploadSection += '\n| File | Result |\n|---|---|\n' +
+                    rows(notable, (r) => (r.state === 'failed' ? `❌ ${cell(String(r.error).slice(0, 200))}` : `skipped: ${cell(String(r.reason).slice(0, 100))}`)).join('\n') + '\n';
+                if (uploadState === 'failure')
+                  uploadSection += `\nThe upload check blocks the merge. After a re-run, if the failure stays, a maintainer can comment \`/allow-upload-failure\` to let this commit through. [View logs](${runUrl})\n`;
+                else if (uploadState === 'error')
+                  uploadSection += `\nThe upload could not run. [View logs](${runUrl})\n`;
+              }
+            }
+            let replaceSection = '';
+            if (env.RUN_REPLACE === 'true' && !replaceSkipped) {
+              const counts = replace?.counts;
+              if (!env.REPLACE_STATE || replaceState !== 'success' || (counts && (counts.replaced || counts.kept))) {
+                replaceSection = `#### Pointer files\n\n${replaceState === 'success' ? '✅' : '⚠️'} ${cell(env.REPLACE_STATE ? env.REPLACE_DESCRIPTION : 'The replace flow did not run.')}\n`;
+                const kept = (replace?.results ?? []).filter((r) => r.state !== 'replaced');
+                if (kept.length)
+                  replaceSection += '\n| File | Left as it is because |\n|---|---|\n' + rows(kept, (r) => cell(String(r.problem).slice(0, 200))).join('\n') + '\n';
+              }
+            }
+            const streakBlocked = env.STREAK_BLOCKED === 'true';
+            if (!existing && !hasTable && !history?.rows.length && !optimizeFailed && state === 'success' && !env.NOTE && !unoptimized && env.COMMENTED !== 'true' && !uploadSection && !replaceSection && !streakBlocked) return reportStatusError();
+
+            // The optimization section lists what the PR's bot commits did, read from git by the
+            // "Optimization history" step: for each file, the copy the author last added against the
+            // optimized copy the PR holds now. Rows for files that changed since are already left out.
+            // This run's own results fill in what never reached a commit (already optimized, failed).
+            // If that step failed, keep the existing section instead.
+            const short = (sha) => sha.slice(0, 7);
+            const blobUrl = (sha, file) =>
+              `${repoUrl}/blob/${sha}/${file.split('/').map(encodeURIComponent).join('/')}`;
+            const saved = (before, after) => `${fmt(after)} (−${Math.round((1 - after / before) * 100)}%)`;
+            const unique = (list) => [...new Set(list)];
+            let opt = null;
+            if (optimizeFailed) {
+              opt = `#### Optimization\n\n⚠️ The optimizer could not run. [View logs](${runUrl})\n`;
+            } else if (history) {
+              const rows = history.rows.map(
+                (h) => `| ${fileCell(h.file)} | [${fmt(h.before)}](${blobUrl(h.original, h.file)}) | ${saved(h.before, h.after)} |`,
+              );
+              const listed = new Set(history.rows.map((h) => h.file));
+              for (const r of optimized ?? []) {
+                if (listed.has(r.file)) continue;
+                // A replaced file missing from the history is one whose push failed.
+                const after = r.error
+                  ? `⚠️ failed<br><code>${cell(r.error)}</code>`
+                  : r.replaced ? saved(r.before, r.after) : `${fmt(r.after)} (${r.note ? cell(r.note) : 'already optimized'})`;
+                rows.push(`| ${fileCell(r.file)} | ${fmt(r.before)} | ${after} |`);
+              }
+              if (rows.length) {
+                opt = '#### Optimization\n\n| File | Before | After |\n|---|---:|---|\n' + rows.join('\n') + '\n';
+                const commits = unique(history.rows.flatMap((h) => h.commits));
+                const originals = unique(history.rows.map((h) => h.original));
+                if (commits.length)
+                  opt +=
+                    `\nCommitted as ${commits.map((c) => `[\`${short(c)}\`](${repoUrl}/commit/${c})`).join(', ')}. ` +
+                    'Pull before pushing again, and give the optimized media a quick visual check.\n' +
+                    `\nOriginals: ${originals.map((o) => `[\`${short(o)}\`](${repoUrl}/tree/${o})`).join(', ')} ` +
+                    '(click a "Before" size to open that file). They live only in this PR\'s history, not in the branch it merges into, ' +
+                    'and stay available as long as nobody force-pushes over the bot commit.\n';
+                if (env.PUSH_RESULT === 'failed')
+                  opt += '\n⚠️ Could not push: the branch changed during the run. The next push re-runs the pipeline.\n';
+                if (pushFailed)
+                  opt += '\n⚠️ Could not push the optimized files: GitHub refused the push three times. Comment `/optimize-assets` to try again.\n';
+              }
+            } else if (hasTable) {
+              opt = '#### Optimization\n\n| File | Before | After |\n|---|---:|---|\n';
+              for (const r of optimized) {
+                const after = r.error
+                  ? `⚠️ failed<br><code>${cell(r.error)}</code>`
+                  : r.replaced ? saved(r.before, r.after) : `${fmt(r.after)} (${r.note ? cell(r.note) : 'already optimized'})`;
+                opt += `| ${fileCell(r.file)} | ${fmt(r.before)} | ${after} |\n`;
+              }
+            } else if (existing) {
+              const i = existing.body.indexOf(OPT_START);
+              const j = existing.body.indexOf(OPT_END);
+              if (i !== -1 && j > i) opt = existing.body.slice(i + OPT_START.length, j).trim() + '\n';
+            }
+            if (!opt && env.COMMENTED === 'true' && env.OPTIMIZE !== 'true' && !env.NOTE)
+              opt = '#### Optimization\n\nNo new or changed assets to optimize.\n';
+            // A forced run that found nothing should say why. The message goes under the table.
+            const forceOnly = env.FORCE === 'true' ? JSON.parse(env.FORCE_ONLY || '[]') : null;
+            if (forceOnly && !hasTable && !optimizeFailed && env.OPTIMIZE !== 'true') {
+              const what = forceOnly.length ? forceOnly.map((n) => `\`${cell(n)}\``).join(', ') : 'any changed asset';
+              opt = `${opt ?? '#### Optimization\n'}\nForced run: no changed asset matched ${what} in this PR. Use a file name or the end of its path, for example \`/optimize-assets force demo.mp4\`.\n`;
+            }
+
+            let body = `${MARKER}\n### Asset pipeline\n\n`;
+            if (env.NOTE) body += `> ${env.NOTE}\n\n`;
+            if (unoptimized)
+              body +=
+                '> [!WARNING]\n' +
+                `> ${unoptimized} changed asset(s) were **not optimized**. This pull request comes from a fork, and forks are optimized automatically only for trusted authors. For anyone else a maintainer comments \`/optimize-assets\` (**Allow edits by maintainers** must be on). ` +
+                'To skip the wait, run `npm install` so the pre-commit hook optimizes assets as you commit, or run `npm run optimize-assets`, then push again.\n\n';
+            const covered = Number(env.COVERED) || 0;
+            const retried = Number(env.RETRIED) || 0;
+            if (covered)
+              body += `> ${covered} changed asset(s) were already optimized or reviewed locally by the pre-commit hook (recorded in the commit messages), so they were left as is.\n\n`;
+            if (forceOnly && (hasTable || env.OPTIMIZE === 'true'))
+              body += `> Forced run: ${forceOnly.length ? forceOnly.map((n) => `\`${cell(n)}\``).join(', ') : 'every changed asset'} optimized even if reviewed locally. An asset is replaced only when the result is at least 10% smaller.\n\n`;
+            if (retried && env.OPTIMIZE === 'true')
+              body += `> Local optimization failed for ${retried} asset(s), so they were optimized here instead.\n\n`;
+            if (env.ON_OPTIMIZE === 'false')
+              body += '> Optimization is turned off for this repository (`ASSET_OPTIMIZE` is `false`). The size limits still apply.\n\n';
+            try {
+              for (const warning of JSON.parse(env.WARNINGS || '[]')) body += `> ⚠️ ${warning}\n\n`;
+            } catch {
+              // The warnings are optional.
+            }
+            if (env.PUSH_RESULT === 'no-token')
+              body += '> The optimized files could not be committed: the repo secret `ASSET_BOT_TOKEN` is not set.\n\n';
+            if (apply?.rejected?.length)
+              body += `> ⚠️ ${apply.rejected.length} optimized file(s) were rejected by the safety checks and left as they were. [View logs](${runUrl})\n\n`;
+            if (streakBlocked)
+              body += '> ⚠️ The bot has pushed three times in a row without a commit from a person, so it did not push this time. Push a commit to let it continue.\n\n';
+            if (opt) body += `${OPT_START}\n${opt}${OPT_END}\n\n`;
+            if (uploadSection) body += `${uploadSection}\n`;
+            if (replaceSection) body += `${replaceSection}\n`;
+
+            body += '#### Size validation\n\n';
+            if (!check) {
+              body += `⚠️ Validation did not run. [View logs](${runUrl})\n`;
+            } else if (!violations.length) {
+              body += `✅ ${check.assets.length} changed asset(s) within limits.\n`;
+            } else {
+              body += `❌ ${violations.length} asset(s) over the limit. Limits: ${check.limits}\n\n`;
+              body += '| File | Size | Limit |\n|---|---:|---:|\n';
+              for (const v of violations) body += `| ${fileCell(v.file)} | ${fmt(v.size)} | ${fmt(v.limit)} |\n`;
+              body += env.FORK === 'true' && env.COMMENTED !== 'true'
+                ? '\nA maintainer can comment `/optimize-assets` to compress these. Anything still over the limit after that must be trimmed (shorter clip, smaller crop, MP4 instead of GIF).\n'
+                : env.OPTIMIZE === 'true' || hasTable
+                  ? '\nThese are still over the limit after optimization. Trim them (shorter clip, smaller crop, MP4 instead of GIF) and push again.\n'
+                  : '\nTrim them (shorter clip, smaller crop, MP4 instead of GIF) and push again.\n';
+              body += '\nIf the file has to stay as it is, a maintainer can comment `/allow-size-failure` to let this commit through. It applies to this commit only.\n';
+            }
+            body += `\n<sub>Checked commit ${env.SHA.slice(0, 7)}</sub>\n`;
+
+            if (!existing) await github.rest.issues.createComment({ ...context.repo, issue_number, body });
+            else if (existing.body !== body) await github.rest.issues.updateComment({ ...context.repo, comment_id: existing.id, body });
+            reportStatusError();

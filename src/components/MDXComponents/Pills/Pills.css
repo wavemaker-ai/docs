@@ -51,9 +51,9 @@
 }
 
 .wm-pill-mobile {
-  background: rgba(231, 104, 41, 0.2);
-  color: rgba(231, 104, 41);
-  --wm-pill-icon-color: rgba(231, 104, 41);
+  background: rgba(126, 87, 194, 0.2);
+  color: rgba(126, 87, 194);
+  --wm-pill-icon-color: rgba(126, 87, 194);
 }
 
 .wm-pill-android {
