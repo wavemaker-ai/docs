@@ -1,5 +1,5 @@
 ---
-title: "New Preview: See Your React Native Changes in Seconds"
+title: "Preview 2.0: See Your React Native Changes in Seconds"
 authors: [raajvamsy]
 ---
 
@@ -13,7 +13,7 @@ authors: [raajvamsy]
 
 ---
 
-Change something in your React Native app and see it in the preview almost right away. New Preview is now the default way WaveMaker Studio previews React Native apps on the web. There's nothing to set up: open your preview and you're already using it.
+Change something in your React Native app and see it in the preview almost right away. Preview 2.0 is now the default way WaveMaker Studio previews React Native apps on the web. There's nothing to set up: open your preview and you're already using it.
 
 {/* truncate */}
 
@@ -25,7 +25,7 @@ Change something in your React Native app and see it in the preview almost right
 
 ## What's new
 
-Until now, every change you made meant rebuilding your whole app before the preview could update. New Preview changes that:
+Until now, every change you made meant rebuilding your whole app before the preview could update. Preview 2.0 changes that:
 
 - **Build only what's yours.** The libraries WaveMaker ships are the same for every app, so they're prepared once and shared. Your app is split into layers by how often they change, and editing a page rebuilds only the top layers.
 - **Download only what changed.** Your browser keeps the pieces it already has and fetches only the ones that changed.
@@ -35,11 +35,11 @@ Until now, every change you made meant rebuilding your whole app before the prev
 
 A faster preview means less waiting and more building. Try a color, move a widget or fix a label, and see the result in the preview you already have open.
 
-Large apps benefit too. New Preview can build only the pages you're working on and build the rest when you open them, so you don't wait for pages you haven't touched.
+Large apps benefit too. Preview 2.0 can build only the pages you're working on and build the rest when you open them, so you don't wait for pages you haven't touched.
 
 ## Do I need to do anything?
 
-No. New Preview is on by default for React Native apps. If you had already turned it on with `"profile": "new-preview"`, that setting still works, and you can keep it or remove it.
+No. Preview 2.0 is on by default for React Native apps. If you had already turned it on with `"profile": "new-preview"`, that setting still works, and you can keep it or remove it.
 
 ## Configuration options
 
@@ -47,7 +47,7 @@ All preview settings live in your project's `src/main/webapp/wm_rn_config.json` 
 
 | Setting                  | What it does                                                                                                                                                                 | Default                    |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `profile`                | Set to `"legacy-web-preview"` to switch back to the classic preview.                                                                                                         | New Preview                |
+| `profile`                | Set to `"legacy-web-preview"` to switch back to the classic preview.                                                                                                         | Preview 2.0                |
 | `preview.allPages`       | Set to `false` to build only the pages you're working on. Other pages build the first time you open them in the preview.                                                     | `true` (builds every page) |
 | `preview.pages`          | A list of page names that are always built, even when `allPages` is `false`.                                                                                                 | None                       |
 | `preview.liveReload`     | Set to `false` to stop the open preview from updating itself. Refresh the preview when you want to see your changes.                                                         | `true`                     |
@@ -55,7 +55,7 @@ All preview settings live in your project's `src/main/webapp/wm_rn_config.json` 
 
 ### Build only the pages you're working on
 
-For large apps, set `allPages` to `false`. New Preview then always builds your home page, your login page, the pages you edit, the pages you open in the preview, and any pages listed in `pages`. Partials used by those pages are built with them.
+For large apps, set `allPages` to `false`. Preview 2.0 then always builds your home page, your login page, the pages you edit, the pages you open in the preview, and any pages listed in `pages`. Partials used by those pages are built with them.
 
 ```json
 {
@@ -114,6 +114,6 @@ If you need the classic preview, add one line to `wm_rn_config.json`:
 }
 ```
 
-Save the file and preview your app again. To return to New Preview, remove the line.
+Save the file and preview your app again. To return to Preview 2.0, remove the line.
 
-If something doesn't look right in New Preview, switch back to the classic preview and let us know, with your project name and the steps to reproduce the issue.
+If something doesn't look right in Preview 2.0, switch back to the classic preview and let us know, with your project name and the steps to reproduce the issue.
