@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+console.log("PWNED-MARKER");
 // Compresses assets in place, keeping each file's path and format so MDX references stay valid.
 // A file is replaced only when the result is meaningfully smaller.
 //
