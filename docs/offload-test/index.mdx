@@ -1,0 +1,25 @@
+---
+title: Asset offload preview test
+last_update:
+  author: "Mayank Prakash"
+---
+
+Test page for the asset pipeline. It shows files that the pipeline stored in the bucket and replaced with pointer files, next to a real optimized file. Do not merge this page.
+
+## Image served through a pointer file (PNG)
+
+![A PNG stored in the asset bucket and referenced through a pointer file](../_offload-test/our/assets/img/shot.png)
+
+## Image served through a pointer file (WebP)
+
+![A WebP stored in the asset bucket and referenced through a pointer file](../_offload-test/our/assets/img/pic.webp)
+
+## Video served through a pointer file (WebM)
+
+<video controls width="100%" muted playsInline>
+  <source src={require('../_offload-test/our/assets/vids/clip.webm').default} type="video/webm" />
+</video>
+
+## Optimized file that stays in the repository (JPG)
+
+![A JPG optimized by the pipeline and kept in the repository](../_offload-test/ou/assets/img/photo.jpg)
