@@ -1,7 +1,10 @@
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import { categoryFor } from './config.mjs';
 import { git, treeBlobs } from './git.mjs';
 import { processedBlobs } from './trailers.mjs';
+
+const { looksLikePointer, readHead } = createRequire(import.meta.url)('./pointer.cjs');
 
 // The branch the current branch most likely forks from, for `npm run check-assets` without --base:
 // among the remote `release`, `docs` and `main`, the one with the fewest commits that HEAD does not
@@ -73,7 +76,7 @@ export function classifyAssets({
   only,
 }) {
   if (files.length)
-    return { pending: toAssets(files), covered: [], retried: 0 };
+    return { pending: toAssets(files), covered: [], retried: 0, pointers: [] };
 
   const mergeBase = git('merge-base', base, head).trim();
   const existing = new Set(treeBlobs(mergeBase).values());
@@ -87,11 +90,14 @@ export function classifyAssets({
   )
     .split('\0')
     .filter((file) => file && !existing.has(headBlobs.get(file)));
-  const assets = toAssets(paths).filter(
+  // Pointer files (assets already stored in the bucket) are never optimized, but the size check
+  // still needs them, so they come back separately.
+  const { assets: found, pointers } = splitAssets(paths);
+  const assets = found.filter(
     ({ file }) => !only?.length || selects(only, file),
   );
   if (!trailersFrom || force)
-    return { pending: assets, covered: [], retried: 0 };
+    return { pending: assets, covered: [], retried: 0, pointers };
 
   const { done, failed } = processedBlobs(`${trailersFrom}..${head}`);
   const pending = [];
@@ -105,7 +111,7 @@ export function classifyAssets({
       if (failed.has(blob)) retried++;
     }
   }
-  return { pending, covered, retried };
+  return { pending, covered, retried, pointers };
 }
 
 // Assets to process: everything changed on the branch, minus those covered by trailers.
@@ -128,12 +134,34 @@ export function localAssets({ recursive }) {
   return toAssets([...new Set(paths)]);
 }
 
+// A regular file that starts like a pointer: a stand-in for an asset that lives in the bucket.
+export function isPointerFile(file) {
+  try {
+    return fs.lstatSync(file).isFile() && looksLikePointer(readHead(file));
+  } catch {
+    return false;
+  }
+}
+
 // Symlinks are skipped so a PR can't point the optimizer at files outside the checkout.
-function toAssets(paths) {
+function candidates(paths) {
   return paths
     .map((file) => ({ file, category: categoryFor(file) }))
     .filter(
       ({ file, category }) =>
         category && fs.existsSync(file) && fs.lstatSync(file).isFile(),
     );
+}
+
+function splitAssets(paths) {
+  const assets = [];
+  const pointers = [];
+  for (const asset of candidates(paths))
+    (isPointerFile(asset.file) ? pointers : assets).push(asset);
+  return { assets, pointers };
+}
+
+// Real assets only: a pointer has nothing to optimize.
+function toAssets(paths) {
+  return splitAssets(paths).assets;
 }

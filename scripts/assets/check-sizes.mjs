@@ -6,12 +6,34 @@
 // uses the nearest of origin/release, origin/docs and origin/main (see defaultBase).
 
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import { LIMITS, formatBytes } from './config.mjs';
-import { changedAssets, parseArgs } from './changed-assets.mjs';
+import { classifyAssets, parseArgs } from './changed-assets.mjs';
+import { displayName, escapeData, escapeProperty } from './workflow-commands.mjs';
+
+const { readPointer } = createRequire(import.meta.url)('./pointer.cjs');
+
+// A pointer file is tiny, but the asset it stands for is not: the limit applies to the size the
+// pointer claims. A pointer that cannot be read counts by its own size; the pointer check reports it.
+function sizeOf(asset) {
+  if (asset.pointer) {
+    try {
+      const pointer = readPointer(asset.file);
+      if (pointer) return pointer.size;
+    } catch {
+      // Falls through to the file's own size.
+    }
+  }
+  return fs.statSync(asset.file).size;
+}
 
 const args = parseArgs(process.argv.slice(2));
-const assets = changedAssets(args).map((asset) => {
-  const size = fs.statSync(asset.file).size;
+const { pending, pointers } = classifyAssets(args);
+const assets = [
+  ...pending,
+  ...pointers.map((asset) => ({ ...asset, pointer: true })),
+].map((asset) => {
+  const size = sizeOf(asset);
   const limit = LIMITS[asset.category].maxBytes;
   return { ...asset, size, limit, ok: size <= limit };
 });
@@ -30,7 +52,7 @@ if (!assets.length) {
 } else {
   markdown += '| File | Size | Limit | |\n|---|---:|---:|---|\n';
   for (const a of assets) {
-    markdown += `| \`${a.file}\` | ${formatBytes(a.size)} | ${formatBytes(a.limit)} | ${a.ok ? '✅' : '❌'} |\n`;
+    markdown += `| \`${a.file}\`${a.pointer ? ' (stored in the bucket)' : ''} | ${formatBytes(a.size)} | ${formatBytes(a.limit)} | ${a.ok ? '✅' : '❌'} |\n`;
   }
 }
 
@@ -46,14 +68,14 @@ if (process.env.GITHUB_ACTIONS) {
     fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, markdown);
   for (const v of violations) {
     console.log(
-      `::error file=${v.file}::${formatBytes(v.size)} exceeds the ${formatBytes(v.limit)} limit`,
+      `::error file=${escapeProperty(v.file)}::${escapeData(`${formatBytes(v.size)} exceeds the ${formatBytes(v.limit)} limit`)}`,
     );
   }
 }
 
 for (const a of assets) {
   console.log(
-    `${a.ok ? 'ok  ' : 'FAIL'}  ${formatBytes(a.size).padStart(10)} / ${formatBytes(a.limit).padEnd(8)} ${a.file}`,
+    `${a.ok ? 'ok  ' : 'FAIL'}  ${formatBytes(a.size).padStart(10)} / ${formatBytes(a.limit).padEnd(8)} ${displayName(a.file)}`,
   );
 }
 console.log(

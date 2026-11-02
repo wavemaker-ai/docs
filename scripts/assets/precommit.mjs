@@ -15,6 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import readline from 'node:readline';
 import ttyStreams from 'node:tty';
+import { isPointerFile } from './changed-assets.mjs';
 import { categoryFor, formatBytes } from './config.mjs';
 import {
   blobId,
@@ -111,6 +112,8 @@ for (const file of names) {
     );
     continue;
   }
+  // A pointer file stands in for an asset stored in the bucket: there is nothing to optimize.
+  if (isPointerFile(file)) continue;
   const seen = ledger.get(info.blob);
   if (seen) entries.push({ status: seen, blob: info.blob, path: file });
   else work.push({ file, category: categoryFor(file), blob: info.blob });

@@ -156,8 +156,22 @@ function sanitizeResults(results, allowed) {
   return out;
 }
 
+// Measured image sizes the replace flow may write into pointers: only well-formed entries (a sha256
+// key and two bounded integers). A bad entry is dropped, not trusted and not fatal. The replace step
+// uses an entry only for a file whose own hash equals the key.
+export function sanitizeDimensions(dimensions) {
+  const out = {};
+  if (!dimensions || typeof dimensions !== 'object' || Array.isArray(dimensions)) return out;
+  const ok = (n) => Number.isInteger(n) && n >= 1 && n <= 99999;
+  for (const [sha, entry] of Object.entries(dimensions).slice(0, MAX_FILES)) {
+    if (SHA256.test(sha) && entry && ok(entry.width) && ok(entry.height))
+      out[sha] = { width: entry.width, height: entry.height };
+  }
+  return out;
+}
+
 // Applies the artifact in `artifactDir` to the checkout in `cwd`.
-// Returns { state, error?, applied: [path], rejected: [{ path, reason }], results }.
+// Returns { state, error?, applied: [path], rejected: [{ path, reason }], results, dimensions }.
 //   state "missing": there is no manifest; "invalid": the manifest cannot be trusted at all.
 export function applyArtifact({ artifactDir, cwd, headSha, allowed }) {
   const allowedSet = new Set(allowed);
@@ -167,6 +181,7 @@ export function applyArtifact({ artifactDir, cwd, headSha, allowed }) {
     applied: [],
     rejected: [],
     results: [],
+    dimensions: {},
   });
   const manifestFile = path.join(artifactDir, 'manifest.json');
   if (!regular(manifestFile)) return fail('missing', 'the artifact has no manifest');
@@ -251,6 +266,7 @@ export function applyArtifact({ artifactDir, cwd, headSha, allowed }) {
     applied,
     rejected,
     results: sanitizeResults(manifest.results, allowedSet),
+    dimensions: sanitizeDimensions(manifest.dimensions),
   };
 }
 
@@ -272,7 +288,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       if (!args[name]) throw new Error(`--${name} is required`);
   } catch (error) {
     console.error(
-      `${error.message}\nUsage: apply-artifact.mjs --artifact <dir> --head-sha <sha> --pending <pending.json> [--report f] [--applied f] [--optimize-report f]`,
+      `${error.message}\nUsage: apply-artifact.mjs --artifact <dir> --head-sha <sha> --pending <pending.json> [--report f] [--applied f] [--optimize-report f] [--dimensions f]`,
     );
     process.exit(2);
   }
@@ -291,6 +307,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     fs.writeFileSync(args.applied, result.applied.map((f) => `${f}\0`).join(''));
   if (args['optimize-report'])
     fs.writeFileSync(args['optimize-report'], JSON.stringify(result.results, null, 2));
+  if (args.dimensions)
+    fs.writeFileSync(args.dimensions, JSON.stringify(result.dimensions, null, 2));
   if (process.env.GITHUB_OUTPUT)
     fs.appendFileSync(
       process.env.GITHUB_OUTPUT,
