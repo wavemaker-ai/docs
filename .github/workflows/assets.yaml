@@ -751,6 +751,18 @@ jobs:
           if [ "$result" != "pushed" ]; then git reset -q --hard HEAD~1; fi
           echo "result=${result}" >> "$GITHUB_OUTPUT"
 
+      # Whatever was applied but not pushed (the push token is missing, the bot hit its push limit, the
+      # push failed or there was nothing to commit) must not be measured: the size check reads the
+      # files on disk, so leftover optimized files would make an oversized PR pass. Back to the commit
+      # the PR really has.
+      - name: Discard what was not pushed
+        if: always() && steps.scan.outcome == 'success' && steps.push.outputs.result != 'pushed'
+        working-directory: pr
+        env:
+          GIT_CONFIG_NOSYSTEM: '1'
+          GIT_CONFIG_GLOBAL: /dev/null
+        run: git reset -q --hard HEAD
+
       # The optimization table in the comment is rebuilt from the PR's bot commits on every run (see
       # scripts/assets/history.mjs), so it never depends on what an earlier comment said. If this step
       # fails, the Report step keeps the comment's existing table.

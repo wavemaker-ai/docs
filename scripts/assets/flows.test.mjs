@@ -154,3 +154,12 @@ test('each override command is wired to its own status, in the trigger, the conc
   // The override job may set these two statuses and nothing else.
   assert.match(text, /\['asset-upload-check', 'asset-size-check'\]\.includes\(process\.env\.CONTEXT\)/);
 });
+
+test('whatever the publish job applied but did not push is discarded before the sizes are measured', () => {
+  const text = fs.readFileSync(workflowFile, 'utf8');
+  const at = (name) => text.indexOf(`      - name: ${name}\n`);
+  assert.ok(at('Commit and push') < at('Discard what was not pushed'), 'discard comes after the push step');
+  assert.ok(at('Discard what was not pushed') < at('Validate sizes'), 'discard comes before the size check');
+  const condition = stepCondition('Discard what was not pushed');
+  assert.match(condition, /steps\.push\.outputs\.result != 'pushed'/);
+});
