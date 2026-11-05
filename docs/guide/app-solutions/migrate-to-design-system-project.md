@@ -37,7 +37,9 @@ Before you begin, make sure you have:
 ## Stage 2 — Run the Migration
 
 1. Launch the `wm-design-system-migrator` skill from WaveMaker AI.
+
 2. Upload your **non-Design System project zip** when prompted.
+
 3. The skill processes the migration automatically across three steps:
 
    - **Design System Conversion** — Updates project and runtime versions, converts metadata, migrates template configuration to PRISM, replaces legacy variable types with actions, updates package scopes, migrates theme artifacts to design tokens, and preserves migration history.
@@ -45,7 +47,6 @@ Before you begin, make sure you have:
    - **Studio-Ready Packaging** — Bundles the migrated project into a Studio-importable package.
 
 4. Download the generated **Studio-Package** once the skill completes.
-
 
 ---
 
@@ -83,16 +84,16 @@ Take screenshots of the original application before migration and keep them alon
 
 ## Limitations and Constraints
 
-| Constraint | Details |
-|---|---|
-| UI distortion after import | Visual layout will not match the original; manual page-by-page refinement is required |
-| Legacy LESS themes | Migration of LESS-based themes is not yet fully automated |
+| Constraint                      | Details                                                                                                   |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| UI distortion after import      | Visual layout will not match the original; manual page-by-page refinement is required                     |
+| Legacy LESS themes              | Migration of LESS-based themes is not yet fully automated                                                 |
 | Container spacing and alignment | Automated handling of spacing and alignment within containers has limited coverage in the current version |
-| Highly customised layouts | Complex or project-specific layout customisations may require additional manual work beyond Stage 4 |
-| Responsive behaviour | Automated responsive behaviour migration has limited coverage in the current version |
+| Highly customised layouts       | Complex or project-specific layout customisations may require additional manual work beyond Stage 4       |
+| Responsive behaviour            | Automated responsive behaviour migration has limited coverage in the current version                      |
 
 ---
 
 ## See Also
 
-- [Design System Project](https://docs.wavemaker.ai/docs/design-system/design-system-project/)
+- [Design System Project](../../design-system/design-system-project/index.mdx)
