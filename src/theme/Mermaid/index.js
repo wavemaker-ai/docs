@@ -32,8 +32,8 @@ const SITE_CONFIG = {
       font-weight: var(--wm-font-weight-semibold);
     }
   `,
-  // Space under a group's title, in px: about one line of text.
-  flowchart: { subGraphTitleMargin: { bottom: 16 } },
+  // Space around a group's title, in px: half a line of text above it, a line below.
+  flowchart: { subGraphTitleMargin: { top: 8, bottom: 16 } },
 };
 
 // Mermaid sizes the SVG to the column (width: 100%, capped at its natural width). The natural width
