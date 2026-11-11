@@ -1,11 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
-// Switches between this site (AI docs) and the classic docs, which are proxied
-// under /learn by the Amplify rewrite. `pathname://` forces a full page load so
-// the Docusaurus router does not try to resolve /learn as one of its own routes.
 export default function DocsSwitcher({ className }) {
   return (
     <div
@@ -16,10 +12,11 @@ export default function DocsSwitcher({ className }) {
       <span className={clsx(styles.option, styles.active)} aria-current="true">
         AI (v12+)
       </span>
-      {/* Docusaurus Link adds target="_blank" to non-internal URLs; keep the same tab. */}
-      <Link className={styles.option} to="pathname:///learn/" target="_self">
+      {/* Plain anchor: <Link> would prefix the absolute site url on every host. */}
+      {/* eslint-disable-next-line @docusaurus/no-html-links */}
+      <a className={styles.option} href="/learn/">
         Classic (v11.x & below)
-      </Link>
+      </a>
     </div>
   );
 }
