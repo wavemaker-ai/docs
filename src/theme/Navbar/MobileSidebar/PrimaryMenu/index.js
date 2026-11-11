@@ -1,7 +1,8 @@
 import React from 'react';
-import {useThemeConfig} from '@docusaurus/theme-common';
-import {useNavbarMobileSidebar} from '@docusaurus/theme-common/internal';
+import { useThemeConfig } from '@docusaurus/theme-common';
+import { useNavbarMobileSidebar } from '@docusaurus/theme-common/internal';
 import NavbarItem from '@theme/NavbarItem';
+import DocsSwitcher from '../../DocsSwitcher';
 function useNavbarItems() {
   // TODO temporary casting until ThemeConfig type is improved
   return useThemeConfig().navbar.items;
@@ -14,6 +15,9 @@ export default function NavbarMobilePrimaryMenu() {
   const items = useNavbarItems();
   return (
     <ul className="menu__list">
+      <li className="menu__list-item">
+        <DocsSwitcher placement="drawer" />
+      </li>
       {items.map((item, i) => (
         <NavbarItem
           mobile

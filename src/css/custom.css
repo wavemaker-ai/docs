@@ -462,6 +462,13 @@ span.DocSearch-Button-Keys {
   }
 }
 
+/* Just above the mobile breakpoint the right side (incl. the docs switcher) reaches the page center */
+@media (min-width: 997px) and (max-width: 1100px) {
+  .navbar-left-wrapper {
+    left: 46%;
+  }
+}
+
 .dropdown > .navbar__link:after {
   border-width: 0;
   width: 12px;
