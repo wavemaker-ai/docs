@@ -73,7 +73,13 @@
           "name": "Node.js",
           "description": "JavaScript runtime environment.",
           "link": "https://nodejs.org/",
-          "version": "22.22.3"
+          "version": "22.23.4"
+        },
+        {
+          "name": "npm",
+          "description": "Package manager used for installing and building web app dependencies.",
+          "link": "https://www.npmjs.com/",
+          "version": "10.9.9"
         },
         {
           "name": "Java (JDK)",
@@ -96,7 +102,13 @@
           "name": "Node.js",
           "description": "JavaScript runtime for serving Next.js apps.",
           "link": "https://nodejs.org/",
-          "version": "22.18.0"
+          "version": "22.23.4"
+        },
+        {
+          "name": "npm",
+          "description": "Package manager used for installing and building web app dependencies.",
+          "link": "https://www.npmjs.com/",
+          "version": "10.9.9"
         },
         {
           "name": "Nginx",
@@ -133,13 +145,13 @@
           "name": "Node.js",
           "description": "JavaScript runtime for the Metro bundler.",
           "link": "https://nodejs.org/",
-          "version": "22.22.3"
+          "version": "22.23.4"
         },
         {
           "name": "npm",
           "description": "Package manager used for React Native dependencies.",
           "link": "https://www.npmjs.com/",
-          "version": "10.9.8"
+          "version": "10.9.9"
         },
         {
           "name": "Java (JDK)",
