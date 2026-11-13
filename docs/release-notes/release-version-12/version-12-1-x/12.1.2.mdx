@@ -7,7 +7,7 @@ hide_title: true
 
 <Common.WaveMakerAIHeading scale={1.5} />
 
-WaveMaker AI 12.1.2 Overview\...
+WaveMaker AI 12.1.2 upgrades the Node.js and npm build requirements, fixes partial override styles on the Studio canvas, and removes a Yarn vulnerability from focus-trap.
 
 For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack?v=12-1-2).
 
@@ -58,7 +58,9 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
   <TabItem name="Bug Fixes">
     <Accordian title="User Interface">
-      {/* Content */}
+      - ### Missing Styles in Studio Canvas <Pill type="web" />
+
+        In Studio, the colors and styles defined in your app's design system were sometimes not loaded completely or were shown incorrectly on the canvas. This happened because of a race condition between generating the styles and loading them in Studio. This is now fixed, with Studio ensuring that styles are fully generated before loading them, automatically retrying if they are not ready, and retaining the previously available styles if loading fails. This ensures that all colours and component styles are consistently displayed on the Studio canvas.
     </Accordian>
 
     <Accordian title="Backend">
