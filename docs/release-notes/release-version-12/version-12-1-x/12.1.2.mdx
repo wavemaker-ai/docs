@@ -58,7 +58,13 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 
   <TabItem name="Bug Fixes">
     <Accordian title="User Interface">
-      {/* Content */}
+      - ### Custom icons blank on the Studio canvas <Pill type="web" />
+
+        Fixed custom icons imported into a project rendering blank on the Studio canvas, including in classic projects, by loading the icon stylesheets into the canvas along with the project's font stylesheets.
+
+      - ### Custom icons and fonts missing in deployed apps <Pill type="web" /> <Pill type="angular" />
+
+        Fixed custom icon and font stylesheets failing to load in deployed Angular apps by resolving their paths against the app's CDN URL, so icons and fonts render when the UI artifact is deployed on its own.
     </Accordian>
 
     <Accordian title="Backend">
