@@ -14,7 +14,7 @@ WaveMaker public documentation. Docusaurus 3.9.2, MDX-first, Node ≥ 20. Deploy
 - Never invent entries in `data/author/authors.yml` or any `tags.yml`. If a referenced key is missing, stop and ask the user.
 - Never add an `<h1>` to a doc, blog, or announcement body. Titles come from frontmatter.
 - Never place doc-, announcement-, or post-specific assets under `static/img/`. Co-locate them next to their content (see **Asset co-location** in File conventions).
-- Never create or edit a pointer file by hand. A pointer is a small text file whose first line is `s3-asset v1`; it stands in for an asset stored in the asset bucket, and the asset pipeline writes it. Reference assets with inline markdown images (`![alt](./assets/img/a.png)`) or `require()`/`import`; reference-style images (`![alt][ref]`) are not supported.
+- Never create or edit a pointer file by hand. A pointer is a small text file whose first line is `s3-asset v1`; it stands in for an asset stored in the asset bucket, and the asset pipeline writes it. Reference assets with inline markdown images (`![alt](./assets/img/a.png)`) or ES `import`. Reference-style images (`![alt][ref]`) are not supported.
 
 ## Validation gate
 
@@ -58,13 +58,18 @@ Reference them with a relative path using standard Markdown image syntax:
 
 ### Videos
 
-Place videos in `assets/vids/` next to the post:
+Place videos in `assets/vids/` next to the post. Reference them with ES `import`. Put one `import` per asset right after the frontmatter, followed by a blank line (the ESM block ends at the first blank line), and name each one in camelCase with a `Video` or `Image` suffix so it can't clash with a globally registered component:
 
 ```mdx
-<video controls width="100%" muted playsInline poster={require('./assets/vids/poster.jpg').default}>
-  <source src={require('./assets/vids/demo.mp4').default} type="video/mp4" />
+import demoPoster from './assets/vids/poster.jpg';
+import demoVideo from './assets/vids/demo.mp4';
+
+<video controls width="100%" muted playsInline poster={demoPoster}>
+  <source src={demoVideo} type="video/mp4" />
 </video>
 ```
+
+The same rule applies to any asset used inside JSX (for example `<img src={diagramImage} />`): import it, and use the imported value directly — there is no `.default`.
 
 ### Shared assets — nearest common ancestor
 

@@ -3,6 +3,9 @@ title: "Preview 2.0: See Your React Native Changes in Seconds"
 authors: [raajvamsy]
 ---
 
+import posterImage from './assets/videos/new-preview/poster.jpg';
+import newPreviewVideo from './assets/videos/new-preview/new-preview.mp4';
+
 <PillGroup>
   <Pill type="react-native" text="React Native" />
 
@@ -17,8 +20,8 @@ Change something in your React Native app and see it in the preview almost right
 
 {/* truncate */}
 
-<video controls width="100%" muted playsInline poster={require('./assets/videos/new-preview/poster.jpg').default}>
-  <source src={require('./assets/videos/new-preview/new-preview.mp4').default} type="video/mp4" />
+<video controls width="100%" muted playsInline poster={posterImage}>
+  <source src={newPreviewVideo} type="video/mp4" />
 </video>
 
 ---

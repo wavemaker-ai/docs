@@ -4,12 +4,15 @@ sidebar_label: Browser and SSO login
 last_update: { author: "Praneeth Reddy" }
 ---
 
+import browserSsoLoginPoster from './assets/vids/browser-sso-login-poster.jpg';
+import browserSsoLoginVideo from './assets/vids/browser-sso-login.mp4';
+
 Organizations often provide their users with multiple mobile apps that authenticate against the same identity provider. When each app handles SSO login on its own, users must enter their credentials separately in every app, and again whenever a link opens a web page protected by the same identity provider.
 
 Browser and SSO login settings address this by letting your app authenticate users through the device browser. A user signs in once, and other apps on the same device that use the same identity provider can sign the user in without prompting for credentials again. You can also configure how the login screen is presented and where links open, so that users keep their authenticated session wherever they need it.
 
-<video controls width="100%" playsInline poster={require('./assets/vids/browser-sso-login-poster.jpg').default}>
-  <source src={require('./assets/vids/browser-sso-login.mp4').default} type="video/mp4" />
+<video controls width="100%" playsInline poster={browserSsoLoginPoster}>
+  <source src={browserSsoLoginVideo} type="video/mp4" />
 </video>
 
 ## Signing in once across apps
