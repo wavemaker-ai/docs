@@ -1,0 +1,8 @@
+.box {
+  width: 100%;
+  margin: 0 auto var(--ifm-leading);
+  /* Site font; the accent colour is left at the Video.js default. */
+  --media-font-family: var(--ifm-font-family-base);
+  /* Show the control bar from the start, not only after the first play. */
+  --media-controls-before-start: visible;
+}
