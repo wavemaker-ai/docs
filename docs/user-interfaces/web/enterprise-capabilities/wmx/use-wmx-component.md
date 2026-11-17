@@ -25,7 +25,7 @@ In a form, add a field and choose the WMX component as the field's widget. Studi
 
 `widget` is `wmx-` followed by the component name, and `componentname` is the component name. The other attributes are the component's properties. Here `dataset` is bound to a variable.
 
-Because the component is a form field, the form reads its value like any other field, so it is included when the form is submitted. For the value to reach the form, the component must call `listener.onChange` when the user changes it (see [Create a WMX component](./create-wmx-component.md)).
+Because the component is a form field, the form reads its value like any other field, so it is included when the form is submitted. For the value to reach the form, the component must call `listener.onChange` when the user changes it (see the [WMX schema reference](./wmx-schema-reference.md#update-a-property-from-the-component) and the [examples](./wmx-examples.md)).
 
 ```mermaid
 sequenceDiagram

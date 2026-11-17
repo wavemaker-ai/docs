@@ -342,8 +342,18 @@ export default [
         items: [
           {
             type: 'doc',
-            id: 'user-interfaces/web/enterprise-capabilities/wmx/create-wmx-component',
-            label: 'Create a WMX component',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/wmx-schema-reference',
+            label: 'WMX schema reference',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/wmx-with-aira',
+            label: 'Create WMX components',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/wmx-examples',
+            label: 'Examples',
           },
           {
             type: 'doc',
