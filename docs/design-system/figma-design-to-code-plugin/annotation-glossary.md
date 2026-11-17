@@ -5,6 +5,9 @@ sidebar_label: Annotation Glossary
 last_update: { author: "Mansi Raj" }
 ---
 
+import reviewAnnotationsPanelImage from './assets/img/review-annotations-panel.png';
+import reviewAnnotationsNeedsReviewImage from './assets/img/review-annotations-needs-review.png';
+
 ---
 
 Annotations are labels you attach to layers in your Figma design so the plugin knows what each layer is — a button, a checkbox, a text field, a table row, and so on. The plugin uses these labels to turn your design into working code, so the better the annotations, the better the generated app.
@@ -14,9 +17,9 @@ You don't have to annotate everything by hand. When you run the plugin, an AI mo
 The Review Annotations panel lists every layer alongside the label the AI assigned. Check **Needs review** to filter down to layers the AI flagged as low-confidence:
 
 <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-  <img src={require('./assets/img/review-annotations-panel.png').default} alt="Review Annotations panel listing Figma layers with their AI-assigned labels, such as page_header and button" style={{ maxWidth: "260px" }} />
+  <img src={reviewAnnotationsPanelImage} alt="Review Annotations panel listing Figma layers with their AI-assigned labels, such as page_header and button" style={{ maxWidth: "260px" }} />
 
-  <img src={require('./assets/img/review-annotations-needs-review.png').default} alt="Review Annotations panel filtered to Needs review, showing layers flagged with a low-confidence warning icon" style={{ maxWidth: "260px" }} />
+  <img src={reviewAnnotationsNeedsReviewImage} alt="Review Annotations panel filtered to Needs review, showing layers flagged with a low-confidence warning icon" style={{ maxWidth: "260px" }} />
 </div>
 
 You don't need to know anything about code to use this guide. For each element on your screen, look through the list below, find the one that visually matches, and apply that annotation to the smallest layer that fully covers the element. If something on your design doesn't clearly match anything here, it's fine to skip it — un-annotated layers are just treated as plain containers.

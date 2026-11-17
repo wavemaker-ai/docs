@@ -42,10 +42,13 @@ More body copy. Use a table when comparing options or summarising a before/after
   */}
 
 {/*
-  Optional local video — place the file under ./assets/videos/<slug>/ first:
+  Optional local video — place the file under ./assets/videos/<slug>/ first, then add an ES import
+  right after the frontmatter (followed by a blank line) and use it in the tag:
+
+    import exampleVideo from './assets/videos/slug/example.mp4';
 
     <video controls width="100%" playsInline>
-      <source src={require('./assets/videos/slug/example.mp4').default} type="video/mp4" />
+      <source src={exampleVideo} type="video/mp4" />
     </video>
   */}
 

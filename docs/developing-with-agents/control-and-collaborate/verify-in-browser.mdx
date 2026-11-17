@@ -3,6 +3,9 @@ title: "Verify in browser"
 last_update: { author: "Sahinya Gottipati" }
 ---
 
+import verifyInBrowserPoster from './assets/vids/verify-in-browser-poster.jpg';
+import verifyInBrowserVideo from './assets/vids/verify-in-browser.mp4';
+
 WaveMaker AI Assistant can verify your app's behavior in real time. The assistant launches the app in a separate browser instance locally on your machine, verifies the intended behavior, and generates more accurate code. This reduces guesswork by the assistant and the number of prompts required to reach the intended result.
 
 ## When the assistant verifies
@@ -16,8 +19,8 @@ It ends with a clear verdict: a bug in your app, something for the platform team
 
 In this recording, the assistant reproduces a reported OTP focus problem, reports an app bug, and asks before fixing it.
 
-<video controls width="100%" muted playsInline poster={require('./assets/vids/verify-in-browser-poster.jpg').default}>
-  <source src={require('./assets/vids/verify-in-browser.mp4').default} type="video/mp4" />
+<video controls width="100%" muted playsInline poster={verifyInBrowserPoster}>
+  <source src={verifyInBrowserVideo} type="video/mp4" />
 </video>
 
 ## How verification works

@@ -4,6 +4,9 @@ sidebar_label: Custom App Wrapper
 last_update: { author: "Ranjith Seekolu" }
 ---
 
+import customAppWrapperPoster from './assets/vids/custom-app-wrapper-poster.jpg';
+import customAppWrapperVideo from './assets/vids/custom-app-wrapper.mp4';
+
 You can wrap your React Native app with your own React component. It sits at the very top of the component tree, above every page, so anything it provides is available to the whole app.
 
 Use it when a library needs a provider or a root-level component to work, for example:
@@ -16,8 +19,8 @@ Use it when a library needs a provider or a root-level component to work, for ex
 - **SDKs that need a provider:** payments (Stripe), authentication (Auth0)
 - **One-time setup at app start:** configuring an SDK before the app renders
 
-<video controls width="100%" playsInline poster={require('./assets/vids/custom-app-wrapper-poster.jpg').default}>
-  <source src={require('./assets/vids/custom-app-wrapper.mp4').default} type="video/mp4" />
+<video controls width="100%" playsInline poster={customAppWrapperPoster}>
+  <source src={customAppWrapperVideo} type="video/mp4" />
 </video>
 
 {/* TODO: add a :::note with the minimum WaveMaker Studio version (listed in release 11.14.1.31) */}

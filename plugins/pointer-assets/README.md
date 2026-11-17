@@ -2,7 +2,7 @@
 
 Lets a text "pointer file" stand in for a binary asset (image, GIF, video) that lives in the asset
 bucket. The pointer sits at the asset's original path, so pages reference it exactly as before
-(`![alt](./assets/img/a.png)`, `require('./assets/vids/a.mp4').default`, `import a from './a.png'`).
+(`![alt](./assets/img/a.png)`, `import a from './assets/vids/a.mp4'`).
 At build time the file resolves to `<base URL>/<key>`; nothing is copied into `build/`.
 
 Nothing creates pointers yet: the upload and replace flows of the asset pipeline come later. Until a
@@ -58,7 +58,7 @@ the repository keeps its original key, which records where it was first stored.
   the two disagree.
 - SVG is not handled: it is imported as a React component and stays in the repo. Pointers under
   `static/` are not supported.
-- Use inline markdown images, `require()` or `import`. Reference-style images are not covered by the
+- Use inline markdown images or `import`. Reference-style images are not covered by the
   remark plugin (and Docusaurus does not process them either).
 - Do not create or edit pointer files by hand.
 - `npm run build` runs the plugin tests and ends with the leak scan. `npm test` runs every test; the
