@@ -284,6 +284,7 @@ const config = {
       './plugins/pointer-assets/index.cjs',
       { baseUrl: POINTER_ASSETS_BASE_URL },
     ],
+    './plugins/vtt-assets/index.cjs',
     [
       '@docusaurus/plugin-content-blog',
       {

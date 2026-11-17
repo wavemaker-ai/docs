@@ -35,3 +35,22 @@
   --media-popover: rgb(22 24 32 / 0.5);
   --media-backdrop-filter-surface: blur(22px) saturate(125%) brightness(0.55);
 }
+
+/*
+ * Hide the browser's own cues: Captions.jsx draws them. Chrome ignores a site's cue background, so
+ * hiding is the only way to avoid showing both.
+ */
+.media-skin video::cue {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/*
+ * Docusaurus (Infima) styles every <kbd> with a light border, inset shadow and dark text. Inside the
+ * player that breaks the key hint in tooltips (the "C" next to "Disable captions"), because the skin
+ * leaves these properties unset. Put them back to what the skin expects.
+ */
+.media-skin kbd {
+  box-shadow: none;
+  color: inherit;
+}

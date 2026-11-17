@@ -4,6 +4,7 @@ import {
   VideoPlayer,
   VideoSkin,
 } from '@videojs/react/video';
+import Captions from './Captions';
 import './VideoPlayer.css';
 import styles from './Video.module.css';
 
@@ -90,6 +91,7 @@ export default function Video({
           >
             {children}
           </PlayerVideo>
+          <Captions />
         </VideoSkin>
       </VideoPlayer>
     </div>
