@@ -7,16 +7,7 @@ last_update: { author: "Yagyaraj Lodhi" }
 
 Edit your component in your own editor, check it in the browser, and then push it to Studio.
 
-```mermaid
-flowchart TD
-    A["mvn wavemaker-workspace:pull"] --> B["Edit index.tsx and wmx.json"]
-    B --> C["npm run dev<br/>check it in the browser"]
-    C -->|"needs changes"| B
-    C -->|"looks right"| D["mvn wavemaker-workspace:push"]
-    D --> E["Refresh the project in Studio"]
-    E --> F["Run the app and test<br/>bindings, events, form value"]
-    F -->|"needs changes"| B
-```
+![Develop and test locally workflow](../../assets/wmx/wmx-local-loop.svg)
 
 ## Prerequisites
 

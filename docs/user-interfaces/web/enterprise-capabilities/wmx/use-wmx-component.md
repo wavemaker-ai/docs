@@ -27,17 +27,7 @@ In a form, add a field and choose the WMX component as the field's widget. Studi
 
 Because the component is a form field, the form reads its value like any other field, so it is included when the form is submitted. For the value to reach the form, the component must call `listener.onChange` when the user changes it (see the [WMX schema reference](./wmx-schema-reference.md#update-a-property-from-the-component) and the [examples](./wmx-examples.md)).
 
-```mermaid
-sequenceDiagram
-    participant V as Variable
-    participant C as WMX component
-    participant F as Form
-    V->>C: dataset (bound property)
-    C->>C: user picks options
-    C->>F: listener.onChange(name, { datavalue })
-    F->>F: field value updated
-    F->>V: form submitted with the value
-```
+![WMX component as a form field](../../assets/wmx/wmx-form-flow.svg)
 
 ## Use it outside a form
 

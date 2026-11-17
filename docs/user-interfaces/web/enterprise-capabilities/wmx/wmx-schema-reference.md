@@ -7,6 +7,8 @@ last_update: { author: "Yagyaraj Lodhi" }
 
 Each WMX component has UI code in `index.tsx`, metadata in `wmx.json`, and an optional icon. For an overview, see [WMX components](./index.mdx).
 
+![How a WMX component connects to the app](../../assets/wmx/wmx-how-it-works.svg)
+
 ## Component structure
 
 ```text
