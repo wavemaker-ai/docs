@@ -20,6 +20,10 @@ export default [
             type: 'doc',
             id: 'build-and-deploy/build/web/build-options',
           },
+          {
+            type: 'doc',
+            id: 'build-and-deploy/build/web/build-react-app',
+          },
 
           {
             type: 'category',
