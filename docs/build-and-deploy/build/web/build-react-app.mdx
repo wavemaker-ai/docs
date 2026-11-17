@@ -68,6 +68,10 @@ Use this when you don't want the Maven build.
 
 4. Deploy the generated **build** directory to any static host.
 
+## Apps with WMX components
+
+If the project has [WMX components](/docs/user-interfaces/web/enterprise-capabilities/wmx/), they are built along with the app. You don't need a separate build step. List any extra libraries a component needs in that component's own `package.json`.
+
 ## Serve the build with nginx
 
 **What you need:** when a user opens `domain/app` (or refreshes `domain/app/orders`), nginx must return `index.html`.
