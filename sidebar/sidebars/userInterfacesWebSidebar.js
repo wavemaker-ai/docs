@@ -357,6 +357,11 @@ export default [
           },
           {
             type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/add-dependencies',
+            label: 'Add external libraries',
+          },
+          {
+            type: 'doc',
             id: 'user-interfaces/web/enterprise-capabilities/wmx/develop-locally',
             label: 'Develop and test locally',
           },

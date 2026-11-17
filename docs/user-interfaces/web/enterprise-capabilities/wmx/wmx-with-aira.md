@@ -46,7 +46,7 @@ To use a component you already have, or one from a library:
 
 1. Create the component folder and add a small `index.tsx` that imports it and passes through the props you want to control.
 2. Describe those props and events in `wmx.json`.
-3. List the library in the component's `package.json`.
+3. Install the library from the component folder with `npm install`. See [Add external libraries](./add-dependencies.md).
 
 ```tsx
 import React from "react";
