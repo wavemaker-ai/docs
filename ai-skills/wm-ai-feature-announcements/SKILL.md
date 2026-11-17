@@ -36,7 +36,8 @@ Before writing, confirm:
 7. **Available from version** — **required**. The WaveMaker version the feature first ships in (e.g., `v12.0`, `v12.1.0`). Readers need to know where it lands. Ask the user explicitly; do not guess, do not default, do not proceed without it.
 8. **Links** — related docs page, release note, or blog post (optional but recommended).
 9. **Hero image** (optional) — path or asset to place under `./assets/images/`.
-10. **Academy content** (optional) — an Academy walkthrough URL (`https://academy.wavemaker.ai/Walkthrough?wm=XXX`) and/or a video URL (`https://academy.wavemaker.ai/Watch?wm=XXX`), plus short `title` and `description` for each. Ask the user; do not fabricate.
+10. **Local video** (optional) — a video file to place under `blogs/feature-announcements/assets/videos/<slug>/`. If one is supplied, also ask for its subtitles: "Does it have speech? Send the `.vtt`, or I can generate one." Embed it and its `<track>` as described in `AGENTS.md` → Videos and Subtitles.
+11. **Academy content** (optional) — an Academy walkthrough URL (`https://academy.wavemaker.ai/Walkthrough?wm=XXX`) and/or a video URL (`https://academy.wavemaker.ai/Watch?wm=XXX`), plus short `title` and `description` for each. Ask the user; do not fabricate.
 
 ## File layout
 
@@ -143,6 +144,7 @@ Reference assets with relative paths from the `.mdx` file (`./assets/img/hero.pn
 - [ ] Summary precedes `{/* truncate */}`.
 - [ ] No HTML comments (`<!-- ... -->`) anywhere in the body.
 - [ ] Availability line (`**Available from WaveMaker vX.Y.**`) is present immediately after `{/* truncate */}` and uses the version supplied by the user.
+- [ ] Every local video with speech has a `.vtt` next to it, imported and added as a `<track>`, or the user confirmed it has none. A generated `.vtt` was flagged for the user to review.
 - [ ] Any Academy walkthrough or video URLs were supplied by the user, not invented.
 - [ ] All images live under `blogs/feature-announcements/assets/images/<slug>/` and are referenced relatively.
 - [ ] `npm run lint` passes.

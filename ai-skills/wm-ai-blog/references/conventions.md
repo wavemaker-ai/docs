@@ -121,6 +121,22 @@ import demoVideo from './assets/videos/slug/demo.mp4';
 
 Add a poster the same way (`import demoPoster from './assets/videos/slug/poster.jpg';` and `poster={demoPoster}`).
 
+### Subtitles
+
+A video with speech gets a WebVTT file next to it (`assets/videos/<slug>/demo.vtt`), imported like the video (name it with a `Subtitles` suffix) and added as a `<track>` inside the `<video>`:
+
+```mdx
+import demoVideo from './assets/videos/slug/demo.mp4';
+import demoSubtitles from './assets/videos/slug/demo.vtt';
+
+<video controls width="100%" playsInline>
+  <source src={demoVideo} type="video/mp4" />
+  <track kind="subtitles" srcLang="en" label="English" src={demoSubtitles} default />
+</video>
+```
+
+Ask the user for the `.vtt` whenever a local video is added ("Does it have speech? Send the `.vtt`, or I can generate one"). When you generate the video, generate the `.vtt` from the same script and flag it for review. Format rules, multiple languages and what is ignored are in `AGENTS.md` → Subtitles.
+
 ## Globally-registered MDX components
 
 These are wired in `src/theme/MDXComponents/index.js` — **never import them**, importing causes a redeclaration error. All are available in any `.mdx` file under `blogs/` or `docs/`.
