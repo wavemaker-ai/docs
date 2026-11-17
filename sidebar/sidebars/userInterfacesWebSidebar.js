@@ -330,6 +330,33 @@ export default [
           },
         ],
       },
+      {
+        type: 'category',
+        label: 'WMX components',
+        collapsible: true,
+        collapsed: true,
+        link: {
+          type: 'doc',
+          id: 'user-interfaces/web/enterprise-capabilities/wmx/index',
+        },
+        items: [
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/create-wmx-component',
+            label: 'Create a WMX component',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/develop-locally',
+            label: 'Develop and test locally',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/use-wmx-component',
+            label: 'Use in your app',
+          },
+        ],
+      },
       // {
       //   type: 'doc',
       //   id: 'user-interfaces/web/enterprise-capabilities/prefabs',
