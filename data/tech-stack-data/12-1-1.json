@@ -76,6 +76,12 @@
           "version": "22.22.3"
         },
         {
+          "name": "npm",
+          "description": "Package manager used for installing and building web app dependencies.",
+          "link": "https://www.npmjs.com/",
+          "version": "10.9.8"
+        },
+        {
           "name": "Java (JDK)",
           "description": "Java Development Kit for running the backend and build tools.",
           "link": "https://openjdk.org/",
@@ -97,6 +103,12 @@
           "description": "JavaScript runtime for serving Next.js apps.",
           "link": "https://nodejs.org/",
           "version": "22.18.0"
+        },
+        {
+          "name": "npm",
+          "description": "Package manager used for installing and building web app dependencies.",
+          "link": "https://www.npmjs.com/",
+          "version": "10.9.8"
         },
         {
           "name": "Nginx",
