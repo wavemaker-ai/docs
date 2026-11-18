@@ -88,6 +88,20 @@ export default [
 
   {
     type: 'category',
+    label: 'testing',
+    collapsible: true,
+    collapsed: true,
+    items: [
+      {
+        type: 'doc',
+        id: 'guide/testing/test-mobile-apps-with-waveqa',
+        label: 'Test Mobile Apps with WaveQA',
+      },
+    ],
+  },
+
+  {
+    type: 'category',
     label: 'security',
     collapsible: true,
     collapsed: true,
