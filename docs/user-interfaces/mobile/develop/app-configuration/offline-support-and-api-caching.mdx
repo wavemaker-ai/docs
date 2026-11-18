@@ -1,0 +1,222 @@
+---
+title: Offline support and API caching
+sidebar_label: Offline support and API caching
+last_update: { author: "Sunil Kumar Gavara" }
+---
+
+import offlineSupportPoster from './assets/vids/offline-support-and-api-caching-poster.jpg';
+import offlineSupportVideo from './assets/vids/offline-support-and-api-caching.mp4';
+
+Mobile users do not always have a reliable connection. When every API call goes straight to the server, they wait for lists they loaded moments ago, and a form that fails mid-submit because the signal dropped loses everything they typed.
+
+Offline support and API caching address this by letting your app answer from the device. API interceptors cache the responses of `GET` calls, and save the `POST`, `PUT` and `DELETE` requests that users make while offline. The app stays fast when the connection is slow, and users keep their work when it drops. You set this up for a service in Studio, or for the whole app in `wm_rn_config.json`.
+
+<video controls width="100%" playsInline poster={offlineSupportPoster}>
+  <source src={offlineSupportVideo} type="video/mp4" />
+</video>
+
+## What your users experience
+
+**When a screen reads data (`GET`):**
+
+1. The first time a screen asks for data, the app calls the server and stores the response on the device.
+2. The next time the same call is made, the app answers from the stored response and skips the server, so the data appears instantly.
+3. When the stored response expires, the next call goes to the server again and refreshes it. If you turn on **Refresh in Background**, the app shows the stored response first and refreshes it in the same call.
+
+**When a user submits data offline (`POST`, `PUT`, `DELETE`):**
+
+1. A user submits a form while the device is offline.
+2. Your interceptor script sees that the device is offline, saves the request on the device, and returns a value, so the screen carries on as normal.
+3. When the connection returns, `NetworkService.onNetworkChange` tells your app, and you send the saved requests to the server.
+
+## When to use it
+
+Use offline support and caching when your users work with unreliable connectivity, for example:
+
+- **Slow data loading:** Users wait for data that the app fetched moments ago. Caching serves it instantly from local storage.
+- **Failed write operations:** A form submission fails mid-request because the signal dropped, and users lose their work. An offline write saves the request on the device so the app can send it when connectivity returns.
+
+| Capability     | HTTP methods            | Solution                                                                               |
+| -------------- | ----------------------- | -------------------------------------------------------------------------------------- |
+| Caching        | `GET`                   | Cache API responses locally and serve them from the cache on repeat calls.             |
+| Offline writes | `POST`, `PUT`, `DELETE` | Save requests locally when the device is offline and send them when it is back online. |
+
+## How it works
+
+All API calls in a React Native app go through a Service Variable:
+
+- **Fetching data (`GET`):** A Service Variable set to **Request data on page load** in Studio fires when the page renders. You can also invoke it from a script.
+- **Submitting data (`POST`, `PUT`, `DELETE`):** You invoke the Service Variable from a script, for example on a button click: `Page.Variables.submitInventoryUpdate.invoke();`
+
+Without an interceptor, every `GET` call goes to the server, and a write made offline never reaches it. An interceptor sits between the Service Variable and the network and decides what happens to each call.
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '2rem 0' }}>
+  ```mermaid
+  flowchart TD
+      A["Service Variable invokes a GET call"] --> B{"Valid cached response?"}
+      B -- Yes --> C["Return the cached response"]
+      B -- No --> D["Call the server"]
+      D --> E["Store the response with its expiry"]
+      E --> F["Return the response"]
+      C --> G{"Refresh in background on?"}
+      G -- Yes --> H["Call the server and update the cache"]
+  ```
+</div>
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '2rem 0' }}>
+  ```mermaid
+  flowchart TD
+      A["Service Variable invokes a POST, PUT or DELETE call"] --> B{"Device online?"}
+      B -- Yes --> C["The interceptor sends the request to the server"]
+      B -- No --> D["The interceptor saves the request on the device"]
+      D --> E["Device comes back online"]
+      E --> F["NetworkService.onNetworkChange runs"]
+      F --> G["Saved requests are sent to the server"]
+  ```
+</div>
+
+## Open the API Interceptors dashboard
+
+In Studio, go to **Settings** > **App Configurations** > **API Interceptors**.
+
+The dashboard lists every interceptor in the project. From it you can:
+
+- Click **Add Interceptor** to bind a caching or custom rule to an endpoint.
+- Filter the list by **HTTP method** (All, GET, POST, PUT, DELETE) or by **Interceptor Type** (All, Cache, Custom).
+- Edit or delete an existing interceptor.
+- Page through large lists with the pagination tracker at the bottom.
+
+## Add an interceptor
+
+1. On the **API Interceptors** dashboard, click **Add Interceptor**.
+2. In **Service**, select an imported REST service, or select **Enter URL manually** and specify the endpoint URL.
+3. Configure the options that appear for the service's HTTP method.
+4. Click **Save**.
+
+The configuration dialog shows the options that match the HTTP method of the service you select.
+
+### Common options
+
+Every interceptor has these options.
+
+| Option      | Type                        | Description                                                 |
+| ----------- | --------------------------- | ----------------------------------------------------------- |
+| `url`       | `string`                    | API endpoint path to match, for example `/inventory/items`. |
+| `method`    | `string`                    | HTTP method: `GET`, `POST`, `PUT` or `DELETE`.              |
+| `intercept` | `(context) => Promise<any>` | Custom interception logic.                                  |
+
+The **Method** field is read-only. It shows the HTTP method of the selected REST service and cannot be changed.
+
+### The context object
+
+The `intercept` script receives a `context` object that describes the Service Variable call it applies to.
+
+| Property or method  | Description                                                                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `context.variable`  | The WaveMaker Service Variable instance. Read `.name`, `.serviceInfo`, `.dataSet` and more from it.                                    |
+| `context.params`    | The input parameters, query parameters or request body, for this invocation.                                                           |
+| `context.proceed()` | Runs the actual HTTP network call and returns a promise with the response. If the script does not call it, no network request is made. |
+
+If the script returns a value, the Service Variable updates with that data and skips the network call.
+
+## Cache GET responses
+
+To cache the responses of a `GET` service, turn on **Enable Caching**. The dialog then shows the cache options.
+
+| Option                     | Type                          | Default     | Description                                                                           |
+| -------------------------- | ----------------------------- | ----------- | ------------------------------------------------------------------------------------- |
+| **Cache Type**             | `'session'` or `'persistent'` | `'session'` | Where to store the cached data. See [Storage types](#storage-types).                  |
+| **Cache Expiry (Minutes)** | `number`                      | 5 minutes   | How long cached data stays valid.                                                     |
+| **Refresh in Background**  | `boolean`                     | `false`     | When `true`, the app also calls the server in the background to keep the cache fresh. |
+
+### Storage types
+
+**Session cache** (`session`):
+
+- Stored in memory. The cache is cleared when the app is closed or restarted.
+- The fastest option, because it needs no disk access.
+- Best for data that changes often and only needs to last for one app session, such as search results, filtered lists and dashboard data.
+
+**Persistent cache** (`persistent`):
+
+- Stored in AsyncStorage on the device disk. The cache survives app restarts.
+- Slightly slower than the session cache.
+- Best for reference data that rarely changes and should be available even when the app opens offline, such as product catalogs, warehouse layouts and configuration data.
+
+When the cache reaches `maxEntries` (default `100`), the app removes expired entries first, then the least recently used entries. This applies to both cache types.
+
+### Refresh in background
+
+This option applies the stale-while-revalidate pattern.
+
+| Value             | Behavior                                                                                                               | Best for                                                    |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `false` (default) | On a cache hit, return the cached response immediately and skip the network call.                                      | Reducing bandwidth, or when data freshness is not critical. |
+| `true`            | On a cache hit, return the cached response immediately and also call the server in the background to update the cache. | Instant loading with reasonably fresh data.                 |
+
+## Save requests made offline
+
+`POST`, `PUT` and `DELETE` interceptors have only the [common options](#common-options), so you write the `intercept` script yourself. In the script:
+
+1. Check whether the device is online. If it is, call `context.proceed()` to send the request.
+2. If the device is offline, save the request data on the device and return a value, so the Service Variable still updates.
+
+The following sample script saves the data of an offline `POST` request in AsyncStorage:
+
+```js
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+intercept: async (context) => {
+  // If the device is online, proceed with the API call.
+  if (context.isOnline) {
+    return context.proceed();
+  }
+
+  // If the device is offline, save the data locally.
+  const pending = JSON.parse(await AsyncStorage.getItem('pending_creates') || '[]');
+  pending.push(context.params);
+  await AsyncStorage.setItem('pending_creates', JSON.stringify(pending));
+
+  // Return static data so that the variable is updated.
+  return {};
+}
+```
+
+When the device is back online, use `NetworkService.onNetworkChange` to send the saved requests to the server. Listen for the network change separately with this callback, not through `context.isOnline`.
+
+## Cache at the app level
+
+You can also turn on caching for the whole app in `wm_rn_config.json`. When it is on, the app caches every Service Variable call that uses a RESTful `GET`, unless you exclude it.
+
+```json
+{
+  "cache": {
+    "enabled": true,
+    "defaults": {
+      "cacheType": "session",
+      "cacheExpiry": 300000,
+      "refreshInBackground": true,
+      "maxEntries": 100,
+      "cleanupInterval": 1800000
+    }
+  }
+}
+```
+
+| Property              | Example value | Description                                                                  |
+| --------------------- | ------------- | ---------------------------------------------------------------------------- |
+| `enabled`             | `true`        | Turns app-level caching on or off.                                           |
+| `cacheType`           | `"session"`   | Where to store cached data: `session` or `persistent`.                       |
+| `cacheExpiry`         | `300000`      | How long cached data stays valid, in milliseconds. `300000` is 5 minutes.    |
+| `refreshInBackground` | `true`        | Whether to also call the server in the background on a cache hit.            |
+| `maxEntries`          | `100`         | The number of entries the cache holds before it removes older ones.          |
+| `cleanupInterval`     | `1800000`     | How often the cache is cleaned up, in milliseconds. `1800000` is 30 minutes. |
+
+To leave a service out of app-level caching, add its URL to the `exclude` key, which takes an array of REST service URLs. Exclusion works only for `GET` calls.
+
+## Things to know
+
+- Caching applies to `GET` calls only. Write requests that you handle offline are saved by your own script.
+- A session cache is cleared when the app closes. A persistent cache survives app restarts.
+- The cache removes expired entries first, then the least recently used entries, when it reaches `maxEntries`.
+- The **Method** field of an interceptor is read-only. To change the method, select a different service.
