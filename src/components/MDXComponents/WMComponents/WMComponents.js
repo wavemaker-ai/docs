@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 import { useColorMode } from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import './WMComponents.css';

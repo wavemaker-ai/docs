@@ -3,6 +3,12 @@ title: 'Responsive design'
 last_update: { date: 2026-10-16, author: 'Uday Kumar' }
 ---
 
+import cardsWrapVideo from './assets/vids/cards-wrap.mp4';
+import cardsScrollVideo from './assets/vids/cards-scroll.mp4';
+import formFieldsWrapVideo from './assets/vids/form-fields-wrap.mp4';
+import listWrapVideo from './assets/vids/list-wrap.mp4';
+import loginResponsiveVideo from './assets/vids/login-responsive.mp4';
+
 In WaveMaker, responsive design with layouts means building apps that automatically adapt their UI to different screen sizes like mobile, tablet, and desktop without creating separate apps.
 
 Responsive design ensures that:
@@ -123,7 +129,7 @@ Minimum and maximum widths are set through CSS classes.
 Cards are placed horizontally and move to the next row when the row runs out of space. The configured gap is kept between cards, and the number of cards per row changes with the viewport width, for example 3 per row on desktop, 2 on tablet, and 1 on mobile.
 
 <video controls width="100%" muted playsInline>
-  <source src={require('./assets/vids/cards-wrap.mp4').default} type="video/mp4" />
+  <source src={cardsWrapVideo} type="video/mp4" />
 </video>
 
 To create a wrapping card layout:
@@ -143,7 +149,7 @@ To create a wrapping card layout:
 Cards stay in a single row and scroll horizontally when there isn't enough space to show them all. Use this when cards need a consistent width without wrapping to multiple rows.
 
 <video controls width="100%" muted playsInline>
-  <source src={require('./assets/vids/cards-scroll.mp4').default} type="video/mp4" />
+  <source src={cardsScrollVideo} type="video/mp4" />
 </video>
 
 To create a scrolling card layout:
@@ -164,7 +170,7 @@ To create a scrolling card layout:
 Form fields are typically arranged in a row with **Wrap** turned on, so they reflow across viewport sizes, for example 3 fields per row on desktop, 2 on tablet, and 1 on mobile.
 
 <video controls width="100%" muted playsInline>
-  <source src={require('./assets/vids/form-fields-wrap.mp4').default} type="video/mp4" />
+  <source src={formFieldsWrapVideo} type="video/mp4" />
 </video>
 
 To create a wrapping form layout:
@@ -198,7 +204,7 @@ To create a wrapping form layout:
 Lists support the same patterns as cards. List items wrap or scroll based on the layout requirement.
 
 <video controls width="100%" muted playsInline>
-  <source src={require('./assets/vids/list-wrap.mp4').default} type="video/mp4" />
+  <source src={listWrapVideo} type="video/mp4" />
 </video>
 
 To create a responsive list layout:
@@ -295,7 +301,7 @@ Make the content inside each accordion section responsive using Auto Layout, so 
 | Check the layout at every supported viewport size.                               | Check only the desktop layout and assume mobile adapts automatically.                   |
 
 <video controls width="100%" muted playsInline>
-  <source src={require('./assets/vids/login-responsive.mp4').default} type="video/mp4" />
+  <source src={loginResponsiveVideo} type="video/mp4" />
 </video>
 
 The login page in this example has two sections: an informational section on the left and the login form on the right. On smaller viewports such as mobile, the informational section is hidden and the login form is centered on the page.

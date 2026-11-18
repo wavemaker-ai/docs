@@ -92,7 +92,7 @@ Never place post assets under `static/img/` — that directory is for globally-s
 
 5. **Place media**
    - Images → `blogs/blog/assets/img/<file>.png`, referenced as `./assets/img/<file>.png`, with descriptive `alt` text and an optional italic caption line below.
-   - Local video → `blogs/blog/assets/videos/<slug>/<file>.mp4`, embedded with the `<video>` + `require()` pattern in `references/conventions.md`.
+   - Local video → `blogs/blog/assets/videos/<slug>/<file>.mp4`, embedded with the `<video>` + ES `import` pattern in `references/conventions.md`.
    - Academy content → `<AcademyCard>` / `<VideoCard>` (globally registered, no import) — only with a real user-supplied URL, never fabricated.
 
 6. **Cross-link** related docs, release notes, or other posts using **site-internal URL paths**, not filesystem-relative MDX paths — this plugin instance does not share the docs plugin's relative-link resolver:
@@ -139,7 +139,7 @@ Unlike guides and core docs, blog posts do not need a sidebar entry. The blog pl
 - [ ] A `{/* truncate */}` marker is present (placed after the hook by default, or wherever the user requested).
 - [ ] Any pill `type` used is either an existing preset (listed to the user beforehand) or a new one added to `Pills.jsx`/`Pills.css` with a label and color the user confirmed.
 - [ ] Images live under `blogs/blog/assets/img/`, referenced with a single `./assets/img/...` (no double slash).
-- [ ] Local videos live under `blogs/blog/assets/videos/<slug>/` and use the `<video>` + `require()` embed.
+- [ ] Local videos live under `blogs/blog/assets/videos/<slug>/` and use the `<video>` + ES `import` embed (imports right after the frontmatter).
 - [ ] Any Academy walkthrough/video URL was supplied by the user, not invented.
 - [ ] Cross-links use site-internal URL paths (`/docs/...`, `/blog/YYYY/MM/DD/...`), not filesystem-relative MDX paths.
 - [ ] No new sidebar file was touched — none is needed.
