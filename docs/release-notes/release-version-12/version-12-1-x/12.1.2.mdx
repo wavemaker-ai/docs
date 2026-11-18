@@ -49,6 +49,16 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
         Building Angular, React, and React Native apps now requires Node.js 22.23.4 and npm 10.9.9, so upgrade both in your local and CI/CD build environments.
 
         For the exact versions, see the [12.1.2 technology stack](/tech-stack?v=12-1-2).
+
+      - ### Expo Go QR code in preview <Pill type="mobile" />
+
+        The Preview toolbar's QR icon in React Native projects now opens a "Preview on your phone" panel with steps to download Expo Go and scan a QR code for Android or iOS.
+
+      - ### ESLint validation for ZIP export <Pill type="web" /> <Pill type="mobile" />
+
+        Exporting a Web or React Native project ZIP now runs ESLint on your source files and fails the export when a rule with Error severity is violated.
+
+        Turn on `Enable ESLint` and set each rule's severity in Settings > Build Preferences > ESLint, and add custom rules in `build-src/eslintrc-override.js`.
     </Accordian>
 
     <Accordian title="Product Ecosystem">
@@ -61,6 +71,7 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Missing Styles in Studio Canvas <Pill type="web" />
 
         In Studio, the colors and styles defined in your app's design system were sometimes not loaded completely or were shown incorrectly on the canvas. This happened because of a race condition between generating the styles and loading them in Studio. This is now fixed, with Studio ensuring that styles are fully generated before loading them, automatically retrying if they are not ready, and retaining the previously available styles if loading fails. This ensures that all colours and component styles are consistently displayed on the Studio canvas.
+
       - ### Custom icons blank on the Studio canvas <Pill type="web" />
 
         Fixed custom icons imported into a project rendering blank on the Studio canvas, including in classic projects, by loading the icon stylesheets into the canvas along with the project's font stylesheets.
@@ -68,6 +79,18 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Custom icons and fonts missing in deployed apps <Pill type="web" /> <Pill type="angular" />
 
         Fixed custom icon and font stylesheets failing to load in deployed Angular apps by resolving their paths against the app's CDN URL, so icons and fonts render when the UI artifact is deployed on its own.
+
+      - ### Slider crash after Expo 57 upgrade <Pill type="mobile" />
+
+        Fixed the Slider, in both single value and range modes, crashing in apps built with Expo 57.
+
+      - ### Dialog alignment after Expo 57 upgrade <Pill type="mobile" />
+
+        Fixed the Dialog not starting below the status bar and not taking its configured height, including a percentage height, in apps built with Expo 57.
+
+      - ### Empty confirmation step and Next button <Pill type="mobile" />
+
+        Fixed a Confirmation step rendering empty and the Next button doing nothing in React Native apps.
     </Accordian>
 
     <Accordian title="Backend">
