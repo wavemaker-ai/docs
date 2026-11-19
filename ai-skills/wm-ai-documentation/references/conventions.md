@@ -140,7 +140,7 @@ When moving or deleting a doc, walk this rule in reverse: if the asset's set of 
 
 ### Videos
 
-Co-located under `assets/vids/` (see `AGENTS.md`). Most core docs do not embed video — prefer linking to an Academy walkthrough or video using `<AcademyCard>` / `<VideoCard>`.
+Co-located under `assets/vids/` (see `AGENTS.md`). A video with speech also gets a co-located `.vtt` subtitle file, imported and added as a `<track>` inside the `<video>`; ask the user for it, or generate it when you generate the video (rules in `AGENTS.md` → Subtitles). Most core docs do not embed video — prefer linking to an Academy walkthrough or video using `<AcademyCard>` / `<VideoCard>`.
 
 ### Globally shared assets
 

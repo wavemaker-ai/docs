@@ -1,0 +1,56 @@
+/*
+ * Video.js default skin. Imported through a project file on purpose: @videojs/react declares
+ * `sideEffects` for its i18n files only, so a bare `import '@videojs/react/video/skin.css'` is
+ * tree-shaken out of the production build (the dev server keeps it, which hides the problem).
+ */
+@import '@videojs/react/video/skin.css';
+
+/*
+ * No Cast button. The default skin has no option to leave it out, so it is hidden here. The class
+ * name is not a documented styling hook: re-check it when upgrading @videojs/react.
+ */
+.media-skin .media-cast-button {
+  display: none;
+}
+
+/*
+ * No big centre buttons (play, seek back and forward): the control bar is enough. Private class
+ * name again, re-check on upgrade. The buffering spinner is a separate element and stays.
+ */
+.media-skin .video-controls-center {
+  display: none;
+}
+
+/*
+ * Readable over bright video, but still frosted. The default skin draws the control bar at 35%
+ * black and menus at 10% white over a plain blur, so white text washes out on a light frame. The
+ * backdrop filter now also dims what is behind a surface (`brightness`), so the blurred video shows
+ * through but never gets brighter than a mid grey, and the tints only need to be light.
+ * These are theme tokens set on .media-skin itself (inside the skin's `base.theme` layer), so they
+ * are overridden on the same element: unlayered rules win over layered ones. The token names are
+ * not documented as public; re-check them on upgrade.
+ */
+.media-skin {
+  --media-controls: rgb(0 0 0 / 0.38);
+  --media-popover: rgb(22 24 32 / 0.5);
+  --media-backdrop-filter-surface: blur(22px) saturate(125%) brightness(0.55);
+}
+
+/*
+ * Hide the browser's own cues: Captions.jsx draws them. Chrome ignores a site's cue background, so
+ * hiding is the only way to avoid showing both.
+ */
+.media-skin video::cue {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/*
+ * Docusaurus (Infima) styles every <kbd> with a light border, inset shadow and dark text. Inside the
+ * player that breaks the key hint in tooltips (the "C" next to "Disable captions"), because the skin
+ * leaves these properties unset. Put them back to what the skin expects.
+ */
+.media-skin kbd {
+  box-shadow: none;
+  color: inherit;
+}

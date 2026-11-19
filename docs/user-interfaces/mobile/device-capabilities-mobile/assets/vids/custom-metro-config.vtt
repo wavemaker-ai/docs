@@ -1,0 +1,57 @@
+WEBVTT
+
+00:00:03.920 --> 00:00:09.340
+Every WaveMaker React Native app is
+bundled by Metro with a configuration
+
+00:00:09.340 --> 00:00:11.500
+WaveMaker sets up for you.
+
+00:00:12.720 --> 00:00:17.520
+A custom Metro configuration lets you
+add your own settings on top of it.
+
+00:00:20.860 --> 00:00:26.740
+In Studio, add a file named
+custommetro.config.js to the web
+
+00:00:26.740 --> 00:00:30.280
+app folder. Export an async function.
+
+00:00:30.880 --> 00:00:35.300
+It receives WaveMaker's Metro config,
+so you change only what you need.
+
+00:00:36.220 --> 00:00:41.240
+Here, we add Lottie as an asset type
+and point an alias at a library.
+
+00:00:42.400 --> 00:00:44.820
+Always finish by returning the config.
+
+00:00:46.200 --> 00:00:51.260
+On the next build, WaveMaker copies your
+file into the generated app and applies it
+
+00:00:51.260 --> 00:00:52.220
+after its own settings.
+
+00:00:53.510 --> 00:00:57.860
+No file? The app builds with
+WaveMaker's defaults just as before.
+
+00:01:01.340 --> 00:01:06.060
+Use it for any metro setting WaveMaker
+doesn't set for you, from the resolver and
+
+00:01:06.060 --> 00:01:10.600
+transformer to caching or a
+library's metro plug-in like Sentry.
+
+00:01:11.660 --> 00:01:16.840
+Edit the config you're given instead of
+replacing it so built-ins like SVG support
+
+00:01:16.840 --> 00:01:21.820
+keep working. One file and
+metro builds your app your way.

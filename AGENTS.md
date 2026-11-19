@@ -58,7 +58,7 @@ Reference them with a relative path using standard Markdown image syntax:
 
 ### Videos
 
-Place videos in `assets/vids/` next to the post. Reference them with ES `import`. Put one `import` per asset right after the frontmatter, followed by a blank line (the ESM block ends at the first blank line), and name each one in camelCase with a `Video` or `Image` suffix so it can't clash with a globally registered component:
+Place videos in `assets/vids/` next to the post. Reference them with ES `import`. Put one `import` per asset right after the frontmatter, followed by a blank line (the ESM block ends at the first blank line), and name each one in camelCase with a `Video`, `Image` or `Subtitles` suffix so it can't clash with a globally registered component:
 
 ```mdx
 import demoPoster from './assets/vids/poster.jpg';
@@ -70,6 +70,27 @@ import demoVideo from './assets/vids/demo.mp4';
 ```
 
 The same rule applies to any asset used inside JSX (for example `<img src={diagramImage} />`): import it, and use the imported value directly — there is no `.default`.
+
+### Subtitles
+
+Videos with speech get subtitles, as a WebVTT (`.vtt`) file referenced from the `<video>`. The player shows a Captions button and draws the cues itself.
+
+```mdx
+import demoSubtitles from './assets/vids/demo.vtt';
+
+<video controls width="100%" playsInline poster={demoPoster}>
+  <source src={demoVideo} type="video/mp4" />
+  <track kind="subtitles" srcLang="en" label="English" src={demoSubtitles} default />
+</video>
+```
+
+- **A video the user supplies:** ask for its subtitles before you finish: "Does this video have speech? Send the `.vtt` file, or I can generate one." Skip them only for a video with no speech (a silent screen recording, music only), and say that you skipped them.
+- **A video you generate** (the user asks you to make one): do not ask, generate the `.vtt` along with it. The source is the script or narration the video was built from, with that script's timings. If the video has no speech, skip the `.vtt` and say so. Tell the user to review the generated `.vtt` before it merges.
+- **A finished video with no script:** use the transcript the user gives you, or transcribe it if a transcription tool is available, and flag the result for review. Never write subtitles for speech you have not heard or read.
+- **Where:** next to the video, with the same base name (`assets/vids/demo.mp4` and `assets/vids/demo.vtt`; for blogs `assets/videos/<slug>/`). Subtitle files stay in the repo as text, so reviewers can read them. The asset pipeline ignores them (never a pointer, never uploaded), and the site serves them from the docs host.
+- **Languages:** one `<track>` per language, each with its own `srcLang` and `label` (`demo.fr.vtt` for French), and `default` on one only. `kind="subtitles"`, `srcLang` and `label` are required: the Captions menu is built from them.
+- **Format:** the file starts with `WEBVTT` and a blank line, then cues as `00:06.640 --> 00:12.480` (or `hh:mm:ss.mmm`) followed by the text. Save as UTF-8. Keep to two lines per cue and about 42 characters per line, each cue on screen for 1 to 7 seconds, and break lines at natural phrases. The text matches the spoken words.
+- **Plain text only.** The player draws captions with its own style, so cue settings (`position:`, `align:`), `STYLE` blocks and tags such as `<v>` and `<c>` have no effect, and tags are stripped from the text. Line breaks are kept.
 
 ### Shared assets — nearest common ancestor
 
@@ -87,7 +108,7 @@ docs/release-notes/                      → versioned release notes
 blogs/blog/                              → engineering blog posts          (/blog)
 blogs/feature-announcements/             → product feature announcements   (/feature-announcements)
 <content-dir>/assets/img/               → co-located images and GIFs (docs and blogs)
-<content-dir>/assets/vids/     → co-located videos (feature announcements)
+<content-dir>/assets/vids/     → co-located videos and their .vtt subtitles (feature announcements)
 static/img/                              → globally shared assets (/img/... in links)
 data/author/authors.yml             → shared author registry
 data/tech-stack-data/<x-y-z>.json   → per-version tech stack (see Tech stack data)

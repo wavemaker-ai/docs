@@ -6,11 +6,14 @@ last_update: { author: "Ranjith" }
 
 import customMetroConfigPoster from './assets/vids/custom-metro-config-poster.jpg';
 import customMetroConfigVideo from './assets/vids/custom-metro-config.mp4';
+import customMetroConfigSubtitlesVideo from './assets/vids/custom-metro-config.vtt';
 
 WaveMaker React Native apps are bundled with Metro using a default configuration. You can add your own Metro settings on top of it, for example to support extra asset types or to tune the build.
 
 <video controls width="100%" playsInline poster={customMetroConfigPoster}>
   <source src={customMetroConfigVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={customMetroConfigSubtitlesVideo} default />
 </video>
 
 {/* TODO: add a :::note with the minimum WaveMaker Studio version (listed in release 11.14.1.31) */}

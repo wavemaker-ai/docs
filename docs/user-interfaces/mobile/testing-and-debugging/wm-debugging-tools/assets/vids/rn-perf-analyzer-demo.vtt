@@ -1,0 +1,75 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.560
+Five steps from any React Native
+build to a performance report.
+
+00:00:04.820 --> 00:00:10.080
+Start with the build you already have,
+Android or iOS, release or debug.
+
+00:00:10.760 --> 00:00:14.720
+It's analyzed right on your machine
+and React Native is detected.
+
+00:00:15.300 --> 00:00:20.540
+Next, one click builds an instrumented
+copy of the app with a performance agent
+
+00:00:20.540 --> 00:00:26.500
+inside. Pick a simulator or an emulator
+and the instrumented build installs
+
+00:00:26.500 --> 00:00:27.600
+straight from the dashboard.
+
+00:00:28.600 --> 00:00:33.560
+Choose a cold or hot start,
+hit record, and the launch is measured.
+
+00:00:34.420 --> 00:00:37.320
+Now just use the app the
+way your users would.
+
+00:00:37.880 --> 00:00:43.200
+Every screen you open, every API call,
+and every frame is traced as you go.
+
+00:00:45.490 --> 00:00:47.310
+Stop and the report is ready.
+
+00:00:48.070 --> 00:00:52.290
+Everything rolls up into one score,
+so you know where to look first.
+
+00:00:52.290 --> 00:00:58.010
+Startup is broken into phases,
+so you can see where the launch time
+
+00:00:58.010 --> 00:01:03.870
+goes. Each screen gets its own time to
+interactive, its calls and its dropped
+
+00:01:03.870 --> 00:01:09.750
+frames. Slow, failing and duplicate
+requests stand out, with the time they
+
+00:01:09.750 --> 00:01:14.270
+waste. Excessive re-renders are traced
+back to the components that cause them.
+
+00:01:16.380 --> 00:01:20.680
+Memory is tracked across every
+navigation, so growth is easy to spot.
+
+00:01:21.600 --> 00:01:26.560
+The timeline lines it all up, so
+cause and effect sits side-by-side.
+
+00:01:27.440 --> 00:01:31.020
+And the biggest bottlenecks are
+ranked, each with a suggested fix.
+
+00:01:34.020 --> 00:01:38.640
+Find what slows your app down and
+fix it before your users feel it.

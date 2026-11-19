@@ -102,6 +102,7 @@ Apply the asset and link rules from `references/conventions.md`:
 - **Internal links to other docs** → relative MDX path from this file, no `.md` / `.mdx` extension, target must exist.
 - **External links** → full `https://` URL.
 - **Academy walkthroughs / videos** → user-supplied URL only. Use the globally-registered `<AcademyCard>` or `<VideoCard>` components, no import.
+- **Local video files** → co-located under `assets/vids/` and embedded as in `AGENTS.md` → Videos. Ask for the video's subtitles ("Does it have speech? Send the `.vtt`, or I can generate one") and add them as a `<track>` — see `AGENTS.md` → Subtitles. When you generate the video, generate the `.vtt` too.
 
 Verify every path before writing it. If a target does not exist, stop and ask the user.
 

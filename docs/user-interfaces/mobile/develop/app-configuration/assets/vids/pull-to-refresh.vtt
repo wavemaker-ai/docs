@@ -1,0 +1,90 @@
+WEBVTT
+
+00:00:06.130 --> 00:00:11.970
+Pull to refresh lets the people who use
+your app reload a page by pulling it
+
+00:00:11.970 --> 00:00:17.970
+down from the top. When they let go,
+a refresh indicator appears and the
+
+00:00:17.970 --> 00:00:19.590
+page loads the latest data.
+
+00:00:21.090 --> 00:00:26.930
+On Android, the indicator slides down
+over the page in the same way as in other
+
+00:00:26.930 --> 00:00:32.770
+Android apps. On iOS, the page
+moves down to show the indicator,
+
+00:00:32.870 --> 00:00:34.770
+which is what iPhone users expect.
+
+00:00:36.210 --> 00:00:41.430
+You can keep the default indicator of each
+platform, or you can use your own Lottie
+
+00:00:41.430 --> 00:00:47.010
+animation. Your animation keeps
+its own shape, so it does not look
+
+00:00:47.010 --> 00:00:48.670
+stretched on either platform.
+
+00:00:53.260 --> 00:00:58.420
+To turn on pull to refresh, open the app
+configuration file and set pull to refresh
+
+00:00:58.420 --> 00:01:04.240
+to true. This one setting turns
+on pull to refresh for every
+
+00:01:04.240 --> 00:01:10.160
+page in your app. To use your own
+animation, upload the Lottie file
+
+00:01:10.160 --> 00:01:14.880
+to the Files folder in your resources
+and add its path as the pull to refresh
+
+00:01:14.880 --> 00:01:20.520
+source. If you do not add a
+source, the app uses the default
+
+00:01:20.520 --> 00:01:22.060
+indicator of each platform.
+
+00:01:24.030 --> 00:01:29.370
+Next, in the markup of the page, add
+the on pull to refresh event to the page
+
+00:01:29.370 --> 00:01:34.310
+content. And in the event script, invoke
+the variables that you want to reload.
+
+00:01:35.890 --> 00:01:41.310
+The event runs every time a user pulls the
+page, and the page shows the new data as
+
+00:01:41.310 --> 00:01:42.890
+soon as the variables respond.
+
+00:01:47.490 --> 00:01:52.770
+To turn off pull to refresh on one page,
+set pull to refresh to false on the page
+
+00:01:52.770 --> 00:01:54.950
+content in the markup of that page.
+
+00:01:56.830 --> 00:02:02.030
+The app setting controls every page, so
+when it is off, no page can turn pull to
+
+00:02:02.030 --> 00:02:07.430
+refresh on. With pull to refresh,
+the people who use your app
+
+00:02:07.430 --> 00:02:09.190
+always see the latest data.
