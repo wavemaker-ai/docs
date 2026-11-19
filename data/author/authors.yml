@@ -92,3 +92,13 @@ raajvamsy:
   page: true
   socials:
     github: wm-raajvamsy
+
+udayShankar:
+  name: Uday Shankar
+  title: Principal Architect at WaveMaker
+  url: https://github.com/udaysa
+  image_url: https://github.com/udaysa.png
+  page: true
+  socials:
+    github: udaysa
+    linkedin: uday-shankar-09b5bb3b
