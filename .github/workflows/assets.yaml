@@ -15,12 +15,10 @@ name: Assets
 # `COLLECTION_BRANCHES` in the "Resolve PR" step. GitHub reads this file from the default branch, so
 # that change has to land on `main`.
 #
-# TEMPORARY: the scripts (scripts/assets/ and package.json) are also read from the default branch,
-# so a collection branch doesn't need to contain them while the pipeline is being tested. To go back
-# to reading them from the PR's base branch, set `ref` in the "Check out trusted scripts" steps of
-# the decode and publish jobs to `needs.resolve.outputs.base_ref` again. Merge `main` into every
-# collection branch first, or PRs into a branch without scripts/assets/ fail with "Validation did
-# not run".
+# The scripts (scripts/assets/ and package.json) and the pointer base URL in docusaurus.config.js
+# are read from the PR's base branch, never from the PR. Every collection branch must contain
+# scripts/assets/; keep them in sync with `main` (merge `main` into each collection branch), or PRs
+# into a branch without them fail with "Validation did not run".
 #
 # When it runs on a PR into a collection branch:
 #   - PRs from branches in this repo: every push → optimize + validate.
@@ -45,7 +43,7 @@ name: Assets
 # content matches an optimized or reviewed trailer are skipped. Size validation covers every asset.
 #
 # It uses pull_request_target so it can comment and set statuses on fork PRs. Scripts come from the
-# default branch (see TEMPORARY above) and nothing from the PR is executed. Fork media is only decoded after a maintainer
+# PR's base branch and nothing from the PR is executed. Fork media is only decoded after a maintainer
 # opts in with the comment.
 #
 # Four jobs, so the code that decodes untrusted media never shares a job with a secret:
@@ -271,8 +269,8 @@ jobs:
         if: steps.pr.outputs.proceed == 'true'
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          # The PR's base branch: scripts and config are never read from the PR itself.
+          ref: ${{ steps.pr.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -337,8 +335,8 @@ jobs:
       - name: Check out trusted scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          # The PR's base branch: scripts and config are never read from the PR itself.
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -418,8 +416,8 @@ jobs:
       - name: Check out trusted scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          # The PR's base branch: scripts and config are never read from the PR itself.
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -540,8 +538,8 @@ jobs:
       - name: Check out trusted scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          # The PR's base branch: scripts and config are never read from the PR itself.
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -662,7 +660,7 @@ jobs:
           GIT_CONFIG_NOSYSTEM: '1'
           GIT_CONFIG_GLOBAL: /dev/null
         run: |
-          ARGS=(--config docusaurus.config.js --report "$RUNNER_TEMP/replace.json" --replaced "$RUNNER_TEMP/replaced.txt")
+          ARGS=(--config ../trusted/docusaurus.config.js --report "$RUNNER_TEMP/replace.json" --replaced "$RUNNER_TEMP/replaced.txt")
           if [ "$RUN_UPLOAD" = "true" ]; then
             ARGS+=(--upload-report "$RUNNER_TEMP/upload.json")
           else
