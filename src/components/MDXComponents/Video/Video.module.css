@@ -1,0 +1,44 @@
+.box {
+  width: 100%;
+  margin: 0 auto var(--ifm-leading);
+  /* Site font; the accent colour is left at the Video.js default. */
+  --media-font-family: var(--ifm-font-family-base);
+  /* Show the control bar from the start, not only after the first play. */
+  --media-controls-before-start: visible;
+}
+
+/*
+ * Subtitles (see Captions.jsx). The skin lifts its own captions above the control bar through
+ * --media-caption-track-y; this box uses the same variable and transition, so they move together.
+ * Sizes use cqw: the skin's container is an inline-size container, so text scales with the player,
+ * including in fullscreen.
+ */
+.captions {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0 4cqw;
+  translate: 0 var(--media-caption-track-y, 0);
+  transition: translate var(--media-caption-track-duration, 0.1s) ease-out
+    var(--media-caption-track-delay, 25ms);
+  pointer-events: none;
+  font-size: clamp(0.85rem, 2.5cqw, 1.7rem);
+}
+
+.caption {
+  max-width: 100%;
+  padding: 0.3em 0.8em;
+  border-radius: 0.5em;
+  background: rgb(0 0 0 / 0.75);
+  color: #fff;
+  font-family: var(--ifm-font-family-base);
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+  white-space: pre-line; /* keep the cue's own line breaks */
+}

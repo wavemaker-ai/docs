@@ -31,6 +31,7 @@
     "@docusaurus/preset-classic": "3.9.2",
     "@docusaurus/theme-mermaid": "^3.9.2",
     "@mdx-js/react": "^3.0.0",
+    "@videojs/react": "10.5.0",
     "clsx": "^2.0.0",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.562.0",

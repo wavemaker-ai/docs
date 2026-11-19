@@ -1,0 +1,110 @@
+WEBVTT
+
+00:00:03.470 --> 00:00:10.000
+Many companies give their users more than
+one app, and each app asks them to sign in.
+
+00:00:10.000 --> 00:00:14.610
+With browser login, users
+sign in once on their device,
+
+00:00:14.870 --> 00:00:16.830
+and their other apps can use that login.
+
+00:00:18.820 --> 00:00:23.540
+You choose how each app signs in, in
+the browser config section of the app
+
+00:00:23.540 --> 00:00:29.480
+configuration file.
+
+00:00:29.480 --> 00:00:34.740
+In the private mode, which is the default,
+users sign in inside the app, and nothing is
+
+00:00:34.740 --> 00:00:40.500
+remembered. In the persistent
+mode, users also sign in inside
+
+00:00:40.500 --> 00:00:43.720
+the app, and the app remembers
+the login for next time.
+
+00:00:45.960 --> 00:00:49.960
+In the auth session mode, users sign
+in through the device browser instead.
+
+00:00:51.560 --> 00:00:55.660
+This is the mode that lets one
+login work across all of your apps.
+
+00:00:59.970 --> 00:01:05.130
+When the first app starts the login, the
+device browser opens the sign-in page of
+
+00:01:05.130 --> 00:01:06.210
+your identity provider.
+
+00:01:07.590 --> 00:01:12.170
+The user enters their password, and the
+browser keeps the identity provider session.
+
+00:01:14.030 --> 00:01:19.070
+The user taps Continue to App, and the
+browser takes them back to the first app,
+
+00:01:19.370 --> 00:01:25.320
+signed in. Later, a second app
+on the same device starts its
+
+00:01:25.320 --> 00:01:26.860
+login in the same browser.
+
+00:01:28.580 --> 00:01:32.660
+The identity provider already knows the
+user, so the password page is skipped.
+
+00:01:32.660 --> 00:01:38.600
+The user taps continue to app,
+and the second app is signed in
+
+00:01:38.600 --> 00:01:40.240
+too, with its own app session.
+
+00:01:42.130 --> 00:01:46.890
+For this to work, both apps use the
+auth session mode and the same identity
+
+00:01:46.890 --> 00:01:51.000
+provider.
+
+00:01:51.000 --> 00:01:56.810
+To turn this on, set the auth mode to auth session
+in the app configuration file.
+
+00:01:58.740 --> 00:02:04.400
+Then set the custom URL scheme in config.json
+to your app ID, so the browser can
+
+00:02:04.400 --> 00:02:07.000
+return to your app.
+
+00:02:07.000 --> 00:02:14.950
+You can also choose where links open,
+in a browser window over your app, in a page inside
+your app, or in the device browser.
+
+00:02:16.610 --> 00:02:21.650
+Links that open in the device browser can
+use the same login, so users are not asked
+
+00:02:21.650 --> 00:02:26.910
+to sign in again. After you change
+these settings, build the app again.
+
+00:02:28.890 --> 00:02:33.550
+With Browser login, your users sign in
+once and move between your apps without
+
+00:02:33.550 --> 00:02:34.310
+signing you again.

@@ -6,6 +6,7 @@ last_update: { author: "Ranjith Seekolu" }
 
 import customAppWrapperPoster from './assets/vids/custom-app-wrapper-poster.jpg';
 import customAppWrapperVideo from './assets/vids/custom-app-wrapper.mp4';
+import customAppWrapperSubtitlesVideo from './assets/vids/custom-app-wrapper.vtt';
 
 You can wrap your React Native app with your own React component. It sits at the very top of the component tree, above every page, so anything it provides is available to the whole app.
 
@@ -21,6 +22,8 @@ Use it when a library needs a provider or a root-level component to work, for ex
 
 <video controls width="100%" playsInline poster={customAppWrapperPoster}>
   <source src={customAppWrapperVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={customAppWrapperSubtitlesVideo} default />
 </video>
 
 {/* TODO: add a :::note with the minimum WaveMaker Studio version (listed in release 11.14.1.31) */}

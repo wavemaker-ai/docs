@@ -4,6 +4,11 @@ id: "test-mobile-apps-with-waveqa"
 last_update: { author: "Jeevan Sourab Inaparti" }
 ---
 
+import waveQaMarketingVideo from './assets/videos/WaveQA-marketing.mp4';
+import waveQaWalkthroughVideo from './assets/videos/WaveQA-walkthrough-voiceover.mp4';
+import waveQaMarketingSubtitlesVideo from './assets/videos/WaveQA-marketing.vtt';
+import waveQaWalkthroughSubtitlesVideo from './assets/videos/WaveQA-walkthrough-voiceover.vtt';
+
 ## Overview
 
 WaveQA is a desktop app that turns screens you capture from your mobile app into automated UI tests. You connect WaveQA's own Android emulator or iPhone simulator, capture the screens of a flow, and let AI generate test cases with reusable setup flows. You then run the tests on the device and review a report for every run.
@@ -12,7 +17,9 @@ This guide walks you through your first project, from install to a passing run.
 
 ### WaveQA in 90 seconds
 
-<video controls preload="metadata" width="100%" src={require('./assets/videos/WaveQA-marketing.mp4').default}>
+<video controls preload="metadata" width="100%" src={waveQaMarketingVideo}>
+  <track kind="subtitles" srcLang="en" label="English" src={waveQaMarketingSubtitlesVideo} default />
+
   Your browser does not support embedded videos.
 </video>
 
@@ -35,7 +42,9 @@ Before you begin, make sure you have:
 
 This narrated walkthrough (2 min 40 s) shows every step in this guide, from creating a project to generated tests.
 
-<video controls preload="metadata" width="100%" src={require('./assets/videos/WaveQA-walkthrough-voiceover.mp4').default}>
+<video controls preload="metadata" width="100%" src={waveQaWalkthroughVideo}>
+  <track kind="subtitles" srcLang="en" label="English" src={waveQaWalkthroughSubtitlesVideo} default />
+
   Your browser does not support embedded videos.
 </video>
 

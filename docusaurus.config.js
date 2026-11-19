@@ -6,6 +6,7 @@
 
 import { themes as prismThemes } from 'prism-react-renderer';
 import pointerImages from './plugins/pointer-assets/remark.cjs';
+import videoPlayer from './plugins/video-player/remark.cjs';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 // Public base URL that pointer files resolve against (see plugins/pointer-assets): the asset bucket
@@ -29,7 +30,21 @@ const config = {
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
-    experimental_faster: true,
+    // Same as `experimental_faster: true`, except for the HTML minimizer. The SWC one rewrites the
+    // CSS inside inline <style> tags in the server HTML (`steps(8, end) infinite` becomes
+    // `steps(8,end)infinite`), so the Video.js player's spinner no longer matches what React
+    // renders on the client: hydration fails and the page is re-rendered. The default minimizer
+    // leaves inline CSS alone.
+    experimental_faster: {
+      swcJsLoader: true,
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: false,
+      lightningCssMinimizer: true,
+      mdxCrossCompilerCache: true,
+      rspackBundler: true,
+      rspackPersistentCache: true,
+      ssgWorkerThreads: true,
+    },
   },
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
@@ -84,10 +99,10 @@ const config = {
           editUrl: 'https://github.com/wavemaker-ai/docs/tree/main/',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
-          beforeDefaultRemarkPlugins: [pointerImages],
+          beforeDefaultRemarkPlugins: [pointerImages, videoPlayer],
         },
         blog: {
-          beforeDefaultRemarkPlugins: [pointerImages],
+          beforeDefaultRemarkPlugins: [pointerImages, videoPlayer],
           showReadingTime: true,
           feedOptions: {
             type: ['rss', 'atom'],
@@ -269,6 +284,7 @@ const config = {
       './plugins/pointer-assets/index.cjs',
       { baseUrl: POINTER_ASSETS_BASE_URL },
     ],
+    './plugins/vtt-assets/index.cjs',
     [
       '@docusaurus/plugin-content-blog',
       {
@@ -285,7 +301,7 @@ const config = {
          * Path to data on filesystem relative to site dir.
          */
         path: 'blogs/feature-announcements',
-        beforeDefaultRemarkPlugins: [pointerImages],
+        beforeDefaultRemarkPlugins: [pointerImages, videoPlayer],
         authorsMapPath: '../../data/author/authors.yml',
         blogSidebarTitle: 'Feature Announcements',
         blogSidebarCount: 'ALL',
