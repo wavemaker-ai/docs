@@ -58,20 +58,23 @@ function botChanges(parent, commit) {
   return changes.length ? changes : null;
 }
 
+// The size of the object a pointer file stands for, or null when the blob is not a pointer.
+function pointerSize(blob) {
+  if (Number(git('cat-file', '-s', blob).trim()) > 1024) return null;
+  const text = git('cat-file', 'blob', blob);
+  if (!looksLikePointer(text)) return null;
+  try {
+    return parsePointer(text, blob).size;
+  } catch {
+    // A malformed pointer counts by its own size; the pointer check reports it.
+    return null;
+  }
+}
+
 // A file's size. For a pointer file it is the size of the object it stands for, so the comment shows
 // what the optimized asset weighs, not the few lines of text that replaced it in the repository.
 function blobSize(blob) {
-  const size = Number(git('cat-file', '-s', blob).trim());
-  if (size > 1024) return size;
-  const text = git('cat-file', 'blob', blob);
-  if (looksLikePointer(text)) {
-    try {
-      return parsePointer(text, blob).size;
-    } catch {
-      // A malformed pointer counts by its own size; the pointer check reports it.
-    }
-  }
-  return size;
+  return pointerSize(blob) ?? Number(git('cat-file', '-s', blob).trim());
 }
 
 function blobAt(rev, file) {
@@ -103,6 +106,15 @@ export function botHistory({ base, head = 'HEAD' }) {
     if (!changes) continue;
     for (const { file, oldBlob, newBlob } of changes) {
       const entry = entries.get(file);
+      // Swapping a file for a pointer to the very same bytes (the upload and replace flows) saved
+      // nothing, so it is not an optimization: it adds no row and no commit of its own. When the file
+      // was optimized earlier, the entry just follows the file to its pointer. A commit that optimizes
+      // and swaps at once changes the size, so it is not skipped.
+      const stored = pointerSize(newBlob);
+      if (stored !== null && pointerSize(oldBlob) === null && stored === blobSize(oldBlob)) {
+        if (entry?.afterBlob === oldBlob) entry.afterBlob = newBlob;
+        continue;
+      }
       if (entry?.afterBlob === oldBlob) {
         entry.afterBlob = newBlob;
         entry.after = blobSize(newBlob);

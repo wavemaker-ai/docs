@@ -104,6 +104,46 @@ test('one bot commit: sizes, original and commit of each optimized file', () => 
   assert.deepEqual(rows[1].commits, [bot]);
 });
 
+const sha = (char) => char.repeat(64);
+// A pointer for `size` bytes stored at a key that mirrors the path (the key rules need the hash infix).
+function pointerFor(file, char, size) {
+  const key = file.replace(/(\.[a-z0-9]+)$/, `.${sha(char).slice(0, 12)}$1`);
+  return `s3-asset v1\nsha256 ${sha(char)}\nsize ${size}\nkey ${key}\n`;
+}
+const STORE = 'chore: store assets in the bucket [asset-bot]';
+
+test('optimized, then swapped for a pointer to the same bytes: one row, and only the optimizing commit is listed', () => {
+  const repo = createRepo();
+  const author = repo.commit('add video', { [VIDEO]: bytes(17000, 2) });
+  const optimized = repo.bot({ [VIDEO]: bytes(1500, 3) });
+  repo.commit(STORE, { [VIDEO]: pointerFor(VIDEO, 'a', 1500) });
+  const { rows } = repo.history();
+  assert.equal(rows.length, 1);
+  assert.deepEqual(sizes(rows[0]), [17000, 1500]);
+  assert.equal(rows[0].original, author);
+  assert.deepEqual(rows[0].commits, [optimized]);
+});
+
+test('kept as it was, then swapped for a pointer to the same bytes: no row (nothing was saved)', () => {
+  const repo = createRepo();
+  repo.commit('add video', { [VIDEO]: bytes(17000, 2) });
+  repo.commit(STORE, { [VIDEO]: pointerFor(VIDEO, 'b', 17000) });
+  assert.deepEqual(repo.history().rows, []);
+});
+
+test('a swap does not hide an optimized file from another swap in the same commit', () => {
+  const repo = createRepo();
+  repo.commit('add assets', { [VIDEO]: bytes(17000, 2), [IMAGE]: bytes(3000, 2) });
+  repo.bot({ [IMAGE]: bytes(700, 3) });
+  repo.commit(STORE, {
+    [VIDEO]: pointerFor(VIDEO, 'c', 17000),
+    [IMAGE]: pointerFor(IMAGE, 'd', 700),
+  });
+  const { rows } = repo.history();
+  assert.deepEqual(rows.map((r) => r.file), [IMAGE]);
+  assert.deepEqual(sizes(rows[0]), [3000, 700]);
+});
+
 test('files the bot did not touch are not listed', () => {
   const repo = createRepo();
   repo.commit('add assets', {
