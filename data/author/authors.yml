@@ -92,3 +92,12 @@ raajvamsy:
   page: true
   socials:
     github: wm-raajvamsy
+
+abhinavKumar:
+  name: Abhinav Kumar
+  title: Senior Development Engineer
+  url: https://github.com/abhinav-wavemaker
+  image_url: https://github.com/abhinav-wavemaker.png
+  page: true
+  socials:
+    github: abhinav-wavemaker

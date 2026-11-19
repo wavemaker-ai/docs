@@ -7,7 +7,7 @@ hide_title: true
 
 <Common.WaveMakerAIHeading scale={1.5} />
 
-WaveMaker AI 12.1.2 upgrades the Node.js and npm build requirements, fixes partial override styles on the Studio canvas, and removes a Yarn vulnerability from focus-trap.
+WaveMaker AI 12.1.2 upgrades the Node.js and npm build requirements, fixes partial override styles on the Studio canvas, and upgrades the Wizard to use a separate Wizard Stepper so a wizard's steps can sit anywhere on the page.
 
 For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack?v=12-1-2).
 
@@ -18,7 +18,11 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
 <ReleaseNotesTabs>
   <TabItem name="Features">
     <Accordian title="User Interface">
-      {/* Content */}
+      - ### Wizard Stepper widget <Pill type="web" />
+
+        The Wizard's step indicators are now a separate Wizard Stepper widget, so you can place a wizard's steps anywhere on the page, such as in a side panel, the app header, or beside an order summary, and put text or buttons right next to them. In Studio, the stepper sits inside the wizard by default and you can drag it anywhere on the canvas like any other widget, and it works the same way in both Angular and React apps. The stepper has its own appearance, orientation, and design tokens, separate from the wizard's.
+
+        For the full story and layout examples, see [Wizards just got unlocked](/blog/2026/11/19/wizards-unlocked).
     </Accordian>
 
     <Accordian title="Backend">
@@ -53,6 +57,18 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Expo Go QR code in preview <Pill type="mobile" />
 
         The Preview toolbar's QR icon in React Native projects now opens a "Preview on your phone" panel with steps to download Expo Go and scan a QR code for Android or iOS.
+
+      - ### Existing wizards migrate to Wizard Stepper <Pill type="web" />
+
+        When you upgrade, a Wizard Stepper is added to each existing wizard and the wizard's appearance, orientation, and theme tokens move over to it, so your pages look the same as before without any manual changes.
+
+      - ### Wizard layouts in Screenshot-to-Code <Pill type="web" />
+
+        Screenshot-to-Code now builds a wizard from three separate pieces: the Wizard Stepper, the wizard content, and the Action buttons. Each piece is placed where the screenshot shows it, so steps shown in a sidebar or above a card are generated in the same position instead of being forced to the top of the wizard.
+
+      - ### Wizard Stepper generation in Autocode <Pill type="web" />
+
+        Autocode now generates the Wizard Stepper along with the wizard, placing it inside the wizard or on its own to match the Figma frame, so generated wizards show their step indicators. Figma annotations now cover numbered, tab, dot, and icon steppers in horizontal and vertical layouts, along with step parts such as the title, icon, number, connector, and selected and finished states, and missing stepper annotations are filled in automatically. Styling classes and tokens go on the right widget, and it works with both the Material and Generic design systems.
     </Accordian>
 
     <Accordian title="Product Ecosystem">
