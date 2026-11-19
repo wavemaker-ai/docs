@@ -236,6 +236,48 @@ test('a change to the config or the plugin checks every pointer, not only the ch
   }
 });
 
+test('with a base config, a branch that predates the literal is checked against the base branch config', async () => {
+  const p = pointerFor('2', { name: 'p', size: 7 });
+  const b = await bucket({ [urlPath(p.key)]: ok(7) });
+  try {
+    const repo = makeRepo({ 'docusaurus.config.js': '// an old config without the literal\n' });
+    repo.change({ 'docs/guide/assets/img/p.png': p.text });
+    const baseConfig = path.join(repo.dir, 'base-docusaurus.config.js');
+    fs.writeFileSync(baseConfig, configFor(b.baseUrl));
+    const opts = { base: 'main', configPath: path.join(repo.dir, 'docusaurus.config.js'), allowedHosts: [b.host], allowInsecure: true, ...FAST };
+    const without = await inRepo(repo.dir, () => run(opts));
+    assert.equal(without.state, 'failure');
+    assert.match(without.detail, /found 0/);
+    const withBase = await inRepo(repo.dir, () => run({ ...opts, baseConfigPath: baseConfig }));
+    assert.equal(withBase.state, 'success');
+    assert.equal(withBase.checked, 1);
+  } finally {
+    await b.close();
+  }
+});
+
+test('with a base config, a PR that changes docusaurus.config.js is still checked against its own config', async () => {
+  const p = pointerFor('3', { name: 'p', size: 7 });
+  const b = await bucket({ [urlPath(p.key)]: ok(7) });
+  try {
+    const repo = makeRepo({ 'docusaurus.config.js': configFor(b.baseUrl) });
+    repo.change({
+      'docusaurus.config.js': configFor('https://evil.example/docs'),
+      'docs/guide/assets/img/p.png': p.text,
+    });
+    const baseConfig = path.join(repo.dir, 'base-docusaurus.config.js');
+    fs.writeFileSync(baseConfig, configFor(b.baseUrl));
+    const report = await inRepo(repo.dir, () =>
+      run({ base: 'main', configPath: path.join(repo.dir, 'docusaurus.config.js'), baseConfigPath: baseConfig, allowedHosts: [b.host], ...FAST }),
+    );
+    assert.equal(report.state, 'failure');
+    assert.match(report.detail, /not an allowed asset host/);
+    assert.deepEqual(b.requests, [], 'no request was made for a rejected base URL');
+  } finally {
+    await b.close();
+  }
+});
+
 test('a base URL on another host, or a config without the literal, is a failure', async () => {
   const p = pointerFor('f', { name: 'p', size: 5 });
   const b = await bucket({ [urlPath(p.key)]: ok(5) });

@@ -380,6 +380,7 @@ jobs:
           BASE_REF: ${{ needs.resolve.outputs.base_ref }}
         run: |
           node ../trusted/scripts/assets/pointer-check.mjs --base "upstream/${BASE_REF}" \
+            --base-config ../trusted/docusaurus.config.js \
             --report "$RUNNER_TEMP/pointer-check.json"
 
       # If the check crashed, the status says so instead of being missing.
