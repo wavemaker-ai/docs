@@ -1,0 +1,95 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:04.620
+This is WaveQA, AI mobile test
+automation for your desktop.
+
+00:00:05.240 --> 00:00:08.600
+Create a project, choose
+Android, and add your app.
+
+00:00:09.160 --> 00:00:14.840
+Click Connect. WaveQA starts its own Android
+emulator and installs your app for you.
+
+00:00:21.730 --> 00:00:26.130
+Your app runs live. Tap, swipe,
+and type right inside WaveQA.
+
+00:00:26.290 --> 00:00:27.970
+Then create a folder for your captures.
+
+00:00:28.470 --> 00:00:31.530
+Now, capture each screen of
+the flow you want to test.
+
+00:00:31.530 --> 00:00:35.730
+First, here we log in, then capture
+the home, list, and form screens.
+
+00:00:50.520 --> 00:00:53.520
+Each capture keeps a
+screenshot and a screen layout.
+
+00:00:54.980 --> 00:00:57.480
+Add your AI provider key once in settings.
+
+00:00:58.000 --> 00:00:58.960
+It's stored encrypted.
+
+00:01:07.150 --> 00:01:09.050
+Click Generate and pick a preset.
+
+00:01:09.490 --> 00:01:15.460
+Here, happy path. The AI writes tests from
+
+00:01:15.460 --> 00:01:15.980
+your captures.
+
+00:01:23.010 --> 00:01:28.830
+It also proposes reusable setup flows,
+like logging in, review them, then
+
+00:01:28.830 --> 00:01:34.490
+save. Save your test data once in
+settings, variables and encrypted
+
+00:01:34.490 --> 00:01:35.090
+credentials.
+
+00:01:41.570 --> 00:01:43.610
+Then, edit any generated step.
+
+00:01:44.050 --> 00:01:47.170
+Here, the login steps use the
+saved username and password.
+
+00:01:59.670 --> 00:02:04.390
+Where tests appear on the Tests tab, each
+step uses elements from your captured
+
+00:02:04.390 --> 00:02:04.870
+screens.
+
+00:02:11.200 --> 00:02:14.920
+Drive the device with
+hardware keys and text input.
+
+00:02:15.320 --> 00:02:19.340
+Record screens automatically, or
+edit tests with the AI Assistant.
+
+00:02:21.100 --> 00:02:24.720
+Export tests as WebDriver
+IOS specs for your CI.
+
+00:02:25.460 --> 00:02:28.960
+Build setup flows, hooks, and
+your own reusable methods.
+
+00:02:32.210 --> 00:02:35.850
+Keep variables, credentials, and
+your AI provider in settings.
+
+00:02:36.490 --> 00:02:39.150
+That's WaveQA, Capture, Generate, Run.

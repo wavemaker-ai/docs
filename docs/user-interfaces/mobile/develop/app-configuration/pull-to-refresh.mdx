@@ -6,11 +6,14 @@ last_update: { author: "Praneeth Reddy" }
 
 import pullToRefreshPoster from './assets/vids/pull-to-refresh-poster.jpg';
 import pullToRefreshVideo from './assets/vids/pull-to-refresh.mp4';
+import pullToRefreshSubtitlesVideo from './assets/vids/pull-to-refresh.vtt';
 
 Pull to refresh lets the people who use your WaveMaker React Native app reload a page by pulling it down from the top and letting go. A refresh indicator appears, the page runs your refresh logic, and the latest data is shown. You turn it on once for the whole app, and you can turn it off on individual pages.
 
 <video controls width="100%" playsInline poster={pullToRefreshPoster}>
   <source src={pullToRefreshVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={pullToRefreshSubtitlesVideo} default />
 </video>
 
 ## When to use it

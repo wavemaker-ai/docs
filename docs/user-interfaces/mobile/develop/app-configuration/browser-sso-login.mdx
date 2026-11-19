@@ -6,6 +6,7 @@ last_update: { author: "Praneeth Reddy" }
 
 import browserSsoLoginPoster from './assets/vids/browser-sso-login-poster.jpg';
 import browserSsoLoginVideo from './assets/vids/browser-sso-login.mp4';
+import browserSsoLoginSubtitlesVideo from './assets/vids/browser-sso-login.vtt';
 
 Organizations often provide their users with multiple mobile apps that authenticate against the same identity provider. When each app handles SSO login on its own, users must enter their credentials separately in every app, and again whenever a link opens a web page protected by the same identity provider.
 
@@ -13,6 +14,8 @@ Browser and SSO login settings address this by letting your app authenticate use
 
 <video controls width="100%" playsInline poster={browserSsoLoginPoster}>
   <source src={browserSsoLoginVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={browserSsoLoginSubtitlesVideo} default />
 </video>
 
 ## Signing in once across apps

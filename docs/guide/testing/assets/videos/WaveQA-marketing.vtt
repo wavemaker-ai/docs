@@ -1,0 +1,52 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.020
+Writing mobile UI tests by hand is
+slow, and they break with every release.
+
+00:00:07.280 --> 00:00:12.540
+Meet WaveQA. It writes those tests for
+you, with AI, right on your desktop.
+
+00:00:14.810 --> 00:00:18.770
+Connect WaveQA's own Android
+emulator or iPhone simulator.
+
+00:00:19.490 --> 00:00:21.290
+Your app runs live, right here.
+
+00:00:24.180 --> 00:00:26.820
+Capture each screen of
+the flow you want to test.
+
+00:00:32.920 --> 00:00:36.340
+Click Generate, and pick what
+to cover, like the happy path.
+
+00:00:38.520 --> 00:00:44.440
+AI turns your captures into tests and
+proposes reusable setup flows like
+
+00:00:44.440 --> 00:00:50.280
+logging in. Every test is ready
+to review and edit step by step.
+
+00:00:54.210 --> 00:00:57.730
+Save your test data once,
+including encrypted credentials.
+
+00:01:00.620 --> 00:01:02.920
+Then use it in any step.
+
+00:01:05.730 --> 00:01:08.290
+Run your tests and watch every step pass.
+
+00:01:12.400 --> 00:01:13.860
+No test code to write.
+
+00:01:13.860 --> 00:01:18.680
+Android and iPhone, and export
+to WebDriver.io for your CI.
+
+00:01:19.920 --> 00:01:23.000
+Wave QA, Capture, Generate, Run.

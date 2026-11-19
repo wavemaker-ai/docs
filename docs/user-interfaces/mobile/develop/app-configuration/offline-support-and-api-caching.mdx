@@ -6,6 +6,7 @@ last_update: { author: "Sunil Kumar Gavara" }
 
 import offlineSupportPoster from './assets/vids/offline-support-and-api-caching-poster.jpg';
 import offlineSupportVideo from './assets/vids/offline-support-and-api-caching.mp4';
+import offlineSupportSubtitlesVideo from './assets/vids/offline-support-and-api-caching.vtt';
 
 Mobile users do not always have a reliable connection. When every API call goes straight to the server, they wait for lists they loaded moments ago, and a form that fails mid-submit because the signal dropped loses everything they typed.
 
@@ -13,6 +14,8 @@ Offline support and API caching address this by letting your app answer from the
 
 <video controls width="100%" playsInline poster={offlineSupportPoster}>
   <source src={offlineSupportVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={offlineSupportSubtitlesVideo} default />
 </video>
 
 ## What your users experience

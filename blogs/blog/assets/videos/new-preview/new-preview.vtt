@@ -1,0 +1,98 @@
+WEBVTT
+
+00:00:06.640 --> 00:00:12.480
+You press Preview. Even a
+small app is made of about
+
+00:00:12.480 --> 00:00:18.100
+2700 modules. Only 26 of
+them are the ones you built.
+
+00:00:20.530 --> 00:00:23.190
+The classic preview rebuilt all of it.
+
+00:00:23.510 --> 00:00:25.550
+Every time you changed anything.
+
+00:00:28.630 --> 00:00:30.790
+So new preview flips it around.
+
+00:00:31.450 --> 00:00:33.470
+Build only what's yours.
+
+00:00:35.640 --> 00:00:39.500
+Everything WaveMaker ships
+is the same for every app.
+
+00:00:40.680 --> 00:00:45.320
+So it's prepared once, and every
+project simply links to it.
+
+00:00:47.000 --> 00:00:50.720
+Your app is cut into layers
+by how often they change.
+
+00:00:52.060 --> 00:00:55.720
+Edit a page, and only the
+top layers are rebuilt.
+
+00:00:57.300 --> 00:01:00.900
+And your browser only downloads
+the pieces that changed.
+
+00:01:05.290 --> 00:01:07.790
+Make a change and keep your preview open.
+
+00:01:08.390 --> 00:01:13.450
+In a few seconds, it updates itself
+without reloading the page
+
+00:01:14.920 --> 00:01:16.120
+and it tells you when it's ready.
+
+00:01:20.690 --> 00:01:22.510
+New preview is on by default.
+
+00:01:23.130 --> 00:01:26.490
+And a few settings in your apps
+config file let you shape it.
+
+00:01:28.400 --> 00:01:33.880
+Big app. Set all pages to false and preview
+builds just the pages you're working on.
+
+00:01:35.830 --> 00:01:38.490
+Open another page and it's
+built when you get there.
+
+00:01:40.360 --> 00:01:43.160
+Add a list of pages to
+keep them always built.
+
+00:01:44.990 --> 00:01:46.150
+Prefer to refresh yourself.
+
+00:01:46.750 --> 00:01:50.270
+Turn live reload off and
+the preview waits for you.
+
+00:01:52.450 --> 00:01:56.070
+While a build runs, the preview
+checks on it every two seconds.
+
+00:01:56.870 --> 00:01:59.050
+Set the poll interval to check less often.
+
+00:01:59.950 --> 00:02:02.130
+And when the tab is
+hidden, it stops checking.
+
+00:02:04.270 --> 00:02:06.190
+Mix them however your project needs.
+
+00:02:08.110 --> 00:02:11.570
+If you ever need the classic
+preview, one line takes you back.
+
+00:02:11.570 --> 00:02:16.270
+Preview 2.0. Build only what's yours.

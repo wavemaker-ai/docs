@@ -4,10 +4,15 @@ sidebar_label: "RN Perf Analyzer"
 last_update: { author: "Mohammed Abdullah Khan" }
 ---
 
+import rnPerfAnalyzerDemoVideo from './assets/vids/rn-perf-analyzer-demo.mp4';
+import rnPerfAnalyzerDemoSubtitlesVideo from './assets/vids/rn-perf-analyzer-demo.vtt';
+
 RN Perf Analyzer measures the runtime performance of a React Native app build and produces a report covering startup, screens, network calls, rendering, and memory.
 
 <video controls width="100%" playsInline>
-  <source src={require('./assets/vids/rn-perf-analyzer-demo.mp4').default} type="video/mp4" />
+  <source src={rnPerfAnalyzerDemoVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={rnPerfAnalyzerDemoSubtitlesVideo} default />
 </video>
 
 ---
