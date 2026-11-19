@@ -1,0 +1,98 @@
+---
+title: "Build a React app"
+last_update: { author: "Yagyaraj Lodhi" }
+---
+
+You can build a React app from WaveMaker Studio in two ways: a full Maven build, or a frontend-only build with npm.
+
+## Build properties
+
+The Maven build takes two properties.
+
+- `app.contextPath` is the sub-route the frontend loads its bundle files (JS, CSS) from. Set it when the app is served under a path such as `https://wavemaker.ai/app1`. If the app is served from the domain root, pass `""`.
+- `app.serverPath` is the base URL of the backend the frontend calls. Set it when you use a WaveMaker backend.
+
+## Option 1: Maven build
+
+### With a WaveMaker backend
+
+```bash
+mvn clean install \
+  -Pdeployment \
+  -DoptimizeUIBuild=true \
+  -Dapp.contextPath=/QuickMobile \
+  -Dapp.serverPath=http://example.com/QuickMobile \
+  -Dbuild.ui.mode=react
+```
+
+### Without a WaveMaker backend
+
+Pass an empty `serverPath`. Keep `contextPath` if the app lives under a sub-route.
+
+```bash
+mvn clean install \
+  -Pdeployment \
+  -DoptimizeUIBuild=true \
+  -Dapp.contextPath=/app2 \
+  -Dapp.serverPath="" \
+  -Dbuild.ui.mode=react
+```
+
+`contextPath` matters when several apps share one domain and are routed by path:
+
+```text
+https://wavemaker.ai/app1
+https://wavemaker.ai/app2
+```
+
+Each app needs to know which sub-route to fetch its bundles from. `serverPath` does the same job for API calls.
+
+## Option 2: Build only the React app
+
+Use this when you don't want the Maven build.
+
+1. Download the React zip from Studio.
+
+2. Set the environment variables:
+
+   ```bash
+   NEXT_PUBLIC_SERVER_PATH=""        # backend URL, or empty if there is no WaveMaker backend
+   NEXT_PUBLIC_BASE_PATH="/app1"     # only when served from a sub-route, otherwise ""
+   ```
+
+3. Run the build:
+
+   ```bash
+   npm run build
+   ```
+
+4. Deploy the generated **build** directory to any static host.
+
+## Apps with WMX components
+
+If the project has [WMX components](/docs/user-interfaces/web/enterprise-capabilities/wmx/), they are built along with the app. You don't need a separate build step. List any extra libraries a component needs in that component's own `package.json`.
+
+## Serve the build with nginx
+
+**What you need:** when a user opens `domain/app` (or refreshes `domain/app/orders`), nginx must return `index.html`.
+
+**Why:** the React app is a single page. Only `index.html` exists as a real file, and the routing happens in the browser. If nginx is asked for `/app/orders` directly, it finds no such file and returns a 404.
+
+**What to do:** add a fallback in the nginx config so any path that isn't a real file returns `index.html`:
+
+```nginx
+location /app/ {
+    root /var/www;                          # build output is in /var/www/app
+    try_files $uri $uri/ /app/index.html;
+}
+```
+
+The `location` path must match the `contextPath` (or `NEXT_PUBLIC_BASE_PATH`) used in the build. For an app at the domain root, use `location /` and `/index.html`.
+
+## Which values to use
+
+| Scenario                          | `contextPath` | `serverPath` |
+| --------------------------------- | ------------- | ------------ |
+| WaveMaker backend, sub-route      | `/app`        | backend URL  |
+| No WaveMaker backend, sub-route   | `/app`        | `""`         |
+| No WaveMaker backend, domain root | `""`          | `""`         |

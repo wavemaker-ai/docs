@@ -15,12 +15,10 @@ name: Assets
 # `COLLECTION_BRANCHES` in the "Resolve PR" step. GitHub reads this file from the default branch, so
 # that change has to land on `main`.
 #
-# TEMPORARY: the scripts (scripts/assets/ and package.json) are also read from the default branch,
-# so a collection branch doesn't need to contain them while the pipeline is being tested. To go back
-# to reading them from the PR's base branch, set `ref` in the "Check out trusted scripts" steps of
-# the decode and publish jobs to `needs.resolve.outputs.base_ref` again. Merge `main` into every
-# collection branch first, or PRs into a branch without scripts/assets/ fail with "Validation did
-# not run".
+# The scripts (scripts/assets/ and package.json) and the pointer base URL in docusaurus.config.js
+# are read from the PR's base branch, never from the PR. Every collection branch must contain
+# scripts/assets/; keep them in sync with `main` (merge `main` into each collection branch), or PRs
+# into a branch without them fail with "Validation did not run".
 #
 # When it runs on a PR into a collection branch:
 #   - PRs from branches in this repo: every push → optimize + validate.
@@ -45,7 +43,7 @@ name: Assets
 # content matches an optimized or reviewed trailer are skipped. Size validation covers every asset.
 #
 # It uses pull_request_target so it can comment and set statuses on fork PRs. Scripts come from the
-# default branch (see TEMPORARY above) and nothing from the PR is executed. Fork media is only decoded after a maintainer
+# PR's base branch and nothing from the PR is executed. Fork media is only decoded after a maintainer
 # opts in with the comment.
 #
 # Four jobs, so the code that decodes untrusted media never shares a job with a secret:
@@ -271,8 +269,8 @@ jobs:
         if: steps.pr.outputs.proceed == 'true'
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          # The PR's base branch: scripts and config are never read from the PR itself.
+          ref: ${{ steps.pr.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -337,8 +335,8 @@ jobs:
       - name: Check out trusted scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          # The PR's base branch: scripts and config are never read from the PR itself.
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -382,6 +380,7 @@ jobs:
           BASE_REF: ${{ needs.resolve.outputs.base_ref }}
         run: |
           node ../trusted/scripts/assets/pointer-check.mjs --base "upstream/${BASE_REF}" \
+            --base-config ../trusted/docusaurus.config.js \
             --report "$RUNNER_TEMP/pointer-check.json"
 
       # If the check crashed, the status says so instead of being missing.
@@ -418,8 +417,8 @@ jobs:
       - name: Check out trusted scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          # The PR's base branch: scripts and config are never read from the PR itself.
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -540,8 +539,8 @@ jobs:
       - name: Check out trusted scripts
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # TEMPORARY: the default branch, not the PR's base branch (see the header).
-          ref: ${{ github.event.repository.default_branch }}
+          # The PR's base branch: scripts and config are never read from the PR itself.
+          ref: ${{ needs.resolve.outputs.base_ref }}
           path: trusted
           sparse-checkout: scripts/assets
           persist-credentials: false
@@ -662,7 +661,7 @@ jobs:
           GIT_CONFIG_NOSYSTEM: '1'
           GIT_CONFIG_GLOBAL: /dev/null
         run: |
-          ARGS=(--config docusaurus.config.js --report "$RUNNER_TEMP/replace.json" --replaced "$RUNNER_TEMP/replaced.txt")
+          ARGS=(--config ../trusted/docusaurus.config.js --report "$RUNNER_TEMP/replace.json" --replaced "$RUNNER_TEMP/replaced.txt")
           if [ "$RUN_UPLOAD" = "true" ]; then
             ARGS+=(--upload-report "$RUNNER_TEMP/upload.json")
           else
@@ -993,6 +992,14 @@ jobs:
                   replaceSection += '\n| File | Left as it is because |\n|---|---|\n' + rows(kept, (r) => cell(String(r.problem).slice(0, 200))).join('\n') + '\n';
               }
             }
+            // The upload and replace sections above describe only the run that did the work. The run
+            // the bot's own push starts finds nothing left to do and would drop them, so when this run
+            // reports neither, say what the PR holds now: the pointer files it contains, read from the
+            // size check (it lists them, with the size of the object each one stands for).
+            const storedFiles = (check?.assets ?? []).filter((a) => a.pointer);
+            let storedSection = '';
+            if (storedFiles.length && !uploadSection && !replaceSection)
+              storedSection = `#### Pointer files\n\n✅ ${storedFiles.length} changed asset(s) are stored in the bucket and held in this PR as pointer files.\n`;
             const streakBlocked = env.STREAK_BLOCKED === 'true';
             if (!existing && !hasTable && !history?.rows.length && !optimizeFailed && state === 'success' && !env.NOTE && !unoptimized && env.COMMENTED !== 'true' && !uploadSection && !replaceSection && !streakBlocked) return reportStatusError();
 
@@ -1021,6 +1028,28 @@ jobs:
                   ? `⚠️ failed<br><code>${cell(r.error)}</code>`
                   : r.replaced ? saved(r.before, r.after) : `${fmt(r.after)} (${r.note ? cell(r.note) : 'already optimized'})`;
                 rows.push(`| ${fileCell(r.file)} | ${fmt(r.before)} | ${after} |`);
+                listed.add(r.file);
+              }
+              // A file the optimizer looked at and left alone has no commit, so git cannot list it. The
+              // run that did the optimizing wrote its row; later runs (the bot's own push starts one)
+              // scan nothing, so carry the row over while the file is unchanged. If the module is not
+              // on the default branch yet, or the old comment cannot be read, the row is just not shown.
+              try {
+                const i = existing?.body?.indexOf(OPT_START) ?? -1;
+                const j = existing?.body?.indexOf(OPT_END) ?? -1;
+                if (i !== -1 && j > i) {
+                  const url = require('url').pathToFileURL(`${env.GITHUB_WORKSPACE}/trusted/scripts/assets/comment-carry.mjs`).href;
+                  const { keptRows } = await import(url);
+                  for (const k of keptRows({
+                    previous: existing.body.slice(i + OPT_START.length, j),
+                    assets: check?.assets ?? [],
+                    shown: listed,
+                    formatSize: fmt,
+                  }))
+                    rows.push(`| ${fileCell(k.file)} | ${fmt(k.size)} | ${fmt(k.size)} (${cell(k.note)}) |`);
+                }
+              } catch (error) {
+                core.warning(`Could not carry over earlier optimization rows: ${error.message}`);
               }
               if (rows.length) {
                 opt = '#### Optimization\n\n| File | Before | After |\n|---|---:|---|\n' + rows.join('\n') + '\n';
@@ -1091,6 +1120,7 @@ jobs:
             if (opt) body += `${OPT_START}\n${opt}${OPT_END}\n\n`;
             if (uploadSection) body += `${uploadSection}\n`;
             if (replaceSection) body += `${replaceSection}\n`;
+            if (storedSection) body += `${storedSection}\n`;
 
             body += '#### Size validation\n\n';
             if (!check) {

@@ -6,7 +6,7 @@
 // host plus a validated key, so a PR cannot point this check at another host.
 //
 // Usage (inside the PR checkout, from the trusted copy of the scripts):
-//   node pointer-check.mjs --base <ref> [--head <ref>] [--config docusaurus.config.js] --report <out.json>
+//   node pointer-check.mjs --base <ref> [--head <ref>] [--config docusaurus.config.js] [--base-config <file>] --report <out.json>
 // Writes `state` (success | failure | error) and `description` to $GITHUB_OUTPUT when set, details to
 // the job summary, and ::error annotations. It exits 0 whatever the result: the workflow sets the
 // status from the outputs.
@@ -19,6 +19,8 @@
 //
 // Without any changed pointer, and without a change to the config or the plugin, nothing is read from
 // the config and nothing is requested: a PR from a branch that predates the config literal is fine.
+// With --base-config, the base URL is read from that file (the base branch's config) unless the PR
+// itself changes docusaurus.config.js, so a stale branch with a pointer in it is fine too.
 
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -70,15 +72,14 @@ export function selectPointers({ base, head }) {
   const changed = split(
     git('diff', '--name-only', '--diff-filter=ACMR', '-z', `${mergeBase}..${head}`),
   );
-  const configTouched = changed.some(
-    (file) =>
-      file === 'docusaurus.config.js' || file.startsWith('plugins/pointer-assets/'),
-  );
+  const configChanged = changed.includes('docusaurus.config.js');
+  const configTouched =
+    configChanged || changed.some((file) => file.startsWith('plugins/pointer-assets/'));
   const candidates = configTouched ? split(git('ls-files', '-z')) : changed;
   const files = candidates.filter(
     (file) => hasPointerExtension(file) && isPointerFile(file),
   );
-  return { files, configTouched };
+  return { files, configTouched, configChanged };
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -156,18 +157,23 @@ export async function run({
   base,
   head = 'HEAD',
   configPath = 'docusaurus.config.js',
+  baseConfigPath,
   allowedHosts = ALLOWED_HOSTS,
   allowInsecure = false,
   ...options
 }) {
   const settings = { ...DEFAULTS, ...options };
-  const { files, configTouched } = selectPointers({ base, head });
+  const { files, configTouched, configChanged } = selectPointers({ base, head });
   if (files.length === 0)
     return { state: 'success', description: 'No pointer files changed', results: [], checked: 0 };
 
   let baseUrl;
   try {
-    baseUrl = extractBaseUrl(fs.readFileSync(configPath, 'utf8'));
+    // The config comes from the base branch unless the PR itself changes it. A PR that changes the
+    // base URL is checked against what it really builds with; a branch that merely predates the
+    // literal is checked against the base branch's.
+    const configFile = configChanged ? configPath : (baseConfigPath ?? configPath);
+    baseUrl = extractBaseUrl(fs.readFileSync(configFile, 'utf8'));
     const url = new URL(baseUrl);
     if (url.protocol !== 'https:' && !allowInsecure) throw new Error('the base URL is not https');
     if (!allowedHosts.includes(url.host)) throw new Error(`the host ${url.host} is not an allowed asset host`);
@@ -252,10 +258,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     args = parseCli(process.argv.slice(2));
     if (!args.base) throw new Error('--base is required');
   } catch (error) {
-    console.error(`${error.message}\nUsage: pointer-check.mjs --base <ref> [--head <ref>] [--config <file>] [--report <file>]`);
+    console.error(`${error.message}\nUsage: pointer-check.mjs --base <ref> [--head <ref>] [--config <file>] [--base-config <file>] [--report <file>]`);
     process.exit(2);
   }
-  const report = await run({ base: args.base, head: args.head, configPath: args.config });
+  const report = await run({ base: args.base, head: args.head, configPath: args.config, baseConfigPath: args['base-config'] });
   if (args.report) fs.writeFileSync(args.report, JSON.stringify(report, null, 2));
   if (process.env.GITHUB_OUTPUT)
     fs.appendFileSync(process.env.GITHUB_OUTPUT, `state=${report.state}\ndescription=${report.description}\n`);
