@@ -330,6 +330,48 @@ export default [
           },
         ],
       },
+      {
+        type: 'category',
+        label: 'WMX components',
+        collapsible: true,
+        collapsed: true,
+        link: {
+          type: 'doc',
+          id: 'user-interfaces/web/enterprise-capabilities/wmx/index',
+        },
+        items: [
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/wmx-schema-reference',
+            label: 'WMX schema reference',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/wmx-with-aira',
+            label: 'Create WMX components',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/wmx-examples',
+            label: 'Examples',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/add-dependencies',
+            label: 'Add external libraries',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/develop-locally',
+            label: 'Develop and test locally',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/web/enterprise-capabilities/wmx/use-wmx-component',
+            label: 'Use in your app',
+          },
+        ],
+      },
       // {
       //   type: 'doc',
       //   id: 'user-interfaces/web/enterprise-capabilities/prefabs',

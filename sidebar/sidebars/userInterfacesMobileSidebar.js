@@ -408,6 +408,11 @@ export default [
             id: 'user-interfaces/mobile/testing-and-debugging/wm-debugging-tools/wavepulse',
             label: 'WavePulse',
           },
+          {
+            type: 'doc',
+            id: 'user-interfaces/mobile/testing-and-debugging/wm-debugging-tools/rn-perf-analyzer',
+            label: 'RN Perf Analyzer',
+          },
         ],
       },
       {
