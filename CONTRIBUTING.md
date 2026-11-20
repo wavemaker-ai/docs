@@ -294,6 +294,8 @@ graph TD
 ```
 ````
 
+Flowcharts are colored automatically: one flat color per level down the edges, no borders, six colors in a fixed order. A node never shares a color with its parent, and the children of one parent share a color. Do not add `style`, `classDef`, or `class` color rules, because the site ignores them. If you use Claude Code, the `wm-ai-mermaid` skill covers diagram conventions.
+
 ## Using the CLI Tool
 
 Our documentation manager CLI tool helps maintain consistency:
