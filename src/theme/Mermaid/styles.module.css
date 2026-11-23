@@ -1,0 +1,112 @@
+.container {
+  /* How far a diagram may shrink to fit the column, as a share of its natural size. Below that the
+     container scrolls sideways, so text stays at least this share of its set size. */
+  --mermaid-min-scale: 0.8;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.container > svg {
+  max-width: 100%;
+  min-width: calc(
+    var(--mermaid-natural-width, 0) * var(--mermaid-min-scale) * 1px
+  );
+}
+
+/* A diagram wider than the column scrolls sideways. Overlay scrollbars hide until the user scrolls,
+   so a styled one is used: it stays visible and shows there is more to see. */
+.container::-webkit-scrollbar {
+  height: 0.5rem;
+}
+
+.container::-webkit-scrollbar-track {
+  background: var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-global-radius);
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: var(--ifm-color-emphasis-500);
+  border-radius: var(--ifm-global-radius);
+}
+
+/* Colors come from the site's CSS variables, so they follow custom.css and the color mode. Mermaid
+   scopes its own rules to the diagram, so these need !important. Colors do not change box sizes, so
+   unlike fonts they can be applied after the render. */
+
+/* Flowchart nodes and groups */
+.container :global(.node) :is(rect, circle, ellipse, polygon, path) {
+  fill: var(--ifm-color-primary-lightest) !important;
+  stroke: var(--ifm-color-primary) !important;
+}
+
+.container :global(.cluster) rect {
+  fill: var(--ifm-color-emphasis-100) !important;
+  stroke: var(--ifm-color-emphasis-400) !important;
+}
+
+/* Lines, arrowheads and the sequence diagram's boxes and lines */
+.container
+  :is(
+    :global(.flowchart-link),
+    :global(.actor-line),
+    :global(.messageLine0),
+    :global(.messageLine1),
+    :global(.loopLine)
+  ) {
+  stroke: var(--ifm-color-emphasis-700) !important;
+}
+
+.container :global(.marker),
+.container
+  :is(
+    :global(.marker),
+    :global(#arrowhead),
+    :global(#crosshead),
+    :global(#filled-head),
+    :global(#sequencenumber)
+  )
+  :is(path, circle) {
+  fill: var(--ifm-color-emphasis-700) !important;
+  stroke: var(--ifm-color-emphasis-700) !important;
+}
+
+.container
+  :is(
+    :global(.actor),
+    :global(.note),
+    :global(.labelBox),
+    :global(.actor-man) :is(line, circle, path),
+    :global(.activation0),
+    :global(.activation1),
+    :global(.activation2)
+  ) {
+  fill: var(--ifm-color-primary-lightest) !important;
+  stroke: var(--ifm-color-primary) !important;
+}
+
+/* Text */
+.container
+  :is(
+    :global(.nodeLabel),
+    :global(.edgeLabel),
+    :global(.cluster-label),
+    :global(.label),
+    span,
+    p,
+    text,
+    tspan
+  ) {
+  color: var(--ifm-font-color-base) !important;
+  fill: var(--ifm-font-color-base) !important;
+}
+
+/* The chip behind an edge label matches the page, so the line breaks around the label and no box
+   shows. The page color token is transparent in light mode, so it is layered over Canvas, the
+   browser's own page color. */
+.container :is(:global(.edgeLabel), :global(.labelBkg), :global(.edgeLabel) p) {
+  background-color: Canvas !important;
+  background-image: linear-gradient(
+    var(--ifm-background-color),
+    var(--ifm-background-color)
+  ) !important;
+}

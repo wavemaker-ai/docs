@@ -16,6 +16,7 @@ import SearchBar from '@theme/SearchBar';
 import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
 import NavbarLogo from '@theme/Navbar/Logo';
 import NavbarSearch from '@theme/Navbar/Search';
+import DocsSwitcher from '../DocsSwitcher';
 import styles from './styles.module.css';
 import { AppLauncher } from 'wm-ui-components';
 // import MenuSection from './menu';
@@ -94,6 +95,7 @@ export default function NavbarContent() {
         // Ask the user to add the respective navbar items => more flexible
         <>
           <NavbarItems items={rightItems} />
+          <DocsSwitcher />
           <NavbarColorModeToggle className={styles.colorModeToggle} />
           <div className="launcher-ecosystem">
             <AppLauncher excludeId="docs" />

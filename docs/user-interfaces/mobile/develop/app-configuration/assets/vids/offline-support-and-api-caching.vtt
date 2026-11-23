@@ -1,0 +1,105 @@
+WEBVTT
+
+00:00:06.540 --> 00:00:11.640
+Your users open the app and wait
+for a list they loaded a minute ago.
+
+00:00:12.940 --> 00:00:18.720
+Then the signal drops in the middle of a
+form and everything they typed is gone.
+
+00:00:20.520 --> 00:00:25.740
+WaveMaker fixes both with one
+idea, the API Interceptor.
+
+00:00:26.800 --> 00:00:33.000
+It sits between a service variable and the
+network and decides what happens to every call.
+
+00:00:35.000 --> 00:00:38.120
+Forget calls, turn on
+
+00:00:38.120 --> 00:00:41.120
+caching, and repeat requests
+are answered from the device.
+
+00:00:42.660 --> 00:00:45.400
+The first call goes to
+the server and is stored.
+
+00:00:45.860 --> 00:00:49.460
+The next ones come straight
+from the cache until it expires.
+
+00:00:51.080 --> 00:00:52.480
+Choose where it lives.
+
+00:00:52.960 --> 00:00:56.120
+A session cache is fast and
+clears when the app closes.
+
+00:00:56.900 --> 00:01:01.640
+A persistent cache survives restarts, so
+the data is there even when the app opens
+
+00:01:01.640 --> 00:01:07.560
+offline. Turn on Refresh in
+background, and users see cached
+
+00:01:07.560 --> 00:01:11.040
+data instantly, while a fresh
+call quietly updates it.
+
+00:01:12.480 --> 00:01:17.720
+By default, cached data stays valid for
+five minutes, and the cache keeps up to a
+
+00:01:17.720 --> 00:01:22.140
+hundred entries, removing expired ones
+first, then the least recently used.
+
+00:01:26.180 --> 00:01:30.220
+For post, put, and delete, you
+write the intercept script yourself.
+
+00:01:31.480 --> 00:01:37.460
+When the device is online, call context.proceed
+and the request goes out as usual.
+
+00:01:38.760 --> 00:01:44.680
+When it's offline, save the request on the
+device and return a value so the screen
+
+00:01:44.680 --> 00:01:50.640
+keeps working. When the connection
+comes back, network service on network
+
+00:01:50.640 --> 00:01:53.620
+change tells your app and
+you send what was saved.
+
+00:01:57.750 --> 00:02:03.550
+Open settings, app configurations, API
+interceptors, and add an interceptor for any
+
+00:02:03.550 --> 00:02:04.570
+service you've imported.
+
+00:02:06.820 --> 00:02:11.940
+The dashboard lists them all, and you can filter
+by method or by type, cache or custom.
+
+00:02:13.810 --> 00:02:20.000
+Prefer one switch? Turn on caching
+for the whole app in wm_rn_config.json
+
+00:02:20.000 --> 00:02:22.010
+and every get is cached.
+
+00:02:23.490 --> 00:02:28.050
+And leave specific services out by
+listing their URLs under exclude.
+
+00:02:28.510 --> 00:02:32.720
+Fast when you're connected,
+safe when you're not.

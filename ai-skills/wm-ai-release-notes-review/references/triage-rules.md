@@ -1,14 +1,16 @@
 # Triage Rules
 
-How to decide what from a source sheet becomes an entry, and how to word it.
+The rubric for judging a hand-written release notes file: is each omission justified, and does each entry's wording hold up. These rules were written for deciding what to include, and they work the same way in reverse. The writer made the call; you check it against the rubric and report disagreements.
+
+Use them to **classify** findings, not to overrule the writer. An omission that fits a rule below is fine. An omission that does not is a candidate for **Missing** in the report.
 
 ## The filter: can a customer observe it?
 
-Keep an item if it maps to something the user **clicks, sees, or gets** — a screen, a control, a message, a generated app's behaviour, a build that now succeeds or runs faster.
+An item belongs in the notes if it maps to something the user **clicks, sees, or gets** — a screen, a control, a message, a generated app's behaviour, a build that now succeeds or runs faster.
 
-Drop it if the only thing that changed is an **event field, an API parameter, an internal detector, a tool's error wording, or a framework refactor**.
+It is fine to omit if the only thing that changed is an **event field, an API parameter, an internal detector, a tool's error wording, or a framework refactor**.
 
-These were cut from a shipped release by the writer, and are the calibration for "too internal":
+These were cut from a shipped release by the writer, and are the calibration for "too internal". Omitting any of them is justified:
 
 | Cut                                                        | Why                  |
 | ---------------------------------------------------------- | -------------------- |
@@ -18,17 +20,17 @@ These were cut from a shipped release by the writer, and are the calibration for
 | Reworded error message suggesting an alternate tool        | Tool message         |
 | Internal summarization text leaking into a task's output   | Internal plumbing    |
 
-### Try rewriting before dropping
+### Check for a surface before accepting an omission
 
 An item can sound internal and still have a surface the user touches. In the same release, a ticket about migrating draft base tracking from tags to marker commits was **not** dropped — it was rewritten in terms of the buttons involved:
 
 > Restore and Edit for earlier conversation states remain available even after Reject All or Sync Studio Changes.
 
-So before dropping: ask what the user would notice. If there is a button, label, list, or screen involved, name it and keep the entry. Drop only when there is genuinely no surface.
+So before accepting an omission: ask what the user would notice. If there is a button, label, list, or screen involved, report the ticket as **Missing** and suggest how it could be worded. Accept the omission only when there is genuinely no surface.
 
 ## Always exclude
 
-These never produce an entry. List each one in the report with its reason.
+These never need an entry, so their absence is justified. List each omitted ticket in the report under **Justifiably omitted**, with its category. An entry that exists for one of these is worth a question to the writer, since it may be announcing something customers cannot observe.
 
 | Category               | Examples                                                                                              |
 | ---------------------- | ----------------------------------------------------------------------------------------------------- |
@@ -49,15 +51,17 @@ This repo is public. Customer names, project codenames, and their application's 
 
 ## Merge
 
+A writer who merges tickets is doing the right thing in these cases. When you see one entry covering several tickets, check the merge is sound, and check the entry does not lose a child.
+
 **Same defect, different tickets.** QA often files the same bug from several screens. If the underlying defect is one thing, write one entry. Two separate tickets about a select-all control failing became a single entry.
 
-**Umbrella plus children.** A parent ticket whose description is a list of links becomes one entry with sub-bullets — one per child. Fetch the children to get their names; do not write "various fixes".
+**Umbrella plus children.** A parent ticket whose description is a list of links becomes one entry with sub-bullets — one per child. Fetch the children to get their names. An entry that says "various fixes" for an umbrella is a finding.
 
 **One capability split across repos.** A codegen change and its runtime counterpart under one ticket are one entry.
 
 ## Split
 
-If a ticket contains **both a fix and an improvement**, it becomes two entries. A ticket about preview builds failing with out-of-memory errors because dependencies reinstalled on every build carried both:
+If a ticket contains **both a fix and an improvement**, it merits two entries. One entry that covers both is a minor finding, not an error. A ticket about preview builds failing with out-of-memory errors because dependencies reinstalled on every build carried both:
 
 - **Bug Fix** — builds intermittently failing with out-of-memory errors.
 - **Enhancement** — unchanged builds now skip dependency installation, cutting build time substantially.
@@ -74,9 +78,9 @@ The test: would a customer who never hit the bug still care? If yes, the improve
 
 Accordian definitions and pill rules are in `../../wm-ai-release-notes/references/conventions.md`.
 
-## Rewriting QA tickets
+## Wording checks for QA-sourced entries
 
-QA tickets are written from inside a test application. They name screens, dialogs, tabs, and record types that mean nothing to a customer. Translate each into the **platform-level defect a WaveMaker developer would recognise**.
+QA tickets are written from inside a test application. They name screens, dialogs, tabs, and record types that mean nothing to a customer. A good entry translates each into the **platform-level defect a WaveMaker developer would recognise**. Flag entries that still carry the test app's vocabulary.
 
 ### The test
 
@@ -88,24 +92,24 @@ The writer's own critique of an early draft:
 
 > "Status column color missing on page 2" — where, what is page 2? Does this make sense in a release note?
 
-The real defect was a table column's conditional background colour not being re-applied after paging. That is the entry.
+The real defect was a table column's conditional background colour not being re-applied after paging. That is what the entry should say.
 
 ### State only the causes the ticket gives
 
-QA tickets report symptoms. If the ticket does not say why, describe the symptom and stop. Writing "because the handler was not registered" when the ticket never says so is inventing a root cause.
+QA tickets report symptoms. If the ticket does not say why, the entry should describe the symptom and stop. An entry that says "because the handler was not registered" when the ticket never says so is inventing a root cause — flag it.
 
 ### Keep error strings
 
-If a ticket quotes an error, keep it in the body. It is what someone hitting the bug will search for. `Required field(s) missing` and `Indexed property setter is not supported` both survived review for this reason.
+If a ticket quotes an error, the entry should keep it. It is what someone hitting the bug will search for. `Required field(s) missing` and `Indexed property setter is not supported` both survived review for this reason. An entry that paraphrases a quoted error away is worth a note.
 
 ### Say "in React apps" when parity is the point
 
-Many tickets exist because behaviour differs between the Angular and React outputs — the ticket says so, or says it works fine in Angular. Without that qualifier, Angular users think the bug affected them too.
+Many tickets exist because behaviour differs between the Angular and React outputs — the ticket says so, or says it works fine in Angular. Without that qualifier in the entry, Angular users think the bug affected them too. Check the pill and wording against the ticket.
 
 ### Do not invent mechanisms
 
-No filenames, settings, config keys, or version numbers that the ticket does not give. If a ticket says a package version was flagged for a CVE, do not name the version it moved to.
+An entry must not contain filenames, settings, config keys, or version numbers that the ticket does not give. If a ticket says a package version was flagged for a CVE, the entry must not name the version it moved to.
 
 ## Low confidence
 
-Some tickets are too garbled to translate with certainty, and Jira adds nothing. Write the most defensible reading, then **flag it in the report** as your reading rather than established fact, so the writer can correct it. Do not quietly present a guess as a finding.
+Some tickets are too garbled to judge an entry against with certainty, and Jira adds nothing. Say what you could and could not establish, and **flag the finding in the report** as your reading rather than established fact, so the writer can correct it. Do not quietly present a guess as a finding.

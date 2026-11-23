@@ -102,6 +102,7 @@ Apply the asset and link rules from `references/conventions.md`:
 - **Internal links to other docs** → relative MDX path from this file, no `.md` / `.mdx` extension, target must exist.
 - **External links** → full `https://` URL.
 - **Academy walkthroughs / videos** → user-supplied URL only. Use the globally-registered `<AcademyCard>` or `<VideoCard>` components, no import.
+- **Local video files** → co-located under `assets/vids/` and embedded as in `AGENTS.md` → Videos. Ask for the video's subtitles ("Does it have speech? Send the `.vtt`, or I can generate one") and add them as a `<track>` — see `AGENTS.md` → Subtitles. When you generate the video, generate the `.vtt` too.
 
 Verify every path before writing it. If a target does not exist, stop and ask the user.
 
@@ -128,7 +129,7 @@ For an existing doc:
 A move is three concurrent changes — the file, its assets, and every inbound reference. Do them in this order:
 
 1. **Identify inbound references.** Search the repo for the current doc path (with and without the `.md`/`.mdx` extension) and for the sidebar `id`. Report every hit to the user before changing anything.
-2. **Identify owned assets.** List every asset referenced from this doc (look for `./assets/img/...`, `./assets/vids/...`, image tags, and `require(...)` calls).
+2. **Identify owned assets.** List every asset referenced from this doc (look for `./assets/img/...`, `./assets/vids/...`, image tags, and `import ... from './assets/...'` statements; also convert any leftover `require(...)` asset reference to an `import`).
 3. **Check asset sharing.** For each asset, grep the repo for other docs that reference it. If shared, the asset moves to the **nearest common ancestor's** `assets/img/` directory (per AGENTS.md). If exclusive, it moves with the doc.
 4. **Present the move plan** to the user — new path, asset moves, sidebar update, list of files whose links will change. Ask for confirmation.
 5. **Execute** — move the file, move its exclusive assets, rewrite inbound links to the new path, update the sidebar `id`, leave shared assets in place (relocate only if their common-ancestor changes).

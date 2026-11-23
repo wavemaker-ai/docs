@@ -56,34 +56,6 @@ VibhuS:
     github: vibhus
     linkedin: vibhu-singhal
 
-# yangshun:
-#   name: Yangshun Tay
-#   title: Ex-Meta Staff Engineer, Co-founder GreatFrontEnd
-#   url: https://linkedin.com/in/yangshun
-#   image_url: https://github.com/yangshun.png
-#   page: true
-#   socials:
-#     x: yangshunz
-#     linkedin: yangshun
-#     github: yangshun
-#     newsletter: https://www.greatfrontend.com
-
-# slorber:
-#   name: Sébastien Lorber
-#   title: Docusaurus maintainer
-#   url: https://sebastienlorber.com
-#   image_url: https://github.com/slorber.png
-#   page:
-#     # customize the url of the author page at /blog/authors/<permalink>
-#     permalink: "/all-sebastien-lorber-articles"
-#   socials:
-#     x: sebastienlorber
-#     linkedin: sebastienlorber
-#     github: slorber
-#     newsletter: https://thisweekinreact.com
-
-
-
 raajvamsy:
   name: Raajvamsy Rayavarapu
   title: Principal Engineer
@@ -101,3 +73,13 @@ abhinavKumar:
   page: true
   socials:
     github: abhinav-wavemaker
+
+udayShankar:
+  name: Uday Shankar
+  title: Principal Architect at WaveMaker
+  url: https://github.com/udaysa
+  image_url: https://github.com/udaysa.png
+  page: true
+  socials:
+    github: udaysa
+    linkedin: uday-shankar-09b5bb3b

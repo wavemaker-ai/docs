@@ -1,0 +1,82 @@
+.switcher {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border: 1px solid var(--ifm-navbar-border-color);
+  border-radius: 999px;
+  background: var(--ifm-color-primary-lightest);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.option {
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+}
+
+a.option:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.active {
+  background: var(--ifm-color-primary);
+  color: #fff;
+  cursor: default;
+}
+
+.short {
+  display: none;
+}
+
+/* Navbar copy: sits before the color mode toggle. */
+.navbar {
+  margin-right: 0.75rem;
+}
+
+/* Drawer copy: only shown inside the mobile menu on phones. */
+.drawer {
+  display: none;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.drawer .option {
+  flex: 1;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.drawer .full {
+  display: inline;
+}
+
+.drawer .short {
+  display: none;
+}
+
+/* Not enough room next to the centered nav items: use the short labels. */
+@media (max-width: 1400px) {
+  .full {
+    display: none;
+  }
+
+  .short {
+    display: inline;
+  }
+}
+
+/* Phones: the navbar is out of room, so the toggle moves into the menu. */
+@media (max-width: 480px) {
+  .navbar {
+    display: none;
+  }
+
+  .drawer {
+    display: flex;
+  }
+}

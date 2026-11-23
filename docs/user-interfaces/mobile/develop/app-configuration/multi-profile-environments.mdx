@@ -4,10 +4,16 @@ sidebar_label: Multi-profile environments
 last_update: { author: "Praneeth Reddy" }
 ---
 
+import multiProfileEnvironmentsPoster from './assets/vids/multi-profile-environments-poster.jpg';
+import multiProfileEnvironmentsVideo from './assets/vids/multi-profile-environments.mp4';
+import multiProfileEnvironmentsSubtitlesVideo from './assets/vids/multi-profile-environments.vtt';
+
 A WaveMaker React Native app can carry several environments in one build, for example development, staging and production, and switch between them on the device without a new build or a reinstall. Each environment is a **profile**: a set of key-value pairs such as API hosts, SSO issuers and feature flags, which the app reads through `Global`.
 
-<video controls width="100%" playsInline poster={require('./assets/vids/multi-profile-environments-poster.jpg').default}>
-  <source src={require('./assets/vids/multi-profile-environments.mp4').default} type="video/mp4" />
+<video controls width="100%" playsInline poster={multiProfileEnvironmentsPoster}>
+  <source src={multiProfileEnvironmentsVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={multiProfileEnvironmentsSubtitlesVideo} default />
 </video>
 
 ## When to use it
@@ -22,7 +28,6 @@ Use multi-profile environments when you want to:
 
 <div style={{ display: 'flex', justifyContent: 'center', margin: '2rem 0' }}>
   ```mermaid
-  %%{init: {'flowchart': {'nodeSpacing': 20, 'rankSpacing': 25}}}%%
   flowchart TD
       A["Profile JSON files"] --> B["wm_rn_config.json: enabledProfiles and defaultProfile"]
       B --> C["Build the app"]

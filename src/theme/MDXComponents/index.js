@@ -11,6 +11,7 @@ import MDXImg from '@theme/MDXComponents/Img';
 import Admonition from '@theme/Admonition';
 import Mermaid from '@theme/Mermaid';
 import VideoCard from '@site/src/components/MDXComponents/VideoCard/VideoCard';
+import Video from '@site/src/components/MDXComponents/Video/Video';
 import WMComponents, {
   ComponentCount,
 } from '@site/src/components/MDXComponents/WMComponents/WMComponents';
@@ -49,6 +50,7 @@ const MDXComponents = {
   admonition: Admonition,
   mermaid: Mermaid,
   VideoCard,
+  Video, // plugins/video-player/remark.cjs renames every <video> in MDX to this
   WMComponents,
   ComponentCount,
   Link,

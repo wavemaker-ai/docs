@@ -109,11 +109,33 @@ The recurring pattern is an image immediately followed by an italicized one-line
 
 ### Local video embed
 
+Import the file with ES `import`. Put the import right after the frontmatter, followed by a blank line (the ESM block ends at the first blank line), and use the imported value directly (no `.default`). Name it in camelCase with a `Video` suffix:
+
 ```mdx
+import demoVideo from './assets/videos/slug/demo.mp4';
+
 <video controls width="100%" playsInline>
-  <source src={require('./assets/videos/<slug>/<file>.mp4').default} type="video/mp4" />
+  <source src={demoVideo} type="video/mp4" />
 </video>
 ```
+
+Add a poster the same way (`import demoPoster from './assets/videos/slug/poster.jpg';` and `poster={demoPoster}`).
+
+### Subtitles
+
+A video with speech gets a WebVTT file next to it (`assets/videos/<slug>/demo.vtt`), imported like the video (name it with a `Subtitles` suffix) and added as a `<track>` inside the `<video>`:
+
+```mdx
+import demoVideo from './assets/videos/slug/demo.mp4';
+import demoSubtitles from './assets/videos/slug/demo.vtt';
+
+<video controls width="100%" playsInline>
+  <source src={demoVideo} type="video/mp4" />
+  <track kind="subtitles" srcLang="en" label="English" src={demoSubtitles} default />
+</video>
+```
+
+Ask the user for the `.vtt` whenever a local video is added ("Does it have speech? Send the `.vtt`, or I can generate one"). When you generate the video, generate the `.vtt` from the same script and flag it for review. Format rules, multiple languages and what is ignored are in `AGENTS.md` → Subtitles.
 
 ## Globally-registered MDX components
 

@@ -50,7 +50,7 @@ Ask these together, in one grouped message:
 4. **Author key** — read `data/author/authors.yml` and list the existing authors (key + name) for the user to pick from. If they want someone not on the list, offer to add a new entry and ask for the details needed to do so: display `name`, `title`, profile `url`, `image_url`, and any `socials` (github/linkedin handles). Do not invent or guess any of these fields — add the entry only with what the user supplies.
 5. **Source material** — draft text, notes, a Slack thread, or just a topic and a few bullet points. Treat the user's input as source-of-truth for facts; you handle structure and prose.
 6. **Tags** (optional) — most existing posts carry no tags at all. Only add tags if the user wants them, and only reuse a key that already exists in `blogs/blog/tags.yml`. That file currently holds unrelated Docusaurus-starter placeholders (`facebook`, `hola`, `tutorial`, ...) — do not reuse those as if they were real topics; if the user wants a real tag, add a proper entry to `tags.yml` first and confirm with them.
-7. **Media** (optional) — screenshots/diagrams, a local video file, or an Academy walkthrough/video URL.
+7. **Media** (optional) — screenshots/diagrams, a local video file, or an Academy walkthrough/video URL. For a local video, also ask for its subtitles: "Does it have speech? Send the `.vtt`, or I can generate one." (rules in `AGENTS.md` → Subtitles)
 
 Do not start drafting until title, slug, and author are confirmed.
 
@@ -92,7 +92,7 @@ Never place post assets under `static/img/` — that directory is for globally-s
 
 5. **Place media**
    - Images → `blogs/blog/assets/img/<file>.png`, referenced as `./assets/img/<file>.png`, with descriptive `alt` text and an optional italic caption line below.
-   - Local video → `blogs/blog/assets/videos/<slug>/<file>.mp4`, embedded with the `<video>` + `require()` pattern in `references/conventions.md`.
+   - Local video → `blogs/blog/assets/videos/<slug>/<file>.mp4`, embedded with the `<video>` + ES `import` pattern in `references/conventions.md`. Add its `.vtt` next to it with a `<track>` (ask the user for it; when you generate the video, generate the `.vtt` from its script).
    - Academy content → `<AcademyCard>` / `<VideoCard>` (globally registered, no import) — only with a real user-supplied URL, never fabricated.
 
 6. **Cross-link** related docs, release notes, or other posts using **site-internal URL paths**, not filesystem-relative MDX paths — this plugin instance does not share the docs plugin's relative-link resolver:
@@ -139,7 +139,8 @@ Unlike guides and core docs, blog posts do not need a sidebar entry. The blog pl
 - [ ] A `{/* truncate */}` marker is present (placed after the hook by default, or wherever the user requested).
 - [ ] Any pill `type` used is either an existing preset (listed to the user beforehand) or a new one added to `Pills.jsx`/`Pills.css` with a label and color the user confirmed.
 - [ ] Images live under `blogs/blog/assets/img/`, referenced with a single `./assets/img/...` (no double slash).
-- [ ] Local videos live under `blogs/blog/assets/videos/<slug>/` and use the `<video>` + `require()` embed.
+- [ ] Local videos live under `blogs/blog/assets/videos/<slug>/` and use the `<video>` + ES `import` embed (imports right after the frontmatter).
+- [ ] Every local video with speech has a `.vtt` next to it, imported and added as a `<track>`, or the user confirmed it has none. A generated `.vtt` was flagged for the user to review.
 - [ ] Any Academy walkthrough/video URL was supplied by the user, not invented.
 - [ ] Cross-links use site-internal URL paths (`/docs/...`, `/blog/YYYY/MM/DD/...`), not filesystem-relative MDX paths.
 - [ ] No new sidebar file was touched — none is needed.

@@ -203,6 +203,11 @@ export default [
             id: 'user-interfaces/mobile/develop/app-configuration/browser-sso-login',
             label: 'Browser and SSO login',
           },
+          {
+            type: 'doc',
+            id: 'user-interfaces/mobile/develop/app-configuration/offline-support-and-api-caching',
+            label: 'Offline support and API caching',
+          },
         ],
       },
       // {
@@ -402,6 +407,11 @@ export default [
             type: 'doc',
             id: 'user-interfaces/mobile/testing-and-debugging/wm-debugging-tools/wavepulse',
             label: 'WavePulse',
+          },
+          {
+            type: 'doc',
+            id: 'user-interfaces/mobile/testing-and-debugging/wm-debugging-tools/rn-perf-analyzer',
+            label: 'RN Perf Analyzer',
           },
         ],
       },

@@ -1,0 +1,127 @@
+WEBVTT
+
+00:00:06.100 --> 00:00:11.960
+Most applications connect to more than
+one backend, like one for development, one
+
+00:00:11.960 --> 00:00:14.360
+for your testers, and
+one for your customers.
+
+00:00:15.980 --> 00:00:21.100
+Creating and maintaining a separate build
+of the app for each backend takes extra
+
+00:00:21.100 --> 00:00:26.980
+time and effort. With Profiles,
+you create one build, and
+
+00:00:26.980 --> 00:00:29.080
+that build contains all
+of your environments.
+
+00:00:33.080 --> 00:00:34.860
+A profile is a
+
+00:00:34.860 --> 00:00:41.500
+small JSON file that contains key value
+pairs, such as your API host or your sign-in settings.
+
+00:00:42.000 --> 00:00:46.570
+To add a profile
+in Studio, open the Resources
+
+00:00:46.570 --> 00:00:48.690
+panel and click Import Resource.
+
+00:00:49.430 --> 00:00:54.790
+Go to the Resources folder inside Web App
+and create a new folder called Profiles.
+
+00:00:55.410 --> 00:01:00.570
+Open the Profiles folder, click Upload
+Files and choose the JSON file for each
+
+00:01:00.570 --> 00:01:05.430
+environment. Use this folder and not
+the Profiles folder at the top of the project
+
+00:01:05.430 --> 00:01:08.790
+because that folder holds
+the back-end properties files.
+
+00:01:11.160 --> 00:01:16.380
+Next, in your app configuration, you list
+the profiles to include in this build, and
+
+00:01:16.380 --> 00:01:18.660
+you choose the profile
+that the app opens with.
+
+00:01:20.500 --> 00:01:23.400
+Profiles that are not in
+this list are not included.
+
+00:01:23.920 --> 00:01:27.500
+The file can remain in your
+project, but the app cannot use it.
+
+00:01:29.480 --> 00:01:31.440
+You then build the app one time.
+
+00:01:35.980 --> 00:01:40.660
+Inside the app, all of these values are
+available in one object, called global.
+
+00:01:42.360 --> 00:01:47.360
+In a widget, you bind a property to a key,
+in the same way that you bind it to any
+
+00:01:47.360 --> 00:01:53.160
+other value. In a script, you
+read the value from app.global.
+
+00:01:53.620 --> 00:01:59.200
+In both cases, the value always comes
+from the profile that is currently active.
+
+00:02:03.710 --> 00:02:07.450
+For example, a tester might want to
+connect the app to the staging environment.
+
+00:02:09.380 --> 00:02:13.580
+You get the list of profiles from the app,
+show them in a drop-down, and when the
+
+00:02:13.580 --> 00:02:15.880
+user selects one, you call set profile.
+
+00:02:17.980 --> 00:02:22.580
+When that call is complete, you call
+refresh, and the screen shows the new values.
+
+00:02:24.440 --> 00:02:27.840
+The app also saves the
+selected profile on the device.
+
+00:02:28.440 --> 00:02:33.480
+When the user closes the app and opens
+it again, the app starts with the same profile
+
+00:02:37.260 --> 00:02:40.080
+These values are packaged inside the app.
+
+00:02:40.380 --> 00:02:42.520
+So anyone who has the app can read them.
+
+00:02:44.540 --> 00:02:48.720
+Only store values such as URLs,
+client IDs and feature flags.
+
+00:02:49.060 --> 00:02:51.820
+Do not store passwords or
+secrets in these files.
+
+00:02:53.800 --> 00:02:57.540
+Multi profile environments let you
+use one build for every environment.

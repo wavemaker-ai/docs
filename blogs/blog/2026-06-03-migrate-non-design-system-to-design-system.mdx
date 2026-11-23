@@ -3,9 +3,11 @@ title: "Migrating to Design System Projects"
 authors: [SagarV]
 ---
 
+import wmMigratorVideoVideo from '../../assets/vids/wm-migrator-video.mp4';
+
 ## The shift happened. Most projects didn't come along.
 
-With WaveMaker AI, the standard for building web and mobile applications is now the **[Design System project](https://docs.wavemaker.ai/docs/design-system/design-system-project/)** — token-driven, component-governed, theme-controlled from the foundation. You define design tokens once, and every component in your application inherits them. Consistency is guaranteed by architecture, not discipline.
+With WaveMaker AI, the standard for building web and mobile applications is now the **[Design System project](/docs/design-system/design-system-project/)** — token-driven, component-governed, theme-controlled from the foundation. You define design tokens once, and every component in your application inherits them. Consistency is guaranteed by architecture, not discipline.
 
 The layout model changed too. Design System projects use **auto layout** to compose pages — replacing the older, rigid grid model with something cleaner, more flexible, and far easier to maintain over time.
 
@@ -54,7 +56,7 @@ The guiding principle across all four stages: the application retains all of its
 We packaged this blueprint into an AI Skill — **[`wm-design-system-migrator`](https://marketplace.wavemaker.ai/artifactDetails?name=Design%20System%20Project%20Migrator)** — that runs the entire migration as a single workflow.
 
 <video controls width="100%" playsInline>
-  <source src={require('../../assets/vids/wm-migrator-video.mp4').default} type="video/mp4" />
+  <source src={wmMigratorVideoVideo} type="video/mp4" />
 </video>
 
 **Step 1 — Design System Conversion** *(Stages 1 & 3)*: updating project and runtime versions, converting metadata, migrating template configuration to PRISM, replacing legacy variable types with actions, updating package scopes, migrating theme artifacts to design tokens, and preserving migration history.

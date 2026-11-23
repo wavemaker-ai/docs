@@ -1,0 +1,59 @@
+WEBVTT
+
+00:00:03.150 --> 00:00:07.630
+Some libraries only work when a
+provider wraps your whole app.
+
+00:00:08.490 --> 00:00:15.000
+A custom app wrapper puts your own
+component at the very top of your React Native app.
+
+00:00:18.900 --> 00:00:20.200
+In Studio, add a
+
+00:00:20.200 --> 00:00:24.940
+file named customapp.rapper.js
+to the web app folder.
+
+00:00:26.240 --> 00:00:31.220
+Export a default component that takes
+children and wraps them in your provider.
+
+00:00:31.780 --> 00:00:33.420
+Here, that's Tan Stack Query.
+
+00:00:34.620 --> 00:00:38.820
+Create the client outside the
+component, so it survives an app reload.
+
+00:00:40.520 --> 00:00:45.640
+On the next build, WaveMaker copies your
+wrapper into the generated app and wraps
+
+00:00:45.640 --> 00:00:47.000
+everything with it.
+
+00:00:50.510 --> 00:00:53.010
+Use it for any library
+that needs a provider.
+
+00:00:53.670 --> 00:00:59.450
+Data caching, state, gestures, error
+reporting, analytics, or payment SDKs.
+
+00:01:00.750 --> 00:01:03.210
+Nest as many providers as you like.
+
+00:01:03.210 --> 00:01:06.150
+Just make sure the innermost
+one renders children.
+
+00:01:07.770 --> 00:01:12.730
+And remember, the wrapper sits outside
+WaveMaker, so variables, themes, and
+
+00:01:12.730 --> 00:01:14.850
+localization aren't available inside it.
+
+00:01:16.390 --> 00:01:18.970
+One file and your whole app is wrapped.
