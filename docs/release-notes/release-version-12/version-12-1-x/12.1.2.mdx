@@ -1,0 +1,120 @@
+---
+last_update: { author: 'Shahnawaz Ahmed' }
+hide_table_of_contents: true
+hide_title: true
+
+---
+
+<Common.WaveMakerAIHeading scale={1.5} />
+
+WaveMaker AI 12.1.2 introduces a separate Wizard Stepper component so a wizard's steps can sit anywhere on the page, upgrades the Node.js and npm build requirements, and fixes Studio canvas styling and Expo 57 issues.
+
+For details about the technology stack upgrades, refer to [Technology Stack](/tech-stack?v=12-1-2).
+
+## 12.1.2
+
+*Release date: 23 November 2026*
+
+<ReleaseNotesTabs>
+  <TabItem name="Features">
+    <Accordian title="User Interface">
+      - ### Wizard Stepper component <Pill type="web" />
+
+        The Wizard's step indicators are now a separate Wizard Stepper component, so you can place a wizard's steps anywhere on the page, such as in a side panel, the app header, or beside an order summary, and put text or buttons right next to them. In Studio, the stepper sits inside the wizard by default and you can drag it anywhere on the canvas like any other component, and it works the same way in both Angular and React apps. The stepper has its own appearance, orientation, and design tokens, separate from the wizard's.
+
+        For the full story and layout examples, see [Wizards just got unlocked](/blog/2026/11/19/wizards-unlocked).
+    </Accordian>
+
+    <Accordian title="Backend">
+      {/* Content */}
+    </Accordian>
+
+    <Accordian title="Platform">
+      {/* Content */}
+    </Accordian>
+
+    <Accordian title="Product Ecosystem">
+      {/* Content */}
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Enhancements">
+    <Accordian title="User Interface">
+      {/* Content */}
+    </Accordian>
+
+    <Accordian title="Backend">
+      {/* Content */}
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### Node.js and npm upgrade <Pill type="web" /> <Pill type="mobile" />
+
+        Building Angular, React, and React Native apps now requires Node.js 22.23.4 and npm 10.9.9, so upgrade both in your local and CI/CD build environments.
+
+        For the exact versions, see the [12.1.2 technology stack](/tech-stack?v=12-1-2).
+
+      - ### Expo Go QR code in preview <Pill type="mobile" />
+
+        The Preview toolbar's QR icon in React Native projects now opens a "Preview on your phone" panel with steps to download Expo Go and scan a QR code for Android or iOS.
+
+      - ### Existing wizards migrate to Wizard Stepper <Pill type="web" />
+
+        When you upgrade, a Wizard Stepper is added to each existing wizard and the wizard's appearance, orientation, and theme tokens move over to it, so your pages look the same as before without any manual changes.
+
+      - ### Wizard layouts in Screenshot-to-Code <Pill type="web" />
+
+        Screenshot-to-Code now builds a wizard from three separate pieces: the Wizard Stepper, the wizard content, and the Action buttons. Each piece is placed where the screenshot shows it, so steps shown in a sidebar or above a card are generated in the same position instead of being forced to the top of the wizard.
+
+      - ### Wizard Stepper generation in Autocode <Pill type="web" />
+
+        Autocode now generates the Wizard Stepper along with the wizard, placing it inside the wizard or on its own to match the Figma frame, so generated wizards show their step indicators. Figma annotations now cover numbered, tab, dot, and icon steppers in horizontal and vertical layouts, along with step parts such as the title, icon, number, connector, and selected and finished states, and missing stepper annotations are filled in automatically. Styling classes and tokens go on the right component, and it works with both the Material and Generic design systems.
+    </Accordian>
+
+    <Accordian title="Product Ecosystem">
+      {/* Content */}
+    </Accordian>
+  </TabItem>
+
+  <TabItem name="Bug Fixes">
+    <Accordian title="User Interface">
+      - ### Missing Styles in Studio Canvas <Pill type="web" />
+
+        In Studio, the colors and styles defined in your app's design system were sometimes not loaded completely or were shown incorrectly on the canvas. This happened because of a race condition between generating the styles and loading them in Studio. This is now fixed, with Studio ensuring that styles are fully generated before loading them, automatically retrying if they are not ready, and retaining the previously available styles if loading fails. This ensures that all colours and component styles are consistently displayed on the Studio canvas.
+
+      - ### Custom icons blank on the Studio canvas <Pill type="web" />
+
+        Fixed custom icons imported into a project rendering blank on the Studio canvas, including in classic projects, by loading the icon stylesheets into the canvas along with the project's font stylesheets.
+
+      - ### Custom icons and fonts missing in deployed apps <Pill type="web" /> <Pill type="angular" />
+
+        Fixed custom icon and font stylesheets failing to load in deployed Angular apps by resolving their paths against the app's CDN URL, so icons and fonts render when the UI artifact is deployed on its own.
+
+      - ### Slider crash after Expo 57 upgrade <Pill type="mobile" />
+
+        Fixed the Slider, in both single value and range modes, crashing in apps built with Expo 57.
+
+      - ### Dialog alignment after Expo 57 upgrade <Pill type="mobile" />
+
+        Fixed the Dialog not starting below the status bar and not taking its configured height, including a percentage height, in apps built with Expo 57.
+
+      - ### Empty confirmation step and Next button <Pill type="mobile" />
+
+        Fixed a Confirmation step rendering empty and the Next button doing nothing in React Native apps.
+    </Accordian>
+
+    <Accordian title="Backend">
+      {/* Content */}
+    </Accordian>
+
+    <Accordian title="Platform">
+      - ### Yarn vulnerability in focus-trap removed <Pill type="web" />
+
+        The `@wavemaker/focus-trap` library no longer has Yarn 1.22.22 as a runtime dependency.
+    </Accordian>
+
+    <Accordian title="Product Ecosystem">
+      {/* Content */}
+    </Accordian>
+  </TabItem>
+</ReleaseNotesTabs>
