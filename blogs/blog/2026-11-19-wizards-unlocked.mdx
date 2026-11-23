@@ -26,7 +26,7 @@ import wizardStepperDragPosterImage from './assets/videos/wizards-unlocked/poste
 
 Your designer puts the steps in a side panel. Or in the header. Or right next to the order summary.
 
-Until now, a WaveMaker wizard could only put them on top or on the left. Starting with **WaveMaker 12.1.2**, the steps are their own widget, the **Wizard Stepper**, and they go wherever the design says.
+Until now, a WaveMaker wizard could only put them on top or on the left. Starting with **WaveMaker 12.1.2**, the steps are their own component, the **Wizard Stepper**, and they go wherever the design says.
 
 {/* truncate */}
 
@@ -96,7 +96,7 @@ Build the layout your designer drew, not the closest thing the wizard allowed.
 ## Build it in Studio
 
 1. Drop a Wizard on the page. The Wizard Stepper comes with it, nested inside, so by default nothing looks different.
-2. Select the stepper on the canvas. It's a regular widget, so you can select it, drag it and style it like any other.
+2. Select the stepper on the canvas. It's a regular component, so you can select it, drag it and style it like any other.
 3. Drag it wherever the design wants it, such as a side panel, the header, a summary card or another container, and place text, buttons or anything else right next to it.
 4. In the stepper's Properties panel, set its appearance (number, icon, dotted or tab) and its orientation (horizontal or vertical).
 
@@ -116,7 +116,7 @@ It works the same in Angular and React apps, whether the stepper is inside the w
 
 ### For developers: the markup
 
-In markup, the stepper is a `wm-wizardstepper` widget, linked to its wizard through `wizardname`. Its appearance and orientation are set with `class` and `variant`:
+In markup, the stepper is a `wm-wizardstepper` component, linked to its wizard through `wizardname`. Its appearance and orientation are set with `class` and `variant`:
 
 ```html
 <wm-wizard name="wizard1">
