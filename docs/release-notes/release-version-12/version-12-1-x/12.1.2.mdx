@@ -101,6 +101,10 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Empty confirmation step and Next button <Pill type="mobile" />
 
         Fixed a Confirmation step rendering empty and the Next button doing nothing in React Native apps.
+
+      - ### Deprecated unload listener in app runtime <Pill type="web" />
+
+        Fixed the app runtime registering a listener for the deprecated `unload` event, which modern browsers such as Chrome are phasing out. The runtime now uses the `pagehide` event instead, so apps no longer trigger browser deprecation warnings.
     </Accordian>
 
     <Accordian title="Backend">
@@ -111,6 +115,22 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Yarn vulnerability in focus-trap removed <Pill type="web" />
 
         The `@wavemaker/focus-trap` library no longer has Yarn 1.22.22 as a runtime dependency.
+
+      - ### Save indicator stuck after switching workspaces
+
+        Fixed the save indicator staying on screen when you switched between workspaces while an auto-save was in progress. The indicator now clears once the save finishes, so it reflects the actual save state.
+
+      - ### Prefab images with relative paths on the canvas <Pill type="web" />
+
+        Fixed images in a prefab's Picture widget not rendering on the project canvas when the image source path started with `./`. These images now display on the Studio canvas just as they do in the prefab.
+
+      - ### Saving a profile after changing Deployment Type
+
+        Fixed a newly created deployment profile failing to save after you updated its Deployment Type, which happened when the project's `app.properties` had a property with no matching configuration in the profile. Studio now handles such properties when saving, so the profile saves without errors.
+
+      - ### Blank screen when importing four-part API versions
+
+        Fixed Studio showing a blank screen while importing an API whose version has four parts, such as `12.0.0.2`. APIs with four-part version numbers now import the same way as standard three-part versions.
     </Accordian>
 
     <Accordian title="Product Ecosystem">
