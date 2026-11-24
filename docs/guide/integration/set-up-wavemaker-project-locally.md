@@ -22,7 +22,11 @@ Install and configure these on your machine before you start:
 You'll also need:
 
 - Access to your WaveMaker Studio host URL
-- Studio login credentials, or an auth token generated at `https://<WaveMaker_Studio_Host>/studio/services/auth/token`
+- An access token for the project you want to sync. An access token is a key generated in WaveMaker Studio that lets the plugin connect to your project without your WaveMaker password or browser session. To generate one, open the project in Studio, go to **Project Settings → Access Tokens → Generate New Token**, choose a validity period (1–90 days), and copy the token value.
+
+:::note
+The access token works only for the project it was created for and only for Workspace Sync operations. If you work on more than one project, generate a separate token for each project.
+:::
 
 ---
 
@@ -48,11 +52,11 @@ Run the `wavemaker-workspace:init` goal once per project. It wires the local fol
 3. Press `y` when prompted to continue.
 4. Provide:
    - **Studio Host URL** — the domain of your WaveMaker Studio instance.
-   - **Credentials** — either email and password, or a token from `https://<WaveMaker_Studio_Host>/studio/services/auth/token`.
-5. When prompted, select the correct **project number** from the list of projects available to your account.
+   - **Access Token** — the token generated from **Project Settings → Access Tokens**.
+5. The plugin shows the project name and branch linked to the token. Press `y` to confirm and fetch the project.
 
 :::note
-Keep your Studio session open in the browser until `init` completes. The plugin uses your active session to enumerate and bind the project.
+The plugin does not depend on your browser session, so it works for SSO users, and logging out of Studio does not affect it. The `pull` and `push` commands reuse the saved token and prompt for a new one only when it expires or is revoked.
 :::
 
 ---
@@ -81,11 +85,11 @@ Treat `pull` the way you'd treat `git pull` before starting work: run it at the 
 
 ## Limitations and Constraints
 
-| Constraint                     | Details                                                                                                                      |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| Active Studio session          | The Studio session must remain open in the browser during `init` and for sync commands to authenticate reliably.             |
-| One project binding per folder | A project directory initialized against one Studio project cannot be re-pointed at another without re-running `init`.        |
-| Tooling requirements           | Git, JDK, and Maven must be present on `PATH`. Missing any one of them will cause `mvn wavemaker-workspace:*` goals to fail. |
+| Constraint                     | Details                                                                                                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Access token validity          | The token expires after the validity period you choose (1–90 days). Generate a new token and enter it when the plugin prompts. |
+| One project binding per folder | A project directory initialized against one Studio project cannot be re-pointed at another without re-running `init`.          |
+| Tooling requirements           | Git, JDK, and Maven must be present on `PATH`. Missing any one of them will cause `mvn wavemaker-workspace:*` goals to fail.   |
 
 ---
 
