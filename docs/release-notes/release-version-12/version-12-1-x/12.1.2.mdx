@@ -105,6 +105,10 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
       - ### Deprecated unload listener in app runtime <Pill type="web" />
 
         Fixed the app runtime registering a listener for the deprecated `unload` event, which modern browsers such as Chrome are phasing out. The runtime now uses the `pagehide` event instead, so apps no longer trigger browser deprecation warnings.
+
+      - ### Items per page dropdown position in Table pagination <Pill type="web" />
+
+        Fixed the Items per page dropdown in a Table widget's pagination opening off-screen or overlapping nearby elements when there wasn't enough room below it. The dropdown's position now adjusts automatically when it opens and while the page is scrolled.
     </Accordian>
 
     <Accordian title="Backend">
@@ -112,6 +116,10 @@ For details about the technology stack upgrades, refer to [Technology Stack](/te
     </Accordian>
 
     <Accordian title="Platform">
+      - ### Swagger API section blank after first switch from REST service
+
+        Fixed the Swagger service section in Studio appearing blank the first time it was opened after a Swagger service and a REST service were both imported. Its APIs loaded only after switching to another service section and back.
+
       - ### Yarn vulnerability in focus-trap removed <Pill type="web" />
 
         The `@wavemaker/focus-trap` library no longer has Yarn 1.22.22 as a runtime dependency.
