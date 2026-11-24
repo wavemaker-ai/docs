@@ -33,74 +33,15 @@
    scopes its own rules to the diagram, so these need !important. Colors do not change box sizes, so
    unlike fonts they can be applied after the render. */
 
-/* Every diagram color comes from the six-color palette (--wm-diagram-* in custom.css), and every fill
-   is flat: one solid color, no gradient, no border. A color is a palette color mixed into the page
-   surface (--wm-diagram-mix-base), so the fill stays subtle in light and dark mode. The text color
-   is the shared one below, set for contrast against the page, so it stays readable on every fill.
-
-   A flowchart node takes the color of its level, set as data-wm-level by levels.js. Level 0 has no
-   parent. A node is one level below its deepest parent, so a node never shares a color with a parent
-   and the children of one parent share a color. The first color is also the fallback for other
-   diagram types. A `wm-<name>` class on a node is ignored on purpose: a hand-picked color could
-   repeat a parent's color. */
-.container {
-  --wm-node-base: var(--wm-diagram-green);
-}
-
-.container :global(.node)[data-wm-level='0'] {
-  --wm-node-base: var(--wm-diagram-green);
-}
-
-.container :global(.node)[data-wm-level='1'] {
-  --wm-node-base: var(--wm-diagram-violet);
-}
-
-.container :global(.node)[data-wm-level='2'] {
-  --wm-node-base: var(--wm-diagram-amber);
-}
-
-.container :global(.node)[data-wm-level='3'] {
-  --wm-node-base: var(--wm-diagram-steel);
-}
-
-.container :global(.node)[data-wm-level='4'] {
-  --wm-node-base: var(--wm-diagram-rose);
-}
-
-.container :global(.node)[data-wm-level='5'] {
-  --wm-node-base: var(--wm-diagram-slate);
-}
-
+/* Flowchart nodes and groups */
 .container :global(.node) :is(rect, circle, ellipse, polygon, path) {
-  fill: color-mix(
-    in srgb,
-    var(--wm-node-base) var(--wm-diagram-fill-strength),
-    var(--wm-diagram-mix-base)
-  ) !important;
-  stroke: none !important;
-  filter: none !important;
+  fill: var(--ifm-color-primary-lightest) !important;
+  stroke: var(--ifm-color-primary) !important;
 }
 
-/* Rectangle nodes in flowcharts get rounded corners by default. Corner radius does not change a
-   box's size, so like colors it can be applied after the render. Scoped to flowcharts through the
-   node id prefix Mermaid gives them, so state and class diagrams keep their own shapes. */
-.container :global(.node)[id^='flowchart-'] rect {
-  rx: 8px;
-  ry: 8px;
-}
-
-/* A group (subgraph) is a lighter tint of the last palette color, so it reads as a surface behind its
-   nodes. The nodes inside it keep their level colors. */
 .container :global(.cluster) rect {
-  fill: color-mix(
-    in srgb,
-    var(--wm-diagram-slate) var(--wm-diagram-group-strength),
-    var(--wm-diagram-mix-base)
-  ) !important;
-  stroke: none !important;
-  filter: none !important;
-  rx: 8px;
-  ry: 8px;
+  fill: var(--ifm-color-emphasis-100) !important;
+  stroke: var(--ifm-color-emphasis-400) !important;
 }
 
 /* Lines, arrowheads and the sequence diagram's boxes and lines */
@@ -139,12 +80,8 @@
     :global(.activation1),
     :global(.activation2)
   ) {
-  fill: color-mix(
-    in srgb,
-    var(--wm-diagram-green) var(--wm-diagram-fill-strength),
-    var(--wm-diagram-mix-base)
-  ) !important;
-  stroke: var(--ifm-color-emphasis-700) !important;
+  fill: var(--ifm-color-primary-lightest) !important;
+  stroke: var(--ifm-color-primary) !important;
 }
 
 /* Text */
