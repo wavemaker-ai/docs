@@ -153,6 +153,19 @@
   --wm-card-border-color: rgba(255, 255, 255, 1);
   --wm-section-img-bg: rgba(240, 245, 255, 1);
 
+  /* Diagram palette: the only colors diagrams use. Each base is mixed into a flat, subtle fill (see
+     src/theme/Mermaid/styles.module.css). Flowchart nodes take them by level in this order: green,
+     violet, amber, steel, rose, slate. Authors do not pick colors per node. */
+  --wm-diagram-green: #6ee7b7;
+  --wm-diagram-amber: #fcd34d;
+  --wm-diagram-violet: #7c3aed;
+  --wm-diagram-rose: #ff4785;
+  --wm-diagram-steel: #3b5aa3;
+  --wm-diagram-slate: #6b7280;
+  --wm-diagram-mix-base: #fff;
+  --wm-diagram-fill-strength: 16%;
+  --wm-diagram-group-strength: 10%;
+
   /* footer variables */
   --ifm-footer-background-color: rgba(250, 250, 251, 1);
   --ifm-footer-padding-horizontal: 140px;
@@ -189,6 +202,9 @@
   );
   --ifm-color-primary-lightest: rgba(255, 255, 255, 0.15);
   --ifm-default-border-color: rgba(255, 255, 255, 0.75);
+  --wm-diagram-mix-base: #12223f;
+  --wm-diagram-fill-strength: 30%;
+  --wm-diagram-group-strength: 20%;
 }
 
 [data-theme='dark'] .section-title {
