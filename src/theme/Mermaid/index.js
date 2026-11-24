@@ -2,12 +2,10 @@
  * Swizzled from @docusaurus/theme-mermaid. What differs from the original:
  * - Diagrams take their font from the site's CSS variables (SITE_CONFIG) and their colors from the
  *   rules in styles.module.css, so editing custom.css restyles them.
- * - Flowchart nodes are tagged with their depth (see levels.js), which the stylesheet turns into one
- *   palette color per level.
  * - A diagram shrinks to fit the column only down to a share of its natural size (see
  *   styles.module.css); below that its container scrolls sideways.
  */
-import React, { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
 import { ErrorBoundaryErrorMessageFallback } from '@docusaurus/theme-common';
 import {
@@ -15,7 +13,6 @@ import {
   useMermaidConfig,
   useMermaidRenderResult,
 } from '@docusaurus/theme-mermaid/client';
-import { tagLevels } from './levels';
 import styles from './styles.module.css';
 
 // Settings that change how Mermaid sizes its boxes. They go in its config, because CSS applied
@@ -48,10 +45,6 @@ function naturalWidth(svg) {
 
 function MermaidRenderResult({ renderResult }) {
   const ref = useRef(null);
-  // Before paint, so a diagram never shows in its untagged colors first.
-  useLayoutEffect(() => {
-    tagLevels(ref.current);
-  }, [renderResult]);
   useEffect(() => {
     const div = ref.current;
     renderResult.bindFunctions?.(div);
