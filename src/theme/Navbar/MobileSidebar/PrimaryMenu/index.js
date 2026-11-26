@@ -1,31 +1,31 @@
 import React from 'react';
-import { useThemeConfig } from '@docusaurus/theme-common';
+import PrimaryMenu from '@theme-original/Navbar/MobileSidebar/PrimaryMenu';
+import Link from '@docusaurus/Link';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useNavbarMobileSidebar } from '@docusaurus/theme-common/internal';
-import NavbarItem from '@theme/NavbarItem';
-import DocsSwitcher from '../../DocsSwitcher';
-function useNavbarItems() {
-  // TODO temporary casting until ThemeConfig type is improved
-  return useThemeConfig().navbar.items;
-}
-// The primary menu displays the navbar items
-export default function NavbarMobilePrimaryMenu() {
+import styles from './styles.module.css';
+
+// The default mobile menu, plus the "Schedule Demo" button at its bottom
+// (on phones the navbar has no room for it).
+export default function PrimaryMenuWrapper(props) {
   const mobileSidebar = useNavbarMobileSidebar();
-  // TODO how can the order be defined for mobile?
-  // Should we allow providing a different list of items?
-  const items = useNavbarItems();
+  const {
+    siteConfig: {
+      customFields: { demoUrl },
+    },
+  } = useDocusaurusContext();
   return (
-    <ul className="menu__list">
-      <li className="menu__list-item">
-        <DocsSwitcher placement="drawer" />
-      </li>
-      {items.map((item, i) => (
-        <NavbarItem
-          mobile
-          {...item}
+    <>
+      <PrimaryMenu {...props} />
+      <div className={styles.demo}>
+        <Link
+          to={demoUrl}
+          className="button button--primary button--block"
           onClick={() => mobileSidebar.toggle()}
-          key={i}
-        />
-      ))}
-    </ul>
+        >
+          Schedule Demo
+        </Link>
+      </div>
+    </>
   );
 }

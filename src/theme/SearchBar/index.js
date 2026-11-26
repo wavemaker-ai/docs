@@ -31,7 +31,6 @@ const DEFAULT_API_URL = 'http://54.147.142.76:8069';
 // Global flag to prevent multiple DocSearch modals f `rom opening
 let globalModalOpen = false;
 
-
 let DocSearchModal = null;
 
 function importDocSearchModalIfNeeded() {
@@ -118,7 +117,6 @@ function useSearchParameters({ contextualSearch, ...props }) {
   };
 }
 
-
 /**
  * Fetches AI follow-up suggestions from the stream API based on query.
  * Aborts the stream as soon as the `followups` event is received.
@@ -170,7 +168,11 @@ function useAISuggestions(query, apiUrl) {
           for (const line of lines) {
             if (!line.trim()) continue;
             let event;
-            try { event = JSON.parse(line); } catch { continue; }
+            try {
+              event = JSON.parse(line);
+            } catch {
+              continue;
+            }
 
             if (event.type === 'followups' && event.suggestions?.length) {
               setSuggestions(event.suggestions);
@@ -187,10 +189,13 @@ function useAISuggestions(query, apiUrl) {
     return () => clearTimeout(debounceRef.current);
   }, [query, apiUrl]);
 
-  useEffect(() => () => {
-    abortRef.current?.abort();
-    clearTimeout(debounceRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      abortRef.current?.abort();
+      clearTimeout(debounceRef.current);
+    },
+    [],
+  );
 
   return suggestions;
 }
@@ -217,7 +222,11 @@ function CustomDocSearchModal({ onClose, onAskAI, apiUrl, ...props }) {
 
     const container = document.querySelector('.DocSearch-Container');
     if (container) {
-      observer.observe(container, { childList: true, subtree: true, characterData: true });
+      observer.observe(container, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
     }
 
     const handleInput = (e) => {
@@ -287,18 +296,17 @@ function AskAISuggestionPortal({ query, onAskAI, apiUrl }) {
         type="button"
         onClick={() => onAskAI(query)}
       >
-        <span >
-          <img src="/img/icon/ask-ai-chat-icon.svg" alt=""  />
+        <span>
+          <img src="/img/icon/ask-ai-chat-icon.svg" alt="" />
         </span>
         <span className="DocSearch-AskAI-Suggestion__label">Ask AI</span>
         {query && (
           <span className="DocSearch-AskAI-Suggestion__query">"{query}"</span>
         )}
-       
       </button>
 
       {/* Vertical suggestion list */}
-      
+
       <ul className="DocSearch-AskAI-SuggestionList">
         {suggestions.map((s) => (
           <li key={s}>
@@ -307,8 +315,16 @@ function AskAISuggestionPortal({ query, onAskAI, apiUrl }) {
               className="DocSearch-AskAI-SuggestionItem"
               onClick={() => onAskAI(s)}
             >
-              <svg className="DocSearch-AskAI-SuggestionItem__icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"  >
-                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <svg
+                className="DocSearch-AskAI-SuggestionItem__icon"
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
               <span>{s}</span>
             </button>
@@ -364,11 +380,14 @@ function DocSearch({ externalUrlRegex, ...props }) {
   }, []);
 
   // Called from inside DocSearch modal — close modal, open AI dialog with query
-  const handleAskAIFromModal = useCallback((query) => {
-    closeModal();
-    setAiDialogQuery(query || '');
-    setIsAIDialogOpen(true);
-  }, [closeModal]);
+  const handleAskAIFromModal = useCallback(
+    (query) => {
+      closeModal();
+      setAiDialogQuery(query || '');
+      setIsAIDialogOpen(true);
+    },
+    [closeModal],
+  );
 
   const closeAIDialog = useCallback(() => {
     setAiDialogQuery('');
@@ -425,7 +444,11 @@ function DocSearch({ externalUrlRegex, ...props }) {
           onMouseOver={importDocSearchModalIfNeeded}
           type="button"
         >
-         <img src='/img/icon/ask-ai-chat-icon.svg' alt="Ask AI" style={{width: '16px', height: '16px'}} />
+          <img
+            src="/img/icon/ask-ai-chat-icon.svg"
+            alt="Ask AI"
+            style={{ width: '16px', height: '16px' }}
+          />
           Ask AI
         </button>
       </div>
@@ -454,14 +477,18 @@ function DocSearch({ externalUrlRegex, ...props }) {
 
       {isAIDialogOpen &&
         createPortal(
-          <AskAIDialog apiUrl={apiUrl} onClose={closeAIDialog} initialQuery={aiDialogQuery} />,
+          <AskAIDialog
+            apiUrl={apiUrl}
+            onClose={closeAIDialog}
+            initialQuery={aiDialogQuery}
+          />,
           document.body,
         )}
     </>
   );
 }
 
-export default function SearchBar() {
+export default function SearchBar(props) {
   const { siteConfig } = useDocusaurusContext();
-  return <DocSearch {...siteConfig.themeConfig.algolia} />;
+  return <DocSearch {...siteConfig.themeConfig.algolia} {...props} />;
 }

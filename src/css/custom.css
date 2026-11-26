@@ -42,7 +42,8 @@
 
   /* navbar */
   --ifm-navbar-padding-vertical: 14px;
-  --ifm-navbar-padding-horizontal: 24px;
+  /* Fluid, like the spacing below: compact on a 360px phone (the smallest we design for), normal from 600px up */
+  --ifm-navbar-padding-horizontal: clamp(12px, 4vw, 24px);
   --ifm-navbar-height: 66px;
   --ifm-top-nav-height: 42px;
   --ifm-navbar-shadow: none;
@@ -385,12 +386,13 @@ span.DocSearch-Button-Keys {
   display: none;
 }
 
-/* ── Navbar search bar (internal pages only) — no border, no bg ── */
+/* ── Navbar search bar (internal pages only): a bordered field next to the docs switcher ──
+   Its width comes from the NavbarSearch container (src/theme/Navbar/Search). */
 .navbar .navbar__items .search-bar-with-ai {
   display: flex;
   align-items: center;
-  height: 40px;
-  width: clamp(160px, 15vw, 260px);
+  height: 38px;
+  width: 100%;
   border: none;
   background: transparent;
   padding: 0;
@@ -399,20 +401,101 @@ span.DocSearch-Button-Keys {
 /* Un-hide the DocSearch button inside the wrapper */
 .navbar .navbar__items .search-bar-with-ai .DocSearch-Button {
   display: flex;
+  justify-content: space-between;
   height: 100%;
-  border: none;
-  background: transparent;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
   box-shadow: none;
   margin: 0;
-  padding: 0 8px;
+  padding: 0 10px 0 12px;
   border-radius: 8px;
-  min-width: unset;
+  min-width: 0;
   width: 100%;
+  /* A size container: see the shortcut chip below */
+  container: navbar-search / inline-size;
 }
 
 .navbar .navbar__items .search-bar-with-ai .DocSearch-Button:hover {
-  background: rgba(0, 0, 0, 0.05);
+  border-color: var(--ifm-color-emphasis-500);
+  background: var(--ifm-background-surface-color);
   box-shadow: none;
+}
+
+/* The label stays on one line and is cut with an ellipsis when the field is narrow */
+.navbar .navbar__items .search-bar-with-ai .DocSearch-Button-Container {
+  flex: 1;
+  min-width: 0;
+}
+
+.navbar .navbar__items .search-bar-with-ai .DocSearch-Button-Placeholder {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Keyboard shortcut as a single chip (the keys are hidden elsewhere on the site) */
+.navbar .navbar__items .search-bar-with-ai .DocSearch-Button-Keys {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  margin: 0;
+  padding: 1px 6px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 5px;
+}
+
+.navbar .navbar__items .search-bar-with-ai .DocSearch-Button-Key {
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* When the field is too narrow for the shortcut chip next to the label, the chip goes. */
+@container navbar-search (max-width: 15em) {
+  .navbar .navbar__items .search-bar-with-ai .DocSearch-Button-Keys {
+    display: none;
+  }
+}
+
+.navbar .navbar__items .search-bar-with-ai .DocSearch-Search-Icon {
+  flex: none;
+}
+
+/* Below 77rem (about 1232px) there is no room for a usable search field next to the docs switcher and the
+   links (it needs about 200px, as in the design), so the search is a plain icon button instead.
+   This is also the mobile design: an icon button next to the menu button. */
+@media (max-width: 77rem) {
+  .navbar .navbar__items .search-bar-with-ai {
+    width: 44px;
+    height: 44px;
+  }
+
+  .navbar .navbar__items .search-bar-with-ai .DocSearch-Button {
+    justify-content: center;
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  /* Icon centred in the button; hovering tints the button instead of outlining it */
+  .navbar .navbar__items .search-bar-with-ai .DocSearch-Button-Container {
+    flex: none;
+  }
+
+  .navbar .navbar__items .search-bar-with-ai .DocSearch-Button:hover {
+    border-color: transparent;
+    background: var(--ifm-color-emphasis-100);
+  }
+
+  .navbar .navbar__items .search-bar-with-ai .DocSearch-Button-Placeholder,
+  .navbar .navbar__items .search-bar-with-ai .DocSearch-Button-Keys {
+    display: none;
+  }
 }
 
 /* Hide the Ask AI pill button in the navbar */
@@ -429,8 +512,14 @@ span.DocSearch-Button-Keys {
   height: 28px;
 }
 
+.navbar {
+  --navbar-gap: clamp(4px, calc(4px + (100vw - 360px) / 30), 12px);
+  /* Width of the icon buttons (launcher, search, menu); they are always at least 44px tall */
+  --navbar-target: clamp(26px, calc(26px + (100vw - 360px) * 0.075), 44px);
+}
+
 .navbar .navbar__items {
-  gap: 12px;
+  gap: var(--navbar-gap);
   font-size: 0.875rem;
 }
 
@@ -443,45 +532,63 @@ span.DocSearch-Button-Keys {
   top: calc(var(--ifm-navbar-height) + 2rem + var(--ifm-top-nav-height));
 }
 
-/* Navbar inner: relative so the center wrapper can be absolutely positioned */
-.navbar__inner {
-  position: relative;
+/* The logo and title keep their width, so the search field is what gives way when space runs out */
+.navbar .navbar__brand {
+  flex-shrink: 0;
 }
 
-/* Left side (logo + search): shrink to its own content */
-.navbar__items--left {
-  flex: 0 0 auto;
+/* Mobile menu: the menu button is on the right, so the panel slides in from the right (Infima's default is the left) */
+.navbar-sidebar {
+  left: auto;
+  right: 0;
+  transform: translate3d(100%, 0, 0);
 }
 
-/* Center the 3 nav items in the full navbar width */
-.navbar-left-wrapper {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  /* Prevent overlap with left/right sides on narrow viewports */
-  max-width: calc(100% - 640px);
+.navbar-sidebar--show .navbar-sidebar {
+  transform: translate3d(0, 0, 0);
 }
 
-.navbar-left-wrapper .navbar__link {
-  font-size: 14px;
-  font-weight: 400;
-  white-space: nowrap;
-}
-
-/* Hide center items on mobile — they live in the mobile sidebar */
+/* Mobile mode (Docusaurus' own 996px breakpoint): logo with the full title, version chip, search, launcher and
+   menu. The spacing is only as tight as it has to be: it scales smoothly from compact on a 360px phone (the
+   smallest we design for, where everything just fits) to the normal desktop spacing and full-size touch
+   targets from 600px up. The demo button is at the bottom of the mobile menu instead. */
 @media (max-width: 996px) {
-  .navbar-left-wrapper {
+  .navbar__items--right > .button {
     display: none;
+  }
+
+  .navbar .navbar__brand {
+    margin-right: clamp(0px, calc((100vw - 360px) / 15), 16px);
+  }
+
+  .navbar .launcher-ecosystem button {
+    width: min(var(--navbar-target), 42px);
+    padding-inline: calc((min(var(--navbar-target), 42px) - 18px) / 2);
+  }
+
+  .navbar .navbar__toggle {
+    width: var(--navbar-target);
+    height: 44px;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navbar .navbar__toggle svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .navbar .navbar__items .search-bar-with-ai {
+    width: var(--navbar-target);
   }
 }
 
-/* Just above the mobile breakpoint the right side (incl. the docs switcher) reaches the page center */
-@media (min-width: 997px) and (max-width: 1100px) {
-  .navbar-left-wrapper {
-    left: 46%;
+/* On the narrowest phones (below the 360px we design for) the logo is enough */
+@media (max-width: 359px) {
+  .navbar .navbar__title {
+    display: none;
   }
 }
 
@@ -1610,13 +1717,6 @@ button.clean-btn.menu__caret::before {
 
   .footer .footer-main-section {
     padding: 32px;
-  }
-}
-
-@media only screen and (max-width: 996px) {
-  /* Hide navbar search on mobile — Docusaurus hamburger menu takes over */
-  .navbar .navbar__items .search-bar-with-ai {
-    display: none !important;
   }
 }
 
