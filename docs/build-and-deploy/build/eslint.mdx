@@ -1,0 +1,178 @@
+---
+title: "ESLint"
+last_update: { author: "Ranjith Kumar Seekolu" }
+---
+
+import eslintPoster from './assets/vids/eslint-in-studio-poster.jpg';
+import eslintVideo from './assets/vids/eslint-in-studio.mp4';
+import eslintSubtitles from './assets/vids/eslint-in-studio.vtt';
+
+ESLint checks your app's JavaScript for errors and coding-standard violations, and you configure it from Studio without editing files. WaveMaker runs ESLint **8.45.0**; every rule is described in the [ESLint 8 rules reference](https://eslint.org/docs/v8.x/rules/).
+
+The video below shows how to turn ESLint on, add rules and plugins, read the issues it finds, and what happens to a push, build, export, or deployment when a rule reports an error.
+
+<video controls width="100%" playsInline poster={eslintPoster}>
+  <source src={eslintVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={eslintSubtitles} default />
+</video>
+
+---
+
+## Where to configure ESLint
+
+The settings live in two places, depending on the project type:
+
+| Project type          | Where to configure ESLint                                        | Default rules                                                  |
+| --------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------- |
+| React Native (mobile) | **Settings → Build Preferences → ESLint**                        | Taken from the generated app's `generated-rn-app/.eslintrc.js` |
+| Web (Angular build)   | **Settings → Profile Configuration →** a profile's build options | None; you add the rules you need                               |
+
+Everything you change is saved to one file, `build-src/eslintrc-override.js`. WaveMaker merges it over its default configuration when it builds the app, so the rules you set win over the defaults.
+
+## Enable ESLint
+
+ESLint runs in a build only when **Enable ESLint** is on for that build's profile. The switch is saved as `runInspection=true` or `runInspection=false` in the profile's properties.
+
+1. Open the ESLint settings for your project type.
+2. Turn on **Enable ESLint**. The version, a link to the ESLint documentation, and the rules table appear.
+3. Click **Save**.
+
+All profiles share one set of rules, because they all read the same `eslintrc-override.js`. In a web project, rules can be changed only in the **development** profile. Other profiles show them read-only with the note *All profiles use the same ESLint configuration. To modify the rules, edit in Development profile.*
+
+## The rules table
+
+The table lists only the rules that are configured: the defaults (mobile) plus every rule in `eslintrc-override.js`.
+
+| Column      | What it shows                                                                                                                                |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rule        | The rule name, with its plugin underneath, for example `eslint:recommended`                                                                  |
+| Description | What the rule checks. Rules that WaveMaker doesn't describe show *Configured in eslintrc-override.js*                                        |
+| Severity    | **Off**, **Warn**, or **Error**                                                                                                              |
+| Options     | A ready-made option for the rule, *No options* when the rule has none, or *Custom options* when the file sets options the list doesn't cover |
+| Actions     | Edit (pencil) and Remove (trash)                                                                                                             |
+
+Severity decides what happens when a rule finds a violation:
+
+- **Off** turns the rule off.
+- **Warn** reports the problem but doesn't stop anything.
+- **Error** reports the problem as a build-blocking failure. In React Native projects it also stops pushes and deployments. See [What errors block](#what-errors-block).
+
+Use the search box to filter by rule name, description, or plugin. The table shows 10 rules per page. WaveMaker's catalog rules come first and rules found only in your file come after them, so check the next page or search when a rule seems to be missing.
+
+## Add, edit, and remove rules
+
+All changes stay pending until you click **Save**. **Discard** drops them.
+
+### Add a rule
+
+1. Click **+ Add Rule**. An empty row appears at the top of the table.
+2. Pick a rule from the list, or type any rule name, including plugin rules such as `wavemaker/no-console-log`. The description fills in for rules WaveMaker knows.
+3. Choose a severity and, if the rule has them, an option.
+4. Click the check mark to add the row, or the cross to cancel.
+
+### Change severity or options
+
+Pick a new value in the **Severity** or **Options** list. Setting a rule to **Off** clears its options; turning it back on doesn't restore them.
+
+### Edit a rule's full value
+
+Click the pencil to open **Edit rule** and type the rule's value as ESLint expects it, for example:
+
+```js
+['error', { allow: ['warn', 'error'] }]
+```
+
+The value must start with a severity: `'off'`, `'warn'`, `'error'`, or `0`, `1`, `2`. Leave the editor empty to remove the rule.
+
+### Remove a rule
+
+Click the trash icon. The rule is taken out of `eslintrc-override.js` when you save. On mobile, removing one of the default rules removes only your override, and the default comes back. To switch a default rule off, set it to **Off** instead.
+
+## Advanced Configuration
+
+**Advanced Configuration** opens the whole `eslintrc-override.js` in an editor, for settings the table can't express: `env`, `globals`, `plugins`, `extends`, `parserOptions`, and `overrides`.
+
+1. Click **Advanced Configuration**. The editor shows the current file, including any table changes you haven't saved. If the file is empty, it shows a commented template to start from.
+2. Edit the file and click **Apply**. The rules table updates to match.
+3. Click **Save** to write the file, or **Discard** to drop the edit.
+
+The file must export its configuration with `module.exports`. Any valid ESLint 8 configuration works, including variables, spread objects, and comments:
+
+```js
+const commonRules = {
+    'no-console': ['warn', { allow: ['error'] }],
+    'eqeqeq': 'error'
+};
+
+module.exports = {
+    env: { browser: true, es2022: true },
+    globals: { App: 'readonly', Page: 'readonly' },
+    plugins: ['wavemaker'],
+    rules: {
+        ...commonRules,
+        'wavemaker/no-console-log': 'warn',
+        'wavemaker/no-unsupported-api': ['error', ['eval', 'requireDynamic']]
+    },
+    overrides: [{ files: ['*.html'], rules: { 'no-undef': 'off' } }]
+};
+```
+
+Apply refuses a file that has a syntax error or doesn't export an object, and shows the reason under the editor.
+
+## Custom ESLint plugins
+
+A plugin listed in `plugins` must also be installed, or the ESLint step of the build fails. ESLint 8 finds a plugin's npm package from the name you give it:
+
+| Name in `plugins`         | npm package to add         |
+| ------------------------- | -------------------------- |
+| `wavemaker`               | `eslint-plugin-wavemaker`  |
+| `eslint-plugin-wavemaker` | `eslint-plugin-wavemaker`  |
+| `@acme`                   | `@acme/eslint-plugin`      |
+| `@acme/core`              | `@acme/eslint-plugin-core` |
+
+**React Native (mobile):** add the package under **Settings → Build Preferences → Plugins**. Under **More Plugins**, select **npm**, enter the package name and version, click **Add**, then **Save**. Until you do, the ESLint page shows a warning above the table, for example *Add eslint-plugin-WaveMaker in Build Preferences → Plugins (npm)*. Plugins the generated app already uses are not flagged. For more about adding packages, see [Third-party Expo plugins](../../user-interfaces/mobile/device-capabilities-mobile/third-party-expo-plugins).
+
+**Web:** add the package to the `dependencies` of `build-src/package-override.json`. It is merged into the app's `package.json` at build time. The ESLint page doesn't check web plugins.
+
+The warning checks only the `plugins` list. A plugin used only through `extends` (such as `plugin:jest/recommended`) or inside `overrides` isn't checked, and a plugin added from a git or local source may be flagged even though it is installed.
+
+## View issues
+
+The **Issues** tab lists the problems ESLint finds. Open **Issues**, select **Inspect**, and use the refresh button to run the inspection again after you change code or rules.
+
+- Problems are grouped by file, with an error count and a warning count at the top.
+- Errors are shown in red.
+- Select a problem's **Location** link to open the file at that line.
+
+## What errors block
+
+In React Native projects, a rule set to **Error** stops the following until the problem is fixed: every export and every deployment, as well as pushes. **Warn** never blocks.
+
+| Action                                                                                                                     | What happens                                                                                                                                                                                                                         |
+| -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Push                                                                                                                       | Studio stops the push and shows *Lint check failed: 1 errors, 3 warnings. Fix the errors and push again.* No commit is sent.                                                                                                         |
+| Deploy                                                                                                                     | Deploy starts by pushing your pending changes, so the same message stops it.                                                                                                                                                         |
+| Export → **Project Sources as Zip**, **Project as WAR**, **Project as ReactNative ZIP**, **Project as Shell to Workspace** | Blocked until the errors are fixed. The build fails at its ESLint step and the build log lists the problems.                                                                                                                         |
+| CI/CD pipeline                                                                                                             | A pipeline that builds the project runs the same check and fails the build on errors. The switch (`runInspection`) and the rules (`eslintrc-override.js`) are both in the project, so the pipeline uses the same settings as Studio. |
+
+A common way to adopt ESLint on an existing project is to start with rules set to **Warn**, fix what they report, then raise them to **Error**.
+
+## Troubleshooting
+
+| What you see                                                                   | Cause                                               | Fix                                                                           |
+| ------------------------------------------------------------------------------ | --------------------------------------------------- | ----------------------------------------------------------------------------- |
+| *Syntax error detected in eslintrc-override.js*                                | The file isn't valid JavaScript                     | Open **Advanced Configuration**, fix the line the error names, then **Apply** |
+| *eslintrc-override.js must export an object, for example module.exports = {};* | The file builds a config but never exports it       | Add the `module.exports` line                                                 |
+| *Start with a severity: 'off', 'warn' or 'error'...* in **Edit rule**          | The rule value has no severity first                | Start the value with a severity, for example `['warn', { ... }]`              |
+| *Unable to update the rules in eslintrc-override.js*                           | Studio couldn't change the file safely              | Make the change in **Advanced Configuration** instead                         |
+| A rule from your file isn't in the table                                       | It's on a later page, or the file doesn't export it | Search for the rule, or check `module.exports`                                |
+| *Add eslint-plugin-x in Build Preferences → Plugins (npm)*                     | A plugin in `plugins` isn't installed               | Add that npm package under **Plugins**                                        |
+| Rules are read-only                                                            | You're in a web profile other than development      | Switch to the **development** profile                                         |
+| *Lint check failed* when you push or deploy                                    | At least one rule at **Error** found a problem      | Open **Issues**, fix the errors, and push again                               |
+
+## See also
+
+- [ESLint 8 rules reference](https://eslint.org/docs/v8.x/rules/)
+- [Third-party Expo plugins](../../user-interfaces/mobile/device-capabilities-mobile/third-party-expo-plugins)
+- [Profiles](../../apis-and-services/configurations/profiles)

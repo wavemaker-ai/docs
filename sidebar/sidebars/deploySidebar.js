@@ -11,6 +11,10 @@ export default [
     collapsed: true,
     items: [
       {
+        type: 'doc',
+        id: 'build-and-deploy/build/eslint',
+      },
+      {
         type: 'category',
         label: 'web',
         collapsible: true,
