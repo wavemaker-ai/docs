@@ -38,6 +38,8 @@ Run Expo projects locally using Expo CLI with two options:
 - No separate build process needed
 - Limited to Expo SDK features
 
+To open the Studio preview in Expo Go without running Expo CLI, see [Preview on Your Phone with Expo Go](./preview-with-expo-go).
+
 **Expo Development Build:**
 
 - Custom build including native code
@@ -157,12 +159,12 @@ Logs must be enabled to see console output when running applications.
 <div style={{ position: "relative", paddingBottom: "56.25%" }}>
   <iframe
     style={{
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    left: 0,
-    top: 0
-  }}
+width: "100%",
+height: "100%",
+position: "absolute",
+left: 0,
+top: 0
+}}
     src="https://embed.app.guidde.com/playbooks/ce8XxiZkyG1R6rRNZ7HXKC"
     title="Enable logs in WaveMaker mobile apps"
     frameBorder={0}
