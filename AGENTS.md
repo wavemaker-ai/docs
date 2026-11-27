@@ -186,6 +186,7 @@ For specific workflows, load the matching skill under `ai-skills/` rather than i
 - `wm-ai-create-guide` — create a how-to or tutorial page under `docs/guide/`.
 - `wm-ai-tech-stack` — add, update, or remove libraries in a `data/tech-stack-data/` version file, or start a new version (schema-validated).
 - `wm-ai-documentation` — write, update, move, or delete a core reference or conceptual doc under `docs/<section>/...` (interactive: outlines first, drafts section by section, handles assets, links, and sidebar wiring).
+- `wm-ai-video` — make and embed a narrated walkthrough video of a Studio feature: script and fact check, real screenshots, one-take voice-over, `.mp4`, `.vtt` subtitles and poster, and the embed markup.
 
 ## Commits & PRs
 
