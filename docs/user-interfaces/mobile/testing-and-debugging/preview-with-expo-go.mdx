@@ -1,0 +1,40 @@
+---
+title: "Preview on Your Phone with Expo Go"
+last_update: { author: 'Ranjith Kumar Seekolu' }
+---
+
+import expoGoPosterImage from './assets/vids/poster.jpg';
+import expoGoPreviewVideo from './assets/vids/expo-go-qr-preview.mp4';
+import expoGoPreviewSubtitles from './assets/vids/expo-go-qr-preview.vtt';
+
+# Preview on Your Phone with Expo Go
+
+For React Native apps, you can open the preview on a real phone with Expo Go and try touch gestures and native features without building an app. The following video shows how to open the QR panel, open the app in Expo Go, and reload it after a change in Studio.
+
+<video controls width="100%" playsInline poster={expoGoPosterImage}>
+  <source src={expoGoPreviewVideo} type="video/mp4" />
+
+  <track kind="subtitles" srcLang="en" label="English" src={expoGoPreviewSubtitles} default />
+</video>
+
+1. Preview the app, then click the QR code icon (**Preview on your phone**) in the preview toolbar.
+2. Install Expo Go on your phone. Use the Expo Go version that matches the **Expo SDK** version shown in the panel.
+3. Select **Android** or **iOS**, then scan the QR code. On Android, use **Scan QR** in Expo Go. On iOS, scan it with the Camera app. You can also copy the Expo link below the QR code and paste it into **Enter URL** in Expo Go.
+4. When you change the app in Studio, the preview rebuilds automatically. To see the change, shake your phone to open the Expo Go developer menu, then tap **Reload**.
+
+## Requirements
+
+- The phone must be able to reach the Studio server over HTTPS. If Studio runs on a private network, connect the phone to that network or VPN.
+- If the Studio server uses a certificate from a private certificate authority, the phone must trust that certificate.
+- The preview URL must open without a sign-in page in front of it, because Expo Go cannot sign in to Studio.
+
+## Advanced Settings
+
+You can change how the Expo Go preview is built in the project's `wm_rn_config.json` file.
+
+| Setting           | Default | What it does                                                                                                                                                             |
+| ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `expoGoDevMode`   | On      | Lets you reload the app from the Expo Go developer menu to see your latest changes. Set it to `false` to turn this off.                                                  |
+| `expoGoDevBundle` | Off     | Set it to `true` to load a development build of the app, with React Native's element inspector and on-screen warnings. It takes effect only while `expoGoDevMode` is on. |
+
+> **Note:** Chrome DevTools (the JavaScript debugger) is not supported in the Expo Go preview.

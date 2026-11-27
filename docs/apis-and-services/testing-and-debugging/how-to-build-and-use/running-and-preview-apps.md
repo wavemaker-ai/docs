@@ -22,14 +22,14 @@ Key behaviors of Preview mode include:
 - A **Preview Toolbar** appears, allowing you to:
   - Select different target devices (desktop, tablet, or mobile) to simulate responsive behavior.
   - View the application layout across multiple screen sizes.
-  - Scan a QR code to open the app directly on a mobile device.
+  - Scan a QR code to open the app directly on a mobile device. For React Native apps, see [Preview on Your Phone with Expo Go](/docs/user-interfaces/mobile/testing-and-debugging/preview-with-expo-go).
 - The preview toolbar can be hidden if it is not required.
 
 ## Application Runtime URL
 
 When the application runs in Preview mode, it is accessed through a URL in the following format:
 
-https://www.wavemakeronline.com/unique-id/app-name/login.html#/login
+[https://www.wavemakeronline.com/unique-id/app-name/login.html#/login](https://www.wavemakeronline.com/unique-id/app-name/login.html#/login)
 
 csharp
 Copy code
@@ -39,8 +39,8 @@ Copy code
 - **`www.wavemakeronline.com`** – The WaveMaker Cloud domain where preview applications are hosted.
 - **`unique-id`** – The application space identifier created during user registration. This value is unique per user.
 - **`app-name`** – The name of the WaveMaker project. This can be customized by configuring the *context root* during deployment.
-- **`login.html`** – The default entry point for applications with security enabled.  
-  - If security is disabled, this segment is omitted, and the URL appears as:  
+- **`login.html`** – The default entry point for applications with security enabled.
+  - If security is disabled, this segment is omitted, and the URL appears as:
     ```
     https://www.wavemakeronline.com/unique-id/app-name/#/Main
     ```

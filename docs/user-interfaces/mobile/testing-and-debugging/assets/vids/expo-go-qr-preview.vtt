@@ -1,0 +1,59 @@
+WEBVTT
+
+00:03.600 --> 00:06.830
+Try your mobile app on a real phone
+in seconds.
+
+00:06.880 --> 00:10.580
+This is the Expo Go preview
+in WaveMaker Studio.
+
+00:11.530 --> 00:13.290
+Preview your React Native app,
+
+00:13.340 --> 00:16.300
+then open the QR panel
+from the toolbar.
+
+00:17.210 --> 00:19.050
+First, install Expo Go.
+
+00:19.100 --> 00:22.780
+Use the version that matches
+your project's Expo SDK,
+
+00:22.830 --> 00:24.570
+shown right in the panel.
+
+00:25.500 --> 00:27.640
+Pick Android or iOS,
+
+00:27.690 --> 00:31.910
+then scan the code, or paste
+the Expo link into Expo Go.
+
+00:31.960 --> 00:34.040
+Your app opens right away.
+
+00:34.970 --> 00:39.190
+Now you can try touch gestures and
+native features on a real phone,
+
+00:39.240 --> 00:40.910
+without building an app.
+
+00:41.830 --> 00:45.250
+Change something in Studio,
+and it rebuilds on its own.
+
+00:45.300 --> 00:48.920
+Just shake your phone and tap Reload
+in the developer menu.
+
+00:49.940 --> 00:53.070
+The Expo Go preview
+in WaveMaker Studio.
+
+00:53.120 --> 00:56.130
+Build in Studio,
+feel it on your phone.

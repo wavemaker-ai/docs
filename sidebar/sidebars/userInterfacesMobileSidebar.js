@@ -365,6 +365,11 @@ export default [
         label: 'Debugging Overview',
       },
       {
+        type: 'doc',
+        id: 'user-interfaces/mobile/testing-and-debugging/preview-with-expo-go',
+        label: 'Preview with Expo Go',
+      },
+      {
         type: 'category',
         label: 'Community Debugging Tools',
         collapsible: true,
