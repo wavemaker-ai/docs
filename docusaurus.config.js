@@ -152,7 +152,7 @@ const config = {
         },
       ],
       colorMode: {
-        respectPrefersColorScheme: true,
+        defaultMode: 'light',
         disableSwitch: false,
       },
       navbar: {
