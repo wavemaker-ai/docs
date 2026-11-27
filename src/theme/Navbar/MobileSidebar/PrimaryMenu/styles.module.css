@@ -1,0 +1,4 @@
+.demo {
+  margin-top: 1rem;
+  padding: 0 var(--ifm-menu-link-padding-horizontal);
+}

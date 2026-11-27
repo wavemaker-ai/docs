@@ -85,6 +85,8 @@ const config = {
   ],
 
   customFields: {
+    // "Schedule Demo" button: in the navbar, and at the bottom of the mobile menu (src/theme/Navbar/MobileSidebar/PrimaryMenu)
+    demoUrl: 'https://wavemaker.ai/ai-early-bird/',
     ecosystemAgentUrl:
       process.env.WAVEMAKER_AGENT_URL || 'https://ecosystem-agent.wavemaker.ai',
   },
@@ -150,7 +152,7 @@ const config = {
         },
       ],
       colorMode: {
-        respectPrefersColorScheme: true,
+        defaultMode: 'light',
         disableSwitch: false,
       },
       navbar: {
@@ -163,7 +165,7 @@ const config = {
           {
             type: 'dropdown',
             label: "What's New",
-            position: 'left',
+            position: 'right',
             items: [
               {
                 to: '/docs/release-notes/',
@@ -182,10 +184,10 @@ const config = {
           {
             type: 'docSidebar',
             sidebarId: 'guideSidebar',
-            position: 'left',
+            position: 'right',
             label: 'Guide',
           },
-          { to: '/blog', label: 'Blogs', position: 'left' },
+          { to: '/blog', label: 'Blogs', position: 'right' },
           // {
           //   type: 'docsVersionDropdown',
           //   position: 'right',

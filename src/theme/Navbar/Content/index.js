@@ -10,6 +10,7 @@ import {
   useNavbarMobileSidebar,
 } from '@docusaurus/theme-common/internal';
 import Link from '@docusaurus/Link';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import NavbarItem from '@theme/NavbarItem';
 import NavbarColorModeToggle from '@theme/Navbar/ColorModeToggle';
 import SearchBar from '@theme/SearchBar';
@@ -17,6 +18,7 @@ import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
 import NavbarLogo from '@theme/Navbar/Logo';
 import NavbarSearch from '@theme/Navbar/Search';
 import DocsSwitcher from '../DocsSwitcher';
+import { useDocsSite } from '../DocsSwitcher/site';
 import styles from './styles.module.css';
 import { AppLauncher } from 'wm-ui-components';
 // import MenuSection from './menu';
@@ -70,24 +72,33 @@ function NavbarContentLayout({ left, right }) {
 }
 export default function NavbarContent() {
   const mobileSidebar = useNavbarMobileSidebar();
+  const {
+    siteConfig: {
+      customFields: { demoUrl },
+    },
+  } = useDocusaurusContext();
   const items = useNavbarItems();
   const [leftItems, rightItems] = splitNavbarItems(items);
   const searchBarItem = items.find((item) => item.type === 'search');
+  // The search button names the docs version it searches, e.g. "Search v12 docs"
+  const { current } = useDocsSite();
+  const searchLabel = `Search ${current.label} docs`;
+  const searchTranslations = {
+    button: { buttonText: searchLabel, buttonAriaLabel: searchLabel },
+  };
   return (
     <NavbarContentLayout
       left={
         // TODO stop hardcoding items?
         <>
-          {!mobileSidebar.disabled && <NavbarMobileSidebarToggle />}
           <NavbarLogo />
+          <DocsSwitcher />
           {!searchBarItem && (
             <NavbarSearch>
-              <SearchBar />
+              <SearchBar translations={searchTranslations} />
             </NavbarSearch>
           )}
-          <div className="navbar-left-wrapper">
-            <NavbarItems items={leftItems} />
-          </div>
+          <NavbarItems items={leftItems} />
         </>
       }
       right={
@@ -95,19 +106,16 @@ export default function NavbarContent() {
         // Ask the user to add the respective navbar items => more flexible
         <>
           <NavbarItems items={rightItems} />
-          <DocsSwitcher />
           <NavbarColorModeToggle className={styles.colorModeToggle} />
           <div className="launcher-ecosystem">
             <AppLauncher excludeId="docs" />
           </div>
 
           {/* <MenuSection /> */}
-          <Link
-            to="https://wavemaker.ai/ai-early-bird/"
-            className="button button--primary"
-          >
+          <Link to={demoUrl} className="button button--primary">
             Schedule Demo
           </Link>
+          {!mobileSidebar.disabled && <NavbarMobileSidebarToggle />}
         </>
       }
     />
